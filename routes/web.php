@@ -2,33 +2,45 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::redirect('/', '/admin', 301);
 
-Route::get('/', function () {
-    return view('backend.dashboard');
+Route::group(['prefix'=> 'admin', 'as'=> 'admin.'],function(){
+
+    Route::view('/', 'backend.dashboard');
+
+    Route::get('/tables', function () {
+        return view('backend.demo.table');
+    });
+
+    Route::get('/charts', function () {
+        return view('backend.demo.chart');
+    });
+
+    Route::view('/category', 'backend.pages.category.categorylist')->name('category');
+
+    Route::get('/add-category', function (){
+        return view('backend.pages.category.addcategory');
+    });
+
+    Route::get('/brand', function (){
+        return view('backend.pages.brand.brandListing');
+    })->name('brand');
+
+    Route::get('/variant', function(){
+        return view('backend.pages.variant.variantlist');
+    })->name('variant');
+
+    Route::get('/unit', function(){
+        return view('backend.pages.unit.unitlist');
+    })->name('unit');
+
+    Route::get('/tax', function(){
+        return view('backend.pages.tax.taxlist');
+    })->name('tax');
+
+    Route::get('/currency', function (){
+        return view('backend.pages.currency.currencylist');
+    })->name('currency');
 });
 
-Route::get('/tables', function () {
-    return view('backend.demo.table');
-});
 
-Route::get('/charts', function () {
-    return view('backend.demo.chart');
-});
-
-Route::get('/category', function(){
-    return view('backend.Category.categorylist');
-});
-
-Route::get('/add-category', function (){
-    return view('backend.Category.addcategory');
-});

@@ -125,7 +125,7 @@
     <script src="{{ asset('assets/common_assets/libs/select2/js/select2.min.js') }}"></script>
 
     <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/libs/notifications/config.js') }}"></script>
+    <script src="{{ asset('assets/backend/js/config.js') }}"></script>
 
     @stack('js')
 

@@ -1,0 +1,15 @@
+.card-header h6 a{
+    text-decoration: none;
+    color: #000;
+    font-size: 1.5rem;
+}
+
+table thead tr th{
+    font-size: 1rem;
+    color: #000;
+}
+
+table tbody {
+    color: #000;
+    font-size: 0.95rem;
+}
