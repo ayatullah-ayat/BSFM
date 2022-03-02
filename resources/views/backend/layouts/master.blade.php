@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <title>@yield('title','Micro Midea')</title>
 
     <!-- Custom fonts for this template-->
@@ -16,6 +17,17 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{ asset('assets/common_assets/libs/daterangepicker/daterangepicker.css') }}">
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="{{ asset('assets/common_assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
+    
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ asset('assets/common_assets/libs/summernote/summernote-bs4.min.css') }}">
+    
+    <link rel="stylesheet" href="{{ asset('assets/common_assets/libs/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/common_assets/libs/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets/backend/css/dashboard.min.css') }}" rel="stylesheet">
 
@@ -83,6 +95,10 @@
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/common_assets/libs/jquery/jquery.min.js') }}"></script>
+
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{ asset('assets/common_assets/libs/jquery/jquery-ui.min.js') }}"></script>
+
     <script src="{{ asset('assets/common_assets/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
@@ -97,6 +113,19 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/backend/libs/chartJs/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/backend/libs/chartJs/chart-pie-demo.js') }}"></script>
+
+    <!-- daterangepicker -->
+    <script src="{{ asset('assets/common_assets/libs/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/common_assets/libs/daterangepicker/daterangepicker.js') }}"></script>
+
+    <!-- Summernote -->
+    <script src="{{ asset('assets/common_assets/libs/summernote/summernote-bs4.min.js') }}"></script>
+    
+    <script src="{{ asset('assets/common_assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/common_assets/libs/select2/js/select2.min.js') }}"></script>
+
+    <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/libs/notifications/config.js') }}"></script>
 
     @stack('js')
 

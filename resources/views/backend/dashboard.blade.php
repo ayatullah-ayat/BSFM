@@ -4,7 +4,7 @@
     <div> 
     
         <!-- Content Row -->
-        <div class="row">
+        <div class="row summary-container">
     
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
@@ -458,12 +458,12 @@
 
 @push('css')
     <style>
-        .card{
+        .summary-container .card{
             position: relative;
             transform-style: preserve-3d;
         }
 
-        .card::before{
+        .summary-container .card::before{
             position: absolute;
             content: '';
             width: 0;
