@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'variant page')
+@section('title','Category pages')
 
 @section('content')
     <div>
@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Product Variant</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Variant</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Sub Categories</a> </h6>
+                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Sub Category</i></button>
             </div>
 
             <div class="card-body">
@@ -18,17 +18,26 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Variant Name</th>
-                                <th>Variant Type</th>
+                                <th>Category Name</th>
+                                <th>Parent Category</th>
+                                <th>Category Description</th>
+                                <th>Sub-Category Image</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Mans</th>
+                                <th>Mans product</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
                                 <th class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
@@ -36,9 +45,16 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Mans</th>
+                                <th>Mans product</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
                                 <th class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
@@ -46,9 +62,16 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Mans</th>
+                                <th>Mans product</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
                                 <th class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
@@ -56,9 +79,33 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Mans</th>
+                                <th>Mans product</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
+                                <th class="text-center">
+                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Mans</th>
+                                <th>Mans product</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
                                 <th class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
@@ -84,14 +131,12 @@
     
     </div>
 
-    {{-- Variant modal  --}}
-
     <div class="modal fade" id="categoryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Variant</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Sub-Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -100,26 +145,48 @@
                 <div class="modal-body">
                     <div id="service-container">
                         <div class="row">
-
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Variant Information</h5>
+                                <h5 class="font-weight-bold bg-custom-booking">Sub-Category Information</h5>
                                 <hr>
                             </div>
-
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Variant Name</label>
+                                    <label for="">Category Name<span style="color: red;" class="req">*</span></label>
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
 
+                            <div class="col-md-6" data-col="col">
+                                <div class="form-group">
+                                    <label for="stuff">Parent Category<span style="color: red;" class="req">*</span></label>
+                                    <select name="stuff" class="stuff" data-required id="stuff" data-placeholder="Parent Category"></select>
+                                </div>
+                                <span class="v-msg"></span>
+                            </div>
+    
+                            {{-- <div class="col-md-6" data-col="col">
+                                <div class="form-group">
+                                    <label for="booking_date">Booking Date <span style="color: red;" class="req">*</span></label>
+                                    <input type="text" data-required autocomplete="off" class="form-control" id="booking_date" name="booking_date">
+                                </div>
+                                <span class="v-msg"></span>
+                            </div> --}}
+
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Variant Type</label>
-                                    <input type="text" class="form-control">
+                                   <label for="">Category Description</label>
+                                   {{-- <textarea rows="4" type="text" class="form-control"> --}}
+                                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
-                            
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Category Image</label>
+                                    <input class="d-flex align-items-center" type="file" name="" id="">
+                                </div>
+                            </div>
+    
                         </div>
                     </div>
                 </div>

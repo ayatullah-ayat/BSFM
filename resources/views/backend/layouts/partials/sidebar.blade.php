@@ -48,8 +48,8 @@
         </a>
         <div id="orders" class="collapse" aria-labelledby="orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Order</a>
-                <a class="collapse-item" href="buttons.html">Manage Order</a>
+                <a class="collapse-item" href="{{ route('admin.order_add') }}">New Order</a>
+                <a class="collapse-item" href="{{ route('admin.order_manage') }}">Manage Order</a>
             </div>
         </div>
     </li>
@@ -62,8 +62,8 @@
         </a>
         <div id="products" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Product</a>
-                <a class="collapse-item" href="buttons.html">Manage Product</a>
+                <a class="collapse-item" href="{{ route('admin.add_product') }}">New Product</a>
+                <a class="collapse-item" href="{{ route('admin.manage_product') }}">Manage Product</a>
             </div>
         </div>
     </li>
@@ -76,9 +76,9 @@
         </a>
         <div id="customers" class="collapse" aria-labelledby="customers" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Customer</a>
-                <a class="collapse-item" href="buttons.html">Manage Customer</a>
-                <a class="collapse-item" href="buttons.html">Customer Ledger</a>
+                <a class="collapse-item" href="#">New Customer</a>
+                <a class="collapse-item" href="{{ route('admin.manage-customer') }}">Manage Customer</a>
+                {{-- <a class="collapse-item" href="#">Customer Ledger</a> --}}
             </div>
         </div>
     </li>
@@ -92,9 +92,9 @@
         </a>
         <div id="suppliers" class="collapse" aria-labelledby="suppliers" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Supplier</a>
-                <a class="collapse-item" href="buttons.html">Manage Supplier</a>
-                <a class="collapse-item" href="buttons.html">Supplier Ledger</a>
+                <a class="collapse-item" href="#">New Supplier</a>
+                <a class="collapse-item" href="{{ route('admin.manage-supplier')}}">Manage Supplier</a>
+                {{-- <a class="collapse-item" href="buttons.html">Supplier Ledger</a> --}}
             </div>
         </div>
     </li>
@@ -107,8 +107,8 @@
         </a>
         <div id="purchase" class="collapse" aria-labelledby="purchase" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Purchase</a>
-                <a class="collapse-item" href="buttons.html">Manage Purchase</a>
+                <a class="collapse-item" href="{{ route('admin.add-purchase') }}">New Purchase</a>
+                <a class="collapse-item" href="{{ route('admin.manage-purchase') }}">Manage Purchase</a>
             </div>
         </div>
     </li>
@@ -123,6 +123,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">New Category</a>
                 <a class="collapse-item" href="{{ route('admin.category')}}">Manage Category</a>
+                <a class="collapse-item" href="{{ route('admin.subcategory')}}">Manage Sub Category</a>
             </div>
         </div>
     </li>
@@ -177,8 +178,8 @@
         </a>
         <div id="gallery" class="collapse" aria-labelledby="gallery" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Product Image</a>
-                <a class="collapse-item" href="buttons.html">Manage Product Image</a>
+                <a class="collapse-item" href="{{route('admin.add-image-gallery')}}">New Gallery Image</a>
+                <a class="collapse-item" href="{{ route('admin.image-gallery')}}">Manage Image Gallery</a>
             </div>
         </div>
     </li>

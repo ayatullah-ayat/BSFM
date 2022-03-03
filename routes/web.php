@@ -21,6 +21,10 @@ Route::group(['prefix'=> 'admin', 'as'=> 'admin.'],function(){
     Route::get('/add-category', function (){
         return view('backend.pages.category.addcategory');
     });
+    
+    Route::get('/subcategory', function (){
+        return view('backend.pages.category.subcategory');
+    })->name('subcategory');
 
     Route::get('/brand', function (){
         return view('backend.pages.brand.brandListing');
@@ -41,6 +45,47 @@ Route::group(['prefix'=> 'admin', 'as'=> 'admin.'],function(){
     Route::get('/currency', function (){
         return view('backend.pages.currency.currencylist');
     })->name('currency');
+
+    Route::get('/image-gallery', function (){
+        return view('backend.pages.imagegallery.imagegallerylist');
+    })->name('image-gallery');
+
+    Route::get('/add-image-gallery', function(){
+        return view('backend.pages.imagegallery.addgallery');
+    })->name('add-image-gallery');
+
+    Route::get('/manage-supplier', function(){
+        return view('backend.pages.supplier.supplierlist');
+    })->name('manage-supplier');
+
+    Route::get('/manage-customer', function(){
+        return view('backend.pages.customer.managecustomer');
+    })->name('manage-customer');
+
+    Route::get('/add-purchase', function(){
+        return view('backend.pages.purchase.addpurchase');
+    })->name('add-purchase');
+
+    Route::get('/manage-purchase', function(){
+        return view('backend.pages.purchase.managepurchase');
+    })->name('manage-purchase');
+
+    Route::get('/add-product', function (){
+        return view('backend.pages.product.addproduct');
+    })->name('add_product');
+
+    Route::get('/manage-product', function (){
+        return view('backend.pages.product.manageproduct');
+    })->name('manage_product');
+
+    Route::get('/order-add', function(){
+        return view('backend.pages.order.orderadd');
+    })->name('order_add');
+
+    Route::get('/order-manage', function(){
+        return view('backend.pages.order.ordermanage');
+    })->name('order_manage');
+
 });
 
 
