@@ -121,8 +121,8 @@
         </a>
         <div id="category" class="collapse" aria-labelledby="category" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Category</a>
-                <a class="collapse-item" href="buttons.html">Manage Category</a>
+                <a class="collapse-item" href="#">New Category</a>
+                <a class="collapse-item" href="{{ route('admin.category')}}">Manage Category</a>
             </div>
         </div>
     </li>
@@ -135,8 +135,8 @@
         </a>
         <div id="brand" class="collapse" aria-labelledby="brand" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Brand</a>
-                <a class="collapse-item" href="buttons.html">Manage Brand</a>
+                <a class="collapse-item" href="#">New Brand</a>
+                <a class="collapse-item" href="{{ route('admin.brand')}}">Manage Brand</a>
             </div>
         </div>
     </li>
@@ -149,8 +149,8 @@
         </a>
         <div id="variant" class="collapse" aria-labelledby="variant" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Variant</a>
-                <a class="collapse-item" href="buttons.html">Manage Variant</a>
+                <a class="collapse-item" href="#">New Variant</a>
+                <a class="collapse-item" href="{{ route('admin.variant')}}">Manage Variant</a>
             </div>
         </div>
     </li>
@@ -163,8 +163,8 @@
         </a>
         <div id="unit" class="collapse" aria-labelledby="unit" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Unit</a>
-                <a class="collapse-item" href="buttons.html">Manage Unit</a>
+                <a class="collapse-item" href="#">New Unit</a>
+                <a class="collapse-item" href="{{ route('admin.unit')}}">Manage Unit</a>
             </div>
         </div>
     </li>
@@ -192,9 +192,9 @@
         </a>
         <div id="tax" class="collapse" aria-labelledby="tax" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Tax</a>
-                <a class="collapse-item" href="buttons.html">Manage Tax</a>
-                <a class="collapse-item" href="buttons.html">Tax Setting</a>
+                <a class="collapse-item" href="#">New Tax</a>
+                <a class="collapse-item" href="{{route('admin.tax')}}">Manage Tax</a>
+                <a class="collapse-item" href="#">Tax Setting</a>
             </div>
         </div>
     </li>
@@ -208,8 +208,8 @@
         </a>
         <div id="currency" class="collapse" aria-labelledby="currency" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Currency</a>
-                <a class="collapse-item" href="buttons.html">Manage Currency</a>
+                <a class="collapse-item" href="#">New Currency</a>
+                <a class="collapse-item" href="{{route('admin.currency')}}">Manage Currency</a>
             </div>
         </div>
     </li>
@@ -338,14 +338,14 @@
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ url('/charts') }}">
+        <a class="nav-link" href="{{ url('/admin/charts') }}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Charts</span></a>
     </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ url('/tables') }}">
+        <a class="nav-link" href="{{ url('/admin/tables') }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>
     </li>
