@@ -22,9 +22,18 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
+
             if (Auth::guard($guard)->check()) {
+
+                if(preg_match("/admin/im", $guard)){
+                    return redirect(RouteServiceProvider::ADMIN_HOME);
+                    // return redirect()->route('admin.dashboard');
+                }
+
                 return redirect(RouteServiceProvider::HOME);
+                
             }
+
         }
 
         return $next($request);

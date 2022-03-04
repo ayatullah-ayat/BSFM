@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('category_name', 255)->nullable();
             $table->string('subcategory_name', 255)->nullable();
 
-            $table->string('product_skew')->unique()->nullable()->comment('product_unique_id');
+            $table->string('product_sku')->unique()->nullable()->comment('product_unique_id');
             $table->string('product_unit')->nullable();
             $table->text('product_name')->nullable();
             $table->text('product_description')->nullable();

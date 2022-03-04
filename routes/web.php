@@ -4,12 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::redirect('/', '/admin/dashboard', 301);
+Route::redirect('/admin', '/admin/dashboard', 301);
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth']], function () {
-
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
+    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Route::view('/dashboard', 'backend.dashboard');
 
     Route::get('/tables', function () {
         return view('backend.demo.table');

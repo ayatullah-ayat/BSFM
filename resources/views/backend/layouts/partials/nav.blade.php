@@ -85,7 +85,7 @@
                 <div class="dropdown-divider"></div>
                 <a href="javascript:void(0)" class="dropdown-item">
                     <i class="fa fa-lock"></i>
-                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="text-center btn btn-sm p-0 mx-2"><span>Log Out</span></button>
                     </form>
