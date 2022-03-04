@@ -183,7 +183,10 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="text-center btn btn-sm p-0"><span>Logout</span></button>
+                    </form>
                 </a>
             </div>
         </li>

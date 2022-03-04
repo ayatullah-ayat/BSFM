@@ -91,19 +91,19 @@ function globeInit(arr=[]){
     let datePattern     = /date/gim;
 
     if(arr.length){
-
+   
         arr.forEach(elem => {
 
             if(selectPattern.test(elem.type)){
-                const { dropdownParent, selector, selectedVal, width} = elem;
+                console.log(selectPattern.test(elem.type));
+                const { dropdownParent, selector, selectedVal, width } = elem;
                 $(selector).select2({
                     width           : width ?? '100%' ,
                     theme           : 'bootstrap4',
                     dropdownParent,
                 }).val(selectedVal).trigger('change')
             }
-
-            if(datePattern.test(elem.type)){
+            else if(datePattern.test(elem.type)){
                 const { selector, format} = elem;
                 $(selector).datepicker({
                     autoclose       : true,
@@ -114,7 +114,7 @@ function globeInit(arr=[]){
                     format          : format ?? 'yyyy-mm-dd',
                 })
             }
-        })
+        });
     }
 }
 

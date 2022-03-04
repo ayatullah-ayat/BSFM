@@ -20,6 +20,7 @@
                                 <th>ID</th>
                                 <th>Category Name</th>
                                 <th>Category Description</th>
+                                <th>Category Image</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -29,6 +30,7 @@
                                 <th>1001</th>
                                 <th>Clothing</th>
                                 <th>Womens gfgfgf</th>
+                                <th>Category Images</th>
                                 <th class="text-center">
                                 <span class="badge badge-success">
                                     Active
@@ -44,6 +46,7 @@
                                 <th>1001</th>
                                 <th>Clothing</th>
                                 <th>Womens gfgfgf</th>
+                                <th>Category Images</th>
                                 <th class="text-center">
                                 <span class="badge badge-success">
                                     Active
@@ -59,6 +62,23 @@
                                 <th>1001</th>
                                 <th>Clothing</th>
                                 <th>Womens gfgfgf</th>
+                                <th>Category Images</th>
+                                <th class="text-center">
+                                <span class="badge badge-success">
+                                    Active
+                                </span>
+                                </th>
+                                <th class="text-center">
+                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>1001</th>
+                                <th>Clothing</th>
+                                <th>Womens gfgfgf</th>
+                                <th>Category Images</th>
                                 <th class="text-center">
                                 <span class="badge badge-success">
                                     Active
@@ -93,7 +113,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Create Category</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -106,20 +126,20 @@
                                 <h5 class="font-weight-bold bg-custom-booking">Category Information</h5>
                                 <hr>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Category Name</label>
+                                    <label for="">Category Name<span style="color: red;" class="req">*</span></label>
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-6" data-col="col">
+                            {{-- <div class="col-md-6" data-col="col">
                                 <div class="form-group">
                                     <label for="stuff">Parent Category<span style="color: red;" class="req">*</span></label>
                                     <select name="stuff" class="stuff" data-required id="stuff" data-placeholder="Select a Staff"></select>
                                 </div>
                                 <span class="v-msg"></span>
                             </div>
-    
+     --}}
                             {{-- <div class="col-md-6" data-col="col">
                                 <div class="form-group">
                                     <label for="booking_date">Booking Date <span style="color: red;" class="req">*</span></label>
@@ -128,10 +148,11 @@
                                 <span class="v-msg"></span>
                             </div> --}}
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="">Category Description <span style="color: red;" class="req">Optional</span></label>
-                                   <input type="text" class="form-control">
+                                   <label for="">Category Description</label>
+                                   {{-- <textarea rows="4" type="text" class="form-control"> --}}
+                                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
 

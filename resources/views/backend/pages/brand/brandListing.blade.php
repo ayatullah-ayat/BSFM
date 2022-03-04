@@ -83,7 +83,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Create Brand</h5>
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Brand</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                               <label for="">Brand Description <span style="color: red;" class="req">Optional</span></label>
+                               <label for="">Brand Description</label>
                                <input type="text" class="form-control">
                             </div>
                         </div>
