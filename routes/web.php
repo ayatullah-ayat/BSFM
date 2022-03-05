@@ -1,7 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\CustomOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmailConfigurationController;
+use App\Http\Controllers\Admin\ManageCompanyController;
+use App\Http\Controllers\Admin\ManageGatewayController;
+use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\SmsSettignsController;
+use App\Http\Controllers\Admin\StockReportController;
 
 Route::redirect('/', '/admin/dashboard', 301);
 Route::redirect('/admin', '/admin/dashboard', 301);
@@ -87,6 +95,26 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/order-manage', function () {
         return view('backend.pages.order.ordermanage');
     })->name('order_manage');
+
+    Route::get('/manage-sale', [SaleController::class, 'index'])->name('manage_sale');
+    Route::get('/add-sale', [SaleController::class, 'create'])->name('add_sale');
+    Route::get('/manage-custom-order', [CustomOrderController::class, 'index'])->name('manage_custom_order');
+    Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
+
+    Route::get('/stock-report', [StockReportController::class, 'stockreport'])->name('stock_report');
+    Route::get('/supplier-stock-report', [StockReportController::class, 'supplierstock'])->name('supplier_stock-report');
+    Route::get('/product-stock-report', [StockReportController::class, 'productreport'])->name('product_stock_report');
+
+    Route::get('/sales-report', [ReportsController::class, 'salesreport'])->name('sales_report');
+    Route::get('/purchase-report', [ReportsController::class, 'purchasereport'])->name('purchase_report');
+    Route::get('/product-tax-report', [ReportsController::class, 'producttaxreport'])->name('product_tax_report');
+    Route::get('/invoice-tax-report', [ReportsController::class, 'invoicetaxreport'])->name('invoice_tax_report');
+
+    Route::get('/sms-configuration', [SmsSettignsController::class, 'smsconfiguration'])->name('sms_configuration');
+    Route::get('/sms-template', [SmsSettignsController::class, 'smstemplate'])->name('sms_template');
+    Route::get('/email-configuration', [EmailConfigurationController::class, 'index'])->name('email_configuration');
+    Route::get('/manage-compnay', [ManageCompanyController::class, 'index'])->name('manage_company');
+    Route::get('/manage-gateway', [ManageGatewayController::class, 'index'])->name('manage_gateway');
 });
 
 

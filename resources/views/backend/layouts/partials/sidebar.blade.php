@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -33,9 +33,9 @@
         </a>
         <div id="sales" class="collapse" aria-labelledby="sales" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Sale</a>
-                <a class="collapse-item" href="buttons.html">Manage Sale</a>
-                <a class="collapse-item" href="cards.html">Pos Sale</a>
+                <a class="collapse-item" href="{{ route('admin.add_sale') }}">New Sale</a>
+                <a class="collapse-item" href="{{ route('admin.manage_sale') }}">Manage Sale</a>
+                <a class="collapse-item" href="#">Pos Sale</a>
             </div>
         </div>
     </li>
@@ -225,8 +225,8 @@
         </a>
         <div id="custom_orders" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Order</a>
-                <a class="collapse-item" href="buttons.html">Manage Order</a>
+                <a class="collapse-item" href="{{ route('admin.add_custom_order') }}">New Order</a>
+                <a class="collapse-item" href="{{ route('admin.manage_custom_order') }}">Manage Order</a>
             </div>
         </div>
     </li>
@@ -239,8 +239,8 @@
         </a>
         <div id="account" class="collapse" aria-labelledby="account" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">New Entry</a>
-                <a class="collapse-item" href="buttons.html">Report</a>
+                <a class="collapse-item" href="#">New Entry</a>
+                <a class="collapse-item" href="#">Report</a>
             </div>
         </div>
     </li>
@@ -257,9 +257,9 @@
         </a>
         <div id="Stock" class="collapse" aria-labelledby="Stock" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">Stock Report</a>
-                <a class="collapse-item" href="buttons.html">Stock Report (Supplier Wise)</a>
-                <a class="collapse-item" href="buttons.html">Stock Report (Product Wise)</a>
+                <a class="collapse-item" href="{{ route('admin.stock_report') }}">Stock Report</a>
+                <a class="collapse-item" href="{{ route('admin.supplier_stock-report') }}">Stock Report (Supplier Wise)</a>
+                <a class="collapse-item" href="{{ route('admin.product_stock_report') }}">Stock Report (Product Wise)</a>
             </div>
         </div>
     </li>
@@ -272,10 +272,10 @@
         </a>
         <div id="Report" class="collapse" aria-labelledby="Report" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">Sales Report</a>
-                <a class="collapse-item" href="buttons.html">Purchase Report</a>
-                <a class="collapse-item" href="buttons.html">Tax Report (Product Wise)</a>
-                <a class="collapse-item" href="buttons.html">Tax Report (Invoice Wise)</a>
+                <a class="collapse-item" href="{{route('admin.sales_report')}}">Sales Report</a>
+                <a class="collapse-item" href="{{ route('admin.purchase_report')}}">Purchase Report</a>
+                <a class="collapse-item" href="{{ route('admin.product_tax_report')}}">Tax Report (Product Wise)</a>
+                <a class="collapse-item" href="{{ route('admin.invoice_tax_report')}}">Tax Report (Invoice Wise)</a>
             </div>
         </div>
     </li>
@@ -285,17 +285,20 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#sms" aria-expanded="true"
             aria-controls="sms">
             <i class="fas fa-fw fa-cog"></i>
-            <span>SMS Settings</span>
+            <span>Settings</span>
         </a>
         <div id="sms" class="collapse" aria-labelledby="sms" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">SMS Configuration</a>
-                <a class="collapse-item" href="buttons.html">SMS Template</a>
+                <a class="collapse-item" href="{{ route('admin.sms_configuration') }}">SMS Configuration</a>
+                <a class="collapse-item" href="{{ route('admin.sms_template') }}">SMS Template</a>
+                <a class="collapse-item" href="{{ route('admin.manage_company') }}">Manage Company</a>
+                <a class="collapse-item" href="{{ route('admin.manage_gateway')}}">Gateway</a>
+                <a class="collapse-item" href="{{ route('admin.email_configuration')}}">Email Configuration</a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#web" aria-expanded="true"
             aria-controls="web">
             <i class="fas fa-fw fa-cog"></i>
@@ -303,27 +306,26 @@
         </a>
         <div id="web" class="collapse" aria-labelledby="web" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">Sales Report</a>
-                <a class="collapse-item" href="buttons.html">Purchase Report</a>
-                <a class="collapse-item" href="buttons.html">Tax Report (Product Wise)</a>
-                <a class="collapse-item" href="buttons.html">Tax Report (Invoice Wise)</a>
+                <a class="collapse-item" href="#">Sales Report</a>
+                <a class="collapse-item" href="#">Purchase Report</a>
+                <a class="collapse-item" href="#">Tax Report (Product Wise)</a>
+                <a class="collapse-item" href="#">Tax Report (Invoice Wise)</a>
             </div>
         </div>
-    </li>
+    </li> --}}
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Software" aria-expanded="true"
             aria-controls="Software">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Software Settings</span>
+            <span>CMS Settings</span>
         </a>
         <div id="Software" class="collapse" aria-labelledby="Software" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="buttons.html">Manage Company</a>
-                <a class="collapse-item" href="buttons.html">Manage User</a>
-                <a class="collapse-item" href="buttons.html">Language</a>
-                <a class="collapse-item" href="buttons.html">Gateway</a>
-                <a class="collapse-item" href="buttons.html">Others</a>
+                <a class="collapse-item" href="#">Site Logo</a>
+                <a class="collapse-item" href="#">Header</a>
+                <a class="collapse-item" href="#">Footer</a>
+                <a class="collapse-item" href="#">Social Icon</a>
             </div>
         </div>
     </li>
