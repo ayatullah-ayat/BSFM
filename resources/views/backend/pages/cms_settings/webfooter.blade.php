@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Email Configuration</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Add Email</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Web Footer Settings</a> </h6>
+                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Add Footer</i></button>
             </div>
 
             <div class="card-body">
@@ -18,11 +18,8 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Company Name</th>
-                                <th>Address</th>
-                                <th>Mobile</th>
-                                <th>Website</th>
-                                <th>Logo</th>
+                                <th>Footer About</th>
+                                <th>Footer Logo</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -30,38 +27,7 @@
 
                             <tr>
                                 <td>01</td>
-                                <td>ThemeShpaer LTD</td>
                                 <td>Kobi Faruk Soroni, Nikunjo-2, Dhaka-1229</td>
-                                <td>+8801456878987</td>
-                                <td>themeshpaer.net</td>
-                                <td>Site logo</td>
-                                <td class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>02</td>
-                                <td>ThemeShpaer LTD</td>
-                                <td>Kobi Faruk Soroni, Nikunjo-2, Dhaka-1229</td>
-                                <td>+8801456878987</td>
-                                <td>themeshpaer.net</td>
-                                <td>Site logo</td>
-                                <td class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>03</td>
-                                <td>ThemeShpaer LTD</td>
-                                <td>Kobi Faruk Soroni, Nikunjo-2, Dhaka-1229</td>
-                                <td>+8801456878987</td>
-                                <td>themeshpaer.net</td>
                                 <td>Site logo</td>
                                 <td class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
@@ -71,15 +37,6 @@
                             </tr>
 
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
                     </table>
                 </div>
@@ -93,7 +50,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Email Configuration</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Footer</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -103,52 +60,24 @@
                     <div id="service-container">
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Email Information</h5>
+                                <h5 class="font-weight-bold bg-custom-booking">Footer Information</h5>
                                 <hr>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Protocal <span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control" name="protocal">
+                                    <label for="">Footer About</label>
+                                    <textarea name="footer_about" id="" cols="0" rows="3" class="form-control"></textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-6" data-col="col">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="email_template">Email Template <span style="color: red;" class="req">*</span> </label>
-                                    <select name="email_template" class="email_template" data-required id="email_template" data-placeholder="Select status"></select>
-                                </div>
-                                <span class="v-msg"></span>
-                          </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">SMTP Host <span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control" name="smtp_host">
+                                    <label for="">Footer Logo</label><br>
+                                    <input type="file" name="footer_log">
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">SMTP Port <span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control" name="smtp_port">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="website">Sender Email <span style="color: red;" class="req">*</span></label>
-                                    <input type="email" class="form-control" name="sender_email">
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="website">Email Password <span style="color: red;" class="req">*</span></label>
-                                    <input type="password" class="form-control" name="email_password">
-                                </div>
-                            </div>
     
                         </div>
                     </div>

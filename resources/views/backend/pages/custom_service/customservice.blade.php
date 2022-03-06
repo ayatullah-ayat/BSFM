@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Category pages')
+@section('title','Custom Service')
 
 @section('content')
     <div>
@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Currency</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Currency</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Custom Service</a> </h6>
+                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Service</i></button>
             </div>
 
             <div class="card-body">
@@ -18,84 +18,50 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Currency Name<i class="wi wi-night-alt-thunderstorm"></i></th>
-                                <th>Currency Icon</th>
-                                <th>Position</th>
-                                <th>Conversion Rate</th>
-                                <th class="text-center">Status</th>
+                                <th>Service Title</th>
+                                <th>Service Description</th>
+                                <th>Service Thumbnail</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+
                             <tr>
-                                <th>1001</th>
-                                <th>BDT</th>
-                                <th>Tk</th>
-                                <th>left</th>
-                                <th>0</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
+                                <td>01</td>
+                                <td>Sourcing cutting machine</td>
+                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid, nobis.</td>
+                                <td>Service Thumbnail</td>
+                                <td class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                     <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
+                                </td>
                             </tr>
+
                             <tr>
-                                <th>1001</th>
-                                <th>BDT</th>
-                                <th>Tk</th>
-                                <th>left</th>
-                                <th>0</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
+                                <td>02</td>
+                                <td>Sourcing cutting machine</td>
+                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid, nobis.</td>
+                                <td>Service Thumbnail</td>
+                                <td class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                     <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
+                                </td>
                             </tr>
+
                             <tr>
-                                <th>1001</th>
-                                <th>BDT</th>
-                                <th>Tk</th>
-                                <th>left</th>
-                                <th>0</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
+                                <td>03</td>
+                                <td>Sourcing cutting machine</td>
+                                <td>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid, nobis.</td>
+                                <td>Service Thumbnail</td>
+                                <td class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                     <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
+                                </td>
                             </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>BDT</th>
-                                <th>Tk</th>
-                                <th>left</th>
-                                <th>0</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                           
+
                         </tbody>
                         {{-- <tfoot>
                             <tr>
@@ -119,7 +85,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Currency</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Custom Service</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -129,39 +95,35 @@
                     <div id="service-container">
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Currency Information</h5>
+                                <h5 class="font-weight-bold bg-custom-booking">Service Information</h5>
                                 <hr>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Currency Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control">
+                                    <label for="">Service Title <span style="color: red;" class="req">*</span></label>
+                                    <input type="text" class="form-control" name="service_title">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="currency_position">Currency Position</label>
-                                    <select name="currency_position" class="currency_position" data-required id="currency_position" data-placeholder="Select a Status"></select>
+                                    <label for="service_description">Service Description</label>
+                                    <textarea name="service_description" id="" cols="0" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Conversion Rate</label>
-                                    <input type="number" class="form-control">
+                                    <label for="service_thumbnail">Service Thumbnail</label> <br>
+                                     <input type="file" name="" id="service_thumbnail" name="service_thumbnail">
                                 </div>
                             </div>
-                            <div class="col-md-6" data-col="col">
+
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="stuff">Select Status<span style="color: red;" class="req">*</span></label>
-                                    <select name="stuff" class="stuff" data-required id="stuff" data-placeholder="Select a Status"></select>
-                                </div>
-                                <span class="v-msg"></span>
-                            </div>
-    
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Currency Icon</label>
-                                    <input class="d-flex align-items-center" type="file" name="" id="">
+                                    <input type="checkbox" name="allow_review" id="allow_review">
+                                    <label for="allow_review"> Allow Review </label>
                                 </div>
                             </div>
     
@@ -209,12 +171,7 @@
             let arr=[
                 {
                     dropdownParent  : '#categoryModal',
-                    selector        : `#stuff`,
-                    type            : 'select',
-                },
-                {
-                    dropdownParent  : '#categoryModal',
-                    selector        : `#currency_position`,
+                    selector        : `#email_template`,
                     type            : 'select',
                 },
                 {

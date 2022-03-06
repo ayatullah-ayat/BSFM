@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://127.0.0.1:8000/admin/dashboard">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -215,7 +215,21 @@
         </div>
     </li>
 {{-- =========================================================================== --}}
-    <div class="sidebar-heading">Custom Order & Account</div>
+    <div class="sidebar-heading">Custom Service & Account</div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#custom_service" aria-expanded="true"
+            aria-controls="custom_service">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Custom Services</span>
+        </a>
+        <div id="custom_service" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('admin.custom_product') }}">Custom Product</a>
+                <a class="collapse-item" href="{{ route('admin.admin.custom_service') }}">Custom Service</a>
+            </div>
+        </div>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#custom_orders" aria-expanded="true"
@@ -322,10 +336,11 @@
         </a>
         <div id="Software" class="collapse" aria-labelledby="Software" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">Site Logo</a>
-                <a class="collapse-item" href="#">Header</a>
-                <a class="collapse-item" href="#">Footer</a>
-                <a class="collapse-item" href="#">Social Icon</a>
+                <a class="collapse-item" href="#">Web Logo</a>
+                <a class="collapse-item" href="#">Web Header</a>
+                <a class="collapse-item" href="{{ route('admin.web_footer') }}">Web Footer</a>
+                <a class="collapse-item" href="{{ route('admin.social_icon') }}">Social Icon</a>
+                <a class="collapse-item" href="{{ route('admin.contact_us') }}">Contact Us</a>
             </div>
         </div>
     </li>

@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CustomOrderController;
+use App\Http\Controllers\Admin\CustomProductController;
+use App\Http\Controllers\Admin\CustomServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
@@ -9,10 +12,12 @@ use App\Http\Controllers\Admin\ManageGatewayController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SmsSettignsController;
+use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\StockReportController;
+use App\Http\Controllers\Admin\WebFooterController;
 
-Route::redirect('/', '/admin/dashboard', 301);
-Route::redirect('/admin', '/admin/dashboard', 301);
+// Route::redirect('/', '/admin/dashboard', 301);
+// Route::redirect('/admin', '/admin/dashboard', 301);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
     
@@ -115,6 +120,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/email-configuration', [EmailConfigurationController::class, 'index'])->name('email_configuration');
     Route::get('/manage-compnay', [ManageCompanyController::class, 'index'])->name('manage_company');
     Route::get('/manage-gateway', [ManageGatewayController::class, 'index'])->name('manage_gateway');
+
+    Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
+    Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
+    Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
+
+    Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');
+    Route::get('/custom-service', [CustomServiceController::class, 'index'])->name('admin.custom_service');
+    
 });
 
 

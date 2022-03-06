@@ -4,7 +4,7 @@
 
 @section('content')
     <div>
-        <div class="container card p-3">
+        <div class="container card p-3 shadow">
             <h4 class="text-dark font-weight-bold text-dark">Custom Order Information</h4>
             <div class="row">
 
