@@ -63,17 +63,27 @@ function ajaxFormToken(){
 }
 
 
-function ajaxRequest(obj, reload=false){
+function ajaxRequest(obj, { reload, timer , html }){
+
     $.ajax({
         ...obj,
         success(res){
 
-            // console.log(res?.data);
             if(res?.success){
                 _toastMsg(res?.msg ?? 'Success!', 'success');
 
                 if(reload){
-                   location.reload()
+                    if(timer){
+                        setTimeout(() => {
+                            location.reload()
+                        }, timer);
+                    }else{
+                        location.reload()
+                    }
+                }
+
+                if(res?.data){
+                    data = res?.data
                 }
             }
         },
@@ -82,6 +92,7 @@ function ajaxRequest(obj, reload=false){
             _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
         },
     });
+
 }
 
 

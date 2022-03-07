@@ -17,7 +17,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>#SL</th>
                                 <th>Category Name</th>
                                 <th>Category Description</th>
                                 <th>Category Image</th>
@@ -26,80 +26,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Womens gfgfgf</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Womens gfgfgf</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Womens gfgfgf</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Womens gfgfgf</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
+                            @isset($categories)
+                                @foreach ($categories as $category)
+                                    <tr data-category="{{json_encode($category)}}">
+                                        <th>{{$loop->iteration}}</th>
+                                        <th>{{ $category->category_name ?? 'N/A'}}</th>
+                                        <th>{{ $category->category_description	 ?? 'N/A'}}</th>
+                                        <th>
+                                            @if($category->category_image)
+                                            <img src="{{ asset($category->category_image) }}" alt="Category Image">
+                                            @else 
+                                            <img src="" alt="Category Image">
+                                            @endif
+                                        </th>
+                                        <th class="text-center">
+                                            {!! $category->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                        </th>
+                                        <th class="text-center">
+                                            <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none detail"></a>
+                                            <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="{{ route('admin.category.destroy',$category->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                        </th>
+                                    </tr>
+                                @endforeach
+                            @endisset
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
                     </table>
                 </div>
@@ -129,7 +80,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">Category Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="categoryName">
                                 </div>
                             </div>
                             {{-- <div class="col-md-6" data-col="col">
@@ -152,14 +103,24 @@
                                 <div class="form-group">
                                    <label for="">Category Description</label>
                                    {{-- <textarea rows="4" type="text" class="form-control"> --}}
-                                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" name="" id="categoryDescription" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Category Image</label>
-                                    <input class="d-flex align-items-center" type="file" name="" id="">
+                                    <input class="d-flex align-items-center" type="file" accept="image/*" name="" id="categoryImage">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Is Active</label><br>
+                                    <input type="radio" name="is_active" id="isActive" checked>
+                                    <label for="isActive">Active</label>
+                                    <input type="radio" name="is_active" id="isInActive">
+                                    <label for="isInActive">Inactive</label>
                                 </div>
                             </div>
     
@@ -171,6 +132,30 @@
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
                         <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="categoryDetailModal"  tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Category Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body" id="modalDetail"></div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -198,8 +183,90 @@
             init();
 
             $(document).on('click','#add', createModal)
+            $(document).on('click','.detail', showDataToModal)
+
+            $(document).on('click','#reset', resetForm)
             $(document).on('click','#category_save_btn', submitToDatabase)
+            $(document).on('click','.delete', deleteToDatabase)
         });
+
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
+
+
+        function resetForm(){
+            resetData();
+        }
+
+
+        function showDataToModal(){
+            let 
+            elem        = $(this),
+            tr          = elem.closest('tr'),
+            category    = tr?.attr('data-category') ? JSON.parse(tr.attr('data-category')) : null,
+            modalDetailElem = $('#modalDetail');
+
+            if(category){
+                let html = `
+                <table class="table table-sm table-bordered table-striped">
+                    <tr>
+                        <th>Category Name</th>
+                        <td>${category.category_name ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Category Description</th>
+                        <td>${category.category_description ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Category Image</th>
+                        <td>
+                            ${ category.category_image ? `
+                                <img src="{{ asset('') }}/${category.category_image}" alt="Category Image">
+                            `: ` <img src="" alt="Category Image">`}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>${category.is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>'}</td>
+                    </tr>
+                </table>
+                `;
+
+                modalDetailElem.html(html);
+            }
+
+            $('#categoryDetailModal').modal('show')
+        }
 
 
         function init(){
@@ -242,19 +309,38 @@
         }
 
         function submitToDatabase(){
-            //
 
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{ route('admin.category.store')}}`, 
                 method  : "POST",
-                data    : {},
+                data    : formatData(),
             };
 
-            ajaxRequest(obj);
+            ajaxRequest(obj, { reload: true, timer: 2000 })
 
-            hideModal('#categoryModal');
+            resetData();
+
+            // hideModal('#categoryModal');
+        }
+
+
+        function formatData(){
+            return {
+                category_name       : $('#categoryName').val().trim(),
+                category_description: $('#categoryDescription').val().trim(),
+                category_image      : $('#categoryImage').val(),
+                is_active           : $('#isActive').is(':checked') ? 1 : 0,
+            };
+        }
+
+
+        function resetData(){
+            $('#categoryName').val(null)
+            $('#categoryDescription').val(null)
+            $('#categoryImage').val(null)
+            $('#isActive').prop('checked', true)
         }
 
     </script>

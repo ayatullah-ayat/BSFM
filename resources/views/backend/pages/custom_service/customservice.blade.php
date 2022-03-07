@@ -207,7 +207,7 @@
 
         function submitToDatabase(){
             //
-
+            
             ajaxFormToken();
 
             let obj = {

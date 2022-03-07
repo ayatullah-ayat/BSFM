@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CustomOrderController;
 use App\Http\Controllers\Admin\CustomProductController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\StockReportController;
+use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WebFooterController;
 
 // Route::redirect('/', '/admin/dashboard', 301);
@@ -31,15 +34,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.demo.chart');
     });
 
-    Route::view('/category', 'backend.pages.category.categorylist')->name('category');
-
-    Route::get('/add-category', function () {
-        return view('backend.pages.category.addcategory');
+    Route::group(['prefix' => 'category', 'as' => 'category.'],function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::post('/', [CategoryController::class, 'store'])->name('store');
+        Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/subcategory', function () {
-        return view('backend.pages.category.subcategory');
-    })->name('subcategory');
+    Route::group(['prefix' => 'subcategory', 'as' => 'subcategory.'],function () {
+        Route::get('/', [SubcategoryController::class, 'index'])->name('index');
+        Route::post('/', [SubcategoryController::class, 'store'])->name('store');
+        Route::put('/{subcategory}', [SubcategoryController::class, 'update'])->name('update');
+        Route::delete('/{subcategory}', [SubcategoryController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/brand', function () {
         return view('backend.pages.brand.brandListing');
@@ -49,9 +56,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.pages.variant.variantlist');
     })->name('variant');
 
-    Route::get('/unit', function () {
-        return view('backend.pages.unit.unitlist');
-    })->name('unit');
+    Route::get('/unit', [UnitController::class, 'index'])->name('unit');
+
 
     Route::get('/tax', function () {
         return view('backend.pages.tax.taxlist');

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use Exception;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::orderByDesc('id')->get();
+        return view('backend.pages.category.categorylist', compact('categories'));
     }
 
     /**
@@ -35,9 +37,28 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        try {
+
+            $data       = $request->all();
+            $category   = Category::create($data);
+            if(!$category)
+                throw new Exception("Unable to create category!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Category Created Successfully!',
+                'data'      => $category
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -69,9 +90,28 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //
+        try {
+
+            $data           = $request->all();
+            $categoryStatus = $category->update($data);
+            if(!$categoryStatus)
+                throw new Exception("Unable to Update category!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Category Updated Successfully!',
+                'data'      => $category->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -82,6 +122,22 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try {
+
+            $isDeleted = $category->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete category!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Category Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
 }
