@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
-use Exception;
+use App\Http\Services\ImageChecker;
 
 class CategoryController extends Controller
 {
+    use ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -41,8 +43,21 @@ class CategoryController extends Controller
     {
         try {
 
-            $data       = $request->all();
-            $category   = Category::create($data);
+            $category_image = $request->category_image;
+            $data           = $request->all();
+            $fileLocation   = 'assets/img/blank-img.png';
+
+            if($category_image){
+                //file, dir
+                $fileResponse = $this->uploadFile($category_image, 'categories/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['category_image'] = $fileLocation;
+            $category = Category::create($data);
             if(!$category)
                 throw new Exception("Unable to create category!", 403);
 
@@ -94,7 +109,28 @@ class CategoryController extends Controller
     {
         try {
 
+            if(!$category)
+                throw new Exception("No record Found!", 404);
+                
             $data           = $request->all();
+            $category_image = $request->category_image;
+            $fileLocation   = $category->category_image;
+
+            if ($category_image) {
+                //file, dir
+                if($fileLocation){
+                    $this->deleteImage($fileLocation);
+                }
+                
+                $fileResponse = $this->uploadFile($category_image, 'categories/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['category_image'] = $fileLocation;
+
             $categoryStatus = $category->update($data);
             if(!$categoryStatus)
                 throw new Exception("Unable to Update category!", 403);

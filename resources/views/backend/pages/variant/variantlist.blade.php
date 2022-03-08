@@ -17,65 +17,33 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>#SL</th>
                                 <th>Variant Name</th>
                                 <th>Variant Type</th>
+                                <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>2001</th>
-                                <th>Red</th>
-                                <th>Color</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
+                            @isset($variants)
+                                @foreach ($variants as $variant)
+                                    <tr>
+                                        <th>{{$loop->iteration}}</th>
+                                        <th>{{$variant->variant_name}}</th>
+                                        <th>{{$variant->variant_type}}</th>
+                                        <th class="text-center">
+                                            {!! $variant->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                        </th>
+                                        <th class="text-center">
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                        </th>
+                                    </tr>
+                                @endforeach
+                            @endisset
                             
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
                     </table>
                 </div>

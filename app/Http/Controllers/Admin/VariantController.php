@@ -16,7 +16,8 @@ class VariantController extends Controller
      */
     public function index()
     {
-        //
+        $variants = Variant::orderByDesc('id')->get();
+        return view('backend.pages.variant.variantlist', compact('variants'));
     }
 
     /**

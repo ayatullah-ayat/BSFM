@@ -7,9 +7,11 @@ use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Services\ImageChecker;
 
 class BrandController extends Controller
 {
+    use ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -40,15 +42,33 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         try {
-           $data = $request->all();
-           $brands= Brand::create($data);
-           if(!$brands)
-           throw new Exception('Unable to create brand', 403);
-           return response()->json([
-            'success'   => true,
-            'msg'       => 'Brand Created Successfully!',
-            'data'      => $brands
-        ]);
+
+            $brand_image    = $request->brand_image;
+            $data           = $request->all();
+            $fileLocation   = 'assets/img/blank-img.png';
+    
+            if($brand_image){
+                //file, dir
+                $fileResponse = $this->uploadFile($brand_image, 'brand/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            // $data['brand_image'] = $fileLocation;
+            // $data  = $request->all();
+            
+            $data['brand_image'] = $fileLocation;
+            $brand = Brand::create($data);
+            if(!$brand)
+                throw new Exception('Unable to create brand', 403);
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Brand Created Successfully!',
+                'data'      => $brand
+            ]);
+
         } catch (\Exception $th) {
             return response()->json([
                 'success'   => false,
@@ -91,9 +111,32 @@ class BrandController extends Controller
     {
         try {
 
+            if(!$brand)
+                throw new Exception("No record Found!", 404);
+
+            // $categoryStatus = $brand->update($data);
             $data           = $request->all();
-            $categoryStatus = $brand->update($data);
-            if(!$categoryStatus)
+            $brand_image    = $request->brand_image;
+            $fileLocation   = $brand->brand_image;
+            
+            if ($brand_image) {
+                //file, dir
+                if($fileLocation){
+                    $this->deleteImage($fileLocation);
+                }
+                
+                $fileResponse = $this->uploadFile($brand_image, 'brand/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['brand_image'] = $fileLocation;
+
+            $brandStatus = $brand->update($data);
+
+            if(!$brandStatus)
                 throw new Exception("Unable to Update Brand!", 403);
 
             return response()->json([

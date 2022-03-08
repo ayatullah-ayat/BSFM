@@ -148,3 +148,30 @@ function globeInit(arr=[]){
 //     },
 
 // ];
+
+
+
+
+function fileRead(elem, src = '#img-preview') {
+    if (elem.files && elem.files[0]) {
+        let FR = new FileReader();
+        FR.addEventListener("load", function (e) {
+            $(document).find(src).attr('src', e.target.result);
+        });
+
+        FR.readAsDataURL(elem.files[0]);
+    }
+}       
+
+
+
+function fileToUpload(selector = '#img-preview', defaultSrc=false) {
+    const pattern = /base64/im;
+
+    if (defaultSrc){
+        $(document).find(selector).attr('src', defaultSrc);  
+    }
+    
+    const file    = $(document).find(selector).attr('src');
+    return pattern.test(file) ? file : null;
+}

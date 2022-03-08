@@ -34,9 +34,9 @@
                                         <th>{{ $category->category_description	 ?? 'N/A'}}</th>
                                         <th>
                                             @if($category->category_image)
-                                            <img src="{{ asset($category->category_image) }}" alt="Category Image">
+                                            <img src="{{ asset($category->category_image) }}" style="width: 80px;" alt="Category Image">
                                             @else 
-                                            <img src="" alt="Category Image">
+                                            <img src="" style="width: 80px;" alt="Category Image">
                                             @endif
                                         </th>
                                         <th class="text-center">
@@ -83,21 +83,6 @@
                                     <input type="text" class="form-control" id="categoryName">
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6" data-col="col">
-                                <div class="form-group">
-                                    <label for="stuff">Parent Category<span style="color: red;" class="req">*</span></label>
-                                    <select name="stuff" class="stuff" data-required id="stuff" data-placeholder="Select a Staff"></select>
-                                </div>
-                                <span class="v-msg"></span>
-                            </div>
-     --}}
-                            {{-- <div class="col-md-6" data-col="col">
-                                <div class="form-group">
-                                    <label for="booking_date">Booking Date <span style="color: red;" class="req">*</span></label>
-                                    <input type="text" data-required autocomplete="off" class="form-control" id="booking_date" name="booking_date">
-                                </div>
-                                <span class="v-msg"></span>
-                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -107,11 +92,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Category Image</label>
-                                    <input class="d-flex align-items-center" type="file" accept="image/*" name="" id="categoryImage">
-                                </div>
+                            <div class="col-md-12 mb-2">
+                                <label for="">Category Image</label>
+                                {!! renderFileInput(['id' => 'categoryImage', 'imageSrc' => '']) !!}
+                                <span class="v-msg"></span>
                             </div>
 
                             <div class="col-md-12">
@@ -190,7 +174,15 @@
             $(document).on('click','#category_save_btn', submitToDatabase)
             $(document).on('click','.delete', deleteToDatabase)
             $(document).on('click' , '#category_update_btn', updateToDatabase)
+            $(document).on('change' , '#categoryImage', checkImage)
         });
+
+
+        // call the func on change file input 
+        function checkImage() {
+            fileRead(this, '#img-preview');
+        }       
+
 
         function deleteToDatabase(e){
             e.preventDefault();
@@ -250,8 +242,8 @@
                         <th>Category Image</th>
                         <td>
                             ${ category.category_image ? `
-                                <img src="{{ asset('') }}/${category.category_image}" alt="Category Image">
-                            `: ` <img src="" alt="Category Image">`}
+                                <img src="{{ asset('') }}${category.category_image}" style="width:80px" alt="Category Image">
+                            `: ` <img src="" style="width:80px" alt="Category Image">`}
                         </td>
                     </tr>
                     <tr>
@@ -323,7 +315,7 @@
 
             resetData();
 
-            // hideModal('#categoryModal');
+            hideModal('#categoryModal');
         }
 
         function showUpdateModal(){
@@ -350,6 +342,9 @@
                     $('#isInActive').prop('checked',true)
                 }
 
+                // show previos image on modal
+                $(document).find('#img-preview').attr('src', `{{ asset('') }}${category.category_image}`);
+
                 showModal('#categoryModal');
             }
 
@@ -370,14 +365,14 @@
 
             resetData();
 
-            // hideModal('#categoryModal');
+            hideModal('#categoryModal');
         }
 
         function formatData(){
             return {
                 category_name       : $('#categoryName').val().trim(),
                 category_description: $('#categoryDescription').val().trim(),
-                category_image      : $('#categoryImage').val(),
+                category_image      : fileToUpload('#img-preview'),
                 is_active           : $('#isActive').is(':checked') ? 1 : 0,
             };
         }
@@ -386,8 +381,11 @@
             $('#categoryName').val(null)
             $('#categoryDescription').val(null)
             $('#categoryImage').val(null)
+            fileToUpload('#img-preview', 'put default src')
             $('#isActive').prop('checked', true)
         }
+
+
 
     </script>
 @endpush

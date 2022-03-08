@@ -35,9 +35,9 @@
                                     <th>{{ $brand->brand_description }}</th>
                                     <th>
                                         @if($brand->brand_image)
-                                            <img src="{{ asset($brand->brand_image) }}" alt="Category Image">
+                                            <img src="{{ asset($brand->brand_image) }}" style="width: 80px;" alt="Brand Image">
                                         @else 
-                                            <img src="" alt="Category Image">
+                                            <img src="" style="width: 80px;" alt="Category Image">
                                         @endif
                                     </th>
                                     <th class="text-center">
@@ -92,11 +92,17 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Brand Image</label>
                                 <input class="d-flex align-items-center " accept="image/*" type="file" name="" id="brand_image">
                             </div>
+                        </div> --}}
+
+                        <div class="col-md-12 mb-2">
+                            <label for="">Brand Image</label>
+                            {!! renderFileInput(['id' => 'brandImage', 'imageSrc' => '']) !!}
+                            <span class="v-msg"></span>
                         </div>
 
                         <div class="col-md-12">
@@ -150,7 +156,14 @@
             $(document).on('click' , '#reset', resetForm)
             $(document).on('click' , '.delete', deleteToDatabase)
             $(document).on('click' , '#brand_update_btn', updateToDatabase)
+
+            $(document).on('change' , '#brandImage', checkImage)
         });
+
+         // call the func on change file input 
+         function checkImage() {
+            fileRead(this, '#img-preview');
+        }    
 
         function deleteToDatabase(e){
             e.preventDefault();
@@ -222,13 +235,16 @@
             showModal('#brandModal');
             $('#brand_save_btn').removeClass('d-none');
             $('#brand_update_btn').addClass('d-none');
-            $('#categoryModal .heading').text('Create');
+            $('#brandModal .heading').text('Create');
+            resetData();
+        }
+
+        function resetForm(){
             resetData();
         }
 
         function submitToDatabase(){
             //
-
             ajaxFormToken();
 
             let obj = {
@@ -238,61 +254,66 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-            resetData()
-            // hideModal('#categoryModal');
+
+            resetData();
+
+            hideModal('#brandModal');
         }
 
         function showUpdateModal(){
 
-        resetData();
+            resetData();
 
-        let brand = $(this).closest('tr').attr('brand-data');
+            let brand = $(this).closest('tr').attr('brand-data');
 
-        if(brand){
+            if(brand){
 
-            $('#brand_save_btn').addClass('d-none');
-            $('#brand_update_btn').removeClass('d-none');
+                $('#brand_save_btn').addClass('d-none');
+                $('#brand_update_btn').removeClass('d-none');
 
-            brand = JSON.parse(brand);
+                brand = JSON.parse(brand);
 
-            $('#brandModal .heading').text('Edit').attr('data-id', brand?.id)
+                $('#brandModal .heading').text('Edit').attr('data-id', brand?.id)
 
-            $('#brand_name').val(brand?.brand_name)
-            $('#brand_description').val(brand?.brand_description)
-            
-            if(brand?.is_active){
-                $('#isActive').prop('checked',true)
-            }else{
-                $('#isInActive').prop('checked',true)
+                $('#brand_name').val(brand?.brand_name)
+                $('#brand_description').val(brand?.brand_description)
+                
+                if(brand?.is_active){
+                    $('#isActive').prop('checked',true)
+                }else{
+                    $('#isInActive').prop('checked',true)
+                }
+
+                // show previos image on modal
+                $(document).find('#img-preview').attr('src', `{{ asset('') }}${brand.brand_image}`);
+
+                showModal('#brandModal');
             }
-
-            showModal('#brandModal');
-          }
         }
         
 
         function updateToDatabase(){
-        ajaxFormToken();
+            ajaxFormToken();
 
-        let id  = $('#brandModal .heading').attr('data-id');
-        let obj = {
-            url     : `{{ route('admin.brand.update', '' ) }}/${id}`, 
-            method  : "PUT",
-            data    : formatData(),
-        };
+            let id  = $('#brandModal .heading').attr('data-id');
+            let obj = {
+                url     : `{{ route('admin.brand.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : formatData(),
+            };
 
-        ajaxRequest(obj, { reload: true, timer: 2000 })
+            ajaxRequest(obj, { reload: true, timer: 2000 })
 
-        resetData();
+            resetData();
 
-        // hideModal('#categoryModal');
+            hideModal('#brandModal');
         }
 
         function formatData(){
             return {
                 brand_name          : $('#brand_name').val().trim(),
                 brand_description   : $('#brand_description').val().trim(),
-                brand_image         : $('#brand_image').val(),
+                brand_image         : fileToUpload('#img-preview'),
                 is_active           : $('#isActive').is(':checked') ? 1 : 0,
             };
         }
@@ -300,12 +321,10 @@
         function resetData(){
             $('#brand_name').val(null)
             $('#brand_description').val(null)
-            $('#brand_image').val(null)
+            $('#brandImage').val(null)
+            fileToUpload('#img-preview', 'put default src')
             $('#isActive').prop('checked', true)
         }
 
-        function resetForm(){
-            resetData();
-        }
     </script>
 @endpush

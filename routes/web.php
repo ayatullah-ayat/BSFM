@@ -18,8 +18,9 @@ use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\WebFooterController;
-use Illuminate\Routing\RouteGroup;
+
 
 // Route::redirect('/', '/admin/dashboard', 301);
 // Route::redirect('/admin', '/admin/dashboard', 301);
@@ -57,16 +58,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'variant', 'as' => 'variant.'], function(){
-        Route::get('/', [BrandController::class, 'index'])->name('index');
-        Route::post('/', [BrandController::class, 'store'])->name('store');
-        Route::put('/{brand}', [BrandController::class, 'update'])->name('update');
-        Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
+    Route::group(['prefix' => 'variants', 'as' => 'variant.'], function(){
+        Route::get('/', [VariantController::class, 'index'])->name('index');
+        Route::post('/', [VariantController::class, 'store'])->name('store');
+        Route::put('/{brand}', [VariantController::class, 'update'])->name('update');
+        Route::delete('/{brand}', [VariantController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/variant', function () {
-        return view('backend.pages.variant.variantlist');
-    })->name('variant');
+    // Route::group(['prefix' => 'units', 'as' => 'unit.'], function(){
+    //     Route::get('/', [BrandController::class, 'index'])->name('index');
+    //     Route::post('/', [BrandController::class, 'store'])->name('store');
+    //     Route::put('/{brand}', [BrandController::class, 'update'])->name('update');
+    //     Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
+    // });
 
     Route::get('/unit', [UnitController::class, 'index'])->name('unit');
 

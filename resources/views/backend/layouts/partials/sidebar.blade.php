@@ -151,7 +151,7 @@
         <div id="variant" class="collapse" aria-labelledby="variant" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">New Variant</a>
-                <a class="collapse-item" href="{{ route('admin.variant')}}">Manage Variant</a>
+                <a class="collapse-item" href="{{ route('admin.variant.index')}}">Manage Variant</a>
             </div>
         </div>
     </li>
