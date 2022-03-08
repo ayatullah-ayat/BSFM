@@ -122,7 +122,7 @@
         <div id="category" class="collapse" aria-labelledby="category" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">New Category</a>
-                <a class="collapse-item" href="{{ route('admin.category')}}">Manage Category</a>
+                <a class="collapse-item" href="{{ route('admin.categories.index')}}">Manage Category</a>
                 <a class="collapse-item" href="{{ route('admin.subcategory')}}">Manage Sub Category</a>
             </div>
         </div>

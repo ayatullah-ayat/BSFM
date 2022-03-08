@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::redirect('/', '/admin/dashboard', 301);
@@ -18,7 +19,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.demo.chart');
     });
 
-    Route::view('/category', 'backend.pages.category.categorylist')->name('category');
+    // =================== Start of category ================================================
+
+    Route::group(['prefix'=> 'categories', 'as' => 'categories.'], function(){
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+    });
+
+    // =================== End of category ================================================
 
     Route::get('/add-category', function () {
         return view('backend.pages.category.addcategory');
