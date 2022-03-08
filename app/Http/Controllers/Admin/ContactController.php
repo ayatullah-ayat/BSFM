@@ -16,7 +16,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.pages.cms_settings.contactform');
     }
 
     /**

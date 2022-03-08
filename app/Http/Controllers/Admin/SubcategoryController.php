@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use App\Http\Requests\SubCategoryRequest;
+use Exception;
 
 class SubcategoryController extends Controller
 {
@@ -16,7 +17,8 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories = Subcategory::orderByDesc('id')->get();
+        return view('backend.pages.category.subcategory', compact('subcategories'));
     }
 
     /**
@@ -35,9 +37,27 @@ class SubcategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SubCategoryRequest $request)
     {
-        //
+        try {
+            $data           = $request->all();
+            $subcategory    = Subcategory::create($data);
+            if(!$subcategory)
+                throw new Exception("Unable to create sub category!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Sub Category Created Successfully!',
+                'data'      => $subcategory
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -82,6 +102,22 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
-        //
+        try {
+
+            $isDeleted = $subcategory->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete subcategory!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Sub Category Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
 }

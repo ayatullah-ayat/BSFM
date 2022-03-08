@@ -63,25 +63,39 @@ function ajaxFormToken(){
 }
 
 
-function ajaxRequest(obj, reload=false){
+function ajaxRequest(obj, { reload, timer , html }){
+
     $.ajax({
         ...obj,
         success(res){
-
-            // console.log(res?.data);
+            console.log(res);
             if(res?.success){
                 _toastMsg(res?.msg ?? 'Success!', 'success');
 
                 if(reload){
-                   location.reload()
+                    if(timer){
+                        setTimeout(() => {
+                            location.reload()
+                        }, timer);
+                    }else{
+                        location.reload()
+                    }
+                }
+
+                if(res?.data){
+                    data = res?.data
                 }
             }
         },
         error(err){
+            // setTimeout(() => {
+            //     location.reload()
+            // }, 1000);
             console.log(err);
             _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
         },
     });
+
 }
 
 
@@ -134,3 +148,30 @@ function globeInit(arr=[]){
 //     },
 
 // ];
+
+
+
+
+function fileRead(elem, src = '#img-preview') {
+    if (elem.files && elem.files[0]) {
+        let FR = new FileReader();
+        FR.addEventListener("load", function (e) {
+            $(document).find(src).attr('src', e.target.result);
+        });
+
+        FR.readAsDataURL(elem.files[0]);
+    }
+}       
+
+
+
+function fileToUpload(selector = '#img-preview', defaultSrc=false) {
+    const pattern = /base64/im;
+
+    if (defaultSrc){
+        $(document).find(selector).attr('src', defaultSrc);  
+    }
+    
+    const file    = $(document).find(selector).attr('src');
+    return pattern.test(file) ? file : null;
+}

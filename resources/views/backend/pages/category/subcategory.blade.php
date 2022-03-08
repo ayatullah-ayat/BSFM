@@ -17,112 +17,44 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
+                                <th>#SL</th>
                                 <th>Parent Category</th>
-                                <th>Category Description</th>
+                                <th>Sub Category Name</th>
+                                <th>Sub Category Description</th>
                                 <th>Sub-Category Image</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Mans</th>
-                                <th>Mans product</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Mans</th>
-                                <th>Mans product</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Mans</th>
-                                <th>Mans product</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Mans</th>
-                                <th>Mans product</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Clothing</th>
-                                <th>Mans</th>
-                                <th>Mans product</th>
-                                <th>Category Images</th>
-                                <th class="text-center">
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
-                                </th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
+
+                            @isset($subcategories)
+                                @foreach ($subcategories as $subcategory)
+                                    <tr>
+                                        <th>{{$loop->iteration}}</th>
+                                        <th>{{$subcategory->category_id ?? 'N/A'}}</th>
+                                        <th>{{$subcategory->subcategory_name ?? 'N/A'}}</th>
+                                        <th>{{$subcategory->subcategory_description ?? 'N/A'}}</th>
+                                        <th>
+                                            @if($subcategory->subcategory_image)
+                                                <img src="{{ asset($subcategory->subcategory) }}" alt="SubCategory Image">
+                                            @else 
+                                                <img src="" alt="SubCategory Image">
+                                            @endif
+                                        </th>
+                                        <th class="text-center">
+                                            {!! $subcategory->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                        </th>
+                                        <th class="text-center">
+                                            <a href="javescript:void(0)" class="fa fa-eye text-info text-decoration-none details"></a>
+                                            <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="{{ route('admin.subcategory.destroy',$subcategory->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                        </th>
+                                    </tr>
+                                @endforeach
+                            @endisset
                             
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
                     </table>
                 </div>
@@ -131,7 +63,7 @@
     
     </div>
 
-    <div class="modal fade" id="categoryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal fade" id="subcategoryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
@@ -151,39 +83,41 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Category Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control">
+                                    <label for="">Sub Category Name<span style="color: red;" class="req">*</span></label>
+                                    <input type="text" class="form-control" id="sub_category_name">
                                 </div>
                             </div>
 
                             <div class="col-md-6" data-col="col">
                                 <div class="form-group">
-                                    <label for="stuff">Parent Category<span style="color: red;" class="req">*</span></label>
-                                    <select name="stuff" class="stuff" data-required id="stuff" data-placeholder="Parent Category"></select>
+                                    <label for="parent_category">Parent Category</label>
+                                    <select name="parent_category" class="parent_category" data-required id="parent_category" data-placeholder="Parent Category"></select>
                                 </div>
                                 <span class="v-msg"></span>
                             </div>
-    
-                            {{-- <div class="col-md-6" data-col="col">
-                                <div class="form-group">
-                                    <label for="booking_date">Booking Date <span style="color: red;" class="req">*</span></label>
-                                    <input type="text" data-required autocomplete="off" class="form-control" id="booking_date" name="booking_date">
-                                </div>
-                                <span class="v-msg"></span>
-                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="form-group">
                                    <label for="">Category Description</label>
                                    {{-- <textarea rows="4" type="text" class="form-control"> --}}
-                                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" name="" id="sub_category_description" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Category Image</label>
-                                    <input class="d-flex align-items-center" type="file" name="" id="">
+                                    <input class="d-flex align-items-center" type="file" name="" id="sub_category_images">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Is Active</label><br>
+                                    <input type="radio" name="is_active" id="isActive" checked>
+                                    <label for="isActive">Active</label>
+                                    <input type="radio" name="is_active" id="isInActive">
+                                    <label for="isInActive">Inactive</label>
                                 </div>
                             </div>
     
@@ -193,8 +127,31 @@
     
                 <div class="modal-footer">
                     <div class="w-100">
-                        <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button type="button" id="resets" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
+                        <button id="subcategory_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="subcategoryDetailModal"  tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel2">Sub Category Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body" id="modalDetails"></div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -222,16 +179,89 @@
             init();
 
             $(document).on('click','#add', createModal)
-            $(document).on('click','#category_save_btn', submitToDatabase)
+            $(document).on('click','#subcategory_save_btn', submitToDatabase)
+            $(document).on('click', '#resets', resetForm)
+            $(document).on('click','.delete', deleteToDatabase)
+            $(document).on('click','.details', showDataToModal)
         });
 
+        function showDataToModal(){
+            let 
+            elem            = $(this),
+            tr              = elem.closest('tr'),
+            subcategory     = tr?.attr('data-category') ? JSON.parse(tr.attr('data-category')) : null,
+            modalDetailElem = $('#modalDetails');
+
+            if(subcategory){
+                let html = `
+                <table class="table table-sm table-bordered table-striped">
+                    <tr>
+                        <th>Category Name</th>
+                        <td>${subcategory.subcategory_name ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Parent Category</th>
+                        <td>${subcategory.category_id ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Category Image</th>
+                        <td>
+                            ${subcategory.category_image ? `
+                                <img src="{{ asset('') }}/${subcategory.subcategory_image}" alt="Category Image">
+                            `: ` <img src="" alt="Category Image">`}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>${subcategory.is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>'}</td>
+                    </tr>
+                </table>
+                `;
+
+                modalDetailElem.html(html);
+            }
+
+            $('#subcategoryDetailModal').modal('show')
+        }
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
 
         function init(){
 
             let arr=[
                 {
                     dropdownParent  : '#categoryModal',
-                    selector        : `#stuff`,
+                    selector        : `.parent_category`,
                     type            : 'select',
                 },
                 {
@@ -262,7 +292,11 @@
 
 
         function createModal(){
-            showModal('#categoryModal');
+            showModal('#subcategoryModal');
+        }
+
+        function resetForm(){
+            resetData();
         }
 
         function submitToDatabase(){
@@ -271,14 +305,32 @@
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{ route('admin.subcategory.store') }}`, 
                 method  : "POST",
-                data    : {},
+                data    : formatData(),
             };
 
-            ajaxRequest(obj);
+            ajaxRequest(obj, { reload: true, timer: 2000 });
 
-            hideModal('#categoryModal');
+            resetData();
+
+            // hideModal('#categoryModal');
+        }
+
+        function formatData(){
+            return {
+                subcategory_name        : $('#sub_category_name').val().trim(),
+                subcategory_description : $('#sub_category_description').val().trim(),
+                subcategory_image       : $('#sub_category_images').val(),
+                is_active               : $('#isActive').is(':checked') ? 1 : 0,
+            };
+        }
+
+        function resetData(){
+            $('#sub_category_name').val(null)
+            $('#sub_category_description').val(null)
+            $('#sub_category_images').val(null)
+            $('#isActive').prop('checked', true)
         }
 
     </script>

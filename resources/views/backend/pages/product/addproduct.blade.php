@@ -3,7 +3,7 @@
 @section('title', 'Add Product')
 
 @section('content')
-<div class="container card p-3">
+<div class="container card p-3 shadow">
     <h4 class="text-dark f-2x font-weight-bold text-dark">Add Product Information</h4>
     <div class="row">
 

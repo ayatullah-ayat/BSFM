@@ -16,7 +16,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        return view("backend.pages.sale.managesale");
     }
 
     /**
@@ -26,7 +26,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.pages.sale.addsale');
     }
 
     /**

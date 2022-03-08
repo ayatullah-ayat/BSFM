@@ -140,14 +140,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Currency Position</label>
-                                    <input type="text" class="form-control">
+                                    <label for="currency_position">Currency Position</label>
+                                    <select name="currency_position" class="currency_position" data-required id="currency_position" data-placeholder="Select a Status"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Conversion Rate</label>
-                                    <input type="text" class="form-control">
+                                    <input type="number" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6" data-col="col">
@@ -210,6 +210,11 @@
                 {
                     dropdownParent  : '#categoryModal',
                     selector        : `#stuff`,
+                    type            : 'select',
+                },
+                {
+                    dropdownParent  : '#categoryModal',
+                    selector        : `#currency_position`,
                     type            : 'select',
                 },
                 {
