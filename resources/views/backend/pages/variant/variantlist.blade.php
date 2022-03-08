@@ -113,13 +113,24 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">Variant Type</label>
                                     <input type="text" class="form-control">
                                 </div>
-                            </div>
+                            </div> --}}
                             
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="label">Variant Type</div>
+                                    <select name="" id="" class="form-control">
+                                        <option>Select Variant</option>
+                                        <option value="">Color</option>
+                                        <option value="">Size</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

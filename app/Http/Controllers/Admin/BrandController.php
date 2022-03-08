@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
+use Exception;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -16,7 +17,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands = Brand::orderByDesc('id')->get();
+        return view('backend.pages.brand.brandListing', compact('brands'));
     }
 
     /**
@@ -35,9 +37,25 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        //
+        try {
+           $data = $request->all();
+           $brands= Brand::create($data);
+           if(!$brands)
+           throw new Exception('Unable to create brand', 403);
+           return response()->json([
+            'success'   => true,
+            'msg'       => 'Brand Created Successfully!',
+            'data'      => $brands
+        ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -71,7 +89,26 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        try {
+
+            $data           = $request->all();
+            $categoryStatus = $brand->update($data);
+            if(!$categoryStatus)
+                throw new Exception("Unable to Update Brand!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Brand Updated Successfully!',
+                'data'      => $brand->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -82,6 +119,23 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        try {
+
+            $isDeleted = $brand->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete category!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Brand Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+    
 }

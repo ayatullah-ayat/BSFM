@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CustomOrderController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WebFooterController;
+use Illuminate\Routing\RouteGroup;
 
 // Route::redirect('/', '/admin/dashboard', 301);
 // Route::redirect('/admin', '/admin/dashboard', 301);
@@ -48,9 +50,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{subcategory}', [SubcategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/brand', function () {
-        return view('backend.pages.brand.brandListing');
-    })->name('brand');
+    Route::group(['prefix' => 'brand', 'as' => 'brand.'], function(){
+        Route::get('/', [BrandController::class, 'index'])->name('index');
+        Route::post('/', [BrandController::class, 'store'])->name('store');
+        Route::put('/{brand}', [BrandController::class, 'update'])->name('update');
+        Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'variant', 'as' => 'variant.'], function(){
+        Route::get('/', [BrandController::class, 'index'])->name('index');
+        Route::post('/', [BrandController::class, 'store'])->name('store');
+        Route::put('/{brand}', [BrandController::class, 'update'])->name('update');
+        Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/variant', function () {
         return view('backend.pages.variant.variantlist');

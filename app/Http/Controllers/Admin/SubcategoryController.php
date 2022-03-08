@@ -40,18 +40,17 @@ class SubcategoryController extends Controller
     public function store(SubCategoryRequest $request)
     {
         try {
-            $data = $request->all();
-            $subcategory = Subcategory::create($data);
-
+            $data           = $request->all();
+            $subcategory    = Subcategory::create($data);
             if(!$subcategory)
-                throw new Exception('Unable to create sub category', 403);
+                throw new Exception("Unable to create sub category!", 403);
 
-                return response()->json([
-                    'success'   => true,
-                    'msg'       => 'Category Created Successfully!',
-                    'data'      => $subcategory
-                ]);
-
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Sub Category Created Successfully!',
+                'data'      => $subcategory
+            ]);
+                
         } catch (\Exception $th) {
             return response()->json([
                 'success'   => false,

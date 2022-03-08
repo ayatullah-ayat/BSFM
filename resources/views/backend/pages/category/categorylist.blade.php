@@ -44,7 +44,7 @@
                                         </th>
                                         <th class="text-center">
                                             <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none detail"></a>
-                                            <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.category.destroy',$category->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </th>
                                     </tr>
@@ -64,7 +64,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Category</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -132,6 +132,7 @@
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
                         <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="category_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -139,7 +140,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="categoryDetailModal"  tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -184,12 +184,13 @@
 
             $(document).on('click','#add', createModal)
             $(document).on('click','.detail', showDataToModal)
+            $(document).on('click','.update', showUpdateModal)
 
             $(document).on('click','#reset', resetForm)
             $(document).on('click','#category_save_btn', submitToDatabase)
             $(document).on('click','.delete', deleteToDatabase)
+            $(document).on('click' , '#category_update_btn', updateToDatabase)
         });
-
 
         function deleteToDatabase(e){
             e.preventDefault();
@@ -223,11 +224,9 @@
             }
         }
 
-
         function resetForm(){
             resetData();
         }
-
 
         function showDataToModal(){
             let 
@@ -268,7 +267,6 @@
             $('#categoryDetailModal').modal('show')
         }
 
-
         function init(){
 
             let arr=[
@@ -303,9 +301,12 @@
             // })
         }
 
-
         function createModal(){
             showModal('#categoryModal');
+            $('#category_save_btn').removeClass('d-none');
+            $('#category_update_btn').addClass('d-none');
+            $('#categoryModal .heading').text('Create')
+            resetData();
         }
 
         function submitToDatabase(){
@@ -325,6 +326,52 @@
             // hideModal('#categoryModal');
         }
 
+        function showUpdateModal(){
+
+            resetData();
+
+            let category = $(this).closest('tr').attr('data-category');
+
+            if(category){
+
+                $('#category_save_btn').addClass('d-none');
+                $('#category_update_btn').removeClass('d-none');
+
+                category = JSON.parse(category);
+
+                $('#categoryModal .heading').text('Edit').attr('data-id', category?.id)
+
+                $('#categoryName').val(category?.category_name)
+                $('#categoryDescription').val(category?.category_description)
+                
+                if(category?.is_active){
+                    $('#isActive').prop('checked',true)
+                }else{
+                    $('#isInActive').prop('checked',true)
+                }
+
+                showModal('#categoryModal');
+            }
+
+
+        }
+
+        function updateToDatabase(){
+            ajaxFormToken();
+
+            let id  = $('#categoryModal .heading').attr('data-id');
+            let obj = {
+                url     : `{{ route('admin.category.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : formatData(),
+            };
+
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+
+            resetData();
+
+            // hideModal('#categoryModal');
+        }
 
         function formatData(){
             return {
@@ -335,13 +382,14 @@
             };
         }
 
-
         function resetData(){
             $('#categoryName').val(null)
             $('#categoryDescription').val(null)
             $('#categoryImage').val(null)
             $('#isActive').prop('checked', true)
         }
+
+      
 
     </script>
 @endpush

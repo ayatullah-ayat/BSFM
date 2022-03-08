@@ -319,7 +319,6 @@
 
         function formatData(){
             return {
-                category_id             : $('#parent_category').val(),
                 subcategory_name        : $('#sub_category_name').val().trim(),
                 subcategory_description : $('#sub_category_description').val().trim(),
                 subcategory_image       : $('#sub_category_images').val(),

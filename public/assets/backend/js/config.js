@@ -68,7 +68,7 @@ function ajaxRequest(obj, { reload, timer , html }){
     $.ajax({
         ...obj,
         success(res){
-
+            console.log(res);
             if(res?.success){
                 _toastMsg(res?.msg ?? 'Success!', 'success');
 
@@ -88,6 +88,9 @@ function ajaxRequest(obj, { reload, timer , html }){
             }
         },
         error(err){
+            // setTimeout(() => {
+            //     location.reload()
+            // }, 1000);
             console.log(err);
             _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
         },
