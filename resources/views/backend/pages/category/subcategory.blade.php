@@ -18,8 +18,8 @@
                         <thead>
                             <tr>
                                 <th>#SL</th>
-                                <th>Parent Category</th>
                                 <th>Sub Category Name</th>
+                                <th>Parent Category</th>
                                 <th>Sub Category Description</th>
                                 <th>Sub-Category Image</th>
                                 <th class="text-center">Status</th>
@@ -32,8 +32,8 @@
                                 @foreach ($subcategories as $subcategory)
                                     <tr>
                                         <th>{{$loop->iteration}}</th>
-                                        <th>{{$subcategory->category_id ?? 'N/A'}}</th>
                                         <th>{{$subcategory->subcategory_name ?? 'N/A'}}</th>
+                                        <th>{{$subcategory->category_id ?? 'N/A'}}</th>
                                         <th>{{$subcategory->subcategory_description ?? 'N/A'}}</th>
                                         <th>
                                             @if($subcategory->subcategory_image)
