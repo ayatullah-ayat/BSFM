@@ -91,7 +91,26 @@ class SubcategoryController extends Controller
      */
     public function update(Request $request, Subcategory $subcategory)
     {
-        //
+        try {
+
+            $data           = $request->all();
+            $categoryStatus = $subcategory->update($data);
+            if(!$categoryStatus)
+                throw new Exception("Unable to Update Subcategory!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'SubCategory Updated Successfully!',
+                'data'      => $subcategory->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**

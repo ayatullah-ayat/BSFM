@@ -389,7 +389,5 @@
             $('#isActive').prop('checked', true)
         }
 
-      
-
     </script>
 @endpush

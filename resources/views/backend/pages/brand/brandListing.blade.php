@@ -29,7 +29,7 @@
                         
                         @isset($brands)
                             @foreach ($brands as $brand)
-                                <tr>
+                                <tr brand-data="{{json_encode($brand)}}">
                                     <th>{{ $loop->iteration }}</th>
                                     <th>{{ $brand->brand_name }}</th>
                                     <th>{{ $brand->brand_description }}</th>
@@ -45,7 +45,7 @@
                                     </th>
                                     <th class="text-center">
                                         {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                        <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none brandUpdate"></a>
+                                        <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                         <a href="{{ route('admin.brand.destroy',$brand->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                     </th>
                                 </tr>
@@ -66,7 +66,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Brand</h5>
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> Brand</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,70 +117,7 @@
                 <div class="w-100">
                     <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
                     <button id="brand_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
-                    <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="updateBrandModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Brand</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div id="service-container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5 class="font-weight-bold bg-custom-booking">Brand Information</h5>
-                            <hr>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="">Brand Name <span style="color: red;" class="req">*</span> </label>
-                                <input type="text" class="form-control " id="brand_name">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                               <label for="">Brand Description</label>
-                               <input type="text" class="form-control " id="brand_description">
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="">Brand Image</label>
-                                <input class="d-flex align-items-center " accept="image/*" type="file" name="" id="brand_image">
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Is Active</label><br>
-                                <input type="radio" name="is_active" id="isActive" checked>
-                                <label for="isActive">Active</label>
-                                <input type="radio" name="is_active" id="isInActive">
-                                <label for="isInActive">Inactive</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <div class="w-100">
-                    <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                    <button id="brand_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Update</span></button>
+                    <button id="brand_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                     <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -207,11 +144,12 @@
         $(document).ready(function(){
             init();
             $(document).on('click' , '#add', createModal)
-            $(document).on('click' , '.brandUpdate', showUpdateModal)
+            $(document).on('click', '.update', showUpdateModal)
+
             $(document).on('click' , '#brand_save_btn', submitToDatabase)
             $(document).on('click' , '#reset', resetForm)
             $(document).on('click' , '.delete', deleteToDatabase)
-            $(document).on('click' , '#brand_update_btn', UpdateToDatabase)
+            $(document).on('click' , '#brand_update_btn', updateToDatabase)
         });
 
         function deleteToDatabase(e){
@@ -244,10 +182,6 @@
                     },
                 });
             }
-        }
-
-        function showUpdateModal(){
-            showModal('#updateBrandModal');
         }
 
         function init(){
@@ -286,6 +220,10 @@
 
         function createModal(){
             showModal('#brandModal');
+            $('#brand_save_btn').removeClass('d-none');
+            $('#brand_update_btn').addClass('d-none');
+            $('#categoryModal .heading').text('Create');
+            resetData();
         }
 
         function submitToDatabase(){
@@ -296,7 +234,7 @@
             let obj = {
                 url     : `{{route('admin.brand.store')}}`, 
                 method  : "POST",
-                data    : formData(),
+                data    : formatData(),
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
@@ -304,23 +242,53 @@
             // hideModal('#categoryModal');
         }
 
-        function UpdateToDatabase(){
-            //
+        function showUpdateModal(){
 
-            ajaxFormToken();
+        resetData();
 
-            let obj = {
-                url     : `{{route('admin.brand.update', $brand->id)}}`, 
-                method  : "PUT",
-                data    : formData(),
-            };
+        let brand = $(this).closest('tr').attr('brand-data');
 
-            ajaxRequest(obj, { reload: true, timer: 2000 })
-            resetData()
-            // hideModal('#categoryModal');
+        if(brand){
+
+            $('#brand_save_btn').addClass('d-none');
+            $('#brand_update_btn').removeClass('d-none');
+
+            brand = JSON.parse(brand);
+
+            $('#brandModal .heading').text('Edit').attr('data-id', brand?.id)
+
+            $('#brand_name').val(brand?.brand_name)
+            $('#brand_description').val(brand?.brand_description)
+            
+            if(brand?.is_active){
+                $('#isActive').prop('checked',true)
+            }else{
+                $('#isInActive').prop('checked',true)
+            }
+
+            showModal('#brandModal');
+          }
+        }
+        
+
+        function updateToDatabase(){
+        ajaxFormToken();
+
+        let id  = $('#brandModal .heading').attr('data-id');
+        let obj = {
+            url     : `{{ route('admin.brand.update', '' ) }}/${id}`, 
+            method  : "PUT",
+            data    : formatData(),
+        };
+
+        ajaxRequest(obj, { reload: true, timer: 2000 })
+
+        resetData();
+
+        // hideModal('#categoryModal');
         }
 
-        function formData(){
+        function formatData(){
             return {
                 brand_name          : $('#brand_name').val().trim(),
                 brand_description   : $('#brand_description').val().trim(),
@@ -339,6 +307,5 @@
         function resetForm(){
             resetData();
         }
-
     </script>
 @endpush

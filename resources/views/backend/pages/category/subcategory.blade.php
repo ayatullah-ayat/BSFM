@@ -30,7 +30,7 @@
 
                             @isset($subcategories)
                                 @foreach ($subcategories as $subcategory)
-                                    <tr>
+                                    <tr data-category="{{json_encode($subcategory)}}">
                                         <th>{{$loop->iteration}}</th>
                                         <th>{{$subcategory->subcategory_name ?? 'N/A'}}</th>
                                         <th>{{$subcategory->category_id ?? 'N/A'}}</th>
@@ -47,7 +47,7 @@
                                         </th>
                                         <th class="text-center">
                                             <a href="javescript:void(0)" class="fa fa-eye text-info text-decoration-none details"></a>
-                                            <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.subcategory.destroy',$subcategory->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </th>
                                     </tr>
@@ -68,7 +68,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Sub-Category</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> Sub-Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -129,6 +129,7 @@
                     <div class="w-100">
                         <button type="button" id="resets" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
                         <button id="subcategory_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="subcategory_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -183,6 +184,9 @@
             $(document).on('click', '#resets', resetForm)
             $(document).on('click','.delete', deleteToDatabase)
             $(document).on('click','.details', showDataToModal)
+
+            $(document).on('click','.update', showUpdateModal)
+            $(document).on('click' , '#subcategory_update_btn', updateToDatabase)
         });
 
         function showDataToModal(){
@@ -290,13 +294,63 @@
             // })
         }
 
-
         function createModal(){
             showModal('#subcategoryModal');
+            $('#subcategory_save_btn').removeClass('d-none');
+            $('#subcategory_update_btn').addClass('d-none');
+            $('#subcategoryModal .heading').text('Create');
+            resetData();
         }
 
         function resetForm(){
             resetData();
+        }
+
+        function showUpdateModal(){
+
+        resetData();
+
+        let category = $(this).closest('tr').attr('data-category');
+
+        if(category){
+
+            $('#subcategory_save_btn').addClass('d-none');
+            $('#subcategory_update_btn').removeClass('d-none');
+
+            category = JSON.parse(category);
+
+            $('#subcategoryModal .heading').text('Edit').attr('data-id', category?.id)
+
+            $('#sub_category_name').val(category?.subcategory_name)
+            $('#sub_category_description').val(category?.subcategory_description)
+            
+            if(category?.is_active){
+                $('#isActive').prop('checked',true)
+            }else{
+                $('#isInActive').prop('checked',true)
+            }
+
+            showModal('#subcategoryModal');
+        }
+
+
+        }
+
+        function updateToDatabase(){
+        ajaxFormToken();
+
+        let id  = $('#subcategoryModal .heading').attr('data-id');
+        let obj = {
+            url     : `{{ route('admin.subcategory.update', '' ) }}/${id}`, 
+            method  : "PUT",
+            data    : formatData(),
+        };
+
+        ajaxRequest(obj, { reload: true, timer: 2000 })
+
+        resetData();
+
+        // hideModal('#categoryModal');
         }
 
         function submitToDatabase(){
