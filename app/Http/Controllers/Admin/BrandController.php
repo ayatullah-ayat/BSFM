@@ -124,7 +124,7 @@ class BrandController extends Controller
                 if($fileLocation){
                     $this->deleteImage($fileLocation);
                 }
-                
+
                 $fileResponse = $this->uploadFile($brand_image, 'brand/');
                 if (!$fileResponse['success'])
                     throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
@@ -149,7 +149,8 @@ class BrandController extends Controller
             return response()->json([
                 'success'   => false,
                 'msg'       => $th->getMessage(),
-                'data'      => null
+                'data'      => null,
+                'file'      => $th->getTrace()
             ]);
         }
     }

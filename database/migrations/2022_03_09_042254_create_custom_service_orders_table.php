@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateCustomServiceOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,34 +13,28 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('custom_service_orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
-            $table->string('customer_name')->nullable();
-
-            $table->date('order_date');
-            $table->string('order_no');
-            $table->text('order_sizes')->nullable();
-            $table->text('order_colors')->nullable();
-
-            $table->text('shipping_address')->nullable();
-            $table->float('service_charge', 10,3)->default(0);
-            $table->float('shipment_cost',10,3)->default(0);
-
-            $table->float('discount_price',10,3)->default(0);
+            $table->string('customer_name');
+            $table->unsignedBigInteger('custom_service_product_id')->nullable();
+            $table->unsignedBigInteger('custom_service_product_name');
+            $table->string('order_no')->unique();
+            $table->float('order_qty',10,3)->default(0);// it will be added in further if client needs
+            $table->float('order_discount_price',10,3)->default(0);// it will be added in further if client needs
+            $table->float('order_total_price',10,3)->default(0);// it will be added in further if client needs
+            $table->text('order_attachment')->nullable();
+            $table->text('note')->nullable();
+            $table->float('advance_balance', 10,3)->default(0);
 
             $table->enum('status', ['pending', 'processing', 'completed', 'rejected', 'cancelled', 'returned'])->default('pending');
-
-            $table->unsignedBigInteger('order_total_qty')->default(0)->comment('grand_qty');
-            $table->float('order_total_price', 10, 3)->default(0)->comment('grand_total');
-
-            $table->text('order_note')->nullable();
 
             $table->unsignedBigInteger('delivered_qty')->default(0);
             $table->float('delivered_price', 10, 3)->default(0);
             $table->timestamp('delivered_at')->nullable();
 
             $table->unsignedBigInteger('delivered_by')->nullable();
+
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
@@ -54,6 +48,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('custom_service_orders');
     }
 }

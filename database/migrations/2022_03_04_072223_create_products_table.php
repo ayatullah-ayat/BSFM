@@ -27,15 +27,24 @@ class CreateProductsTable extends Migration
             $table->text('product_description')->nullable();
             $table->text('product_specification')->nullable();
             $table->text('product_thumbnail_image')->nullable();
-            
+  
+            $table->unsignedBigInteger('product_discount')->default(0)->comment('percentage'); 
+
+            $table->unsignedBigInteger('product_qty')->default(0);
             $table->float('product_unit_price', 10, 3)->default(0);
             $table->float('product_wholesale_price', 10, 3)->default(0); // paikari mullo
-            $table->unsignedBigInteger('product_qty')->default(0);
-            $table->unsignedBigInteger('product_discount')->default(0);
+
+            $table->unsignedBigInteger('stock_qty')->default(0);
+            $table->float('stock_price', 10, 3)->default(0); 
+
+            $table->unsignedBigInteger('stock_out_qty')->default(0);
+            $table->float('stock_out_price', 10, 3)->default(0); 
+
 
             $table->text('product_video_link')->nullable();
 
             $table->boolean('is_active')->default(1);
+            $table->boolean('is_publish')->default(0);
             $table->boolean('allowed_review')->default(1);
             $table->boolean('allowed_offer')->default(0);
             $table->boolean('is_best_sale')->default(0);
