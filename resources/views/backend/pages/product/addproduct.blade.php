@@ -64,8 +64,8 @@
 
         <div class="col-md-6">
             <div class="form-group">
-                <label for="">Stock</label>
-                <input name="stock" type="number" class="form-control" placeholder="Stock">
+                <label for="">Product Qty</label>
+                <input name="stock" type="number" class="form-control" placeholder="Product Qty">
             </div>
         </div>
 
