@@ -41,9 +41,16 @@ trait ImageChecker
     }
 
     private function deleteImage($oldPath=null, $disk = 'public'){
+
         if($oldPath && $disk){
-            Storage::disk($disk)->delete($oldPath);
-            return true;
+
+            $formatTocheckLocation = preg_replace("/storage/im", "", $oldPath);
+            if (Storage::disk($disk)->exists($formatTocheckLocation)) {
+                Storage::disk($disk)->delete($formatTocheckLocation);
+                
+                return true;
+            }
+
         }
 
         return false;
