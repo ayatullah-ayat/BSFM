@@ -121,7 +121,7 @@
         </a>
         <div id="category" class="collapse" aria-labelledby="category" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Category</a>
+                {{-- <a class="collapse-item" href="#">New Category</a> --}}
                 <a class="collapse-item" href="{{ route('admin.category.index')}}">Manage Category</a>
                 <a class="collapse-item" href="{{ route('admin.subcategory.index')}}">Manage Sub Category</a>
             </div>
@@ -136,7 +136,7 @@
         </a>
         <div id="brand" class="collapse" aria-labelledby="brand" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Brand</a>
+                {{-- <a class="collapse-item" href="#">New Brand</a> --}}
                 <a class="collapse-item" href="{{ route('admin.brand.index')}}">Manage Brand</a>
             </div>
         </div>
@@ -150,7 +150,7 @@
         </a>
         <div id="variant" class="collapse" aria-labelledby="variant" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Variant</a>
+                {{-- <a class="collapse-item" href="#">New Variant</a> --}}
                 <a class="collapse-item" href="{{ route('admin.variant.index')}}">Manage Variant</a>
             </div>
         </div>
@@ -164,8 +164,8 @@
         </a>
         <div id="unit" class="collapse" aria-labelledby="unit" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Unit</a>
-                <a class="collapse-item" href="{{ route('admin.unit')}}">Manage Unit</a>
+                {{-- <a class="collapse-item" href="#">New Unit</a> --}}
+                <a class="collapse-item" href="{{ route('admin.unit.index')}}">Manage Unit</a>
             </div>
         </div>
     </li>
@@ -193,9 +193,9 @@
         </a>
         <div id="tax" class="collapse" aria-labelledby="tax" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Tax</a>
-                <a class="collapse-item" href="{{route('admin.tax')}}">Manage Tax</a>
-                <a class="collapse-item" href="#">Tax Setting</a>
+                {{-- <a class="collapse-item" href="#">New Tax</a> --}}
+                <a class="collapse-item" href="{{route('admin.tax.index')}}">Manage Tax</a>
+                {{-- <a class="collapse-item" href="#">Tax Setting</a> --}}
             </div>
         </div>
     </li>
@@ -209,8 +209,8 @@
         </a>
         <div id="currency" class="collapse" aria-labelledby="currency" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Currency</a>
-                <a class="collapse-item" href="{{route('admin.currency')}}">Manage Currency</a>
+                {{-- <a class="collapse-item" href="#">New Currency</a> --}}
+                <a class="collapse-item" href="{{route('admin.currency.index')}}">Manage Currency</a>
             </div>
         </div>
     </li>

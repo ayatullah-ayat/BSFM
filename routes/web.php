@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomOrderController;
 use App\Http\Controllers\Admin\CustomProductController;
 use App\Http\Controllers\Admin\CustomServiceController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\WebFooterController;
@@ -61,27 +63,34 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::group(['prefix' => 'variants', 'as' => 'variant.'], function(){
         Route::get('/', [VariantController::class, 'index'])->name('index');
         Route::post('/', [VariantController::class, 'store'])->name('store');
-        Route::put('/{brand}', [VariantController::class, 'update'])->name('update');
-        Route::delete('/{brand}', [VariantController::class, 'destroy'])->name('destroy');
+        Route::put('/{variant}', [VariantController::class, 'update'])->name('update');
+        Route::delete('/{variant}', [VariantController::class, 'destroy'])->name('destroy');
     });
 
-    // Route::group(['prefix' => 'units', 'as' => 'unit.'], function(){
-    //     Route::get('/', [BrandController::class, 'index'])->name('index');
-    //     Route::post('/', [BrandController::class, 'store'])->name('store');
-    //     Route::put('/{brand}', [BrandController::class, 'update'])->name('update');
-    //     Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('destroy');
-    // });
+    Route::group(['prefix' => 'units', 'as' => 'unit.'], function(){
+        Route::get('/', [UnitController::class, 'index'])->name('index');
+        Route::post('/', [UnitController::class, 'store'])->name('store');
+        Route::put('/{unit}', [UnitController::class, 'update'])->name('update');
+        Route::delete('/{unit}', [UnitController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/unit', [UnitController::class, 'index'])->name('unit');
+    Route::group(['prefix' => 'taxes', 'as' => 'tax.'], function(){
+        Route::get('/', [TaxController::class, 'index'])->name('index');
+        Route::post('/', [TaxController::class, 'store'])->name('store');
+        Route::put('/{tax}', [TaxController::class, 'update'])->name('update');
+        Route::delete('/{tax}', [TaxController::class, 'destroy'])->name('destroy');
+    });
 
+    Route::group(['prefix' => 'currencies', 'as' => 'currency.'], function(){
+        Route::get('/', [CurrencyController::class, 'index'])->name('index');
+        Route::post('/', [CurrencyController::class, 'store'])->name('store');
+        Route::put('/{currency}', [CurrencyController::class, 'update'])->name('update');
+        Route::delete('/{currency}', [CurrencyController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/tax', function () {
-        return view('backend.pages.tax.taxlist');
-    })->name('tax');
-
-    Route::get('/currency', function () {
-        return view('backend.pages.currency.currencylist');
-    })->name('currency');
+    // Route::get('/currency', function () {
+    //     return view('backend.pages.currency.currencylist');
+    // })->name('currency');
 
     Route::get('/image-gallery', function () {
         return view('backend.pages.imagegallery.imagegallerylist');
