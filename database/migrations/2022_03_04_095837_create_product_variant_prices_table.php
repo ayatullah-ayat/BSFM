@@ -18,8 +18,11 @@ class CreateProductVariantPricesTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('color_name')->unsigned();
             $table->bigInteger('size_name')->unsigned();
-            $table->bigInteger('unit_price')->unsigned();
-            $table->bigInteger('wholesale_price')->unsigned();
+            $table->float('unit_price', 10, 3)->unsigned()->default(0);
+            $table->float('wholesale_price', 10 ,3)->unsigned()->default(0);
+            $table->unsignedBigInteger('product_qty')->default(0);
+            $table->unsignedBigInteger('stock_qty')->default(0);
+            $table->unsignedBigInteger('stock_out_qty')->default(0);
             $table->timestamps();
         });
     }

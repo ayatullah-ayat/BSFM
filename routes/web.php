@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ContactController;
-use App\Http\Controllers\Admin\CurrencyController;
-use App\Http\Controllers\Admin\CustomOrderController;
-use App\Http\Controllers\Admin\CustomProductController;
-use App\Http\Controllers\Admin\CustomServiceController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EmailConfigurationController;
-use App\Http\Controllers\Admin\ManageCompanyController;
-use App\Http\Controllers\Admin\ManageGatewayController;
-use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\SaleController;
-use App\Http\Controllers\Admin\SmsSettignsController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\VariantController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\WebFooterController;
 use App\Http\Controllers\Admin\SocialIconController;
+use App\Http\Controllers\Admin\CustomOrderController;
+use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
-use App\Http\Controllers\Admin\TaxController;
-use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\Admin\VariantController;
-use App\Http\Controllers\Admin\WebFooterController;
+use App\Http\Controllers\Admin\CustomProductController;
+use App\Http\Controllers\Admin\CustomServiceController;
+use App\Http\Controllers\Admin\ManageCompanyController;
+use App\Http\Controllers\Admin\ManageGatewayController;
+use App\Http\Controllers\Admin\EmailConfigurationController;
 
 
 // Route::redirect('/', '/admin/dashboard', 301);
@@ -116,13 +117,26 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.pages.purchase.managepurchase');
     })->name('manage-purchase');
 
-    Route::get('/add-product', function () {
-        return view('backend.pages.product.addproduct');
-    })->name('add_product');
 
-    Route::get('/manage-product', function () {
-        return view('backend.pages.product.manageproduct');
-    })->name('manage_product');
+
+    Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+        Route::get('/',             [ProductController::class, 'index'])->name('index');
+        Route::get('/create',       [ProductController::class, 'create'])->name('create');
+        Route::post('/',            [ProductController::class, 'store'])->name('store');
+        Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
+        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    // Route::get('/add-product', function () {
+    //     return view('backend.pages.product.addproduct');
+    // })->name('add_product');
+
+    // Route::get('/manage-product', function () {
+    //     return view('backend.pages.product.manageproduct');
+    // })->name('manage_product');
+
+
+
 
     Route::get('/order-add', function () {
         return view('backend.pages.order.orderadd');
