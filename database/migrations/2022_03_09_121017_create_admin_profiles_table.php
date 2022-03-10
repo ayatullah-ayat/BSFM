@@ -15,6 +15,10 @@ class CreateAdminProfilesTable extends Migration
     {
         Schema::create('admin_profiles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('mobile_no')->nullable()->unique();
+            $table->enum('gender', [null, 1, 2, 3])->default(null)->comment('1-male, 2-female, 3-others');
             $table->timestamps();
         });
     }
