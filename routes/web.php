@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomOrderController;
 use App\Http\Controllers\Admin\CustomProductController;
 use App\Http\Controllers\Admin\CustomServiceController;
@@ -104,18 +106,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::group(['prefix' => 'suppliers', 'as' => 'supplier.'], function(){
         Route::get('/', [SupplierController::class, 'index'])->name('index');
         Route::post('/', [SupplierController::class, 'store'])->name('store');
-        Route::put('/{currency}', [SupplierController::class, 'update'])->name('update');
-        Route::delete('/{currency}', [SupplierController::class, 'destroy'])->name('destroy');
+        Route::put('/{supplier}', [SupplierController::class, 'update'])->name('update');
+        Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
     });
 
-
-    // Route::get('/manage-supplier', function () {
-    //     return view('backend.pages.supplier.supplierlist');
-    // })->name('manage-supplier');
-
-    Route::get('/manage-customer', function () {
-        return view('backend.pages.customer.managecustomer');
-    })->name('manage-customer');
+    Route::group(['prefix' => 'customers', 'as' => 'customer.'], function(){
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::post('/', [CustomerController::class, 'store'])->name('store');
+        Route::put('/{customer}', [CustomerController::class, 'update'])->name('update');
+        Route::delete('/{customer}', [CustomerController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/add-purchase', function () {
         return view('backend.pages.purchase.addpurchase');
@@ -166,7 +166,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
 
     Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');
-    Route::get('/custom-service', [CustomServiceController::class, 'index'])->name('admin.custom_service');
+
+    Route::get('/custom-service', [OurCustomServiceController::class, 'index'])->name('admin.custom_service');
+
+    Route::group(['prefix' => 'customservices', 'as' => 'customservice.'], function(){
+        Route::get('/', [OurCustomServiceController::class, 'index'])->name('index');
+        Route::post('/', [OurCustomServiceController::class, 'store'])->name('store');
+        Route::put('/{ourCustomService}', [OurCustomServiceController::class, 'update'])->name('update');
+        Route::delete('/{ourCustomService}', [OurCustomServiceController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'contacts', 'as' => 'contact.'], function(){
+        Route::get('/', [ContactController::class, 'index'])->name('index');
+        Route::post('/', [ContactController::class, 'store'])->name('store');
+        Route::put('/{contact}', [ContactController::class, 'update'])->name('update');
+        Route::delete('/{contact}', [ContactController::class, 'destroy'])->name('destroy');
+    });
+
+    // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
     
 });
 

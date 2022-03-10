@@ -60,6 +60,7 @@ class BrandController extends Controller
             // $data  = $request->all();
             
             $data['brand_image'] = $fileLocation;
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $brand = Brand::create($data);
             if(!$brand)
                 throw new Exception('Unable to create brand', 403);
@@ -133,7 +134,7 @@ class BrandController extends Controller
             }
 
             $data['brand_image'] = $fileLocation;
-
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $brandStatus = $brand->update($data);
 
             if(!$brandStatus)

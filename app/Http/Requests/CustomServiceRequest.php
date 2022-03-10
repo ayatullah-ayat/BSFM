@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class CustomServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_name'         => 'required|string',
-            'category_description'  => 'nullable|string',
-            'category_image'        => 'nullable',
+            'service_name'          => 'required|string',
+            'service_description'   => 'nullable|string',
+            'service_thumbnail'     => 'nullable',
             'is_active'             => 'required',
         ];
     }
@@ -35,12 +35,12 @@ class CategoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'category_name.required'        => 'Category is Required!',
-            'category_name.string'          => 'Category must be String Type!',
-            'category_description.string'   => 'Description Must be String Type!',
+            'service_name.required'         => 'Service is Required!',
+            'service_name.string'           => 'Service must be String Type!',
+            'service_description.string'    => 'Description Must be String Type!',
             'is_active.required'            => 'Please select the category status!',
         ];
     }
 
-    
+
 }

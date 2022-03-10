@@ -57,6 +57,7 @@ class CategoryController extends Controller
             }
 
             $data['category_image'] = $fileLocation;
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $category = Category::create($data);
             if(!$category)
                 throw new Exception("Unable to create category!", 403);
@@ -130,7 +131,7 @@ class CategoryController extends Controller
             }
 
             $data['category_image'] = $fileLocation;
-
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $categoryStatus = $category->update($data);
             if(!$categoryStatus)
                 throw new Exception("Unable to Update category!", 403);
@@ -176,4 +177,6 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+    
 }

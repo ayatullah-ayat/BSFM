@@ -41,6 +41,7 @@ class CurrencyController extends Controller
     {
         try {
             $data  = $request->all();
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $tax   = Currency::create($data);
             if(!$tax)
                 throw new Exception("Unable to create Currency!", 403);
@@ -94,6 +95,7 @@ class CurrencyController extends Controller
         try {
 
             $data            = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $currencystatus  = $currency->update($data);
             if(!$currencystatus)
                 throw new Exception("Unable to Update Tax!", 403);

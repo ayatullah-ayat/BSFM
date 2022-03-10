@@ -76,8 +76,8 @@
         </a>
         <div id="customers" class="collapse" aria-labelledby="customers" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Customer</a>
-                <a class="collapse-item" href="{{ route('admin.manage-customer') }}">Manage Customer</a>
+                {{-- <a class="collapse-item" href="#">New Customer</a> --}}
+                <a class="collapse-item" href="{{ route('admin.customer.index') }}">Manage Customer</a>
                 {{-- <a class="collapse-item" href="#">Customer Ledger</a> --}}
             </div>
         </div>
@@ -225,7 +225,7 @@
         <div id="custom_service" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.custom_product') }}">Custom Product</a>
-                <a class="collapse-item" href="{{ route('admin.admin.custom_service') }}">Custom Service</a>
+                <a class="collapse-item" href="{{ route('admin.customservice.index') }}">Custom Service</a>
             </div>
         </div>
     </li>
@@ -339,7 +339,7 @@
                 <a class="collapse-item" href="#">Web Header</a>
                 <a class="collapse-item" href="{{ route('admin.web_footer') }}">Web Footer</a>
                 <a class="collapse-item" href="{{ route('admin.social_icon') }}">Social Icon</a>
-                <a class="collapse-item" href="{{ route('admin.contact_us') }}">Contact Us</a>
+                <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Us</a>
             </div>
         </div>
     </li>

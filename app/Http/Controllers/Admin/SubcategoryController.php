@@ -41,6 +41,8 @@ class SubcategoryController extends Controller
     {
         try {
             $data           = $request->all();
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
+            
             $subcategory    = Subcategory::create($data);
             if(!$subcategory)
                 throw new Exception("Unable to create sub category!", 403);
@@ -94,6 +96,7 @@ class SubcategoryController extends Controller
         try {
 
             $data           = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $categoryStatus = $subcategory->update($data);
             if(!$categoryStatus)
                 throw new Exception("Unable to Update Subcategory!", 403);

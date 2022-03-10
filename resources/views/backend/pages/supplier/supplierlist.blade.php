@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Category pages')
+@section('title','Supplier page')
 
 @section('content')
     <div>
@@ -17,119 +17,39 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>#SL</th>
                                 <th>Supplier Name</th>
-                                <th>Address</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Details</th>
+                                <th>Address</th>
+                                <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>1001</th>
-                                <th>Noor Hussain</th>
-                                <th>Pallobi, Mirpur</th>
-                                <th>noorpagla@gmail.com</th>
-                                <th>+8801888445656</th>
-                                <th>Mans Product supplier</th>
-                                <th class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </th>
-                            </tr>
-                            
-                        </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
+                            @isset($suppliers)
+                                @foreach ($suppliers as $supplier)
+                                    <tr supplier-data="{{json_encode($supplier)}}">
+                                        <th>{{ $loop->iteration }}</th>
+                                        <th>{{ $supplier->supplier_name }}</th>
+                                        <th>{{ $supplier->supplier_email  }}</th>
+                                        <th>{{ $supplier->supplier_phone  }}</th>
+                                        <th>{{ $supplier->supplier_address }}</th>
+                                        <th class="text-center">
+                                            {!! $supplier->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                        </th>
+                                        <th class="text-center">
+                                            {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                            <a href="javasript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
+                                            <a href="{{route('admin.supplier.destroy',$supplier->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                        </th>
+                                    </tr>
+                                @endforeach
+                            @endisset
+                       
+                        </tbody>
+        
                     </table>
                 </div>
             </div>
@@ -137,12 +57,12 @@
     
     </div>
 
-    <div class="modal fade" id="categoryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal fade" id="supplierModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Supplier</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"> <span class="heading">Create</span> Supplier</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -159,36 +79,38 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Supplier Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" id="supplier_name">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Supplier Email</label>
-                                    <input type="text" class="form-control">
+                                    <input type="email" class="form-control" id="supplier_email">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Supplier Phone</label>
-                                    <input type="text" class="form-control">
+                                    <input type="number" class="form-control" id="supplier_phone">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Supplier Address</label>
-                                    <input type="text" class="form-control">
+                                    <label for="">Supplier Address</label> 
+                                    <input type="text" class="form-control" id="supplier_address"> 
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="">Supplier Details</label>
-                                   {{-- <textarea rows="4" type="text" class="form-control"> --}}
-                                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
+                                    <label>Is Active</label><br>
+                                    <input type="radio" name="is_active" id="isActive" checked>
+                                    <label for="isActive">Active</label>
+                                    <input type="radio" name="is_active" id="isInActive">
+                                    <label for="isInActive">Inactive</label>
                                 </div>
                             </div>
     
@@ -199,7 +121,8 @@
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="supplier_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="supplier_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -228,7 +151,13 @@
             init();
 
             $(document).on('click','#add', createModal)
-            $(document).on('click','#category_save_btn', submitToDatabase)
+            $(document).on('click','#supplier_save_btn', submitToDatabase)
+
+            $(document).on('click', '#reset', resetForm)
+            $(document).on('click', '.delete', deleteToDatabase)
+
+            $(document).on('click', '.update', showUpdateModal)
+            $(document).on('click','#supplier_update_btn', updateToDatabase)
         });
 
 
@@ -236,7 +165,7 @@
 
             let arr=[
                 {
-                    dropdownParent  : '#categoryModal',
+                    dropdownParent  : '#supplierModal',
                     selector        : `#stuff`,
                     type            : 'select',
                 },
@@ -266,25 +195,128 @@
             // })
         }
 
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
 
         function createModal(){
-            showModal('#categoryModal');
+            showModal('#supplierModal');
+            $('#supplier_save_btn').removeClass('d-none');
+            $('#supplier_update_btn').addClass('d-none');
+            $('#supplierModal .heading').text('Create');
+            resetData();
+        }
+
+        function resetForm(){
+            resetData();
         }
 
         function submitToDatabase(){
-            //
-
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{route('admin.supplier.store')}}`, 
                 method  : "POST",
-                data    : {},
+                data    : formatData(),
             };
 
-            ajaxRequest(obj);
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+            resetData();
+            hideModal('#supplierModal');
+        }
 
-            hideModal('#categoryModal');
+        function showUpdateModal(){
+            resetData();
+
+            let supplier = $(this).closest('tr').attr('supplier-data');
+
+            if(supplier){
+
+                $('#supplier_save_btn').addClass('d-none');
+                $('#supplier_update_btn').removeClass('d-none');
+
+                supplier = JSON.parse(supplier);
+
+                $('#supplierModal .heading').text('Edit').attr('data-id', supplier?.id)
+
+                $('#supplier_name').val(supplier?.supplier_name)
+                $('#supplier_email').val(supplier?.supplier_email)
+                $('#supplier_phone').val(supplier?.supplier_phone)
+                $('#supplier_address').val(supplier?.supplier_address)
+
+                if(supplier?.is_active){
+                    $('#isActive').prop('checked',true)
+                }else{
+                    $('#isInActive').prop('checked',true)
+                }
+
+                showModal('#supplierModal');
+            }
+        }
+
+
+        function updateToDatabase(){
+            ajaxFormToken();
+
+            let id  = $('#supplierModal .heading').attr('data-id');
+            let obj = {
+                url     : `{{ route('admin.supplier.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : formatData(),
+            };
+
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+
+            resetData();
+
+            hideModal('#supplierModal');
+        }
+
+
+        function formatData(){
+            return {
+                supplier_name    : $('#supplier_name').val().trim(),
+                supplier_email   : $('#supplier_email').val(), 
+                supplier_phone   : $('#supplier_phone').val(), 
+                supplier_address : $('#supplier_address').val(), 
+                is_active        : $('#isActive').is(':checked') ? 1 : 0,
+            }
+        }
+ 
+        function resetData(){
+                $('#supplier_name').val(null),
+                $('#supplier_email').val(null), 
+                $('#supplier_phone').val(null), 
+                $('#supplier_address').val(null), 
+                $('#isActive').prop('checked', true)
         }
 
     </script>

@@ -40,7 +40,9 @@ class VariantController extends Controller
     public function store(VariantRequest $request)
     {
         try {
-            $data      = $request->all();
+            $data               = $request->all();
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
+
             $variant   = Variant::create($data);
             if(!$variant)
                 throw new Exception("Unable to create variant!", 403);
@@ -93,7 +95,9 @@ class VariantController extends Controller
     {
         try {
 
-            $data           = $request->all();
+            $data               = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
+
             $variantstatus = $variant->update($data);
             if(!$variantstatus)
                 throw new Exception("Unable to Update variant!", 403);
