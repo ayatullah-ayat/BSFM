@@ -27,7 +27,7 @@
                 <span class="v-msg"></span>
             </div>
         
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="">Product Name<span style="color: red;" class="req">*</span></label>
                     <input name="product_name" type="text" class="form-control" placeholder="Product Name">
@@ -36,26 +36,55 @@
         
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="">Product SKU<span style="color: red;" class="req">*</span></label>
+                    <label for="">Product SKU<span style="color: red;" class="req">*</span></label> 
+                    <span class="float-right">
+                        <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
+                        <input type="checkbox" name="manageVariant" id="manageVariant">
+                    </span>
                     <input name="product_sku" type="text" class="form-control" placeholder="Product SKU">
                 </div>
             </div>
-        
-            <div class="col-md-6" data-col="col">
-                <div class="form-group">
-                    <label for="color"> Color</label>
-                    <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
+        {{-- ----------------------------------------------------------------------------------------- --}}
+            <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="">
+                <div class="col-md-6" data-col="col">
+                    <div class="form-group">
+                        <label for="color"> Color</label>
+                        <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
+                    </div>
+                    <span class="v-msg"></span>
                 </div>
-                <span class="v-msg"></span>
-            </div>
-        
-            <div class="col-md-6" data-col="col">
-                <div class="form-group">
-                    <label for="size">Size</label>
-                    <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
+                
+                <div class="col-md-6" data-col="col">
+                    <div class="form-group">
+                        <label for="size">Size</label>
+                        <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
+                    </div>
+                    <span class="v-msg"></span>
                 </div>
-                <span class="v-msg"></span>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="price">Unit Price</label>
+                        <input name="unit_price" type="number" class="form-control" placeholder="Product Price">
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="wholesale_price">Wholesale Price</label>
+                        <input name="wholesale_price" type="number" class="form-control" placeholder="Product Wholesale Price">
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="">Product Qty</label>
+                        <input name="product_qty" type="number" class="form-control" placeholder="Product Qty">
+                    </div>
+                </div>
             </div>
+
+        {{-- -----------------------------------------------------------------------------------------------  --}}
         
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
@@ -76,27 +105,6 @@
         
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="price">Unit Price</label>
-                    <input name="unit_price" type="number" class="form-control" placeholder="Product Price">
-                </div>
-            </div>
-        
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="wholesale_price">Wholesale Price</label>
-                    <input name="wholesale_price" type="number" class="form-control" placeholder="Product Wholesale Price">
-                </div>
-            </div>
-        
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="">Product Qty</label>
-                    <input name="stock" type="number" class="form-control" placeholder="Product Qty">
-                </div>
-            </div>
-        
-            <div class="col-md-6">
-                <div class="form-group">
                     <label for="discount">Discount(%)</label>
                     <input name="discount" type="number" class="form-control" placeholder="Discount">
                 </div>
@@ -108,29 +116,6 @@
                     <select name="product_unit" class="unit" data-required id="unit" data-placeholder="Select Unit"></select>
                 </div>
                 <span class="v-msg"></span>
-            </div>
-        
-        
-            <div class="col-md-12" data-col="col">
-                <div class="form-group">
-                    <label for="tags">Tags</label>
-                    <select name="tags" class="tags" multiple data-required id="tags" data-placeholder="Select Tags"></select>
-                </div>
-                <span class="v-msg"></span>
-            </div>
-        
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="default_image">Thumbnail Image</label><br>
-                    <input name="default_image" type="file" id="default_image">
-                </div>
-            </div>
-        
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="product_gallery">Gallery Image</label><br>
-                    <input name="product_gallery" type="file" multiple id="product_gallery">
-                </div>
             </div>
         
             <div class="col-md-12">
@@ -171,7 +156,29 @@
                 </div>
         
             </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="default_image">Thumbnail Image</label><br>
+                    <input name="default_image" type="file" id="default_image">
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="product_gallery">Gallery Image</label><br>
+                    <input name="product_gallery" type="file" multiple id="product_gallery">
+                </div>
+            </div>
         
+            <div class="col-md-12" data-col="col">
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <select name="tags" class="tags" multiple data-required id="tags" data-placeholder="Select Tags"></select>
+                </div>
+                <span class="v-msg"></span>
+            </div>
+            
             <div class="col-md-12">
                 <div class="w-100">
                     <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
@@ -183,6 +190,83 @@
         </div>
     </form>
 </div>
+
+
+
+{{-- -------------------- modal area ----------------------------------------------  --}}
+<div class="modal fade" id="manageVariantSizePriceModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+    role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Manage Product Variant & Stock Qty </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+            {{-- ---------------------------------------- variant wise qty price --------------------------------------- --}}
+                <div class="row">
+                    <div class="col-md-12" id="variantWisePrice">
+                        <table class="table table-sm table-bordered w-100 text-center mx-auto">
+                            <thead class="bg-danger">
+                                <tr>
+                                    <th class="text-white">Color</th>
+                                    <th class="text-white">Size</th>
+                                    <th class="text-white">Price</th>
+                                    <th class="text-white">Qty</th>
+                                    <th>
+                                        <button class="btn btn-sm btn-light text-dark" id="addVariantRow"><i class="fa fa-plus"></i> Add</button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <select name="color_id" class="color" data-required data-placeholder="Select Color"></select>
+                                    </td>
+                                    <td>
+                                        <select name="size_id" class="size" data-required data-placeholder="Select Size"></select>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="unit_price" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="number" name="product_qty" class="form-control">
+                                    </td>
+                                    <td>
+                                        <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-dark text-white">
+                                <tr>
+                                    <th colspan="1">0</th>
+                                    <th colspan="1">0</th>
+                                    <th colspan="1">0</th>
+                                    <th colspan="1">0</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            {{-- ---------------------------------------- variant wise qty price --------------------------------------- --}}
+            </div>
+
+            <div class="modal-footer">
+                <div class="w-100">
+                    <button type="button" id="save-variant-price-qty" class="btn btn-sm btn-success float-right mx-1"><i class="fa fa-save"></i> Submit</button>
+                    <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('css')
@@ -198,9 +282,114 @@
     $(document).ready(function(){
         init();
 
-        $(document).on('click','#add', createModal)
+        $(document).on('change','#manageVariant', manageVariantPriceStock)
+        $(document).on('click','#addVariantRow', createRow)
+        $(document).on('click','.deleteVariantRow', deleteRow)
+        $(document).on('click','#save-variant-price-qty', ()=>{
+
+            let 
+            data = [],
+            rows = [...$('#variantWisePrice').find('tbody').find('tr')];
+
+            rows.forEach(row => {
+
+                let 
+                color_id    = $(row).find('[name="color_id"]').val() ?? null,
+                size_id     = $(row).find('[name="size_id"]').val() ?? null,
+                unit_price  = $(row).find('[name="unit_price"]').val() ?? 0,
+                product_qty = $(row).find('[name="product_qty"]').val() ?? 0;
+
+                data.push(
+                    {
+                        color_id,
+                        size_id,
+                        unit_price,
+                        product_qty,
+                    }
+                )
+            });
+
+            collectionOfVariantPriceQty(data);
+
+            hideModal('#manageVariantSizePriceModal');
+        })
+
         $(document).on('submit','#productForm', submitToDatabase)
     });
+
+    
+
+
+    function createRow(){
+        let 
+        elem    = $(this),
+        tbody   = $('#variantWisePrice').find('tbody'),
+        html    = `
+        <tr>
+           <td>
+                <select name="color_id" class="color" data-required data-placeholder="Select Color"></select>
+            </td>
+            <td>
+                <select name="size_id" class="size" data-required data-placeholder="Select Size"></select>
+            </td>
+            <td>
+                <input type="number" name="unit_price" class="form-control">
+            </td>
+            <td>
+                <input type="number" name="product_qty" class="form-control">
+            </td>
+            <td>
+                <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
+            </td>
+        </tr>`;
+        
+        tbody.append(html);
+
+        let arr = [
+             {
+                selector        : `.color`,
+                type            : 'select'
+            },
+            {
+                selector        : `.size`,
+                type            : 'select',
+            },
+        ];
+
+        globeInit(arr);
+    }
+
+
+    function deleteRow(){
+        $(this).closest('tr').remove();
+    }
+
+
+    function collectionOfVariantPriceQty(data=null){
+
+        let 
+        targetElem = $('#defaultPrice');
+
+        if(data){
+            targetElem.attr('data-product-variant', JSON.stringify(data));
+        }else{
+            return JSON.parse(targetElem.attr('data-product-variant'));
+        }
+
+    }
+
+
+    function manageVariantPriceStock(){
+        let elem = $(this);
+
+        if(elem.is(":checked")){
+            $('#defaultPrice').hide();
+            showModal('#manageVariantSizePriceModal');
+        }else{
+            $('#defaultPrice').show();
+            hideModal('#manageVariantSizePriceModal');
+        }
+    }
 
 
     function init(){
@@ -211,11 +400,11 @@
                 type            : 'select',
             },
             {
-                selector        : `#color`,
+                selector        : `.color`,
                 type            : 'select'
             },
             {
-                selector        : `#size`,
+                selector        : `.size`,
                 type            : 'select',
             },
             {
