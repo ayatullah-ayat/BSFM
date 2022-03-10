@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\VariantController;
@@ -100,9 +101,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.pages.imagegallery.addgallery');
     })->name('add-image-gallery');
 
-    Route::get('/manage-supplier', function () {
-        return view('backend.pages.supplier.supplierlist');
-    })->name('manage-supplier');
+    Route::group(['prefix' => 'suppliers', 'as' => 'supplier.'], function(){
+        Route::get('/', [SupplierController::class, 'index'])->name('index');
+        Route::post('/', [SupplierController::class, 'store'])->name('store');
+        Route::put('/{currency}', [SupplierController::class, 'update'])->name('update');
+        Route::delete('/{currency}', [SupplierController::class, 'destroy'])->name('destroy');
+    });
+
+
+    // Route::get('/manage-supplier', function () {
+    //     return view('backend.pages.supplier.supplierlist');
+    // })->name('manage-supplier');
 
     Route::get('/manage-customer', function () {
         return view('backend.pages.customer.managecustomer');

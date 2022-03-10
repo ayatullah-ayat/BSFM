@@ -93,7 +93,7 @@
         <div id="suppliers" class="collapse" aria-labelledby="suppliers" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">New Supplier</a>
-                <a class="collapse-item" href="{{ route('admin.manage-supplier')}}">Manage Supplier</a>
+                <a class="collapse-item" href="{{ route('admin.supplier.index')}}">Manage Supplier</a>
                 {{-- <a class="collapse-item" href="buttons.html">Supplier Ledger</a> --}}
             </div>
         </div>
@@ -183,7 +183,6 @@
             </div>
         </div>
     </li>
-
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tax" aria-expanded="true"
