@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Category pages')
+@section('title','Contact page')
 
 @section('content')
     <div>
@@ -199,7 +199,6 @@
                         // console.log(res?.data);
                         if(res?.success){
                             _toastMsg(res?.msg ?? 'Success!', 'success');
-                            resetData();
 
                             setTimeout(() => {
                                 location.reload();
@@ -221,6 +220,7 @@
             if(contact){
 
                 contact = JSON.parse(contact);
+                $('#contactModal').attr('data-id', contact?.id)
 
                 $('#name').val(contact?.name)
                 $('#email').val(contact?.email)

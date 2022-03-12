@@ -336,8 +336,6 @@
             hideModal('#serviceModal');
         }
 
-
-
         function formatData(){
             return {
                 service_name        : $('#service_title').val().trim(),

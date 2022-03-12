@@ -13,4 +13,5 @@ class CustomServiceProduct extends Model
     {
         return $this->hasMany(CustomServiceOrder::class);
     }
+
 }

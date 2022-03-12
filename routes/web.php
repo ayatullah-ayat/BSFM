@@ -4,11 +4,13 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\Custom\CustomServiceCategoryController;
+use App\Http\Controllers\Admin\Custom\CustomServiceProductController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomOrderController;
-use App\Http\Controllers\Admin\CustomProductController;
-use App\Http\Controllers\Admin\CustomServiceController;
+// use App\Http\Controllers\Admin\CustomProductController;
+// use App\Http\Controllers\Admin\CustomServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
@@ -165,15 +167,29 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
     Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
 
-    Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');
+    // Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');
 
-    Route::get('/custom-service', [OurCustomServiceController::class, 'index'])->name('admin.custom_service');
+    // Route::get('/custom-service', [OurCustomServiceController::class, 'index'])->name('admin.custom_service');
+
+    Route::group(['prefix' => 'customservicecategories', 'as' => 'customservicecategory.'], function(){
+        Route::get('/', [CustomServiceCategoryController::class, 'index'])->name('index');
+        Route::post('/', [CustomServiceCategoryController::class, 'store'])->name('store');
+        Route::put('/{customServiceCategory}', [CustomServiceCategoryController::class, 'update'])->name('update');
+        Route::delete('/{customServiceCategory}', [CustomServiceCategoryController::class, 'destroy'])->name('destroy');
+    });
 
     Route::group(['prefix' => 'customservices', 'as' => 'customservice.'], function(){
         Route::get('/', [OurCustomServiceController::class, 'index'])->name('index');
         Route::post('/', [OurCustomServiceController::class, 'store'])->name('store');
-        Route::put('/{ourCustomService}', [OurCustomServiceController::class, 'update'])->name('update');
-        Route::delete('/{ourCustomService}', [OurCustomServiceController::class, 'destroy'])->name('destroy');
+        Route::put('/{customServiceCategory}', [OurCustomServiceController::class, 'update'])->name('update');
+        Route::delete('/{customServiceCategory}', [OurCustomServiceController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'customserviceproducts', 'as' => 'customserviceproduct.'], function(){
+        Route::get('/', [CustomServiceProductController::class, 'index'])->name('index');
+        Route::post('/', [CustomServiceProductController::class, 'store'])->name('store');
+        Route::put('/{customServiceProduct}', [CustomServiceProductController::class, 'update'])->name('update');
+        Route::delete('/{customServiceProduct}', [CustomServiceProductController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix' => 'contacts', 'as' => 'contact.'], function(){

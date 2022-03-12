@@ -224,7 +224,8 @@
         </a>
         <div id="custom_service" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.custom_product') }}">Custom Product</a>
+                <a class="collapse-item" href="{{ route('admin.customservicecategory.index') }}">Custom Service Category</a>
+                <a class="collapse-item" href="{{ route('admin.customserviceproduct.index') }}">Custom Product</a>
                 <a class="collapse-item" href="{{ route('admin.customservice.index') }}">Custom Service</a>
             </div>
         </div>

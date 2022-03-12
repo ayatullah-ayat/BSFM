@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin\Custom;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomServiceProductRequest;
+use App\Http\Services\ImageChecker;
 use App\Models\Custom\CustomServiceProduct;
+use Exception;
 
 class CustomServiceProductController extends Controller
 {
+    use ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +19,8 @@ class CustomServiceProductController extends Controller
      */
     public function index()
     {
-        //
+        $customproducts = CustomServiceProduct::orderByDesc('id')->get();
+        return view('backend.pages.custom_service.customproduct', compact('customproducts'));
     }
 
     /**
@@ -34,9 +39,41 @@ class CustomServiceProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomServiceProductRequest $request)
     {
-        //
+        try {
+
+            $product_thumbnail  = $request->product_thumbnail;
+            $data               = $request->all();
+            $fileLocation       = 'assets/img/blank-img.png';
+    
+            if($product_thumbnail){
+                //file, dir
+                $fileResponse = $this->uploadFile($product_thumbnail, 'CustomServiceProduct/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+            
+            $data['product_thumbnail'] = $fileLocation;
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
+            $customProduct = CustomServiceProduct::create($data);
+            if(!$customProduct)
+                throw new Exception('Unable to create Product', 403);
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Product Created Successfully!',
+                'data'      => $customProduct
+            ]);
+
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -70,7 +107,47 @@ class CustomServiceProductController extends Controller
      */
     public function update(Request $request, CustomServiceProduct $customServiceProduct)
     {
-        //
+        try {
+
+            if(!$customServiceProduct)
+                throw new Exception("No record Found!", 404);
+                
+            $data               = $request->all();
+            $product_thumbnail  = $request->product_thumbnail;
+            $fileLocation       = $customServiceProduct->product_thumbnail;
+
+            if ($product_thumbnail) {
+                //file, dir
+                if($fileLocation){
+                    $this->deleteImage($fileLocation);
+                }
+                
+                $fileResponse = $this->uploadFile($product_thumbnail, 'CustomServiceProduct/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['product_thumbnail'] = $fileLocation;
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
+            $customproductstatus = $customServiceProduct->update($data);
+            if(!$customproductstatus)
+                throw new Exception("Unable to Update Service!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Service Updated Successfully!',
+                'data'      => $customServiceProduct->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -81,6 +158,24 @@ class CustomServiceProductController extends Controller
      */
     public function destroy(CustomServiceProduct $customServiceProduct)
     {
-        //
+        try {
+
+            $isDeleted = $customServiceProduct->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete Service!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Service Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+
+
 }

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin\Custom;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomServiceCategoryRequest;
+use App\Http\Services\ImageChecker;
 use App\Models\Custom\CustomServiceCategory;
+use Exception;
 
 class CustomServiceCategoryController extends Controller
 {
+    use ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +19,8 @@ class CustomServiceCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $CustomServiceCategories = CustomServiceCategory::orderByDesc('id')->get();
+        return view('backend.pages.custom_service.customservicecategory', compact('CustomServiceCategories'));
     }
 
     /**
@@ -34,10 +39,47 @@ class CustomServiceCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomServiceCategoryRequest $request)
     {
-        //
+        try {
+            // dd($request->all());
+
+            $category_thumbnail = $request->category_thumbnail;
+            $data               = $request->all();
+            $fileLocation       = 'assets/img/blank-img.png';
+    
+            if($category_thumbnail){
+                //file, dir
+                $fileResponse = $this->uploadFile($category_thumbnail, 'CustomServiceCategory/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+            
+            $data['category_thumbnail'] = $fileLocation;
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
+            $customservicecategory = CustomServiceCategory::create($data);
+
+            if(!$customservicecategory)
+                throw new Exception('Unable to create Service Category', 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Service Category Created Successfully!',
+                'data'      => $customservicecategory
+            ]);
+
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -62,7 +104,7 @@ class CustomServiceCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\CustomServiceCategory  $customServiceCategory
@@ -81,6 +123,24 @@ class CustomServiceCategoryController extends Controller
      */
     public function destroy(CustomServiceCategory $customServiceCategory)
     {
-        //
+        try {
+
+            $isDeleted = $customServiceCategory->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete Service Category!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Service Category Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+
+
 }
