@@ -17,7 +17,6 @@ class CreateCustomersTable extends Migration
             
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->enum('customer_type',['ecommerce','customize','other'])->default('ecommerce');
             $table->string('customer_name')->nullable();
             $table->string('customer_email')->unique()->nullable();
             $table->string('customer_phone')->unique()->nullable();

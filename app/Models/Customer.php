@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Models\Product;
 use App\Models\SaleProduct;
+use App\Models\CustomerType;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    protected $guarded = ['id'];
+
     public function saleProducts()
     {
         return $this->hasMany(SaleProduct::class);
@@ -17,4 +20,10 @@ class Customer extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function customerTypes()
+    {
+        return $this->belongsToMany(CustomerType::class, 'customer_type');
+    }
 }
+  

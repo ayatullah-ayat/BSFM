@@ -41,6 +41,7 @@ class UnitController extends Controller
     {
         try {
             $data      = $request->all();
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $unit   = Unit::create($data);
             if(!$unit)
                 throw new Exception("Unable to create Unit!", 403);
@@ -94,6 +95,7 @@ class UnitController extends Controller
         try {
 
             $data       = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $unitstatus = $unit->update($data);
             if(!$unitstatus)
                 throw new Exception("Unable to Update Unit!", 403);

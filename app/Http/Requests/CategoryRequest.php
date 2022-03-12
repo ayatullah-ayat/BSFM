@@ -41,4 +41,6 @@ class CategoryRequest extends FormRequest
             'is_active.required'            => 'Please select the category status!',
         ];
     }
+
+    
 }

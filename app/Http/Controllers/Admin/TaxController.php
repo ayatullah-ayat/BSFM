@@ -41,6 +41,7 @@ class TaxController extends Controller
     {
         try {
             $data      = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $tax   = Tax::create($data);
             if(!$tax)
                 throw new Exception("Unable to create Tax!", 403);
@@ -94,6 +95,7 @@ class TaxController extends Controller
         try {
 
             $data           = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $taxstatus  = $tax->update($data);
             if(!$taxstatus)
                 throw new Exception("Unable to Update Tax!", 403);
