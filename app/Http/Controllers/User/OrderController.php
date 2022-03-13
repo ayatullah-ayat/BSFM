@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ShopController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,10 @@ class ShopController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.shop');
+        return view('frontend.pages.checkout');
+        //checkout
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -26,7 +27,7 @@ class ShopController extends Controller
     {
         //
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,16 +38,16 @@ class ShopController extends Controller
     {
         //
     }
-    
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug=null)
+    public function show($id)
     {
-        return view('frontend.pages.product_detail');
+        //
     }
 
     /**

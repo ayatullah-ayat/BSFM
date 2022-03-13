@@ -3,7 +3,7 @@
 
 @section('content')
   <!-- Breadcrumb Area-->
-<section class="container-fluid breadcrumb-area">
+{{-- <section class="container-fluid breadcrumb-area">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 <!-- Cart Area-->
 <section class="product-cart-area">
@@ -90,8 +90,7 @@
                         <tr>
                             <td colspan="2"></td>
                             <td colspan="2">
-                                <a href="checkout.html"
-                                    class="btn btn-danger btn-sm text-decoration-none text-white w-100">চেক আউট</a>
+                                <a href="{{ route('checkout_index') }}" class="btn btn-danger btn-sm text-decoration-none text-white w-100">চেক আউট</a>
                             </td>
                         </tr>
                         <!-- -------------------- footer ---------------------------  -->

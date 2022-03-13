@@ -114,7 +114,8 @@ body {
     border-radius: 5px;
 }
 
-.register-button button {
+.register-button button,
+.register-button a {
     width: 133px;
     height: 20px;
     line-height: 0.2rem !important;
@@ -126,7 +127,9 @@ body {
 }
 
 .register-button button:hover,
-.register-button button.active {
+.register-button button.active,
+.register-button a:hover,
+.register-button a.active {
     background: #e20c18;
     color: #FFFFFF;
 }
@@ -199,6 +202,28 @@ body {
     height: 28px;
     border: none;
 }
+
+.order-track-input {
+    width: 100%;
+    height: auto;
+    border: 1px solid;
+}
+
+.form-control2 {
+    width: 100%;
+    height: 41px;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.25);
+}
+
+textarea.form-control {
+    min-height: calc(6.5em + 0.75rem + 2px);
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.25);
+}
+
 
 .input-group input::placeholder {
     color: #DADADA;
@@ -665,3 +690,154 @@ footer {
         justify-content: center;
     }
 }
+
+
+
+
+
+
+
+
+
+
+/* -------------------- order track -------------------  */
+#orderTrackModal .card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.10rem
+}
+
+#orderTrackModal .card-header:first-child {
+    border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0
+}
+
+#orderTrackModal .card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+#orderTrackModal .track {
+    position: relative;
+    background-color: #ddd;
+    height: 7px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 60px;
+    margin-top: 50px
+}
+
+#orderTrackModal .track .step {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    width: 25%;
+    margin-top: -18px;
+    text-align: center;
+    position: relative
+}
+
+#orderTrackModal .track .step.active:before {
+    background: #157ed2
+}
+
+#orderTrackModal .track .step::before {
+    height: 7px;
+    position: absolute;
+    content: "";
+    width: 100%;
+    left: 0;
+    top: 18px
+}
+
+#orderTrackModal .track .step.active .icon {
+    background: #157ed2;
+    color: #fff
+}
+
+#orderTrackModal .track .icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    border-radius: 100%;
+    background: #ddd
+}
+
+#orderTrackModal .track .step.active .text {
+    font-weight: 400;
+    color: #000
+}
+
+#orderTrackModal .track .text {
+    display: block;
+    margin-top: 7px
+}
+
+#orderTrackModal .itemside {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%
+}
+
+#orderTrackModal .itemside .aside {
+    position: relative;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+#orderTrackModal .img-sm {
+    width: 80px;
+    height: 80px;
+    padding: 7px
+}
+
+#orderTrackModal ul.row,
+#orderTrackModal ul.row-sm {
+    list-style: none;
+    padding: 0
+}
+
+#orderTrackModal .itemside .info {
+    padding-left: 15px;
+    padding-right: 7px
+}
+
+#orderTrackModal .itemside .title {
+    display: block;
+    margin-bottom: 5px;
+    color: #157ed2
+}
+
+
+#orderTrackModal .btn-warning {
+    color: #ffffff;
+    background-color: #157ed2;
+    border-color: #157ed2;
+    border-radius: 1px
+}
+
+#orderTrackModal .btn-warning:hover {
+    color: #ffffff;
+    background-color: #157ed2;
+    border-color: #157ed2;
+    border-radius: 1px
+}
+
+/* -------------------- order track -------------------  */

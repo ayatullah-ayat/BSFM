@@ -9,10 +9,20 @@
             </div>
 
             <div class="col-md-6 d-flex align-items-center justify-content-lg-end justify-content-center">
-                <div class="register-button bg-white btn-group" role="group">
-                    <button class="btn btn-sm active"> লগ ইন </button>
-                    <button class="btn btn-sm "> রেজিস্টার </button>
+                @guest
+                    <div class="register-button bg-white btn-group" role="group">
+                        <a href="{{ route('login') }}" class="btn btn-sm active"> লগ ইন </a>
+                        <a href="{{ route('register') }}" class="btn btn-sm "> রেজিস্টার </a>
+                    </div>
+                @else 
+                <div class="mx-2" style="margin-top: -8px">
+                    @php
+                        $path = auth()->user()->profile ? auth()->user()->profile->photo : null;
+                    @endphp
+                      {!! profilePhoto($path,['class' => 'img-fluid rounded-circle', 'width' => '30px', 'draggable' => 'false'] ) !!}
                 </div>
+                <h6><a class="text-decoration-none text-dark" href="{{ route('dashboard.index') }}">{{ auth()->user()->name ?? 'N/A' }}</a></h6>
+                @endguest
             </div>
 
         </div>

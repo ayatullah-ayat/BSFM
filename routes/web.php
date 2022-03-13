@@ -2,9 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TaxController;
-use App\Http\Controllers\User\CartController;
-use App\Http\Controllers\User\HomeController;
-use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\BrandController;
@@ -20,16 +17,27 @@ use App\Http\Controllers\Admin\CustomOrderController;
 use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
-use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\CustomProductController;
 use App\Http\Controllers\Admin\CustomServiceController;
-
-
-// ------------ Frontend namespace ----------------------
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
+
+
+
+// ------------ Frontend namespace ----------------------
+
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ShopController;
+use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\AboutController;
+
+use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
+use App\Http\Controllers\User\OrderController as CustomerOrderController;
+use App\Http\Controllers\User\ContactController as CustomerContactController;
+use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 // ------------ Frontend namespace ----------------------
 
 Route::redirect('/', '/home', 301);
@@ -40,9 +48,15 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 
 Route::group(['prefix' => ''],function(){
     // --------------------------- Generak Route goes Here ---------------------------------
-    Route::get('/home',[HomeController::class, 'index'])->name('index');
-    Route::get('/shop',[ShopController::class, 'index'])->name('shop_index');
-    Route::get('/cart',[CartController::class, 'index'])->name('cart_index');
+    Route::get('/home',         [HomeController::class, 'index'])->name('index');
+    Route::get('/shop',         [ShopController::class, 'index'])->name('shop_index');
+    Route::get('/shop/{slug}',  [ShopController::class, 'show'])->name('product_detail');
+    Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
+    Route::get('/custom-order', [UserCustomOrderController::class, 'index'])->name('customorder_index');
+    Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
+    Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
+    Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
+    Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
 
     // --------------------------- Auth Route goes here ---------------------------------
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.','middleware'=>['auth:web', 'PreventBackHistory']], function () {

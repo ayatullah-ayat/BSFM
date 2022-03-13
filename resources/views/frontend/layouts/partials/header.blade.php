@@ -17,7 +17,7 @@
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" aria-current="page" href="customorder.html"> কাস্টমাইজ </a>
+                        <a class="nav-link" aria-current="page" href="{{ route('customorder_index') }}"> কাস্টমাইজ </a>
                     </li>
 
                     <li class="nav-item">
@@ -25,15 +25,15 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> গ্যালারী </a>
+                        <a class="nav-link" href="{{ route('gallery_index') }}"> গ্যালারী </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> আমাদের সম্পর্কে </a>
+                        <a class="nav-link" href="{{ route('about_index') }}"> আমাদের সম্পর্কে </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> যোগাযোগ </a>
+                        <a class="nav-link" href="{{ route('contact_index') }}"> যোগাযোগ </a>
                     </li>
                 </ul>
 
@@ -46,7 +46,7 @@
                 </form>
 
                 <div class="ordertraking">
-                    <a href="#"> <i class="fa-solid fa-truck-fast text-light"></i> অর্ডার ট্রাক করুন </a>
+                    <a href="javascript:void(0)"> <i class="fa-solid fa-truck-fast text-light"></i> অর্ডার ট্রাক করুন </a>
                 </div>
 
                 <div class="cart-icon">

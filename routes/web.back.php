@@ -25,9 +25,19 @@ use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
 
 
+
 // ------------ Frontend namespace ----------------------
+
+use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\AboutController;
+
+use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
+use App\Http\Controllers\User\OrderController as CustomerOrderController;
+use App\Http\Controllers\User\ContactController as CustomerContactController;
+use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 // ------------ Frontend namespace ----------------------
 
 Route::redirect('/', '/home', 301);
@@ -36,22 +46,29 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 
 // --------------------------- Frontend ---------------------------------
 
-Route::group(['prefix' => ''],function(){
+Route::group(['prefix' => ''], function () {
     // --------------------------- Generak Route goes Here ---------------------------------
-    Route::get('/home',[HomeController::class, 'index'])->name('index');
+    Route::get('/home',         [HomeController::class, 'index'])->name('index');
+    Route::get('/shop',         [ShopController::class, 'index'])->name('shop_index');
+    Route::get('/shop/{slug}',  [ShopController::class, 'show'])->name('product_detail');
+    Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
+    Route::get('/custom-order', [UserCustomOrderController::class, 'index'])->name('customorder_index');
+    Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
+    Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
+    Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
+    Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
 
     // --------------------------- Auth Route goes here ---------------------------------
-    Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.','middleware'=>['auth:web', 'PreventBackHistory']], function () {
+    Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => ['auth:web', 'PreventBackHistory']], function () {
         Route::get('/', [UserDashboardController::class, 'index'])->name('index');
     });
-
 });
 
 
 // --------------------------- Admin Dashboard ---------------------------------
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
-    
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:admin', 'PreventBackHistory']], function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/tables', function () {
@@ -62,53 +79,53 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.demo.chart');
     });
 
-    Route::group(['prefix' => 'category', 'as' => 'category.'],function () {
+    Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
         Route::get('/',             [CategoryController::class, 'index'])->name('index');
         Route::post('/',            [CategoryController::class, 'store'])->name('store');
         Route::put('/{category}',   [CategoryController::class, 'update'])->name('update');
-        Route::delete('/{category}',[CategoryController::class, 'destroy'])->name('destroy');
+        Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'subcategory', 'as' => 'subcategory.'],function () {
+    Route::group(['prefix' => 'subcategory', 'as' => 'subcategory.'], function () {
         Route::get('/',             [SubcategoryController::class, 'index'])->name('index');
         Route::post('/',            [SubcategoryController::class, 'store'])->name('store');
-        Route::put('/{subcategory}',[SubcategoryController::class, 'update'])->name('update');
-        Route::delete('/{subcategory}',[SubcategoryController::class, 'destroy'])->name('destroy');
+        Route::put('/{subcategory}', [SubcategoryController::class, 'update'])->name('update');
+        Route::delete('/{subcategory}', [SubcategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'brand', 'as' => 'brand.'], function(){
+    Route::group(['prefix' => 'brand', 'as' => 'brand.'], function () {
         Route::get('/',             [BrandController::class, 'index'])->name('index');
         Route::post('/',            [BrandController::class, 'store'])->name('store');
         Route::put('/{brand}',      [BrandController::class, 'update'])->name('update');
         Route::delete('/{brand}',   [BrandController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'variants', 'as' => 'variant.'], function(){
+    Route::group(['prefix' => 'variants', 'as' => 'variant.'], function () {
         Route::get('/',             [VariantController::class, 'index'])->name('index');
         Route::post('/',            [VariantController::class, 'store'])->name('store');
         Route::put('/{variant}',    [VariantController::class, 'update'])->name('update');
         Route::delete('/{variant}', [VariantController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'units', 'as' => 'unit.'], function(){
+    Route::group(['prefix' => 'units', 'as' => 'unit.'], function () {
         Route::get('/',             [UnitController::class, 'index'])->name('index');
         Route::post('/',            [UnitController::class, 'store'])->name('store');
         Route::put('/{unit}',       [UnitController::class, 'update'])->name('update');
         Route::delete('/{unit}',    [UnitController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'taxes', 'as' => 'tax.'], function(){
+    Route::group(['prefix' => 'taxes', 'as' => 'tax.'], function () {
         Route::get('/',             [TaxController::class, 'index'])->name('index');
         Route::post('/',            [TaxController::class, 'store'])->name('store');
         Route::put('/{tax}',        [TaxController::class, 'update'])->name('update');
         Route::delete('/{tax}',     [TaxController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'currencies', 'as' => 'currency.'], function(){
+    Route::group(['prefix' => 'currencies', 'as' => 'currency.'], function () {
         Route::get('/',             [CurrencyController::class, 'index'])->name('index');
         Route::post('/',            [CurrencyController::class, 'store'])->name('store');
         Route::put('/{currency}',   [CurrencyController::class, 'update'])->name('update');
-        Route::delete('/{currency}',[CurrencyController::class, 'destroy'])->name('destroy');
+        Route::delete('/{currency}', [CurrencyController::class, 'destroy'])->name('destroy');
     });
 
     // Route::get('/currency', function () {
@@ -123,18 +140,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         return view('backend.pages.imagegallery.addgallery');
     })->name('add-image-gallery');
 
-    Route::group(['prefix' => 'suppliers', 'as' => 'supplier.'], function(){
+    Route::group(['prefix' => 'suppliers', 'as' => 'supplier.'], function () {
         Route::get('/',             [SupplierController::class, 'index'])->name('index');
         Route::post('/',            [SupplierController::class, 'store'])->name('store');
         Route::put('/{supplier}',   [SupplierController::class, 'update'])->name('update');
-        Route::delete('/{supplier}',[SupplierController::class, 'destroy'])->name('destroy');
+        Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'customers', 'as' => 'customer.'], function(){
+    Route::group(['prefix' => 'customers', 'as' => 'customer.'], function () {
         Route::get('/',             [CustomerController::class, 'index'])->name('index');
         Route::post('/',            [CustomerController::class, 'store'])->name('store');
         Route::put('/{customer}',   [CustomerController::class, 'update'])->name('update');
-        Route::delete('/{customer}',[CustomerController::class, 'destroy'])->name('destroy');
+        Route::delete('/{customer}', [CustomerController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/add-purchase', function () {
@@ -202,14 +219,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
 
     Route::get('/custom-service', [OurCustomServiceController::class, 'index'])->name('admin.custom_service');
 
-    Route::group(['prefix' => 'customservices', 'as' => 'customservice.'], function(){
+    Route::group(['prefix' => 'customservices', 'as' => 'customservice.'], function () {
         Route::get('/',                     [OurCustomServiceController::class, 'index'])->name('index');
         Route::post('/',                    [OurCustomServiceController::class, 'store'])->name('store');
         Route::put('/{ourCustomService}',   [OurCustomServiceController::class, 'update'])->name('update');
-        Route::delete('/{ourCustomService}',[OurCustomServiceController::class, 'destroy'])->name('destroy');
+        Route::delete('/{ourCustomService}', [OurCustomServiceController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'contacts', 'as' => 'contact.'], function(){
+    Route::group(['prefix' => 'contacts', 'as' => 'contact.'], function () {
         Route::get('/',             [ContactController::class, 'index'])->name('index');
         Route::post('/',            [ContactController::class, 'store'])->name('store');
         Route::put('/{contact}',    [ContactController::class, 'update'])->name('update');
@@ -217,8 +234,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     });
 
     // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
-    
+
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -58,3 +58,23 @@ if (!function_exists('renderFileInput')) {
             </div>";
     }
 }
+
+
+if (!function_exists('profilePhoto')) {
+    function profilePhoto($path=null,array $attributes=[]){
+
+        $profilePath = $path ? asset($path) : asset('assets/frontend/img/profile/profile-picture.png');
+
+        $result = "<img src=\"$profilePath\" " . join(' ', array_map(function ($key) use ($attributes) {
+            if (is_bool($attributes[$key])) {
+                return $attributes[$key] ? $key : '';
+            }
+
+            return $key . '="' . $attributes[$key] . '"';
+
+        }, array_keys($attributes))) . ' alt="Profile Image" >';
+
+        return $result;
+
+    }
+}

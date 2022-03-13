@@ -3,7 +3,7 @@
 
 @section('content')
 <!-- Product Shop Area-->
-<section class="container-fluid product-shop-area my-4">
+<section class="container-fluid product-shop-area my-5">
     <div class="container">
         <div class="row shop-row">
             <div class="col-md-3">
@@ -182,7 +182,7 @@
                                 <div class="card-product-button d-flex justify-content-evenly">
                                     <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
                                         করুন</button>
-                                    <a href="singleproduct.html" type="button" class="btn btn-sm btn-danger"> অর্ডার
+                                    <a href="{{ route('product_detail','product-slug') }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
                                         করুন </a>
                                 </div>
                             </div>
@@ -599,8 +599,7 @@
         <div class="row">
             <div class="col-md-12 d-flex align-items-center justify-content-center">
                 <div class="call-center text-center">
-                    <h2> আপনি যা খুঁজছিলেন তা খুঁজে পাননি? কল করুন:<span> <a href="tel:01971819813"
-                                class="text-decoration-none" type="button">০১৯৭-১৮১৯-৮১৩</a></span></h2>
+                    <h2> আপনি যা খুঁজছিলেন তা খুঁজে পাননি? কল করুন:<span> <a href="tel:01971819813" class="text-decoration-none" type="button">০১৯৭-১৮১৯-৮১৩</a></span></h2>
                 </div>
             </div>
         </div>
