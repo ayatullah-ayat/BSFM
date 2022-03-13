@@ -13,4 +13,15 @@ class CustomServiceProduct extends Model
     {
         return $this->hasMany(CustomServiceOrder::class);
     }
+
+    public function service()
+    {
+        return $this->belongsTo(OurCustomService::class, 'service_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CustomServiceCategory::class, 'category_id');
+    }
+
 }

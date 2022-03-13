@@ -32,10 +32,10 @@
                                 @foreach ($customers as $customer)
                                     <tr customer-data="{{json_encode($customer)}}">
                                         <th>{{ $loop->index }}</th>
-                                        <th>{{ $customer->customer_name }}</th>
-                                        <th>{{ $customer->customer_email }}</th>
-                                        <th>{{ $customer->customer_phone }}</th>
-                                        <th>{{ $customer->customer_address }}</th>
+                                        <th>{{ $customer->customer_name ?? 'N/A' }}</th>
+                                        <th>{{ $customer->customer_email ?? 'N/A' }}</th>
+                                        <th>{{ $customer->customer_phone ?? 'N/A' }}</th>
+                                        <th>{{ $customer->customer_address ?? 'N/A' }}</th>
                                         <th class="text-center">
                                             {!! $customer->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

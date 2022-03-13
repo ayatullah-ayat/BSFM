@@ -32,10 +32,10 @@
                                 @foreach ($suppliers as $supplier)
                                     <tr supplier-data="{{json_encode($supplier)}}">
                                         <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $supplier->supplier_name }}</th>
-                                        <th>{{ $supplier->supplier_email  }}</th>
-                                        <th>{{ $supplier->supplier_phone  }}</th>
-                                        <th>{{ $supplier->supplier_address }}</th>
+                                        <th>{{ $supplier->supplier_name ?? 'N/A' }}</th>
+                                        <th>{{ $supplier->supplier_email  ?? 'N/A' }}</th>
+                                        <th>{{ $supplier->supplier_phone  ?? 'N/A' }}</th>
+                                        <th>{{ $supplier->supplier_address ?? 'N/A' }}</th>
                                         <th class="text-center">
                                             {!! $supplier->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

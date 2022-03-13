@@ -30,8 +30,8 @@
                                 @foreach ($variants as $variant)
                                     <tr variant-data="{{json_encode($variant)}}">
                                         <th>{{$loop->iteration}}</th>
-                                        <th>{{$variant->variant_name}}</th>
-                                        <th>{{$variant->variant_type}}</th>
+                                        <th>{{$variant->variant_name ?? 'N/A'}}</th>
+                                        <th>{{$variant->variant_type ?? 'N/A'}}</th>
                                         <th class="text-center">
                                             {!! $variant->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

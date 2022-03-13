@@ -31,9 +31,9 @@
                                 @foreach ($taxes as $tax)
                                     <tr tax-data="{{ json_encode($tax) }}">
                                         <th>{{$loop->iteration}}</th>
-                                        <th>{{$tax->product_id}}</th>
-                                        <th>{{$tax->tax_name}}</th>
-                                        <th>{{$tax->tax_percentage}}</th>
+                                        <th>{{$tax->product_id ?? 'N/A' }}</th>
+                                        <th>{{$tax->tax_name ?? 'N/A' }}</th>
+                                        <th>{{$tax->tax_percentage ?? 'N/A' }}</th>
                                         <th class="text-center">
                                             {!! $tax->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

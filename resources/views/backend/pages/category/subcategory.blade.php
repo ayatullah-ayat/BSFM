@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Category pages')
+@section('title','SubCategory page')
 
 @section('content')
     <div>
@@ -29,27 +29,28 @@
                         <tbody>
 
                             @isset($subcategories)
-                                @foreach ($subcategories as $subcategory)
+                            @foreach ($subcategories as $subcategory)
+                            {{-- @dd($subcategory) --}}
                                     <tr data-category="{{json_encode($subcategory)}}">
-                                        <th>{{$loop->iteration}}</th>
-                                        <th>{{$subcategory->subcategory_name ?? 'N/A'}}</th>
-                                        <th>{{$subcategory->category_id ?? 'N/A'}}</th>
-                                        <th>{{$subcategory->subcategory_description ?? 'N/A'}}</th>
-                                        <th>
+                                        <td>{{$loop->iteration}}</th>
+                                        <td>{{$subcategory->subcategory_name ?? 'N/A'}}</th>
+                                        <td>{{$subcategory->category->category_name ?? 'N/A'}}</th>
+                                        <td>{{$subcategory->subcategory_description ?? 'N/A'}}</th>
+                                        <td>
                                             @if($subcategory->subcategory_image)
-                                                <img src="{{ asset($subcategory->subcategory) }}" alt="SubCategory Image">
+                                                <img src="{{ asset($subcategory->subcategory_image) }}" style="width: 80px;" alt="SubCategory Image">
                                             @else 
                                                 <img src="" alt="SubCategory Image">
                                             @endif
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {!! $subcategory->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             <a href="javescript:void(0)" class="fa fa-eye text-info text-decoration-none details"></a>
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.subcategory.destroy',$subcategory->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset
@@ -68,7 +69,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> Sub-Category</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> SubCategory</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -78,37 +79,41 @@
                     <div id="service-container">
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Sub-Category Information</h5>
+                                <h5 class="font-weight-bold bg-custom-booking">SubCategory Information</h5>
                                 <hr>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="">Sub Category Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control" id="sub_category_name">
+                                    <label for="subcategory_name">SubCategory Name<span style="color: red;" class="req">*</span></label>
+                                    <input type="text" class="form-control" id="subcategory_name">
                                 </div>
                             </div>
 
                             <div class="col-md-6" data-col="col">
                                 <div class="form-group">
-                                    <label for="parent_category">Parent Category</label>
-                                    <select name="parent_category" class="parent_category" data-required id="parent_category" data-placeholder="Parent Category"></select>
+                                    <label for="category_id">Parent Category</label>
+                                    <select name="category_id" class="category_id" data-required id="category_id" data-placeholder="Parent Category">
+                                        @isset($categories)
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
                                 </div>
                                 <span class="v-msg"></span>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="">Category Description</label>
-                                   {{-- <textarea rows="4" type="text" class="form-control"> --}}
-                                    <textarea class="form-control" name="" id="sub_category_description" cols="30" rows="5"></textarea>
+                                   <label for="subcategory_description">SubCategory Description</label>
+                                    <textarea class="form-control" name="" id="subcategory_description" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Category Image</label>
-                                    <input class="d-flex align-items-center" type="file" name="" id="sub_category_images">
-                                </div>
+                            <div class="col-md-12 mb-2">
+                                <label for="">SubCategory Image</label>
+                                {!! renderFileInput(['id' => 'subcategoryImage', 'imageSrc' => '']) !!}
+                                <span class="v-msg"></span>
                             </div>
 
                             <div class="col-md-12">
@@ -187,7 +192,13 @@
 
             $(document).on('click','.update', showUpdateModal)
             $(document).on('click' , '#subcategory_update_btn', updateToDatabase)
+
+            $(document).on('change' , '#subcategoryImage', checkImage)
         });
+
+          function checkImage() {
+            fileRead(this, '#img-preview');
+        }       
 
         function showDataToModal(){
             let 
@@ -200,18 +211,22 @@
                 let html = `
                 <table class="table table-sm table-bordered table-striped">
                     <tr>
-                        <th>Category Name</th>
+                        <th>Parent Category</th>
+                        <td>${subcategory.category.category_name ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>SubCategory Name</th>
                         <td>${subcategory.subcategory_name ?? 'N/A'}</td>
                     </tr>
                     <tr>
-                        <th>Parent Category</th>
-                        <td>${subcategory.category_id ?? 'N/A'}</td>
+                        <th>SubCategory Description</th>
+                        <td>${subcategory.subcategory_description ?? 'N/A'}</td>
                     </tr>
                     <tr>
-                        <th>Category Image</th>
+                        <th>SubCategory Image</th>
                         <td>
-                            ${subcategory.category_image ? `
-                                <img src="{{ asset('') }}/${subcategory.subcategory_image}" alt="Category Image">
+                            ${subcategory.subcategory_image ? `
+                                <img src="{{ asset('') }}${subcategory.subcategory_image}" style="width:80px" alt="Category Image" alt="Category Image">
                             `: ` <img src="" alt="Category Image">`}
                         </td>
                     </tr>
@@ -264,8 +279,8 @@
 
             let arr=[
                 {
-                    dropdownParent  : '#categoryModal',
-                    selector        : `.parent_category`,
+                    dropdownParent  : '#subcategoryModal',
+                    selector        : `#category_id`,
                     type            : 'select',
                 },
                 {
@@ -321,14 +336,18 @@
 
             $('#subcategoryModal .heading').text('Edit').attr('data-id', category?.id)
 
-            $('#sub_category_name').val(category?.subcategory_name)
-            $('#sub_category_description').val(category?.subcategory_description)
-            
+            $('#category_id').val(category?.category_id).trigger('change')
+            $('#subcategory_name').val(category?.subcategory_name)
+            $('#subcategory_description').val(category?.subcategory_description)
+
             if(category?.is_active){
                 $('#isActive').prop('checked',true)
             }else{
                 $('#isInActive').prop('checked',true)
             }
+
+            // show previos image on modal
+            $(document).find('#img-preview').attr('src', `{{ asset('') }}${category.subcategory_image}`);
 
             showModal('#subcategoryModal');
         }
@@ -368,23 +387,25 @@
 
             resetData();
 
-            // hideModal('#categoryModal');
+            hideModal('#categoryModal');
         }
 
         function formatData(){
             return {
-                subcategory_name        : $('#sub_category_name').val().trim(),
-                subcategory_description : $('#sub_category_description').val().trim(),
-                subcategory_image       : $('#sub_category_images').val(),
-                is_active               : $('#isActive').is(':checked') ? 1 : 0,
+                category_id            : $('#category_id').val(),
+                subcategory_name       : $('#subcategory_name').val().trim(),
+                subcategory_description: $('#subcategory_description').val().trim(),
+                subcategory_image      : fileToUpload('#img-preview'),
+                is_active              : $('#isActive').is(':checked') ? 1 : 0,
             };
         }
 
         function resetData(){
-            $('#sub_category_name').val(null)
-            $('#sub_category_description').val(null)
-            $('#sub_category_images').val(null)
-            $('#isActive').prop('checked', true)
+            $('#category_id').val(null)
+            $('#subcategory_name').val(null)
+            $('#subcategory_description').val(null)
+            fileToUpload('#img-preview', '')
+            $('#isActive').is(':checked') ? 1 : 0
         }
 
     </script>

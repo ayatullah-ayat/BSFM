@@ -31,14 +31,14 @@
                             @isset($services)
                                 @foreach ($services as $service)
                                     <tr service-data="{{ json_encode($service) }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $service->service_name }}</td>
-                                        <td>{{ $service->service_description }}</td>
+                                        <td>{{ $loop->iteration ?? 'N/A' }}</td>
+                                        <td>{{ $service->service_name ?? 'N/A' }}</td>
+                                        <td>{{ $service->service_description ?? 'N/A' }}</td>
                                         <td>
                                             @if($service->service_thumbnail)
-                                            <img src="{{ asset($service->service_thumbnail) }}" style="width: 80px;" alt="service Image">
+                                                <img src="{{ asset($service->service_thumbnail) }}" style="width: 80px;" alt="service Image">
                                             @else 
-                                            <img src="" style="width: 80px;" alt="service Image">
+                                                <img src="" style="width: 80px;" alt="service Image">
                                             @endif
                                         </td>
                                         <td>
@@ -335,8 +335,6 @@
 
             hideModal('#serviceModal');
         }
-
-
 
         function formatData(){
             return {
