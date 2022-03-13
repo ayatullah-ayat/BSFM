@@ -8,7 +8,7 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Custom Product Service</a> </h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Custom Service Product</a> </h6>
                 <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Product</i></button>
             </div>
 
@@ -17,10 +17,12 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>SL</th>
-                                <th>Service Title</th>
-                                <th>Service Description</th>
-                                <th>Service Thumbnail</th>
+                                <th>#SL</th>
+                                <th>Service Name</th>
+                                <th>Category</th>
+                                <th>Product Name</th>
+                                <th>Product Description</th>
+                                <th>Product Thumbnail</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -31,13 +33,15 @@
                                 @foreach ($customproducts as $customproduct)
                                     <tr customproduct-data="{{ json_encode($customproduct) }}">
                                         <td>{{ $loop->iteration}}</td>
-                                        <td>{{ $customproduct->product_name }}</td>
-                                        <td>{{ $customproduct->product_description }}</td>
+                                        <td>{{ $customproduct->service->service_name ?? 'N/A' }}</td>
+                                        <td>{{ $customproduct->category->category_name ?? 'N/A' }}</td>
+                                        <td>{{ $customproduct->product_name  ?? 'N/A'}}</td>
+                                        <td>{{ $customproduct->product_description ?? 'N/A' }}</td>
                                         <td>
                                             @if($customproduct->product_thumbnail)
-                                            <img src="{{ asset($customproduct->product_thumbnail) }}" style="width: 80px;" alt="service Image">
+                                                <img src="{{ asset($customproduct->product_thumbnail) }}" style="width: 80px;" alt="service Image">
                                             @else 
-                                            <img src="" style="width: 80px;" alt="service Image">
+                                                <img src="" style="width: 80px;" alt="service Image">
                                             @endif
                                         </td>
                                         <td class="text-center">
@@ -84,10 +88,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="service_id">Service</label>
-                                    <select name="service_id" id="service_id" class="form-control">
-                                        <option value="0">Raju</option>
-                                        <option value="1">Mahadi</option>
-                                        <option value="2">Noor</option>   
+                                    <select name="service_id" id="service_id" class="form-control" data-placeholder="Select a Service">
+                                        @isset($customservices)
+                                            @foreach ($customservices as $customservice)
+                                                <option value="{{ $customservice->id }}">{{ $customservice->service_name }}</option>
+                                            @endforeach        
+                                        @endisset
                                     </select>
                                 </div>
                             </div>
@@ -95,11 +101,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="category_id">Category</label>
-                                    <select name="category_id" id="category_id" class="form-control">
-                                        <option value="0">Apple</option>
-                                        <option value="1">Orange</option>
-                                        <option value="2">Tomato</option>
-                                    </select>
+                                    <select name="category_id" id="category_id" class="form-control" data-placeholder="Select a Category"></select>
                                 </div>
                             </div>
 
@@ -176,6 +178,7 @@
             init();
 
             $(document).on('click','#add', createModal)
+            $(document).on('change','#service_id', loadCategoryByService)
             $(document).on('click','#customproduct_save_btn', submitToDatabase)
 
             $(document).on('click', '.delete', deleteToDatabase)
@@ -185,6 +188,33 @@
             $(document).on('click', '.update', showUpdateModal)
             $(document).on('click','#customproduct_update_btn', updateToDatabase)
         });
+
+
+        function loadCategoryByService(){
+            let service_id = $(this).val();
+
+            $.ajax({
+                url     : `{{ route('admin.customserviceproduct.getCategory','')}}/${service_id}`,
+                method  : 'GET',
+                beforeSend(){
+                    console.log('sending ...');
+                },
+                success(data){
+
+                    let options = ``;
+                    if(data.length){
+                        data.forEach(item => {
+                            options += `<option value="${item.id}">${item.text}</option>`;
+                        });
+                    }
+
+                    $(document).find('#category_id').html(options);
+                },
+                error(err){
+                    console.log(err);
+                },
+            })
+        }
 
         // call the func on change file input 
         function checkImage() {
@@ -306,15 +336,17 @@
 
                 $('#product_name').val(customproduct?.product_name)
                 $('#product_description').val(customproduct?.product_description)
-                $('#product_description').val(customproduct?.product_description)
-                $('#product_description').val(customproduct?.product_description)
+                $('#service_id').val(customproduct?.service_id).trigger('change')
 
+                setTimeout(() => {
+                 $('#category_id').val(customproduct?.category_id).trigger('change')
+                }, 1000);
 
                 if(customproduct?.is_active){
-                $('#isActive').prop('checked',true)
-                }else{
-                $('#isInActive').prop('checked',true)
-            }
+                    $('#isActive').prop('checked',true)
+                    }else{
+                    $('#isInActive').prop('checked',true)
+                }
                 // show previos image on modal
                 $(document).find('#img-preview').attr('src', `{{ asset('') }}${customproduct.product_thumbnail}`);
 

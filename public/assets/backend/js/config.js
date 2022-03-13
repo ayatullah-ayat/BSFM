@@ -38,7 +38,6 @@ function fieldError(responseJSON, field = "") {
 }
 
 
-
 function showModal(selector=null)
 {
     if(selector){

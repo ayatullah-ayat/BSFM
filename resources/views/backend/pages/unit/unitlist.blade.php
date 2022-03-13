@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'variant page')
+@section('title', 'Unit page')
 
 @section('content')
     <div>
@@ -30,8 +30,8 @@
                                 @foreach ($units as $unit)
                                     <tr unit-data="{{json_encode($unit)}}">
                                         <th>{{$loop->iteration}}</th>
-                                        <th>{{$unit->unit_name}}</th>
-                                        <th>{{$unit->unit_short_name}}</th>
+                                        <th>{{$unit->unit_name ?? 'N/A' }}</th>
+                                        <th>{{$unit->unit_short_name ?? 'N/A' }}</th>
                                         <th class="text-center">
                                             {!! $unit->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

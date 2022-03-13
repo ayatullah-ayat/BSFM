@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomServiceProductRequest;
 use App\Http\Services\ImageChecker;
+use App\Models\Custom\CustomServiceCategory;
 use App\Models\Custom\CustomServiceProduct;
+use App\Models\Custom\OurCustomService;
 use Exception;
 
 class CustomServiceProductController extends Controller
@@ -20,7 +22,9 @@ class CustomServiceProductController extends Controller
     public function index()
     {
         $customproducts = CustomServiceProduct::orderByDesc('id')->get();
-        return view('backend.pages.custom_service.customproduct', compact('customproducts'));
+        $customservices = OurCustomService::get();
+        $servicescategories = CustomServiceCategory::get();
+        return view('backend.pages.custom_service.customproduct', compact('customproducts','customservices' ,'servicescategories'));
     }
 
     /**
@@ -28,9 +32,24 @@ class CustomServiceProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function getCategory($service_id)
+    {
+        try {
+
+            $categories = CustomServiceCategory::selectRaw(
+                'category_name as text, id'
+            )->where('service_id', $service_id)->get();
+            
+            return response()->json($categories);
+
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage());
+        }
+    }
+
     public function create()
     {
-        //
+        
     }
 
     /**

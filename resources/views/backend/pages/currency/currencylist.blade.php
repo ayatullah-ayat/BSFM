@@ -32,11 +32,11 @@
                             @isset($currencies)
                                 @foreach ($currencies as $currency)
                                     <tr currency-data="{{json_encode($currency)}}">
-                                        <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $currency->currency_name }}</th>
-                                        <th>{{ $currency->currency_icon}}</th>
-                                        <th>{{ $currency->currency_position }}</th>
-                                        <th>{{ $currency->currency_conversion_rate }}</th>
+                                        <th>{{ $loop->iteration ?? 'N/A'}}</th>
+                                        <th>{{ $currency->currency_name  ?? 'N/A' }}</th>
+                                        <th>{{ $currency->currency_icon ?? 'N/A' }}</th>
+                                        <th>{{ $currency->currency_position  ?? 'N/A' }}</th>
+                                        <th>{{ $currency->currency_conversion_rate  ?? 'N/A' }}</th>
                                         <th class="text-center">
                                             {!! $currency->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </th>

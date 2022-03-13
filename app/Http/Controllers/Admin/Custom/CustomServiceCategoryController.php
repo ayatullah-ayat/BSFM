@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomServiceCategoryRequest;
 use App\Http\Services\ImageChecker;
 use App\Models\Custom\CustomServiceCategory;
+use App\Models\Custom\OurCustomService;
 use Exception;
 
 class CustomServiceCategoryController extends Controller
@@ -20,7 +21,8 @@ class CustomServiceCategoryController extends Controller
     public function index()
     {
         $CustomServiceCategories = CustomServiceCategory::orderByDesc('id')->get();
-        return view('backend.pages.custom_service.customservicecategory', compact('CustomServiceCategories'));
+        $customservices = OurCustomService::get();
+        return view('backend.pages.custom_service.customservicecategory', compact( 'CustomServiceCategories' , 'customservices'));
     }
 
     /**
@@ -112,8 +114,49 @@ class CustomServiceCategoryController extends Controller
      */
     public function update(Request $request, CustomServiceCategory $customServiceCategory)
     {
-        //
+        try {
+
+            if(!$customServiceCategory)
+                throw new Exception("No record Found!", 404);
+                
+            $data               = $request->all();
+            $category_thumbnail  = $request->category_thumbnail;
+            $fileLocation       = $customServiceCategory->category_thumbnail;
+
+            if ($category_thumbnail) {
+                //file, dir
+                if($fileLocation){
+                    $this->deleteImage($fileLocation);
+                }
+                
+                $fileResponse = $this->uploadFile($category_thumbnail, 'CustomServiceCategory/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['category_thumbnail'] = $fileLocation;
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
+            $servicestatus = $customServiceCategory->update($data);
+            if(!$servicestatus)
+                throw new Exception("Unable to Update Service Category!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Service Category Updated Successfully!',
+                'data'      => $customServiceCategory->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

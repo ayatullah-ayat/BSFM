@@ -34,9 +34,9 @@
                                         <td>{{ $category->category_description	 ?? 'N/A'}}</td>
                                         <td>
                                             @if($category->category_image)
-                                            <img src="{{ asset($category->category_image) }}" style="width: 80px;" alt="Category Image">
+                                                <img src="{{ asset($category->category_image) }}" style="width: 80px;" alt="Category Image">
                                             @else 
-                                            <img src="" style="width: 80px;" alt="Category Image">
+                                                <img src="" style="width: 80px;" alt="Category Image">
                                             @endif
                                         </td>
                                         <td class="text-center">

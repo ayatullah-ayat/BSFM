@@ -18,6 +18,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Service Name</th>
                                 <th>Category Name</th>
                                 <th>Category Description</th>
                                 <th>Category Image</th>
@@ -28,10 +29,13 @@
                         <tbody>
                             @isset($CustomServiceCategories)
                                 @foreach ($CustomServiceCategories as $CustomServiceCategory)
-                                    <tr>
+
+                                {{-- @dd($CustomServiceCategory->customservice) --}}
+                                    <tr servicecategory-data="{{ json_encode($CustomServiceCategory) }}">
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$CustomServiceCategory->category_name  }}</td>
-                                        <td>{{$CustomServiceCategory->category_description }}</td>
+                                        <td>{{$CustomServiceCategory->customservice->service_name ?? 'N/A' }}</td>
+                                        <td>{{$CustomServiceCategory->category_name ?? 'N/A' }}</td>
+                                        <td>{{$CustomServiceCategory->category_description ?? 'N/A'}}</td>
                                         <td>
                                             @if( $CustomServiceCategory->category_thumbnail )
                                                 <img src="{{ asset( $CustomServiceCategory->category_thumbnail ) }}" style="width: 80px;" alt="Category Image">
@@ -45,7 +49,7 @@
 
                                         <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none updatecategory"></a>
                                             <a href="{{ route('admin.customservicecategory.destroy', $CustomServiceCategory->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </td>
                                     </tr>
@@ -67,7 +71,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Category</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"><span class="heading">Create</span> Service Category</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -80,6 +84,20 @@
                                 <h5 class="font-weight-bold bg-custom-booking">Category Information</h5>
                                 <hr>
                             </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="service_id">Service</label>
+                                    <select name="service_id" id="service_id" class="form-control" data-placeholder="Select a Service">
+                                        @isset($customservices)
+                                            @foreach ($customservices as $customservice)
+                                                <option value="{{ $customservice->id }}">{{ $customservice->service_name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="categoryName">Service Category Name<span style="color: red;" class="req">*</span></label>
@@ -90,7 +108,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                    <label for="categoryDescription">Category Description</label>
-                                    <textarea class="form-control" name="categoryDescription" id="categoryDescription" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" name="categoryDescription" id="categoryDescription" cols="0" rows="4"></textarea>
                                 </div>
                             </div>
 
@@ -118,6 +136,7 @@
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
                         <button id="service_category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="service_category_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -150,6 +169,9 @@
             $(document).on('click' , '#service_category_save_btn', submitToDatabase)
             $(document).on('click', '#reset', resetForm)
             $(document).on('change' , '#categoryImage', checkImage)
+
+            $(document).on('click' , '.updatecategory', showUpdateModal)
+            $(document).on('click' , '#service_category_update_btn', updateToDatabase)
         });
 
          // call the func on change file input 
@@ -193,7 +215,7 @@
             let arr=[
                 {
                     dropdownParent  : '#categoryModal',
-                    selector        : `#stuff`,
+                    selector        : `#service_id`,
                     type            : 'select',
                 },
                 {
@@ -226,6 +248,56 @@
             resetData()
         }
 
+        function showUpdateModal(){
+
+            resetData();
+
+            let servicecategory = $(this).closest('tr').attr('servicecategory-data');
+
+            if(servicecategory){
+                $('#service_category_save_btn').addClass('d-none');
+                $('#service_category_update_btn').removeClass('d-none');
+
+                servicecategory = JSON.parse(servicecategory);
+
+                $('#categoryModal .heading').text('Edit').attr('data-id', servicecategory?.id)
+
+                $('#service_id').val(servicecategory?.service_id).trigger('change')
+                $('#categoryName').val(servicecategory?.category_name)
+                $('#categoryDescription').val(servicecategory?.category_description)
+
+                if(servicecategory?.is_active){
+                    $('#isActive').prop('checked',true)
+                }else{
+                    $('#isInActive').prop('checked',true)
+                }
+
+                // show previos image on modal
+                $(document).find('#img-preview').attr('src', `{{ asset('') }}${servicecategory.category_thumbnail}`);
+
+                showModal('#categoryModal');
+            }
+
+
+        }
+
+        function updateToDatabase(){
+            ajaxFormToken();
+
+            let id  = $('#categoryModal .heading').attr('data-id');
+            let obj = {
+                url     : `{{ route('admin.customservicecategory.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : formatData(),
+            };
+
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+
+            resetData();
+
+            hideModal('#categoryModal');
+        }
+
         function submitToDatabase(){
 
             ajaxFormToken();
@@ -245,6 +317,7 @@
 
         function formatData(){
             return {
+                service_id          : $('#service_id').val(),
                 category_name       : $('#categoryName').val().trim(),
                 category_description: $('#categoryDescription').val().trim(),
                 category_thumbnail  : fileToUpload('#img-preview'),
@@ -253,6 +326,7 @@
         }
 
         function resetData(){
+            $('#service_id').val(null)
             $('#categoryName').val(null)
             $('#categoryDescription').val(null)
             $('#categoryImage').val(null)
