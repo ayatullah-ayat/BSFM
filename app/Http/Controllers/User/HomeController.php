@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Custom\CustomServiceCategory;
+use App\Models\Custom\CustomServiceProduct;
+use App\Models\Custom\OurCustomService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,7 +17,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.home');
+        $customservices         = OurCustomService::where('is_active',1)->orderByDesc('id')->get();
+        $customservicecategories= CustomServiceCategory::where('is_active', 1)->orderByDesc('id')->get();
+        $serviceproducts        = CustomServiceProduct::get();
+
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts'));
     }
 
     /**
@@ -22,6 +29,25 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getProduct($category_id)
+    {
+        try {
+
+            $products = CustomServiceProduct::where([
+                ['category_id', $category_id],
+                ['is_active', 1]
+            ])
+            ->get();
+            
+            return response()->json($products);
+
+        } catch (\Throwable $th) {
+            return response()->json($th->getMessage());
+        }
+    }
+
+
     public function create()
     {
         //

@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\CustomerChecker;
+use App\Http\Services\ImageChecker;
+use App\Models\Custom\CustomServiceOrder;
+use App\Models\Custom\CustomServiceProduct;
+use Exception;
 use Illuminate\Http\Request;
+use DB;
 
 class CustomOrderController extends Controller
 {
+
+    use CustomerChecker, ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class CustomOrderController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.customorder');
+        
     }
 
     /**
@@ -35,7 +43,83 @@ class CustomOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            // dd($request->all());
+
+            $order_attachment   = $request->order_attachment;
+            $data               = $request->all();
+            $fileLocation       = null;
+            $order_attachment =  $order_attachment && count(json_decode($order_attachment)) > 0 ? json_decode($order_attachment)[0] : null;
+    
+            if($order_attachment){
+                //file, dir
+                $fileResponse = $this->uploadFile($order_attachment, 'CustomServiceOrder/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+            
+            $data['order_attachment']       = $fileLocation;
+            $data['order_no']               =  uniqid();
+            $data['order_qty']              =  0;
+            $data['order_discount_price']   =  0;
+            $data['order_total_price']      =  0;
+            $data['advance_balance']        =  0;
+            $data['status']                 =  'pending';
+
+            DB::beginTransaction();
+            $oldcustomer = $this->isCustomerExists($data['customer_name'], $data['customer_phone']);
+            if($oldcustomer['success']){
+                $data['customer_id'] = $oldcustomer['data']->id;
+
+            }else{
+
+                $customer = $this->createCustomer([
+                    'customer_name'     => $data['customer_name'],
+                    'customer_phone'    => $data['customer_phone'],
+                    'customer_address'  => $data['customer_address'],
+                    'current_balance'   => 0,
+                    'is_active'         => 1,
+                ]);
+
+                if(!$customer['success']) 
+                    throw new Exception($customer['msg'], 403);
+
+                $data['customer_id'] = $customer['data']->id;
+
+                $customerType = $this->createCustomerType([
+                    'customer_id' => $data['customer_id'],
+                    'customer_type' => 'customize',
+                ]);
+                
+                if(!$customerType['success']) 
+                    throw new Exception($customerType['msg'], 403);
+
+            }
+
+            $customserviceorder = CustomServiceOrder::create($data);
+
+            if(!$customserviceorder)
+                throw new Exception('Unable to create Order', 403);
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Order Created Successfully!',
+                'data'      => $customserviceorder
+            ]);
+
+        } catch (\Exception $th) {
+            DB::rollback();
+
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -44,9 +128,9 @@ class CustomOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(CustomServiceProduct $customServiceProduct)
     {
-        //
+        return view('frontend.pages.customorder', compact('customServiceProduct'));
     }
 
     /**

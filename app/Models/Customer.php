@@ -23,7 +23,12 @@ class Customer extends Model
 
     public function customerTypes()
     {
-        return $this->belongsToMany(CustomerType::class, 'customer_type');
+        return $this->hasMany(CustomerType::class, 'customer_type');
+    }
+
+    public function customerType($type='customize')
+    {
+        return $this->hasOne(CustomerType::class, 'customer_id')->where('customer_type', $type);
     }
 }
   

@@ -31,7 +31,7 @@
                             @isset($customers)
                                 @foreach ($customers as $customer)
                                     <tr customer-data="{{json_encode($customer)}}">
-                                        <th>{{ $loop->index }}</th>
+                                        <th>{{ $loop->iteration }}</th>
                                         <th>{{ $customer->customer_name ?? 'N/A' }}</th>
                                         <th>{{ $customer->customer_email ?? 'N/A' }}</th>
                                         <th>{{ $customer->customer_phone ?? 'N/A' }}</th>

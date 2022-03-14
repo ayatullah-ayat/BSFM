@@ -84,7 +84,11 @@ function ajaxRequest(obj, { reload, timer , html }){
                 if(res?.data){
                     data = res?.data
                 }
+            }else{
+                _toastMsg(res?.msg ?? 'Something wents wrong!');
             }
+
+            
         },
         error(err){
             // setTimeout(() => {

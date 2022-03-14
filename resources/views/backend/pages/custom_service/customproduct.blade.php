@@ -174,6 +174,7 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
     <script>
+        
         $(document).ready(function(){
             init();
 

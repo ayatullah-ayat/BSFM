@@ -36,25 +36,32 @@
     
         <div class="container">
             <div class="row">
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/Final-Jersy.png')}}" alt="Product img">
+
+                @isset($customservicecategories)
+                    @foreach ($customservicecategories as $customservicecategory)
+                        <div class="col-md-4 col-sm-12 mb-2">
+                            <div class="product-content d-flex">
+        
+                                <div class="product-img">
+                                    @isset($customservicecategory->category_thumbnail)
+                                     <img src="{{asset( $customservicecategory->category_thumbnail )}}" alt="Product img">
+                                    @else    
+                                    <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
+                                    @endisset
+                                </div>
+            
+                                <div class="product-details text-center">
+                                    <h3 class="product-title"> {{ $customservicecategory->category_name  }} </h3>
+                                    <p class="product-text">  {{ $customservicecategory->category_description  }} </p>
+                                    <a href="javascript:void(0)" id="category_id" data-categoryid="{{$customservicecategory->id}}" type="button" class="product-button customize-btn"> কাস্টমাইজ করুন </a>
+                                </div>
+            
+                            </div>
                         </div>
+                    @endforeach
+                @endisset
     
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" type="button" class="product-button" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
+                {{-- <div class="col-md-4 col-sm-12">
                     <div class="product-content d-flex">
     
                         <div class="product-img">
@@ -180,7 +187,7 @@
                         </div>
     
                     </div>
-                </div>
+                </div> --}}
     
                 <div class="product-ses-more text-center">
                     <a href="#"> আরও কাস্টমাইজ প্রোডাক্ট দেখুন </a>
@@ -230,17 +237,29 @@
             </div>
     
             <div class="row">
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-1.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> সোর্সিং, কাটিং, সেলাই. </p>
+                @isset($customservices)
+                    @foreach ($customservices as $customservice)
+                    {{-- @dd() --}}
+                        <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
+                            <div class="card service-card">
+                                <img draggable="false" class="card-img-top" src="{{ asset($customservice->service_thumbnail) }}" alt="Card image cap">
+                                @if ($customservice->is_allow_caption)
+                                    <div class="card-body">
+                                        <p class="card-text text-center">{{ $customservice->service_name  }}</p>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
+                    @endforeach
+                @endisset
+                {{-- <td>
+                    @if($service->service_thumbnail)
+                        <img src="{{ asset($service->service_thumbnail) }}" style="width: 80px;" alt="service Image">
+                    @else 
+                        <img src="" style="width: 80px;" alt="service Image">
+                    @endif
+                </td> --}}
+                {{-- <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
                     <div class="card service-card">
                         <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-2.png')}}" alt="Card image cap">
                         <div class="card-body">
@@ -294,6 +313,7 @@
                     </div>
     
                 </div>
+
                 <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
     
                     <div class="card service-card">
@@ -302,7 +322,7 @@
                             <p class="card-text text-center"> সাবলিমেশন মগ প্রিন্ট। </p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
     
             </div>
     
@@ -490,7 +510,7 @@
     
     <!-- ------------------ modal -------------------  -->
     
-    <div class="modal fade" style="z-index: 22001;" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" style="z-index: 22001;" id="customProductModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content modal-dialog-scrollable">
@@ -504,7 +524,7 @@
     
                     <div class="grid-product-container">
     
-                        <div class="card-box">
+                        {{-- <div class="card-box">
                             <div class="card modal-card text-center">
                                 <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
                                 <p> পলিস্টার টি-শার্ট </p>
@@ -531,34 +551,7 @@
                                 <p> পলিস্টার টি-শার্ট </p>
                             </div>
                         </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
+     --}}
     
                     </div>
     
@@ -576,4 +569,71 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/home.css') }}">
+@endpush
+
+@push('js')
+<script>
+    $(document).ready( function(){
+        $(document).on('click', '.customize-btn', loadCustomizeProduct)
+        $(document).on('click', '.customize-product-box', loadCustomizeProductPage)
+    });
+
+
+    function loadCustomizeProduct(){
+        let 
+        elem        = $(this),
+        category_id = elem.attr('data-categoryid'); 
+
+        $.ajax({
+            url     : `{{ route('customize.getCustomizeProduct','')}}/${category_id}`,
+            method  : 'GET',
+            beforeSend(){
+                console.log('sending ...');
+            },
+            success(data){
+                console.log(data);
+                let 
+                cssStyle = '',
+                products = ``;
+                if(data.length){
+                    data.forEach(item => {
+                        let productImage = item?.product_thumbnail ?? 'assets/frontend/img/product/product-1.png';
+                        products += `<div class="card-box customize-product-box" data-href="${window.location.origin}/customize/custom-order/${item.id}">
+                            <div class="card modal-card text-center">
+                                <img class="pt-3" src="${window.location.origin}/${productImage}" alt="Product Image">
+                                <p> ${item?.product_name ?? 'N/A'} </p>
+                            </div>
+                        </div>`;
+                    });
+                    cssStyle = ['grid-template-columns','repeat(auto-fill, minmax(160px, 1fr))'];
+                }else{
+                    products += `<div class="row">
+                        <div class="alert alert-danger my-3">
+                            <h4>404</h4>
+                            <p>Oops! No Product Found For The category!</p>
+                        </div>
+                    </div>`;
+
+                    cssStyle = ['grid-template-columns','repeat(1, 1fr)'];
+                }
+
+                $('.grid-product-container').html(products)
+                $('.grid-product-container').css(cssStyle[0],cssStyle[1]);
+                $('#customProductModal').modal('show')
+            }
+        });
+    }
+
+
+    function loadCustomizeProductPage(){
+        let elem = $(this);
+        $(document).find('.customize-product-box').find('.modal-card').removeClass('active')
+        elem.find('.modal-card').addClass('active')
+
+        setTimeout(() => {
+            window.open(elem.attr('data-href'),"_self");
+        }, 1000);
+    }
+
+</script>
 @endpush
