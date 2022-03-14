@@ -30,15 +30,14 @@ class CreateProductsTable extends Migration
   
             $table->unsignedBigInteger('product_discount')->default(0)->comment('percentage'); 
 
-            $table->unsignedBigInteger('product_qty')->default(0);
-            $table->float('product_unit_price', 10, 3)->default(0);
-            $table->float('product_wholesale_price', 10, 3)->default(0); // paikari mullo
+            $table->unsignedBigInteger('total_product_qty')->default(0);
+            $table->float('total_product_unit_price', 10, 3)->default(0);
+            $table->float('total_product_wholesale_price', 10, 3)->default(0); // paikari mullo
 
-            $table->unsignedBigInteger('stock_qty')->default(0);
-            $table->float('stock_price', 10, 3)->default(0); 
-
-            $table->unsignedBigInteger('stock_out_qty')->default(0);
-            $table->float('stock_out_price', 10, 3)->default(0); 
+            $table->unsignedBigInteger('total_stock_qty')->default(0);
+            $table->float('total_stock_price', 10, 3)->default(0); 
+            $table->unsignedBigInteger('total_stock_out_qty')->default(0);
+            $table->float('total_stock_out_price', 10, 3)->default(0); 
 
 
             $table->text('product_video_link')->nullable();

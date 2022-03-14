@@ -10,7 +10,7 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary text-dark"><a href="/" class="text-decoration-none">Manage Product</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.add_product') }}"><i class="fa fa-plus"> Product</i></a></button>
+                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.products.create') }}"><i class="fa fa-plus"> Product</i></a></button>
             </div>
 
             <div class="card-body">

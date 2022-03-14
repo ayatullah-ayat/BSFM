@@ -16,7 +16,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.pages.product.manageproduct');
     }
 
     /**
@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.pages.product.addproduct');
     }
 
     /**
