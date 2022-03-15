@@ -52,16 +52,22 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 // --------------------------- Frontend ---------------------------------
 
 Route::group(['prefix' => ''],function(){
-    // --------------------------- Generak Route goes Here ---------------------------------
-    Route::get('/home',         [HomeController::class, 'index'])->name('index');
+    // --------------------------- General Route goes Here ---------------------------------
+    Route::get('/home',         [HomeController::class, 'index'])->name('home_index');
     Route::get('/shop',         [ShopController::class, 'index'])->name('shop_index');
     Route::get('/shop/{slug}',  [ShopController::class, 'show'])->name('product_detail');
     Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
-    Route::get('/custom-order', [UserCustomOrderController::class, 'index'])->name('customorder_index');
     Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
     Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
     Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
     Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
+    
+    // --------------------------- Customize Route goes Here ---------------------------------------
+    Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
+        Route::get('/{category_id}',[HomeController::class, 'getProduct'])->name('getCustomizeProduct');
+        Route::get('/custom-order/{customServiceProduct}', [UserCustomOrderController::class, 'show'])->name('customorder_show');
+        Route::post('/', [UserCustomOrderController::class, 'store'])->name('store');
+    });
 
     // --------------------------- Auth Route goes here ---------------------------------
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.','middleware'=>['auth:web', 'PreventBackHistory']], function () {
@@ -97,6 +103,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [SubcategoryController::class, 'store'])->name('store');
         Route::put('/{subcategory}',[SubcategoryController::class, 'update'])->name('update');
         Route::delete('/{subcategory}',[SubcategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}',         [SubcategoryController::class, 'subcategoriesByCategory'])->name('subcategoriesByCategory');
     });
 
     Route::group(['prefix' => 'brand', 'as' => 'brand.'], function(){
@@ -235,8 +242,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::group(['prefix' => 'customservices', 'as' => 'customservice.'], function(){
         Route::get('/',                         [OurCustomServiceController::class, 'index'])->name('index');
         Route::post('/',                        [OurCustomServiceController::class, 'store'])->name('store');
-        Route::put('/{customServiceCategory}',  [OurCustomServiceController::class, 'update'])->name('update');
-        Route::delete('/{customServiceCategory}',[OurCustomServiceController::class, 'destroy'])->name('destroy');
+        Route::put('/{ourCustomService}',       [OurCustomServiceController::class, 'update'])->name('update');
+        Route::delete('/{ourCustomService}',    [OurCustomServiceController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix' => 'customserviceproducts', 'as' => 'customserviceproduct.'], function(){

@@ -106,7 +106,7 @@
                             </div> --}}
 
                             <div class="col-md-12 mb-2">
-                                <label for="">Service Image</label>
+                                <label for="">Service Image ( size: 273 x 232 )</label>
                                 {!! renderFileInput(['id' => 'service_thumbnail', 'imageSrc' => '']) !!}
                                 <span class="v-msg"></span>
                             </div>

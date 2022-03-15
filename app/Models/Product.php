@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
 
+    protected $guarded = ['id'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -41,10 +43,15 @@ class Product extends Model
         return $this->belongsToMany(ProductSize::class, 'product_id');
     }
 
-    
+    public function variants()
+    {
+        return $this->belongsToMany(ProductVariantPrice::class, 'product_variant_prices');
+    }
+
+
     public function brands()
     {
-        return $this->belongsToMany(Brand::class);
+        return $this->belongsToMany(Brand::class, 'product_brand')->withPivot('brand_name');
     }
 
     public function productImages()
@@ -55,7 +62,7 @@ class Product extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(ProductTag::class, 'product_id');
+        return $this->belongsToMany(ProductTag::class, 'product_tags', 'product_id', 'tag_name');
     }
 
 

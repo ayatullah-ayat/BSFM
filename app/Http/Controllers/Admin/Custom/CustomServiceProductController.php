@@ -46,6 +46,7 @@ class CustomServiceProductController extends Controller
             return response()->json($th->getMessage());
         }
     }
+    
 
     public function create()
     {

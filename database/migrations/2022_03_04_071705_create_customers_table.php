@@ -20,7 +20,7 @@ class CreateCustomersTable extends Migration
             $table->string('customer_name')->nullable();
             $table->string('customer_email')->unique()->nullable();
             $table->string('customer_phone')->unique()->nullable();
-            $table->string('customer_address')->nullable();
+            $table->text('customer_address')->nullable();
             $table->text('institute_description')->nullable();
             $table->float('current_balance', 10,3)->default(0);
             

@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use App\Models\Unit;
 use App\Models\Brand;
+use App\Models\Product;
+use App\Models\Variant;
 use App\Models\Category;
 use App\Models\Currency;
-use App\Models\Product;
 use App\Models\ProductTag;
-use App\Models\Unit;
-use App\Models\Variant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Services\ImageChecker;
+use App\Http\Controllers\Controller;
+use App\Http\Services\ProductChecker;
 
 class ProductController extends Controller
 {
+    use ImageChecker, ProductChecker;
     /**
      * Display a listing of the resource.
      *
@@ -51,9 +56,66 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-            dd($request->all());
-            //code...
+
+
+            $data                       = $request->all();
+            $product_thumbnail_image    = $request->product_thumbnail_image;
+            $product_gallery            = $request->product_gallery;
+            $fileLocation               = null;
+            $product_thumbnail_image    = $product_thumbnail_image && count(json_decode($product_thumbnail_image)) > 0 ? json_decode($product_thumbnail_image)[0] : null;
+            $product_gallery_images     = $product_gallery && count(json_decode($product_gallery)) > 0 ? json_decode($product_gallery) : null;
+
+            if ($product_thumbnail_image) {
+                $fileResponse = $this->uploadFile($product_thumbnail_image, 'products/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+                $data['product_thumbnail_image'] = $fileLocation;
+            }
+
+            $data['product_gallerys']=[];
+            if ($product_gallery_images) {
+
+                foreach ($product_gallery_images as $image) {
+                    $fileResponse = $this->uploadFile($image, 'products/');
+                    if (!$fileResponse['success'])
+                        throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                    $fileLocation = $fileResponse['fileLocation'];
+                    $data['product_gallerys'][]= ['product_image' => $fileLocation];
+                }
+            }
+
+            DB::beginTransaction();
+
+            // create product 
+            $productData = $this->createProduct($data);
+
+            // create product variants
+            // $product->brands()->attach($brands);
+            // $product->sizes()->attach($sizes);
+            // $product->colors()->attach($colors);
+            // $product->tags()->attach($tags);
+
+            // 
+
+            // dd($productData);
+            if(!$productData['success'])
+                throw new Exception($productData['msg'] ?? "Unable to Create Product!", 403);
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => $productData['msg'] ?? 'Success!',
+                'data'      => $productData['data'] ?? null
+            ]);
+                
         } catch (\Exception $th) {
+
+            DB::rollback();
+
             return response()->json([
                 'success'   => false,
                 'msg'       => $th->getMessage(),
@@ -83,6 +145,7 @@ class ProductController extends Controller
     {
         //
     }
+    
 
     /**
      * Update the specified resource in storage.
