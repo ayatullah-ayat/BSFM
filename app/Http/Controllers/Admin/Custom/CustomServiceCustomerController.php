@@ -16,7 +16,7 @@ class CustomServiceCustomerController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests\CustomOrderRequest;
 use App\Http\Services\CustomerChecker;
 use App\Http\Services\ImageChecker;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
 use Exception;
-use Illuminate\Http\Request;
 use DB;
 
 class CustomOrderController extends Controller
@@ -41,7 +42,7 @@ class CustomOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomOrderRequest $request)
     {
         try {
             // dd($request->all());

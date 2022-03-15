@@ -56,14 +56,11 @@
                                 @endforeach
                             @endisset
 
-
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
-    
     </div>
 
     <div class="modal fade" id="customProductModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">

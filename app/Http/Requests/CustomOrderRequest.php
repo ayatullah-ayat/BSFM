@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CustomerRequest extends FormRequest
+class CustomOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,9 @@ class CustomerRequest extends FormRequest
     {
         return [
             'customer_name'     => 'required|string',
-            'customer_email'    => 'nullable|string|unique:customers, customer_email',
-            'customer_phone'    => 'nullable|string|unique:customers, customer_phone',
             'customer_address'  => 'nullable|string',
-            'is_active'         => 'required',
+            'customer_phone'    => 'nullable|string|unique:customers,customer_phone',
+            'customer_address'  => 'nullable|string',
         ];
     }
 
@@ -38,9 +37,8 @@ class CustomerRequest extends FormRequest
         return [
             'customer_name.required'  => 'Customer name is Required!',
             'customer_name.string'    => 'Customer name must be String Type!',
-            'customer_email.unique'   => 'Customer email must be Unique!',
-            'customer_phone.unique'   => 'Customer phone must be unique!',
             'customer_address.string' => 'Customer address must be String Type!',
+            'customer_phone.unique'   => 'Customer phone must be Unique!',
             'is_active.required'      => 'Please select the supplier status!',
         ];
     }
