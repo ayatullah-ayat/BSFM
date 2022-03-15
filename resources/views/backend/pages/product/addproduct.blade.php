@@ -5,15 +5,20 @@
 @section('content')
 <div class="card p-4 shadow">
     <h4 class="text-dark f-2x font-weight-bold text-dark">Add Product Information</h4>
-    <form action="{{ route('admin.products.store') }}" method="POST" id="productForm">
-        @csrf 
+    <form action="{{ route('admin.products.store') }}" method="POST" id="productForm" enctype="multipart/form-data">
+        {{-- @csrf  --}}
         <div class="row">
         
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="category"> Category<span style="color: red;" class="req">*</span></label>
-                    <select name="category_id" class="category" data-required id="category"
-                        data-placeholder="Select Category"></select>
+                    <select name="category_id" class="category" data-required id="category" data-placeholder="Select Category">
+                        @if($categories)
+                            @foreach ($categories as $item)
+                                <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
@@ -30,7 +35,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="">Product Name<span style="color: red;" class="req">*</span></label>
-                    <input name="product_name" type="text" class="form-control" placeholder="Product Name">
+                    <input name="product_name" id="product_name" type="text" class="form-control" placeholder="Product Name">
                 </div>
             </div>
         
@@ -41,7 +46,7 @@
                         <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
                         <input type="checkbox" name="manageVariant" id="manageVariant">
                     </span>
-                    <input name="product_sku" type="text" class="form-control" placeholder="Product SKU">
+                    <input name="product_sku" id="product_sku" type="text" class="form-control" placeholder="Product SKU">
                 </div>
             </div>
         {{-- ----------------------------------------------------------------------------------------- --}}
@@ -49,7 +54,13 @@
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color</label>
-                        <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
+                        <select name="color_ids" class="color" data-required id="color" data-placeholder="Select Color">
+                            @if($colors)
+                                @foreach ($colors as $item)
+                                    <option value="{{ $item->id }}">{{ $item->variant_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -57,7 +68,13 @@
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="size">Size</label>
-                        <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
+                        <select name="size_ids" class="size" multiple data-required id="size" data-placeholder="Select Size">
+                            @if($sizes)
+                                @foreach ($sizes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->variant_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -65,21 +82,21 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="price">Unit Price</label>
-                        <input name="unit_price" type="number" class="form-control" placeholder="Product Price">
+                        <input name="unit_price" id="unit_price" type="number" class="form-control" placeholder="Product Price">
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price</label>
-                        <input name="wholesale_price" type="number" class="form-control" placeholder="Product Wholesale Price">
+                        <input name="wholesale_price" id="wholesale_price" type="number" class="form-control" placeholder="Product Wholesale Price">
                     </div>
                 </div>
                 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="">Product Qty</label>
-                        <input name="product_qty" type="number" class="form-control" placeholder="Product Qty">
+                        <input name="product_qty" id="product_qty" type="number" class="form-control" placeholder="Product Qty">
                     </div>
                 </div>
             </div>
@@ -89,7 +106,13 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="brand"> Brand</label>
-                    <select name="brand" class="brand" data-required id="brand" data-placeholder="Select brand"></select>
+                    <select name="brand" class="brand" data-required id="brand" data-placeholder="Select brand">
+                         @if($brands)
+                            @foreach ($brands as $item)
+                                <option value="{{ $item->id }}">{{ $item->brand_name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
@@ -97,8 +120,13 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency</label>
-                    <select name="currency" class="currency" data-required id="currency"
-                        data-placeholder="Select currency"></select>
+                    <select name="currency" class="currency" data-required id="currency" data-placeholder="Select currency">
+                        @if($currencies)
+                            @foreach ($currencies as $item)
+                                <option value="{{ $item->id }}">{{ $item->currency_name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
@@ -106,14 +134,20 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="discount">Discount(%)</label>
-                    <input name="discount" type="number" class="form-control" placeholder="Discount">
+                    <input name="discount" id="discount" type="number" class="form-control" placeholder="Discount">
                 </div>
             </div>
         
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="unit">Uom (Unit)</label>
-                    <select name="product_unit" class="unit" data-required id="unit" data-placeholder="Select Unit"></select>
+                    <select name="product_unit" class="unit" data-required id="unit" data-placeholder="Select Unit">
+                        @if($units)
+                            @foreach ($units as $item)
+                                <option value="{{ $item->id }}">{{ $item->unit_name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
@@ -160,7 +194,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="default_image">Thumbnail Image</label><br>
-                    <input name="default_image" type="file" id="default_image">
+                    <input name="product_thumbnail_image" type="file" id="default_image">
                 </div>
             </div>
             
@@ -409,7 +443,8 @@
             },
             {
                 selector        : `#tags`,
-                type            : 'select'
+                type            : 'select',
+                tags            : true,
             },
             {
                 selector        : `.category`,
@@ -457,23 +492,80 @@
     function submitToDatabase(e){
 
         //
-        // e.preventDefault();
+        e.preventDefault();
 
-        console.log(uploadedFiles);
+console.log(formatProductData());
+return false;
 
-        // return false;
+        ajaxFormToken();
 
-        // ajaxFormToken();
+        $.ajax({
+            url: `{{ route('admin.products.store') }}`,
+            method: 'POST',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data : { data: JSON.stringify(formatProductData())},
+            beforeSend(){
+                console.log('Sending ...');
+            },
+            success(res){
+                console.log(res);
+            },
+            error(err){
+                console.log(err);
+            },
+        })
 
-        // let obj = {
-        //     url     : ``, 
-        //     method  : "POST",
-        //     data    : {},
-        // };
+        
 
-        // ajaxRequest(obj);
 
         // hideModal('#categoryModal');
+    }
+
+
+    function formatProductData(){
+
+        let files = [];
+        function fileRead(elem, src = '#img-preview') {
+            if (elem[0]?.files && elem[0]?.files[0]) {
+                let FR = new FileReader();
+                FR.addEventListener("load", function (e) {
+                    files.push(e.target.result);
+                });
+        
+                FR.readAsDataURL(elem[0].files[0]);
+
+                return files;
+            }
+        }
+
+        return {
+            category_id             : $('.category').val(),
+            subcategory_id          : $('#subcategory').val(),
+            product_name            : $('#product_name').val(),
+            product_sku             : $('#product_sku').val(),
+            color_ids               : $('#color').val(),
+            size_ids                : $('#size').val(),
+            unit_price              : $('#unit_price').val(),
+            wholesale_price         : $('#wholesale_price').val(),
+            product_qty             : $('#product_qty').val(),
+            brand                   : $('.brand').val(),
+            currency                : $('.currency').val(),
+            product_qty             : $('#product_qty').val(),
+            product_unit            : $('.unit').val(),
+            discount                : $('#discount').val(),
+            description             : $('#description').val(),
+            specification           : $('#specification').val(),
+            is_best_sale            : $('#is_best_sale').prop('checked'),
+            allow_review            : $('#allow_review').prop('checked'),
+            is_active               : $('#is_active').prop('checked'),
+            is_publish              : $('#is_publish').prop('checked'),
+            product_thumbnail_image : $('#default_image')[0].files.length ? fileRead($('#default_image')) : null,
+            product_gallery         : $('#product_gallery')[0].files.length ? fileRead($('#product_gallery')) : [],
+            tags                    : $('#tags').val(),
+            variant_prices          :[]
+        };
     }
 
 </script>

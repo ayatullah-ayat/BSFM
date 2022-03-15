@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Currency;
 use App\Models\Product;
+use App\Models\ProductTag;
+use App\Models\Unit;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -26,7 +31,15 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('backend.pages.product.addproduct');
+        $categories = Category::select('category_name','id')->where('is_active',1)->get();
+        $brands     = Brand::select('brand_name','id')->where('is_active',1)->get();
+        $units      = Unit::select('unit_name','id')->where('is_active',1)->get();
+        $currencies = Currency::select('currency_name','id')->where('is_active',1)->get();
+        $colors     = Variant::select('variant_name','id')->where([ ['is_active', 1], ['variant_type', 'color']])->get();
+        $sizes      = Variant::select('variant_name','id')->where([ ['is_active', 1], ['variant_type', 'size']])->get();
+        // $tags       = ProductTag::all();
+
+        return view('backend.pages.product.addproduct', compact('categories', 'brands', 'units', 'currencies','colors','sizes'));
     }
 
     /**
@@ -37,7 +50,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            dd($request->all());
+            //code...
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
