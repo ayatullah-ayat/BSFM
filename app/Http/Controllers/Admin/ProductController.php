@@ -133,7 +133,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        // $singleproducts = Product::find($product);
+        // dd($singleproducts);
+        return view('backend.pages.product.viewproduct', compact('product'));
     }
 
     /**
@@ -144,7 +146,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('backend.pages.product.editproduct', compact('product'));
     }
     
 
@@ -168,6 +170,23 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        try {
+
+            $isDeleted = $product->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete Order!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Order Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+
 }

@@ -83,17 +83,17 @@
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
-                                        <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
+                                            <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                        {{ $singleProduct->wholesale_price ?? 0.0 }}
+                                            {{ $singleProduct->wholesale_price ?? 0.0 }}
                                         @endif
                                     </td>
                                     <td>{{ $product->total_product_qty ?? 0.0 }}</td>
                                     <td>{{ $product->total_stock_qty ?? 0.0 }}</td>
                                     <td class="text-center">
-                                        <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                        <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                        <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                        <a href="{{ route('admin.products.show', $product->id )}}" class="fa fa-eye text-info text-decoration-none"></a>
+                                        <a href="{{ route('admin.products.edit',$product->id )}}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="{{route('admin.products.destroy',$product->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -153,8 +153,8 @@
     <script>
         $(document).ready(function(){
             $(document).on('click','.view-variant-product', getVariatProductInfo)
+            $(document).on('click', '.delete', deleteToDatabase)
         })
-
 
         function getVariatProductInfo(){
 
@@ -243,5 +243,38 @@
                 },
             })
         }
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        console.log(res);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
+
     </script>
 @endpush
