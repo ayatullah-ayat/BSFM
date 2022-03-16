@@ -239,8 +239,8 @@
         </a>
         <div id="custom_orders" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.add_custom_order') }}">New Order</a>
-                <a class="collapse-item" href="{{ route('admin.manage_custom_order') }}">Manage Order</a>
+                <a class="collapse-item" href="#">New Order</a>
+                <a class="collapse-item" href="{{ route('admin.customserviceorder.index') }}">Manage Custom Order</a>
             </div>
         </div>
     </li>

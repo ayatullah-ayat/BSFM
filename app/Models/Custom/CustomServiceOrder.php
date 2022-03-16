@@ -3,7 +3,8 @@
 namespace App\Models\Custom;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Custom\CustomServiceCustomer;
+// use App\Models\Custom\CustomServiceCustomer;
+use App\Models\Customer;
 
 class CustomServiceOrder extends Model
 {
@@ -11,6 +12,7 @@ class CustomServiceOrder extends Model
 
     public function customer()
     {
-        return $this->belongsTo(CustomServiceCustomer::class);
+        return $this->belongsTo(Customer::class);
     }
+
 }

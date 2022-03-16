@@ -42,18 +42,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="">Product SKU<span style="color: red;" class="req">*</span></label> 
-                    <span class="float-right">
-                        <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
-                        <input type="checkbox" name="manageVariant" id="manageVariant">
-                    </span>
                     <input name="product_sku" id="product_sku" type="text" class="form-control" placeholder="Product SKU">
                 </div>
             </div>
 
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
-                    <label for="brand"> Brand <span style="color: red;" class="req">*</span></label>
-                    <select name="brand" required class="brand" data-required id="brand" data-placeholder="Select brand">
+                    <label for="brand"> Brand </label>
+                    <select name="brand" class="brand" data-required id="brand" data-placeholder="Select brand">
                         @if($brands)
                         @foreach ($brands as $item)
                         <option value="{{ $item->id }}">{{ $item->brand_name }}</option>
@@ -67,6 +63,10 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
+                    <span class="float-right">
+                        <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
+                        <input type="checkbox" name="manageVariant" id="manageVariant">
+                    </span>
                     <select name="currency" required class="currency" data-required id="currency" data-placeholder="Select currency">
                         @if($currencies)
                         @foreach ($currencies as $item)
@@ -80,7 +80,7 @@
 
         {{-- ----------------------------------------------------------------------------------------- --}}
             <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="">
-                <div class="col-md-6" data-col="col">
+                <div class="col-md-2" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color <span style="color: red;" class="req">*</span></label>
                         <select name="color_ids" class="color" data-required id="color" data-placeholder="Select Color">
@@ -94,7 +94,7 @@
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-6" data-col="col">
+                <div class="col-md-4" data-col="col">
                     <div class="form-group">
                         <label for="size">Size <span style="color: red;" class="req">*</span></label>
                         <select name="size_ids" class="size" multiple data-required id="size" data-placeholder="Select Size">
@@ -108,40 +108,39 @@
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
                         <input name="unit_price" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
                     </div>
                 </div>
-
-                <div class="col-md-3">
+                
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
-                        <input name="sale_price" readonly id="sale_price" type="number" class="form-control calcPriceQty" placeholder="Sales Price">
+                        <label for="wholesale_price">Wholesale Price (Offline Sale)</label>
+                        <input name="wholesale_price" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
-                
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label for="wholesale_price">Wholesale Price</label>
-                        <input name="wholesale_price" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
+                        <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
+                        <input name="sale_price" readonly id="sale_price" type="number" class="form-control calcPriceQty"
+                            placeholder="Sales Price">
                     </div>
                 </div>
                 
             </div>
 
         {{-- -----------------------------------------------------------------------------------------------  --}}
-
         
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="product_qty">Product Qty <span style="color: red;" class="req">*</span></label>
                     <input required name="product_qty" id="product_qty" min="1" type="number" class="calcPriceQty form-control" placeholder="Product Qty">
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="discount">Discount(%)</label>
                     <input name="discount" id="discount" type="number" class="form-control calcPriceQty" placeholder="Discount">
@@ -260,7 +259,7 @@
 {{-- -------------------- modal area ----------------------------------------------  --}}
 <div class="modal fade" id="manageVariantSizePriceModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
     role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -282,8 +281,11 @@
                                     <th class="text-white">Unit Price</th>
                                     <th class="text-white">Wholesale <br> Price</th>
                                     <th class="text-white">Qty</th>
-                                    <th>
-                                        <button class="btn btn-sm btn-light text-dark" id="addVariantRow"><i class="fa fa-plus"></i> Add</button>
+                                    <th class="text-white">Total Unit <br> Price</th>
+                                    <th class="text-white">Total Wholesale <br> Price</th>
+                                    <th class="text-white">Total Sales <br> Price</th>
+                                    <th class="align-middle">
+                                        <button class="btn btn-sm btn-light text-dark d-inline-block" id="addVariantRow"><i class="fa fa-plus"></i></button>
                                     </th>
                                 </tr>
                             </thead>
@@ -317,16 +319,33 @@
                                         <input type="number" name="product_qty" class="form-control calcPriceQtyModal text-center">
                                     </td>
                                     <td>
+                                        <input type="number" readonly name="total_unit_price" value="0" class="form-control text-center">
+                                    </td>
+                                    <td>
+                                        <input type="number" readonly name="total_wholesale_price" value="0" class="form-control text-center">
+                                    </td>
+                                    <td>
+                                        <input type="number" readonly name="total_sales_price" value="0" class="form-control text-center">
+                                    </td>
+                                    <td>
                                         <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="bg-dark text-white">
+                            <tfoot>
                                 <tr>
-                                    <th colspan="2"></th>
+                                    <th colspan="7" class="text-right"> Discount(%)</th>
+                                    <th>
+                                        <input type="number" name="discount_percentage" class="form-control text-center calcPriceQtyModal" max="100">
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr class="bg-dark text-white">
+                                    <th colspan="4"></th>
+                                    <th colspan="1" id="totalQtyModal">0</th>
                                     <th colspan="1" id="totalUnitPriceModal">0</th>
                                     <th colspan="1" id="totalWholesalePriceModal">0</th>
-                                    <th colspan="1" id="totalQtyModal">0</th>
+                                    <th colspan="1" id="totalSalesPriceModal">0</th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -378,11 +397,12 @@
         $(document).on('click','#save-variant-price-qty', ()=>{
 
             let 
-            data = [],
-            rows = [...$('#variantWisePrice').find('tbody').find('tr')],
-            totalUnitPrice = 0,
+            data                = [],
+            rows                = [...$('#variantWisePrice').find('tbody').find('tr')],
+            totalUnitPrice      = 0,
             totalWholesalePrice = 0,
-            totalQty = 0;
+            totalSalesPrice     = 0,
+            totalQty            = 0;
 
             rows.forEach(row => {
 
@@ -391,6 +411,7 @@
                 size_name       = $(row).find('[name="size_id"]').val() ?? null,
                 unit_price      = $(row).find('[name="unit_price"]').val() ?? 0,
                 wholesale_price = $(row).find('[name="wholesale_price"]').val() ?? 0,
+                sales_price     = $(row).find('[name="total_sales_price"]').val() ?? 0,
                 product_qty     = $(row).find('[name="product_qty"]').val() ?? 0,
                 stock_qty       = $(row).find('[name="product_qty"]').val() ?? 0;
 
@@ -398,25 +419,27 @@
                     {
                         color_name,
                         size_name,
-                        unit_price: Number(unit_price),
-                        wholesale_price: Number(wholesale_price),
-                        product_qty: Number(product_qty),
-                        stock_qty: Number(stock_qty),
+                        unit_price      : Number(unit_price),
+                        sales_price     : (Number(sales_price) / Number(product_qty)).toFixed(3),
+                        wholesale_price : Number(wholesale_price),
+                        product_qty     : Number(product_qty),
+                        stock_qty       : Number(stock_qty),
                     }
                 )
-
-                totalUnitPrice += Number(unit_price) ?? 0;
-                totalWholesalePrice += Number(wholesale_price) ?? 0;
-                totalQty += Number(product_qty) ?? 0;
+                                    
+                totalUnitPrice      += Number(unit_price ?? 0 ) * Number(product_qty ?? 0);
+                totalWholesalePrice += Number(wholesale_price ?? 0 ) * Number(product_qty ?? 0);
+                totalQty            += Number(product_qty) ?? 0;
             });
+                    
+            
+            $('#total_product_price').val(totalUnitPrice.toFixed(3));
+            $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
+            $('#product_qty').val( totalQty );
+            $('#discount').val($('[name="discount_percentage"]').val() ?? 0);
 
-
-            $('#totalUnitPriceModal').text(totalUnitPrice);
-            $('#totalWholesalePriceModal').text(totalWholesalePrice);
-            $('#totalQtyModal').text(totalQty);
-
-            $('#total_product_price').val(totalUnitPrice);
-            $('#total_wholesale_price').val(totalWholesalePrice);
+            totalSalesPrice = Number($('#totalSalesPriceModal').text() ?? 0);
+            $('#total_sales_price').val(totalSalesPrice.toFixed(3));
 
             collectionOfVariantPriceQty(data);
 
@@ -435,6 +458,7 @@
         initVal         = 0,
         elem            = $(this),
         currentVal      = elem.val(),
+        manageVariant   = $('#manageVariant').is(":checked"),
         unitPrice       = $('#unit_price').val() ?? 0,
         wholesalePrice  = $('#wholesale_price').val() ?? 0,
         qty             = $('#product_qty').val() ?? 0,
@@ -444,9 +468,19 @@
             elem.val(initVal);
         }
 
-        let totalUnitPrice      = Number(unitPrice) * Number(qty); 
-        let totalSalesPrice     = Number(unitPrice) * Number(qty); 
-        let totalWholesalePrice = Number(wholesalePrice) * Number(qty); 
+        if(Number(discount) > 100){
+            $('#discount').val(100)
+            discount = 100;
+        }
+
+        let 
+        totalUnitPriceModal         = $('#totalUnitPriceModal').text(),
+        totalWholesalePriceModal    = $('#totalWholesalePriceModal').text(),
+        totalQtyModal               = $('#totalQtyModal').text();
+
+        let totalUnitPrice      = manageVariant ? Number(totalUnitPriceModal ?? 0) : Number(unitPrice) * Number(qty); 
+        let totalSalesPrice     = manageVariant ? Number(totalUnitPriceModal ?? 0 ) : Number(unitPrice) * Number(qty); 
+        let totalWholesalePrice = manageVariant ? Number(totalWholesalePriceModal ?? 0) : Number(wholesalePrice) * Number(qty); 
 
         if(discount){
             discount            = discount / 100;
@@ -454,10 +488,10 @@
             totalWholesalePrice = totalWholesalePrice - (totalWholesalePrice * discount);
         }
 
-        $('#total_product_price').val(totalUnitPrice);
-        $('#total_sales_price').val(totalSalesPrice);
-        $('#total_wholesale_price').val(totalWholesalePrice);
-        $('#sale_price').val( totalSalesPrice / Number(qty) );
+        $('#total_product_price').val(totalUnitPrice.toFixed(3));
+        $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
+        $('#total_sales_price').val(totalSalesPrice.toFixed(3));
+        $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
 
     }
 
@@ -468,15 +502,21 @@
         initVal         = 0,
         elem            = $(this),
         currentVal      = elem.val(),
-        discount        = $('#discount').val() ?? 0,
         data            = [],
         rows            = [...$('#variantWisePrice').find('tbody').find('tr')],
+        discount        = $('[name="discount_percentage"]').val() ?? 0,
         totalUnitPrice  = 0,
         totalWholesalePrice = 0,
+        totalSalesPrice = 0,
         totalQty = 0;
 
         if(Number(currentVal) < 0){
             elem.val(initVal);
+        }
+
+        if(Number(discount) > 100){
+            $('[name="discount_percentage"]').val(100)
+            discount = 100;
         }
 
         rows.forEach(row => {
@@ -489,14 +529,33 @@
             product_qty     = $(row).find('[name="product_qty"]').val() ?? 0,
             stock_qty       = $(row).find('[name="product_qty"]').val() ?? 0;
 
-            totalUnitPrice += Number(unit_price) ?? 0;
-            totalWholesalePrice += Number(wholesale_price) ?? 0;
-            totalQty += Number(product_qty) ?? 0;
+            let 
+            unitPriceSingle     = Number(unit_price ?? 0 ) * Number(product_qty ?? 0),
+            salesPriceSingle    = Number(unit_price ?? 0 ) * Number(product_qty ?? 0),
+            wholeSalePriceSingle= Number(wholesale_price ?? 0 ) * Number(product_qty ?? 0),
+            productQtySingle    = Number(product_qty ?? 0);
+
+            totalUnitPrice      += unitPriceSingle;
+            totalWholesalePrice += wholeSalePriceSingle;
+            totalQty            += productQtySingle;
+
+            if(discount){
+                discount            = discount / 100;
+                salesPriceSingle    = unitPriceSingle - (unitPriceSingle * discount);
+                wholeSalePriceSingle= wholeSalePriceSingle - (wholeSalePriceSingle * discount);
+            }
+
+            totalSalesPrice += salesPriceSingle;
+
+            $(row).find('[name="total_unit_price"]').val(unitPriceSingle);
+            $(row).find('[name="total_wholesale_price"]').val( wholeSalePriceSingle);
+            $(row).find('[name="total_sales_price"]').val( salesPriceSingle );
         });
 
 
-        $('#totalUnitPriceModal').text(totalUnitPrice);
-        $('#totalWholesalePriceModal').text(totalWholesalePrice);
+        $('#totalUnitPriceModal').text(totalUnitPrice.toFixed(3));
+        $('#totalWholesalePriceModal').text(totalWholesalePrice.toFixed(3));
+        $('#totalSalesPriceModal').text(totalSalesPrice.toFixed(3));
         $('#totalQtyModal').text(totalQty);
 
     }
@@ -567,6 +626,15 @@
                 <input type="number" min="1" name="product_qty" class="form-control calcPriceQtyModal text-center">
             </td>
             <td>
+                <input type="number" readonly name="total_unit_price" value="0" class="form-control text-center">
+            </td>
+            <td>
+                <input type="number" readonly name="total_wholesale_price" value="0" class="form-control text-center">
+            </td>
+            <td>
+                <input type="number" readonly name="total_sales_price" value="0" class="form-control text-center">
+            </td>
+            <td>
                 <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
             </td>
         </tr>`;
@@ -591,6 +659,7 @@
 
     function deleteRow(){
         $(this).closest('tr').remove();
+        $('[name="discount_percentage"]').trigger('keyup')
     }
 
 
@@ -601,7 +670,7 @@
         if(data){
             targetElem.attr('data-product-variant', JSON.stringify(data));
         }else{
-            return JSON.parse(targetElem.attr('data-product-variant'));
+            return targetElem?.attr('data-product-variant') ? JSON.parse(targetElem.attr('data-product-variant')) : null;
         }
 
     }
@@ -696,14 +765,7 @@
         thumbnail       = fileRead($('#default_image')),
         productGallery  = fileRead($('#product_gallery'));
 
-        console.log(productGallery,'productGallery');
-
         timeId = setTimeout(() => {
-
-            console.log(formatProductData());
-
-            return false;
-
 
             $.ajax({
                 url         : `{{ route('admin.products.store') }}`,
@@ -717,9 +779,19 @@
                 },
                 success(res){
                     console.log(res);
+                    if(res?.success){
+                        _toastMsg(res?.msg ?? 'Success!', 'success');
+
+                        setTimeout(() => {
+                            open(`{{ route('admin.products.index') }}`,'_self');
+                        }, 2000);
+                    }else{
+                        _toastMsg(res?.msg ?? 'Error!');
+                    }
                 },
                 error(err){
                     console.log(err);
+                    _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
                 },
             });
 
@@ -736,21 +808,41 @@
 
         let
         variantPrices       = collectionOfVariantPriceQty(),
-        is_product_variant  = variantPrices ? 1 : 0;
+        is_product_variant  = Number($('#manageVariant').prop('checked')) && variantPrices ? 1 : 0;
+
+        if(!is_product_variant){
+            variantPrices = [];
+
+            let sizes = $('#size').val();
+            if(sizes && sizes.length){
+                sizes.forEach(size => {
+                    variantPrices.push({
+                        color_name      : $('#color').val(),
+                        size_name       : size,
+                        unit_price      : Number($('#unit_price').val() ?? 0),
+                        sales_price     : Number($('#sale_price').val() ?? 0),
+                        wholesale_price : Number($('#wholesale_price').val() ?? 0),
+                        product_qty     : 0,
+                        stock_qty       : 0,
+                    })
+                })
+            }
+
+            
+        }
 
         return {
             category_id             : $('.category').val(),
             subcategory_id          : $('#subcategory').val(),
             product_name            : $('#product_name').val(),
             product_sku             : $('#product_sku').val(),
-            colors                  : $('#color').val(),
-            sizes                   : $('#size').val(),
-            unit_price              : $('#unit_price').val(),
-            wholesale_price         : $('#wholesale_price').val(),
-            product_qty             : $('#product_qty').val(),
+            total_product_unit_price: $('#total_product_price').val() ?? 0,
+            total_stock_price       : $('#total_sales_price').val() ?? 0,
+            total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
+            // sales_price             : $('#sale_price').val(),
+            product_qty             : $('#product_qty').val(), // total Product qty
             brand                   : $('.brand').val(),
             currency                : $('.currency').val(),
-            product_qty             : $('#product_qty').val(),
             product_unit            : $('.unit').val(),
             discount                : $('#discount').val(),
             description             : $('#description').val(),

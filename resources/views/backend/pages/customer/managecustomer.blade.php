@@ -31,19 +31,19 @@
                             @isset($customers)
                                 @foreach ($customers as $customer)
                                     <tr customer-data="{{json_encode($customer)}}">
-                                        <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $customer->customer_name ?? 'N/A' }}</th>
-                                        <th>{{ $customer->customer_email ?? 'N/A' }}</th>
-                                        <th>{{ $customer->customer_phone ?? 'N/A' }}</th>
-                                        <th>{{ $customer->customer_address ?? 'N/A' }}</th>
-                                        <th class="text-center">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customer->customer_name ?? 'N/A' }}</td>
+                                        <td>{{ $customer->customer_email ?? 'N/A' }}</td>
+                                        <td>{{ $customer->customer_phone ?? 'N/A' }}</td>
+                                        <td>{{ $customer->customer_address ?? 'N/A' }}</td>
+                                        <td class="text-center">
                                             {!! $customer->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{route('admin.customer.destroy', $customer->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset

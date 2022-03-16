@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Custom\CustomServiceOrder;
 use App\Models\Product;
 use App\Models\SaleProduct;
 use App\Models\CustomerType;
@@ -30,5 +31,6 @@ class Customer extends Model
     {
         return $this->hasOne(CustomerType::class, 'customer_id')->where('customer_type', $type);
     }
+    
 }
   
