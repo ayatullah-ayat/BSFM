@@ -133,7 +133,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        // $singleproducts = Product::find($product);
+        // dd($singleproducts);
+        return view('backend.pages.product.viewproduct', compact('product'));
     }
 
     /**
@@ -224,12 +226,14 @@ class ProductController extends Controller
 
         } catch (\Throwable $th) {
 
+            DB::rollBack();
+            
             return response()->json([
                 'success'   => false,
                 'msg'       => $th->getMessage()
             ]);
 
-            DB::rollBack();
         }
     }
+
 }

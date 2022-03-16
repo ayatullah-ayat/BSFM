@@ -83,16 +83,16 @@
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
-                                        <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
+                                            <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                        {{ $singleProduct->wholesale_price ?? 0.0 }}
+                                            {{ $singleProduct->wholesale_price ?? 0.0 }}
                                         @endif
                                     </td>
                                     <td>{{ $product->total_product_qty ?? 0.0 }}</td>
                                     <td>{{ $product->total_stock_qty ?? 0.0 }}</td>
                                     <td class="text-center">
-                                        <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="{{ route('admin.products.show', $product->id )}}" class="fa fa-eye text-info text-decoration-none"></a>
+                                        <a href="{{ route('admin.products.edit',$product->id )}}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                         <a href="{{ route('admin.products.destroy', $product->id) }}" class="fa fa-trash text-danger text-decoration-none delete-product"></a>
                                     </td>
                                 </tr>
@@ -156,7 +156,6 @@
             $(document).on('click','.delete-product', deleteToDatabase)
 
         })
-
 
         function getVariatProductInfo(){
 
@@ -245,7 +244,6 @@
                 },
             })
         }
-
 
         function deleteToDatabase(e){
             e.preventDefault();
