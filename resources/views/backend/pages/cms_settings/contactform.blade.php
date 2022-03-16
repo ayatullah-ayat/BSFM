@@ -31,11 +31,11 @@
                                 @foreach ($contacts as $contact)
                                     <tr contact-data="{{ json_encode($contact)}}">
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{ $contact->name }}</td>
-                                        <td>{{ $contact->email }}</td>
-                                        <td>{{ $contact->phone }}</td>
-                                        <td>{{ $contact->subject }}</td>
-                                        <td>{{ $contact->message }}</td>
+                                        <td>{{ $contact->name ?? 'N/A' }}</td>
+                                        <td>{{ $contact->email ?? 'N/A' }}</td>
+                                        <td>{{ $contact->phone ?? 'N/A' }}</td>
+                                        <td>{{ $contact->subject ?? 'N/A' }}</td>
+                                        <td>{{ $contact->message ?? 'N/A' }}</td>
                                         <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>

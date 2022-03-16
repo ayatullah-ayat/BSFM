@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContactRequest;
 use Illuminate\Http\Request;
+use App\Models\Contact;
+use Exception;
+
 
 class ContactController extends Controller
 {
@@ -33,9 +37,27 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
-        //
+        try {
+            $data  = $request->all();
+            $tax   = Contact::create($data);
+            if(!$tax)
+                throw new Exception("Unable to sent contact!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Contact Successfully!',
+                'data'      => $tax
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
