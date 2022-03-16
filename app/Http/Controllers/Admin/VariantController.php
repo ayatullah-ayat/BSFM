@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\VariantRequest;
+use App\Models\ProductVariantPrice;
 use App\Models\Variant;
 use Exception;
 
@@ -68,9 +69,10 @@ class VariantController extends Controller
      * @param  \App\Models\Variant  $variant
      * @return \Illuminate\Http\Response
      */
-    public function show(Variant $variant)
+    public function show($product_id)
     {
-        //
+        $items = ProductVariantPrice::where('product_id', $product_id)->get();
+        return response()->json($items);
     }
 
     /**

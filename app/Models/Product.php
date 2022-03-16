@@ -32,26 +32,31 @@ class Product extends Model
     }
 
     
-    public function colors()
+    public function colors($select='*')
     {
-        return $this->belongsToMany(ProductColor::class, 'product_id');
+        return $this->hasMany(ProductVariantPrice::class, 'product_id','id')
+                ->selectRaw($select);
     }
 
 
-    public function sizes()
+    public function sizes($select='*')
     {
-        return $this->belongsToMany(ProductSize::class, 'product_id');
+        return $this->hasMany(ProductVariantPrice::class, 'product_id', 'id')
+        ->selectRaw($select);
+
     }
 
     public function variants()
     {
-        return $this->belongsToMany(ProductVariantPrice::class, 'product_variant_prices');
+        return $this->belongsToMany(ProductVariantPrice::class, 'product_variant_prices', 'product_id', 'size_name')->withTimestamps();
     }
+    
 
 
     public function brands()
     {
-        return $this->belongsToMany(Brand::class, 'product_brand')->withPivot('brand_name');
+        return $this->belongsToMany(Brand::class, 'product_brand')
+        ->withPivot('brand_name');
     }
 
     public function productImages()

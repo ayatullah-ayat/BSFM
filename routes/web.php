@@ -118,6 +118,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [VariantController::class, 'store'])->name('store');
         Route::put('/{variant}',    [VariantController::class, 'update'])->name('update');
         Route::delete('/{variant}', [VariantController::class, 'destroy'])->name('destroy');
+        Route::get('/{product_id}', [VariantController::class, 'show'])->name('show');
     });
 
     Route::group(['prefix' => 'units', 'as' => 'unit.'], function(){

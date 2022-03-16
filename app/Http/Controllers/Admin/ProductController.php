@@ -26,7 +26,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('backend.pages.product.manageproduct');
+        $products = Product::where('is_active', 1)->get();
+        return view('backend.pages.product.manageproduct', compact('products'));
     }
 
     /**
