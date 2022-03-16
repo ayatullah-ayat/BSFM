@@ -19,10 +19,12 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Customer Name</th>
+                                <th>Order NO</th>
+                                <th>Order Date</th>
+                                <th>Customer</th>
                                 <th>Phone</th>
-                                <th>Address</th>
-                                <th>Custom Logo</th>
+                                <th>Product</th>
+                                <th>Attachment</th>
                                 <th>Status</th>
                                 <th width="70" class="text-center">Action</th>
                             </tr>
@@ -31,11 +33,13 @@
 
                             @isset($customserviceorders)
                                 @foreach ($customserviceorders as $customserviceorder)
-                                    <tr>
+                                    <tr customorder-data="{{ json_encode($customserviceorder) }}">
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customserviceorder->order_no }}</td>
+                                        <td>{{ $customserviceorder->created_at }}</td>
                                         <td>{{ $customserviceorder->customer_name ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer->customer_phone ?? 'N/A' }}</td>
-                                        <td>{{ $customserviceorder->customer_address ?? 'N/A' }}</td>
+                                        <td>{{ $customserviceorder->custom_service_product_name ?? 'N/A' }}</td>
                                         <td>
                                             @if( $customserviceorder->order_attachment )
                                                 <a style="text-decoration: none;" href="{{ asset($customserviceorder->order_attachment) }}" download>
@@ -50,8 +54,8 @@
                                             {!! $customserviceorder->status ? '<span class="badge badge-danger">Pending </span>' : '<span class="badge badge-success">Confirmed </span>' !!}
                                         </td>
                                         <td class="text-center">
-                                            <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none"></a>
-                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none detail"></a>
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.customserviceorder.destroy',$customserviceorder->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </td>
                                     </tr>
@@ -102,19 +106,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="product_id">Select Category</label>
-                                <select name="product_id" id="product_id" class="form-control" data-placeholder="Select a Category">
-                                    @isset($customserviceproducts)
-                                        @foreach ($customserviceproducts as $customserviceproduct)
-                                            <option value="{{ $customserviceproduct->id }}">{{ $customserviceproduct->product_name  }}</option>
-                                        @endforeach        
-                                    @endisset
-                                </select>
-                            </div>
-                        </div> --}}
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="product_id">Select Product</label>
@@ -143,13 +134,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="product_thumbnail">Product Thumbnail</label> <br>
-                                 <input type="file" name="" id="product_thumbnail" name="product_thumbnail">
-                            </div>
-                        </div> --}}
-
                         <div class="col-md-12 mb-2">
                             <label for="">Attachment File</label>
                             {!! renderFileInput(['id' => 'attachment_file', 'imageSrc' => '']) !!}
@@ -173,8 +157,8 @@
             <div class="modal-footer">
                 <div class="w-100">
                     <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                    <button id="customproduct_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
-                    <button id="customproduct_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
+                    <button id="customOrder_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                    <button id="customOrder_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                     <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -182,6 +166,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="categoryDetailModal"  tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Custom Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="modalDetail"></div>
+
+            <div class="modal-footer">
+                <div class="w-100">
+                    <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('css')
@@ -201,17 +209,18 @@
         
         $(document).ready(function(){
             init();
-
             $(document).on('click','#add', createModal)
             $(document).on('change','#category_id', loadProductByCategory)
-            $(document).on('click','#customproduct_save_btn', submitToDatabase)
+            $(document).on('click','#customOrder_save_btn', submitToDatabase)
 
             $(document).on('click', '.delete', deleteToDatabase)
             $(document).on('click' , '#reset', resetForm)
             $(document).on('change' ,'#attachment_file', checkImage)
 
             $(document).on('click', '.update', showUpdateModal)
-            $(document).on('click','#customproduct_update_btn', updateToDatabase)
+            $(document).on('click', '.update', showUpdateModal)
+            $(document).on('click','#customOrder_update_btn', updateToDatabase)
+            $(document).on('click','.detail', showDataToModal)
         });
 
         function loadProductByCategory(){
@@ -239,6 +248,71 @@
                     console.log(err);
                 },
             })
+        }
+
+        function showDataToModal(){
+            let 
+            elem        = $(this),
+            tr          = elem.closest('tr'),
+            customOrder    = tr?.attr('customorder-data') ? JSON.parse(tr.attr('customorder-data')) : null,
+            modalDetailElem = $('#modalDetail');
+
+            if(customOrder){
+                let html = `
+                <table class="table table-sm table-bordered table-striped">
+                    <tr>
+                        <th>Customer</th>
+                        <td>${customOrder.customer_name ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Order NO</th>
+                        <td>${customOrder.order_no ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td>${customOrder.created_at ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>${customOrder.customer_phone ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Product</th>
+                        <td>${customOrder.custom_service_product_name ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td>${customOrder.customer_address ?? 'N/A'}</td>
+                    </tr>
+            
+                    <tr>
+                        <th>Payment</th>
+                        <td>${customOrder.advance_balance ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <th>Delivered Qty</th>
+                        <td>${customOrder.delivered_qty ?? 'N/A'}</td>
+                    </tr>
+            
+                    <tr>
+                        <th>Attachment</th>
+                        <td>
+                            ${ customOrder.order_attachment ? `
+                                <img src="{{ asset('') }}${customOrder.order_attachment}" style="width:80px" alt="Category Image">
+                            `: ` <img src="" style="width:80px" alt="Category Image">`}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>${category.status ? '<span class="badge badge-success">Delivered </span>' : '<span class="badge badge-danger">Pending </span>'}</td>
+                    </tr>
+                </table>
+                `;
+
+                modalDetailElem.html(html);
+            }
+
+            $('#categoryDetailModal').modal('show')
         }
 
         // call the func on change file input 
@@ -319,8 +393,8 @@
 
         function createModal(){
             showModal('#customServiceOrderModal');
-            $('#customproduct_save_btn').removeClass('d-none');
-            $('#customproduct_update_btn').addClass('d-none');
+            $('#customOrder_save_btn').removeClass('d-none');
+            $('#customOrder_update_btn').addClass('d-none');
             $('#customServiceOrderModal .heading').text('Create')
             resetData();
         }
@@ -331,42 +405,45 @@
 
         function showUpdateModal(){
             resetData();
-            let customproduct = $(this).closest('tr').attr('customproduct-data');
-            if(customproduct){
+            let customOrder = $(this).closest('tr').attr('customorder-data');
+            if(customOrder){
 
-                $('#customproduct_save_btn').addClass('d-none');
-                $('#customproduct_update_btn').removeClass('d-none');
+                $('#customOrder_save_btn').addClass('d-none');
+                $('#customOrder_update_btn').removeClass('d-none');
 
-                customproduct = JSON.parse(customproduct);
+                customOrder = JSON.parse(customOrder);
 
-                $('#customProductModal .heading').text('Edit').attr('data-id', customproduct?.id)
+                $('#customServiceOrderModal .heading').text('Edit').attr('data-id', customOrder?.id)
 
-                $('#product_name').val(customproduct?.product_name)
-                $('#product_description').val(customproduct?.product_description)
-                $('#service_id').val(customproduct?.service_id).trigger('change')
+                $('#category_id').val(customOrder?.category_id).trigger('change')
 
                 setTimeout(() => {
-                 $('#category_id').val(customproduct?.category_id).trigger('change')
+                 $('#product_id').val(customOrder?.product_id).trigger('change')
                 }, 1000);
 
-                if(customproduct?.is_active){
-                    $('#isActive').prop('checked',true)
-                    }else{
-                    $('#isInActive').prop('checked',true)
-                }
-                // show previos image on modal
-                $(document).find('#img-preview').attr('src', `{{ asset('') }}${customproduct.product_thumbnail}`);
+                $('#customer_name').val(customOrder?.customer_name)
+                $('#customer_phone').val(customOrder?.customer_phone)
+                $('#customer_address').val(customOrder?.customer_address)
+                $('#customer_phone').val(customOrder?.customer_phone)
 
-                showModal('#customProductModal');
+                // if(customOrder?.status){
+                //     $('#isActive').prop('checked',true)
+                //     }else{
+                //     $('#isInActive').prop('checked',true)
+                // }
+                // show previos image on modal
+                $(document).find('#img-preview').attr('src', `{{ asset('') }}${customOrder.order_attachment}`);
+
+                showModal('#customServiceOrderModal');
             }
         }
 
         function updateToDatabase(){
             ajaxFormToken();
 
-            let id  = $('#customProductModal .heading').attr('data-id');
+            let id  = $('#customServiceOrderModal .heading').attr('data-id');
             let obj = {
-                url     : `{{ route('admin.customserviceproduct.update', '' ) }}/${id}`, 
+                url     : `{{ route('admin.customserviceorder.update', '' ) }}/${id}`, 
                 method  : "PUT",
                 data    : formatData(),
             };

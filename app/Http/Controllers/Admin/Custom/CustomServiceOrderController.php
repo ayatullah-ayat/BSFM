@@ -173,8 +173,50 @@ class CustomServiceOrderController extends Controller
      */
     public function update(Request $request, CustomServiceOrder $customServiceOrder)
     {
-        //
+        try {
+
+            if(!$customServiceOrder)
+                throw new Exception("No record Found!", 404);
+                
+            $data               = $request->all();
+            $order_attachment   = $request->order_attachment;
+            $fileLocation       = $customServiceOrder->order_attachment;
+
+            if ($order_attachment) {
+                //file, dir
+                if($fileLocation){
+                    $this->deleteImage($fileLocation);
+                }
+                
+                $fileResponse = $this->uploadFile($order_attachment, 'CustomServiceOrder/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+
+            $data['order_attachment'] = $fileLocation;
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
+            $customorderstatus = $customServiceOrder->update($data);
+            if(!$customorderstatus)
+                throw new Exception("Unable to Update Order!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Order Updated Successfully!',
+                'data'      => $customServiceOrder->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.

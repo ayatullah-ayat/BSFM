@@ -144,7 +144,43 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        // dd($product->category->subCategories);
+        // dd($product->sizes);
+        $tags = [];
+        $selectedSizes = [];
+        $unitPrice      = null;
+        $salesPrice     = null;
+        $wholesalesPrice= null;
+
+        if(isset($product->singleProductTags)){
+            foreach ($product->singleProductTags as $tag) {
+                $tags[]= $tag->tag_name;
+            }
+        }
+
+        if(isset($product->sizes)){
+            foreach ($product->sizes as $size) {
+                $selectedSizes[]= $size->size_name;
+
+                if(!$product->is_product_variant && $unitPrice == null){
+                    $unitPrice          = $size->unit_price;
+                    $salesPrice         = $size->unit_price;
+                    $wholesalesPrice    = $size->sales_price;
+                }
+            }
+            
+        }
+
+
+        $categories = Category::select('category_name', 'id')->where('is_active', 1)->get();
+        $brands     = Brand::select('brand_name', 'id')->where('is_active', 1)->get();
+        $units      = Unit::select('unit_name', 'id')->where('is_active', 1)->get();
+        $currencies = Currency::select('currency_name', 'id')->where('is_active', 1)->get();
+        $colors     = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'color']])->get();
+        $sizes      = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'size']])->get();
+    
+        return view('backend.pages.product.editproduct', compact('unitPrice', 'salesPrice', 'wholesalesPrice', 'categories', 'tags', 'selectedSizes', 'product', 'brands', 'units', 'currencies', 'colors', 'sizes'));
+
     }
     
 
@@ -168,6 +204,32 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        try {
+
+            DB::beginTransaction();
+
+            $product->delete();
+            $product->brands()->detach();
+            $product->tags()->detach();
+            $product->productImages()->delete();
+            $product->variants()->detach();
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Product Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+
+            DB::rollBack();
+        }
     }
 }

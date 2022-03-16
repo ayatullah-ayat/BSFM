@@ -58,6 +58,7 @@ Route::group(['prefix' => ''],function(){
     Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
     Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
     Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
+    Route::post('/', [CustomerContactController::class, 'store'])->name('contact_store');
     Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
     Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
     
@@ -181,6 +182,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/',             [ProductController::class, 'index'])->name('index');
         Route::get('/create',       [ProductController::class, 'create'])->name('create');
         Route::post('/',            [ProductController::class, 'store'])->name('store');
+        Route::get('/{product}/edit',[ProductController::class, 'edit'])->name('edit');
         Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
     });

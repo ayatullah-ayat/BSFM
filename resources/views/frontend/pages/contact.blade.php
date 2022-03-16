@@ -66,35 +66,36 @@
                 <div class="contact-form">
                     <h3 class="text-center">যোগাযোগ করুন </h3>
 
-                    <form>
                         <div class="form-group form-group2">
                             <input type="text" class="form-control form-control2 border mt-3"
-                                id="exampleFormControlInput1" placeholder=" আপনার নাম ">
+                                id="name" placeholder=" আপনার নাম ">
                         </div>
 
                         <div class="form-group">
                             <input type="email" class="form-control form-control2 border mt-3"
-                                id="exampleFormControlInput1" placeholder=" ইমেইল অ্যাড্রেস ">
+                                id="email" placeholder=" ইমেইল অ্যাড্রেস ">
                         </div>
 
                         <div class="form-group">
-                            <input type="email" class="form-control form-control2 border mt-3"
-                                id="exampleFormControlInput1" placeholder=" ফোন নাম্বার ">
+                            <input type="number" class="form-control form-control2 border mt-3"
+                                id="phone" placeholder=" ফোন নাম্বার ">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control2 border mt-3"
+                                id="subject" placeholder="সাবজেক্ট">
                         </div>
 
                         <div class="form-group">
                             <textarea style="resize: none;" class="form-control border mt-3"
-                                id="exampleFormControlTextarea1" rows="20" cols="10"
+                                id="message" rows="20" cols="10"
                                 placeholder=" আপনি কি চাচ্ছেন তা উল্লেখ করুন.... "></textarea>
                         </div>
 
                         <div class="form-group text-center mt-3">
                             <!-- <button class="contact-button btn btn-danger btn-sm btn-outline-none border-0"> পাঠিয়ে দিন </button> -->
-                            <a href="#" class="btn btn-sm mt-3 btn-danger w-100"> পাঠিয়ে দিন </a>
+                            <button class="btn btn-sm mt-3 btn-danger w-100" id="contact_sent_btn"> পাঠিয়ে দিন </button>
                         </div>
-
-
-                    </form>
 
                 </div>
             </div>
@@ -127,4 +128,40 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/contact.css') }}">
+@endpush
+
+@push('js')
+    <!-- Page level plugins -->
+    <script src="{{ asset('assets/backend/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $(document).on('click','#contact_sent_btn', submitToDatabase)
+        });
+
+        function submitToDatabase(){
+
+            let obj = {
+                url     : `{{ route('contact_store')}}`, 
+                method  : "POST",
+                data    : formatData(),
+            };
+
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+        }
+
+        function formatData(){
+            return {
+                name    : $('#name').val().trim(),
+                email   : $('#email').val(),
+                phone   : $('#phone').val(),
+                subject : $('#subject').val().trim(),
+                message : $('#message').val().trim(),
+                _token  : `{{csrf_token()}}`
+            }
+        }
+
+    </script>
 @endpush

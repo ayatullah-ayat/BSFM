@@ -28,7 +28,7 @@ class Product extends Model
 
     public function subCategory()
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsTo(Subcategory::class, 'subcategory_id');
     }
 
     
@@ -68,6 +68,12 @@ class Product extends Model
     public function tags()
     {
         return $this->belongsToMany(ProductTag::class, 'product_tags', 'product_id', 'tag_name');
+    }
+
+
+    public function singleProductTags()
+    {
+        return $this->hasMany(ProductTag::class,'product_id');
     }
 
 
