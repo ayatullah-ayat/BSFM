@@ -182,4 +182,17 @@ class SubcategoryController extends Controller
             ]);
         }
     }
+
+
+    public function subcategoriesByCategory($id)
+    {
+        $subcategories = Subcategory::selectRaw('subcategory_name as text, id')
+        ->where([
+            ['category_id', $id],
+            ['is_active', 1],
+        ])
+        ->get();
+        return response()->json($subcategories);
+    }
+
 }

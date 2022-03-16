@@ -113,10 +113,11 @@ function globeInit(arr=[]){
 
             if(selectPattern.test(elem.type)){
                 console.log(selectPattern.test(elem.type));
-                const { dropdownParent, selector, selectedVal, width } = elem;
+                const { dropdownParent, selector, selectedVal, width , tags} = elem;
                 $(selector).select2({
                     width           : width ?? '100%' ,
                     theme           : 'bootstrap4',
+                    tags            : tags ?? false,
                     dropdownParent,
                 }).val(selectedVal).trigger('change')
             }

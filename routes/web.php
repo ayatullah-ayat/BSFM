@@ -102,6 +102,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [SubcategoryController::class, 'store'])->name('store');
         Route::put('/{subcategory}',[SubcategoryController::class, 'update'])->name('update');
         Route::delete('/{subcategory}',[SubcategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}',         [SubcategoryController::class, 'subcategoriesByCategory'])->name('subcategoriesByCategory');
     });
 
     Route::group(['prefix' => 'brand', 'as' => 'brand.'], function(){

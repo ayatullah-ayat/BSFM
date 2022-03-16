@@ -5,15 +5,20 @@
 @section('content')
 <div class="card p-4 shadow">
     <h4 class="text-dark f-2x font-weight-bold text-dark">Add Product Information</h4>
-    <form action="{{ route('admin.products.store') }}" method="POST" id="productForm">
-        @csrf 
+    <form action="{{ route('admin.products.store') }}" method="POST" id="productForm" enctype="multipart/form-data">
+        {{-- @csrf  --}}
         <div class="row">
         
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="category"> Category<span style="color: red;" class="req">*</span></label>
-                    <select name="category_id" class="category" data-required id="category"
-                        data-placeholder="Select Category"></select>
+                    <select required name="category_id" class="category" data-required id="category" data-placeholder="Select Category">
+                        @if($categories)
+                            @foreach ($categories as $item)
+                                <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
@@ -30,7 +35,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="">Product Name<span style="color: red;" class="req">*</span></label>
-                    <input name="product_name" type="text" class="form-control" placeholder="Product Name">
+                    <input required name="product_name" id="product_name" type="text" class="form-control" placeholder="Product Name">
                 </div>
             </div>
         
@@ -41,88 +46,147 @@
                         <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
                         <input type="checkbox" name="manageVariant" id="manageVariant">
                     </span>
-                    <input name="product_sku" type="text" class="form-control" placeholder="Product SKU">
+                    <input name="product_sku" id="product_sku" type="text" class="form-control" placeholder="Product SKU">
                 </div>
             </div>
+
+            <div class="col-md-6" data-col="col">
+                <div class="form-group">
+                    <label for="brand"> Brand <span style="color: red;" class="req">*</span></label>
+                    <select name="brand" required class="brand" data-required id="brand" data-placeholder="Select brand">
+                        @if($brands)
+                        @foreach ($brands as $item)
+                        <option value="{{ $item->id }}">{{ $item->brand_name }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <span class="v-msg"></span>
+            </div>
+            
+            <div class="col-md-6" data-col="col">
+                <div class="form-group">
+                    <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
+                    <select name="currency" required class="currency" data-required id="currency" data-placeholder="Select currency">
+                        @if($currencies)
+                        @foreach ($currencies as $item)
+                        <option value="{{ $item->currency_name }}">{{ $item->currency_name }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <span class="v-msg"></span>
+            </div>
+
         {{-- ----------------------------------------------------------------------------------------- --}}
             <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="">
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
-                        <label for="color"> Color</label>
-                        <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
+                        <label for="color"> Color <span style="color: red;" class="req">*</span></label>
+                        <select name="color_ids" class="color" data-required id="color" data-placeholder="Select Color">
+                            @if($colors)
+                                @foreach ($colors as $item)
+                                    <option value="{{ $item->variant_name }}">{{ $item->variant_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <span class="v-msg"></span>
                 </div>
                 
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
-                        <label for="size">Size</label>
-                        <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
+                        <label for="size">Size <span style="color: red;" class="req">*</span></label>
+                        <select name="size_ids" class="size" multiple data-required id="size" data-placeholder="Select Size">
+                            @if($sizes)
+                                @foreach ($sizes as $item)
+                                    <option value="{{ $item->variant_name }}">{{ $item->variant_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <label for="price">Unit Price</label>
-                        <input name="unit_price" type="number" class="form-control" placeholder="Product Price">
+                        <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
+                        <input name="unit_price" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
+                        <input name="sale_price" readonly id="sale_price" type="number" class="form-control calcPriceQty" placeholder="Sales Price">
                     </div>
                 </div>
                 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price</label>
-                        <input name="wholesale_price" type="number" class="form-control" placeholder="Product Wholesale Price">
+                        <input name="wholesale_price" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
                 
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="">Product Qty</label>
-                        <input name="product_qty" type="number" class="form-control" placeholder="Product Qty">
-                    </div>
-                </div>
             </div>
 
         {{-- -----------------------------------------------------------------------------------------------  --}}
-        
-            <div class="col-md-6" data-col="col">
-                <div class="form-group">
-                    <label for="brand"> Brand</label>
-                    <select name="brand" class="brand" data-required id="brand" data-placeholder="Select brand"></select>
-                </div>
-                <span class="v-msg"></span>
-            </div>
-        
-            <div class="col-md-6" data-col="col">
-                <div class="form-group">
-                    <label for="currency">Currency</label>
-                    <select name="currency" class="currency" data-required id="currency"
-                        data-placeholder="Select currency"></select>
-                </div>
-                <span class="v-msg"></span>
-            </div>
+
         
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="discount">Discount(%)</label>
-                    <input name="discount" type="number" class="form-control" placeholder="Discount">
+                    <label for="product_qty">Product Qty <span style="color: red;" class="req">*</span></label>
+                    <input required name="product_qty" id="product_qty" min="1" type="number" class="calcPriceQty form-control" placeholder="Product Qty">
                 </div>
             </div>
-        
-            <div class="col-md-6" data-col="col">
+
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="unit">Uom (Unit)</label>
-                    <select name="product_unit" class="unit" data-required id="unit" data-placeholder="Select Unit"></select>
+                    <label for="discount">Discount(%)</label>
+                    <input name="discount" id="discount" type="number" class="form-control calcPriceQty" placeholder="Discount">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="total_product_price">Total Unit Price</label>
+                    <input readonly name="total_product_price" id="total_product_price" type="number" class="form-control" placeholder="Total Unit Price">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="total_sales_price">Total Sales Price</label>
+                    <input readonly name="total_sales_price" id="total_sales_price" type="number" class="form-control" placeholder="Total Sales Price">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="total_wholesale_price">Total Wholesale Price</label>
+                    <input readonly name="total_wholesale_price" id="total_wholesale_price" type="number" class="form-control" placeholder="Total Wholesale Price">
+                </div>
+            </div>
+
+            <div class="col-md-3" data-col="col">
+                <div class="form-group">
+                    <label for="unit">Uom (Unit) <span style="color: red;" class="req">*</span></label>
+                    <select name="product_unit" class="unit" data-required id="unit" required data-placeholder="Select Unit">
+                        @if($units)
+                        @foreach ($units as $item)
+                        <option value="{{ $item->unit_name }}">{{ $item->unit_name }}</option>
+                        @endforeach
+                        @endif
+                    </select>
                 </div>
                 <span class="v-msg"></span>
             </div>
         
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="description">Product Description</label>
-                    <textarea name="description" id="description" cols="" rows="5" class="form-control"
-                        placeholder="Product Description"></textarea>
+                    <label for="description">Product Description <span style="color: red;" class="req">*</span></label>
+                    <textarea name="description" id="description" cols="" rows="5" class="form-control" placeholder="Product Description"></textarea>
                 </div>
             </div>
         
@@ -159,8 +223,8 @@
 
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="default_image">Thumbnail Image</label><br>
-                    <input name="default_image" type="file" id="default_image">
+                    <label for="default_image">Thumbnail Image <span style="color: red;" class="req">*</span></label><br>
+                    <input name="product_thumbnail_image" required type="file" id="default_image">
                 </div>
             </div>
             
@@ -215,7 +279,8 @@
                                 <tr>
                                     <th class="text-white">Color</th>
                                     <th class="text-white">Size</th>
-                                    <th class="text-white">Price</th>
+                                    <th class="text-white">Unit Price</th>
+                                    <th class="text-white">Wholesale <br> Price</th>
                                     <th class="text-white">Qty</th>
                                     <th>
                                         <button class="btn btn-sm btn-light text-dark" id="addVariantRow"><i class="fa fa-plus"></i> Add</button>
@@ -223,18 +288,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr class="single">
                                     <td>
-                                        <select name="color_id" class="color" data-required data-placeholder="Select Color"></select>
+                                        <select name="color_id" class="color" data-required data-placeholder="Select Color">
+                                            @if($colors)
+                                                @foreach ($colors as $item)
+                                                <option value="{{ $item->variant_name }}">{{ $item->variant_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </td>
                                     <td>
-                                        <select name="size_id" class="size" data-required data-placeholder="Select Size"></select>
+                                        <select name="size_id" class="size" data-required data-placeholder="Select Size">
+                                            @if($sizes)
+                                                @foreach ($sizes as $item)
+                                                    <option value="{{ $item->variant_name }}">{{ $item->variant_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </td>
                                     <td>
-                                        <input type="number" name="unit_price" class="form-control">
+                                        <input type="number" name="unit_price" class="form-control calcPriceQtyModal text-center">
                                     </td>
                                     <td>
-                                        <input type="number" name="product_qty" class="form-control">
+                                        <input type="number" name="wholesale_price" class="form-control calcPriceQtyModal text-center">
+                                    </td>
+                                    <td>
+                                        <input type="number" name="product_qty" class="form-control calcPriceQtyModal text-center">
                                     </td>
                                     <td>
                                         <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
@@ -243,10 +323,10 @@
                             </tbody>
                             <tfoot class="bg-dark text-white">
                                 <tr>
-                                    <th colspan="1">0</th>
-                                    <th colspan="1">0</th>
-                                    <th colspan="1">0</th>
-                                    <th colspan="1">0</th>
+                                    <th colspan="2"></th>
+                                    <th colspan="1" id="totalUnitPriceModal">0</th>
+                                    <th colspan="1" id="totalWholesalePriceModal">0</th>
+                                    <th colspan="1" id="totalQtyModal">0</th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -279,64 +359,212 @@
     <script>
 
     let uploadedFiles = [];
+    let timeId = null;
     $(document).ready(function(){
         init();
 
+        $(document).on('change','.category', getAllSubcategories)
+
+        $(document).on('keyup change','.calcPriceQty', calcTotalPrice)
+
         $(document).on('change','#manageVariant', manageVariantPriceStock)
+
+
         $(document).on('click','#addVariantRow', createRow)
         $(document).on('click','.deleteVariantRow', deleteRow)
+
+
+        // ----------------------------- modal --------------------- 
         $(document).on('click','#save-variant-price-qty', ()=>{
 
             let 
             data = [],
-            rows = [...$('#variantWisePrice').find('tbody').find('tr')];
+            rows = [...$('#variantWisePrice').find('tbody').find('tr')],
+            totalUnitPrice = 0,
+            totalWholesalePrice = 0,
+            totalQty = 0;
 
             rows.forEach(row => {
 
                 let 
-                color_id    = $(row).find('[name="color_id"]').val() ?? null,
-                size_id     = $(row).find('[name="size_id"]').val() ?? null,
-                unit_price  = $(row).find('[name="unit_price"]').val() ?? 0,
-                product_qty = $(row).find('[name="product_qty"]').val() ?? 0;
+                color_name      = $(row).find('[name="color_id"]').val() ?? null,
+                size_name       = $(row).find('[name="size_id"]').val() ?? null,
+                unit_price      = $(row).find('[name="unit_price"]').val() ?? 0,
+                wholesale_price = $(row).find('[name="wholesale_price"]').val() ?? 0,
+                product_qty     = $(row).find('[name="product_qty"]').val() ?? 0,
+                stock_qty       = $(row).find('[name="product_qty"]').val() ?? 0;
 
                 data.push(
                     {
-                        color_id,
-                        size_id,
-                        unit_price,
-                        product_qty,
+                        color_name,
+                        size_name,
+                        unit_price: Number(unit_price),
+                        wholesale_price: Number(wholesale_price),
+                        product_qty: Number(product_qty),
+                        stock_qty: Number(stock_qty),
                     }
                 )
+
+                totalUnitPrice += Number(unit_price) ?? 0;
+                totalWholesalePrice += Number(wholesale_price) ?? 0;
+                totalQty += Number(product_qty) ?? 0;
             });
+
+
+            $('#totalUnitPriceModal').text(totalUnitPrice);
+            $('#totalWholesalePriceModal').text(totalWholesalePrice);
+            $('#totalQtyModal').text(totalQty);
+
+            $('#total_product_price').val(totalUnitPrice);
+            $('#total_wholesale_price').val(totalWholesalePrice);
 
             collectionOfVariantPriceQty(data);
 
             hideModal('#manageVariantSizePriceModal');
         })
 
+        $(document).on('keyup change','.calcPriceQtyModal', calcTotalPriceModal)
+
         $(document).on('submit','#productForm', submitToDatabase)
     });
 
+
+    function calcTotalPrice(){
+
+        let 
+        initVal         = 0,
+        elem            = $(this),
+        currentVal      = elem.val(),
+        unitPrice       = $('#unit_price').val() ?? 0,
+        wholesalePrice  = $('#wholesale_price').val() ?? 0,
+        qty             = $('#product_qty').val() ?? 0,
+        discount        = $('#discount').val() ?? 0;
+
+        if(Number(currentVal) < 0){
+            elem.val(initVal);
+        }
+
+        let totalUnitPrice      = Number(unitPrice) * Number(qty); 
+        let totalSalesPrice     = Number(unitPrice) * Number(qty); 
+        let totalWholesalePrice = Number(wholesalePrice) * Number(qty); 
+
+        if(discount){
+            discount            = discount / 100;
+            totalSalesPrice     = totalUnitPrice - (totalUnitPrice * discount);
+            totalWholesalePrice = totalWholesalePrice - (totalWholesalePrice * discount);
+        }
+
+        $('#total_product_price').val(totalUnitPrice);
+        $('#total_sales_price').val(totalSalesPrice);
+        $('#total_wholesale_price').val(totalWholesalePrice);
+        $('#sale_price').val( totalSalesPrice / Number(qty) );
+
+    }
+
+
+    function calcTotalPriceModal(){
+
+        let 
+        initVal         = 0,
+        elem            = $(this),
+        currentVal      = elem.val(),
+        discount        = $('#discount').val() ?? 0,
+        data            = [],
+        rows            = [...$('#variantWisePrice').find('tbody').find('tr')],
+        totalUnitPrice  = 0,
+        totalWholesalePrice = 0,
+        totalQty = 0;
+
+        if(Number(currentVal) < 0){
+            elem.val(initVal);
+        }
+
+        rows.forEach(row => {
+
+            let 
+            color_name      = $(row).find('[name="color_id"]').val() ?? null,
+            size_name       = $(row).find('[name="size_id"]').val() ?? null,
+            unit_price      = $(row).find('[name="unit_price"]').val() ?? 0,
+            wholesale_price = $(row).find('[name="wholesale_price"]').val() ?? 0,
+            product_qty     = $(row).find('[name="product_qty"]').val() ?? 0,
+            stock_qty       = $(row).find('[name="product_qty"]').val() ?? 0;
+
+            totalUnitPrice += Number(unit_price) ?? 0;
+            totalWholesalePrice += Number(wholesale_price) ?? 0;
+            totalQty += Number(product_qty) ?? 0;
+        });
+
+
+        $('#totalUnitPriceModal').text(totalUnitPrice);
+        $('#totalWholesalePriceModal').text(totalWholesalePrice);
+        $('#totalQtyModal').text(totalQty);
+
+    }
+
+
+    function getAllSubcategories(){
+        let category_id = $(this).val();
+
+        $.ajax({
+            url     : `{{ route('admin.subcategory.subcategoriesByCategory','')}}/${category_id}`,
+            method  : 'GET',
+            beforeSend(){
+                console.log('sending ...');
+            },
+            success(data){
+
+                let options = ``;
+                if(data.length){
+                    data.forEach(item => {
+                        options += `<option value="${item.id}">${item.text}</option>`;
+                    });
+                }
+
+                $(document).find('#subcategory').html(options);
+            },
+            error(err){
+                console.log(err);
+            },
+        })
+    }
+
     
-
-
     function createRow(){
+
         let 
         elem    = $(this),
         tbody   = $('#variantWisePrice').find('tbody'),
+        id      = new Date().getTime(),
+        colors  = @json($colors),
+        sizes   = @json($sizes),
         html    = `
-        <tr>
+        <tr class="single">
            <td>
-                <select name="color_id" class="color" data-required data-placeholder="Select Color"></select>
+                <select name="color_id" id="color_${id}" class="color" data-required data-placeholder="Select Color">
+                    ${
+                        colors.map((color,i) => (
+                            `<option value="${color.variant_name}">${color.variant_name}</option>`
+                        )).join('')
+                    }
+                </select>
             </td>
             <td>
-                <select name="size_id" class="size" data-required data-placeholder="Select Size"></select>
+                <select name="size_id" id="size_${id}" class="size" data-required data-placeholder="Select Size">
+                    ${
+                        sizes.map((size,i) => (
+                        `<option value="${size.variant_name}">${size.variant_name}</option>`
+                        )).join('')
+                    }
+                </select>
             </td>
             <td>
-                <input type="number" name="unit_price" class="form-control">
+                <input type="number" name="unit_price" class="form-control calcPriceQtyModal text-center">
             </td>
             <td>
-                <input type="number" name="product_qty" class="form-control">
+                <input type="number" name="wholesale_price" class="form-control calcPriceQtyModal text-center">
+            </td>
+            <td>
+                <input type="number" min="1" name="product_qty" class="form-control calcPriceQtyModal text-center">
             </td>
             <td>
                 <span class="fa fa-times text-danger fa-lg deleteVariantRow" type="button"></span>
@@ -345,18 +573,19 @@
         
         tbody.append(html);
 
-        let arr = [
-             {
-                selector        : `.color`,
-                type            : 'select'
-            },
-            {
-                selector        : `.size`,
-                type            : 'select',
-            },
-        ];
+        $(`#size_${id}`).select2({
+            width : '100%' ,
+            theme : 'bootstrap4',
+            tags  : false,
+            dropdownParent: $('#manageVariantSizePriceModal'),
+        }).val(null).trigger('change')
 
-        globeInit(arr);
+        $(`#color_${id}`).select2({
+            width : '100%' ,
+            theme : 'bootstrap4',
+            tags  : false,
+            dropdownParent: $('#manageVariantSizePriceModal'),
+        }).val(null).trigger('change')
     }
 
 
@@ -367,8 +596,7 @@
 
     function collectionOfVariantPriceQty(data=null){
 
-        let 
-        targetElem = $('#defaultPrice');
+        let targetElem = $('#defaultPrice');
 
         if(data){
             targetElem.attr('data-product-variant', JSON.stringify(data));
@@ -409,7 +637,8 @@
             },
             {
                 selector        : `#tags`,
-                type            : 'select'
+                type            : 'select',
+                tags            : true,
             },
             {
                 selector        : `.category`,
@@ -457,24 +686,109 @@
     function submitToDatabase(e){
 
         //
-        // e.preventDefault();
+        e.preventDefault();
 
-        console.log(uploadedFiles);
+        ajaxFormToken();
 
-        // return false;
+        clearTimeout(timeId)
 
-        // ajaxFormToken();
+        let
+        thumbnail       = fileRead($('#default_image')),
+        productGallery  = fileRead($('#product_gallery'));
 
-        // let obj = {
-        //     url     : ``, 
-        //     method  : "POST",
-        //     data    : {},
-        // };
+        console.log(productGallery,'productGallery');
 
-        // ajaxRequest(obj);
+        timeId = setTimeout(() => {
+
+            console.log(formatProductData());
+
+            return false;
+
+
+            $.ajax({
+                url         : `{{ route('admin.products.store') }}`,
+                method      : 'POST',
+                dataType    : "json",
+                cache       : false,
+                async       : false,
+                data        : { ...formatProductData(), product_thumbnail_image: JSON.stringify(thumbnail), product_gallery: JSON.stringify(productGallery) },
+                beforeSend(){
+                    console.log('Sending ...');
+                },
+                success(res){
+                    console.log(res);
+                },
+                error(err){
+                    console.log(err);
+                },
+            });
+
+        }, 500);
+
+        
+
 
         // hideModal('#categoryModal');
     }
+
+
+    function formatProductData(){
+
+        let
+        variantPrices       = collectionOfVariantPriceQty(),
+        is_product_variant  = variantPrices ? 1 : 0;
+
+        return {
+            category_id             : $('.category').val(),
+            subcategory_id          : $('#subcategory').val(),
+            product_name            : $('#product_name').val(),
+            product_sku             : $('#product_sku').val(),
+            colors                  : $('#color').val(),
+            sizes                   : $('#size').val(),
+            unit_price              : $('#unit_price').val(),
+            wholesale_price         : $('#wholesale_price').val(),
+            product_qty             : $('#product_qty').val(),
+            brand                   : $('.brand').val(),
+            currency                : $('.currency').val(),
+            product_qty             : $('#product_qty').val(),
+            product_unit            : $('.unit').val(),
+            discount                : $('#discount').val(),
+            description             : $('#description').val(),
+            specification           : $('#specification').val(),
+            is_best_sale            : Number($('#is_best_sale').prop('checked')),
+            allow_review            : Number($('#allow_review').prop('checked')),
+            is_active               : Number($('#is_active').prop('checked')),
+            is_publish              : Number($('#is_publish').prop('checked')),
+            product_thumbnail_image : null,
+            product_gallery         : [],
+            tags                    : $('#tags').val(),
+            variant_prices          : variantPrices,
+            is_product_variant,
+        };
+    }
+
+
+    function fileRead(elem, src = '#img-preview') {
+        let files = [];
+
+        if (elem[0]?.files && elem[0]?.files[0]) 
+        {
+            
+            Array.from(elem[0].files)
+            .forEach(file => { 
+                let FR = new FileReader();
+                FR.addEventListener("load", function (e) {
+                    files.push(e.target.result);
+                });
+                
+                // console.log(file);
+                FR.readAsDataURL(file)
+            });
+
+            return files;
+        }
+    }
+
 
 </script>
 @endpush
