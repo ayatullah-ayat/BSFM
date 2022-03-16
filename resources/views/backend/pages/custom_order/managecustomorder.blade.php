@@ -19,6 +19,8 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
+                                <th>Order Number</th>
+                                <th>Order Date</th>
                                 <th>Customer Name</th>
                                 <th>Phone</th>
                                 <th>Address</th>
@@ -33,6 +35,8 @@
                                 @foreach ($customserviceorders as $customserviceorder)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $customserviceorder->order_no }}</td>
+                                        <td>{{ $customserviceorder->created_at }}</td>
                                         <td>{{ $customserviceorder->customer_name ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer->customer_phone ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer_address ?? 'N/A' }}</td>
