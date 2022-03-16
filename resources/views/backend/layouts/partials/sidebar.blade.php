@@ -178,8 +178,7 @@
         </a>
         <div id="gallery" class="collapse" aria-labelledby="gallery" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{route('admin.add-image-gallery')}}">New Gallery Image</a>
-                <a class="collapse-item" href="{{ route('admin.image-gallery')}}">Manage Image Gallery</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Manage Image Gallery</a>
             </div>
         </div>
     </li>

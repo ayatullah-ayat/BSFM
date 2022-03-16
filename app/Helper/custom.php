@@ -78,3 +78,11 @@ if (!function_exists('profilePhoto')) {
 
     }
 }
+
+
+
+if (!function_exists('hasProfile')){
+    function hasProfile($guard="web"){
+        return auth()->guard($guard)->user()->profile;
+    }
+}

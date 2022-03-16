@@ -4,6 +4,8 @@ namespace App\Http\Services;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariantPrice;
+use App\Models\Subcategory;
 use Exception;
 
 trait ProductChecker
@@ -60,24 +62,63 @@ trait ProductChecker
     }
 
 
-    private function updateProduct(array $fields=[], $id=null){
+    private function updateProduct(array $fields=[], $product){
         try {
 
-            $product = Product::where('id',$id)->update($fields);
-            if(!$product)
+            $productFields = $this->productFields($fields);
+
+            $productUpdate = $product->update($productFields);
+            if(!$productUpdate)
                 throw new Exception("Unable to Update Product!", 403);
+
+            if (!isset($fields['variant_prices']) || !count($fields['variant_prices']))
+            throw new Exception("Please select color & size!", 403);
+
+            $brand_id   = $fields['brand'] ?? null;
+            $brand      = Brand::find($brand_id);
+            if ($brand) {
+                $product->brands()->sync($brand_id, ['brand_name' => $brand->brand_name]);
+            }
+
+            $tags = [];
+            if (isset($fields['tags']) && count($fields['tags'])) {
+                foreach ($fields['tags'] as $tagName) {
+                    $tags[] = ['tag_name' => $tagName];
+                }
+
+                // dd($tags);
+                $product->singleProductTags()->delete();
+                $product->singleProductTags()->createMany($tags);
+
+                // $product->tags()->sync($tags);
+            }
+
+            if (isset($fields['product_gallerys']) && count($fields['product_gallerys'])) {
+                $product->productImages()->delete();
+                $product->productImages()->createMany($fields['product_gallerys']);
+            }
+
+            if(count($fields['variant_prices'])){
+
+                foreach ($fields['variant_prices'] as $variant) {
+                    $product->sizes()->delete();
+                    $product->sizes()->createMany($fields['variant_prices']);
+                }
+                // dd($variant);
+            }
+
+
+
                 
             return [
                 'success'   => true,
-                'msg'       => 'Product Updated Successfully!',
-                'data'      => Product::find($id)
+                'msg'       => 'Product Updated Successfully!'
             ];
 
         }  catch (\Throwable $th) {
             return [
                 'success'   => false,
-                'msg'       => $th->getMessage(),
-                'data'      => null
+                'msg'       => $th->getMessage()
             ];
         }
     }
@@ -90,7 +131,7 @@ trait ProductChecker
         try {
 
             $category       = Category::find($data['category_id'] ?? null);
-            $subcategory    = Category::find($data['subcategory_id'] ?? null);
+            $subcategory    = Subcategory::find($data['subcategory_id'] ?? null);
 
             if (!$category)
                 throw new Exception("Category Not Found!", 403);

@@ -1,10 +1,13 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Add Product')
+@section('title', 'Edit Product')
 
 @section('content')
 <div class="card p-4 shadow">
-    <h4 class="text-dark f-2x font-weight-bold text-dark">Edit Product Information</h4>
+    <div class="w-100">
+        <h4 class="text-dark f-2x font-weight-bold text-dark d-inline-block">Edit Product Information</h4>
+        <a class="text-white btn btn-sm btn-info float-right" href="{{ route('admin.products.index') }}"><i class="fa fa-arrow-left"> Back</i></a>
+    </div>
     <form action="{{ route('admin.products.update', $product->id) }}" method="POST" id="productForm" enctype="multipart/form-data">
         {{-- @csrf  --}}
         <div class="row">
@@ -68,6 +71,7 @@
                 <span class="v-msg"></span>
             </div>
             
+            
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
@@ -87,7 +91,7 @@
             </div>
 
         {{-- ----------------------------------------------------------------------------------------- --}}
-            <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="" style="display: {{ $product->is_product_variant ? 'none':'' }}">
+            <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="{{ $product->is_product_variant ? json_encode($product->sizes) : null  }}"  style="display: {{ $product->is_product_variant ? 'none':'' }}">
                 <div class="col-md-2" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color <span style="color: red;" class="req">*</span></label>
@@ -234,7 +238,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="default_image">Thumbnail Image <span style="color: red;" class="req">*</span></label><br>
-                    <input name="product_thumbnail_image" required type="file" id="default_image">
+                    <input name="product_thumbnail_image" type="file" id="default_image">
                 </div>
             </div>
             
@@ -402,6 +406,7 @@
         </div>
     </div>
 </div>
+
 
 @endsection
 
@@ -747,7 +752,7 @@
             {
                 selector        : `.color`,
                 type            : 'select',
-                selectedVal     : @json($product->colors ? $product->colors[0]->color_name : null)
+                selectedVal     : @json($product->colors && @count($product->colors) ? $product->colors[0]->color_name : null)
             },
             {
                 selector        : `.size`,
@@ -768,7 +773,7 @@
             {
                 selector        : `.brand`,
                 type            : 'select',
-                selectedVal     : @json($product->brands[0]->id ?? null)
+                selectedVal     : @json($product->brands && @count($product->colors) ? $product->brands[0]->id : null)
             },
             {
                 selector        : `.currency`,
@@ -812,6 +817,8 @@
         //
         e.preventDefault();
 
+        let url = $(this).attr('action');
+
         ajaxFormToken();
 
         clearTimeout(timeId)
@@ -823,8 +830,8 @@
         timeId = setTimeout(() => {
 
             $.ajax({
-                url         : `{{ route('admin.products.store') }}`,
-                method      : 'POST',
+                url         : url,
+                method      : 'PUT',
                 dataType    : "json",
                 cache       : false,
                 async       : false,

@@ -43,7 +43,6 @@ class ProductController extends Controller
         $currencies = Currency::select('currency_name','id')->where('is_active',1)->get();
         $colors     = Variant::select('variant_name','id')->where([ ['is_active', 1], ['variant_type', 'color']])->get();
         $sizes      = Variant::select('variant_name','id')->where([ ['is_active', 1], ['variant_type', 'size']])->get();
-        // $tags       = ProductTag::all();
 
         return view('backend.pages.product.addproduct', compact('categories', 'brands', 'units', 'currencies','colors','sizes'));
     }
@@ -92,14 +91,6 @@ class ProductController extends Controller
 
             // create product 
             $productData = $this->createProduct($data);
-
-            // create product variants
-            // $product->brands()->attach($brands);
-            // $product->sizes()->attach($sizes);
-            // $product->colors()->attach($colors);
-            // $product->tags()->attach($tags);
-
-            // 
 
             // dd($productData);
             if(!$productData['success'])
@@ -166,8 +157,8 @@ class ProductController extends Controller
 
                 if(!$product->is_product_variant && $unitPrice == null){
                     $unitPrice          = $size->unit_price;
-                    $salesPrice         = $size->unit_price;
-                    $wholesalesPrice    = $size->sales_price;
+                    $salesPrice         = $size->sales_price;
+                    $wholesalesPrice    = $size->wholesale_price;
                 }
             }
             
@@ -195,7 +186,82 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // dd($product, $request->all());
+
+        try{
+
+
+            $fileLocation               = $product->product_thumbnail_image ?? null;
+
+            $data                       = $request->all();
+            $product_gallery            = $request->product_gallery;
+            $product_thumbnail_image    = $request->product_thumbnail_image;
+
+            $product_thumbnail_image    = $product_thumbnail_image && count(json_decode($product_thumbnail_image)) > 0 ? json_decode($product_thumbnail_image)[0] : null;
+            $product_gallery_images     = $product_gallery && count(json_decode($product_gallery)) > 0 ? json_decode($product_gallery) : null;
+
+            if ($product_thumbnail_image) {
+ 
+                if ($fileLocation) {
+                    $this->deleteImage($fileLocation);
+                }
+
+                $fileResponse = $this->uploadFile($product_thumbnail_image, 'products/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+            }
+            
+            $data['product_thumbnail_image'] = $fileLocation;
+
+            $data['product_gallerys'] = [];
+            if ($product_gallery_images) {
+
+                foreach ($product_gallery_images as $image) {
+
+                    if(isset($product->productImages) && count($product->productImages)) {
+                        foreach ($product->productImages as $oldImage) {
+                            $this->deleteImage($oldImage);
+                        }
+                    }
+
+                    $fileResponse = $this->uploadFile($image, 'products/');
+                    if (!$fileResponse['success'])
+                        throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                    $fileLocation = $fileResponse['fileLocation'];
+                    $data['product_gallerys'][] = ['product_image' => $fileLocation];
+                }
+            }
+
+            DB::beginTransaction();
+
+            // create product 
+            $productData = $this->updateProduct($data, $product);
+
+            // dd($productData);
+            if (!$productData['success'])
+                throw new Exception($productData['msg'] ?? "Unable to Update Product!", 403);
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => $productData['msg'] ?? 'Success!',
+                'data'      => $productData['data'] ?? null
+            ]);
+
+        } catch (\Exception $th) {
+
+            DB::rollback();
+
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**

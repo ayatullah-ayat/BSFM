@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\User\CartController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\User\AboutController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\VariantController;
@@ -19,25 +21,25 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
-use App\Http\Controllers\Admin\SocialIconController;
 
 
 
 // ------------ Frontend namespace ----------------------
 
 
+use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
-use App\Http\Controllers\User\UserDashboardController;
 
+use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
+use App\Http\Controllers\Admin\Custom\CustomServiceOrderController;
 use App\Http\Controllers\Admin\Custom\CustomServiceProductController;
 use App\Http\Controllers\Admin\Custom\CustomServiceCategoryController;
-use App\Http\Controllers\Admin\Custom\CustomServiceOrderController;
 use App\Http\Controllers\User\OrderController as CustomerOrderController;
 use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
@@ -58,7 +60,7 @@ Route::group(['prefix' => ''],function(){
     Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
     Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
     Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
-    Route::post('/', [CustomerContactController::class, 'store'])->name('contact_store');
+    Route::post('/',            [CustomerContactController::class, 'store'])->name('contact_store');
     Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
     Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
     
@@ -146,13 +148,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     //     return view('backend.pages.currency.currencylist');
     // })->name('currency');
 
-    Route::get('/image-gallery', function () {
-        return view('backend.pages.imagegallery.imagegallerylist');
-    })->name('image-gallery');
+    Route::group(['prefix' => 'profile', 'as' => 'auth_user.'], function () {
+        Route::get('/',         [AdminProfileController::class, 'profile'])->name('profile');
+        Route::put('/{admin}',  [AdminProfileController::class, 'update'])->name('profile_update');
+    });
 
-    Route::get('/add-image-gallery', function () {
-        return view('backend.pages.imagegallery.addgallery');
-    })->name('add-image-gallery');
+
+    Route::group(['prefix' => 'cms-settings', 'as' => 'cms_settings.'], function () {
+
+        Route::group(['prefix' => 'gallery', 'as' => 'gallery.'], function () {
+            Route::get('/',             [GalleryController::class, 'index'])->name('index');
+            Route::post('/',            [GalleryController::class, 'store'])->name('store');
+            Route::put('/{gallery}',    [GalleryController::class, 'update'])->name('update');
+            Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('destroy');
+        });
+
+
+    });
+
 
     Route::group(['prefix' => 'suppliers', 'as' => 'supplier.'], function(){
         Route::get('/',             [SupplierController::class, 'index'])->name('index');

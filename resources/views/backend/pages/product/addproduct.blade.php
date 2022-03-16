@@ -4,7 +4,11 @@
 
 @section('content')
 <div class="card p-4 shadow">
-    <h4 class="text-dark f-2x font-weight-bold text-dark">Add Product Information</h4>
+    <div class="w-100">
+        <h4 class="text-dark f-2x font-weight-bold d-inline-block">Add Product Information</h4>
+        <a class="text-white btn btn-sm btn-info float-right" href="{{ route('admin.products.index') }}"><i class="fa fa-arrow-left"> Back</i></a>
+    </div>
+
     <form action="{{ route('admin.products.store') }}" method="POST" id="productForm" enctype="multipart/form-data">
         {{-- @csrf  --}}
         <div class="row">
