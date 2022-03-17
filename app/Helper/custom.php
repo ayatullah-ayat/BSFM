@@ -100,3 +100,11 @@ if (!function_exists('wholesalesPrice')) {
         return ($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0;
     }
 }
+
+
+if (!function_exists('matchColor')) {
+    function matchColor($color_name=null)
+    {
+        return preg_match('/white|#f{1,5}/im', $color_name);
+    }
+}

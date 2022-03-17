@@ -171,11 +171,13 @@
                         @foreach ($products as $item)
                             <div class="mb-3">
                                 <div class="card __product-card">
-                                    <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                                    <img src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                                    <div class="card-wishlist" style="z-index: 100;" type="button"> <i class="fa-solid fa-heart"></i></div>
+                                    <a href="{{ route('product_detail',$item->id ) }}">
+                                        <img draggable="false" src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                                    </a>
                                     <div class="card-body p-0">
                                         <div class="card-product-title card-title text-center fw-bold">
-                                            <h5>{{ $item->product_name }}</h5>
+                                            <a href="{{ route('product_detail',$item->id ) }}" class="text-decoration-none text-dark"><h5>{{ $item->product_name }}</h5></a>
                                         </div>
 
                                         @if ( $item->total_product_unit_price && $item->total_product_qty )
@@ -201,7 +203,7 @@
                                         <div class="card-product-button d-flex justify-content-evenly">
                                             <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
                                                 করুন</button>
-                                            <a href="{{ route('product_detail',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
+                                            <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
                                                 করুন </a>
                                         </div>
                                     </div>

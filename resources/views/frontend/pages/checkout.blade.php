@@ -2,34 +2,13 @@
 @section('title','Checkout')
 
 @section('content')
-<!-- Breadcrumb Area-->
-    {{-- <section class="container-fluid breadcrumb-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-    
-                    <div class="breadcrumb-details d-flex align-items-center justify-content-center">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb mb-0 py-4">
-                                <li class="breadcrumb-item"><a href="#"> হোম </a></li>
-                                <li class="breadcrumb-item active" aria-current="page"> সোপ </li>
-                                <li class="breadcrumb-item active" aria-current="page"> চেক আউট </li>
-                            </ol>
-                        </nav>
-                    </div>
-    
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    
     <!-- Checkout Area-->
     <div class="container-fluid checkout-area my-5">
         <div class="container">
             <div class="row my-4">
                 <div class="col-md-4 order-md-2 mb-4">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">কার্ট ইনফরমেশনঃ</span>
+                        <span class="text-muted">ওভারভিউঃ </span>
                         <span class="badge badge-secondary badge-pill">3</span>
                     </h4>
                     <ul class="list-group mb-3">
@@ -38,7 +17,7 @@
                             <div>
                                 <h6 class="my-0"> প্রোডাক্ট দাম (৳): </h6>
                             </div>
-                            <span class="text-muted">১২০</span>
+                            <span class="text-muted" id="producterdum">0.0</span>
                         </li>
     
                         <li class="list-group-item d-flex justify-content-between bg-light">
@@ -46,12 +25,12 @@
                                 <h6 class="my-0"> ডিসকাউন্ট (৳): </h6>
     
                             </div>
-                            <span class="text-success">২০</span>
+                            <span class="text-success" id="discount">0</span>
                         </li>
     
                         <li class="list-group-item d-flex justify-content-between">
                             <span> সর্বমোট (৳):</span>
-                            <strong> ১০০ </strong>
+                            <strong id="surbomot"> 0.0 </strong>
                         </li>
     
                     </ul>
@@ -65,6 +44,96 @@
                 </div>
     
                 <div class="col-md-8 order-md-1">
+                    <!-- Checkout cart start-->
+                        <section class="product-cart-area">
+                            <div class="containerx">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="cart-items-details">
+                                            <table class="table table-borderless table-sm">
+                                                <!-- --------------------- heading -------------------  -->
+                                                <tr class="bg-danger">
+                                                    <th> প্রোডাক্ট </th>
+                                                    <th class="text-center"> মূল্য (৳) </th>
+                                                    <th class="text-center"> পরিমান </th>
+                                                    <th class="text-right"> মোট মূল্য (৳) </th>
+                                                </tr>
+                                                <!-- --------------------- heading -------------------  -->
+                                                @isset($product)
+                                                    @if($product->total_product_unit_price && $product->total_stock_qty)
+                                                        @php
+                                                            $totalprice = $product->total_product_unit_price;
+                                                            $totalqty   = $product->total_product_qty;
+                                                            $unitprice  = $totalprice / $totalqty;
+                                                        @endphp
+                                                    @endif
+                                                @endisset
+
+                                                @if ( $product->total_product_unit_price && $product->product_discount )
+                                                    @php
+                                                        $totaldiscount  = $product->total_product_unit_price * $product->product_discount / 100;
+                                                        $singlediscount = $totaldiscount / $product->total_product_qty ;
+                                                        $saleprice      =  $unitprice - $singlediscount;
+                                                    @endphp
+                                                @endif
+
+
+                                                @if(isset($product) && $product->product_name)
+                                                <tr data-product="{{ $product->id }}">
+                                                    <td class="align-middle">
+                                                        <div class="cart-info">
+                                                            <a href="javascript:void(0)"><i class="fa-solid fa-xmark fa-lg deleteItem"></i></a>
+                                                            <img src="{{asset($product->product_thumbnail_image ?? '')}}" alt="">
+                                                            <p>{{ $product->product_name ?? 'N/A'}}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center align-middle Sale_Price"  data-salesprice="{{$saleprice * 1 }}"> {{ $saleprice ?? '0.0' }}</td>
+                                                    <td class="text-center align-middle btn-qty-cell">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" data-increment-type="minus" class="stateChange btn btn-light"><span
+                                                                    class="fa fa-minus"></span></button>
+                                                            <button type="button" class="btn btn-light count" data-min="1"
+                                                                data-max="10" value="">1</button>
+                                                            <button type="button" data-increment-type="plus" class="stateChange btn btn-light"><span
+                                                                    class="fa fa-plus"></span></button>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right px-2 align-middle subtotal"> {{ $saleprice * 1 }}</td>
+                                                </tr>
+
+                                                @else 
+                                                <tr>
+                                                    <td class="align-middle">
+                                                        <div class="cart-info">
+                                                            <a href="#"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                                                            <img src="{{asset('assets/frontend/img/product/cap-2 2.png')}}" alt="">
+                                                            <p>Nike Airmax 270 react else.</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center align-middle"> ৮০৳ </td>
+                                                    <td class="text-center align-middle btn-qty-cell">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" id="minus" class="stateChange btn btn-light"><span
+                                                                    class="fa fa-minus"></span></button>
+                                                            <button type="button" class="btn btn-light" id="count" data-min="1"
+                                                                data-max="10">1</button>
+                                                            <button type="button" id="plus" class="stateChange btn btn-light"><span
+                                                                    class="fa fa-plus"></span></button>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right px-2 align-middle"> ২৪০৳</td>
+                                                </tr>
+                                                @endif 
+                        
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    <!-- Checkout cart end -->
+
+                    <!-- Checkout Shipment start-->
                     <h4 class="mb-3">শিপমেন্ট এড্রেসঃ</h4>
                     <div class="row">
     
@@ -130,6 +199,8 @@
                         </div>
     
                     </div>
+                    <!-- Checkout Shipment end-->
+
                 </div>
     
             </div>
@@ -154,4 +225,98 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/checkout.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/cart.css') }}">
+@endpush
+
+@push('js')
+<script>
+        $(function(){
+            $(document).on("click",'.stateChange', incrementDecrementCount)
+            $(document).on("click",'.deleteItem', removeItemFromRow)
+        });
+
+        function incrementDecrementCount(e){
+            let 
+            elem        = $(this),
+            countElem   = elem.closest('tr').find('.count'),
+            ref         = elem.attr('data-increment-type'),
+            count       = Number(countElem.text() ?? 0 ),
+            pattern1    = /(plus|increment|increament)/im,
+            pattern2    = /(minus|decrement|decreament)/im,
+            minCount    = Number(countElem?.attr('data-min') ?? 1),
+            maxCount    = Number(countElem?.attr('data-max') ?? 10),
+            price       = Number(elem.closest('tr').find('.Sale_Price').attr('data-salesprice') ?? 0);
+            
+            if(pattern1.test(ref)){
+
+                count++;
+                if(count > maxCount) count = maxCount;
+
+            }else if(pattern2.test(ref)){
+
+                count--;
+                if(count < minCount) count = minCount;
+            }
+
+            
+            countElem.text(count);
+
+            priceCalculation( (price * count) , elem.closest('tr').find('.subtotal') )
+        }
+
+        function priceCalculation( price, target){
+
+            let pattern = /^[+-]?\d+(\.\d+)$/im;
+            if(pattern.test(price)){
+                price = price.toFixed(3);
+            }
+
+            target.text(price);
+            overview();
+            
+        }
+
+        function removeItemFromRow(){
+            let 
+            elem    = $(this),
+            len     = $(document).find('.cart-items-details table').find(`tr[data-product]`).length;
+            if(len <= 1){
+                alert('You can\'t delete This Product')
+                return false;
+            }
+
+            if(confirm("Are you sure To remove the Product?")){
+                elem.closest('tr[data-product]').remove();
+                overview();
+            }
+        }
+
+
+        function overview(){
+            let 
+            pattern         = /^[+-]?\d+(\.\d+)$/im,
+            totalProduct    = 0,
+            grandTotal      = 0,
+            disCountPrice   = Number($('#discount').text() ?? 0),
+            rows            = $(document).find('.cart-items-details table').find(`tr[data-product]`);
+
+            [...rows].forEach(row => {
+                let itemCount   = Number($(row).find('.count').text() ?? 0);
+                let itemPrice   = Number($(row).find('.Sale_Price').attr('data-salesprice') ?? 0);
+                totalProduct    = itemPrice * itemCount;
+            })
+
+            grandTotal = Number(totalProduct) + Number(disCountPrice);
+
+            if(pattern.test(totalProduct)){
+                totalProduct = totalProduct.toFixed(3);
+                grandTotal   = grandTotal.toFixed(3)
+            }
+
+            $('#producterdum').text(totalProduct);
+            $('#surbomot').text(grandTotal);
+        }
+
+        
+</script>
 @endpush

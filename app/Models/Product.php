@@ -52,7 +52,6 @@ class Product extends Model
                 ->selectRaw($select);
     }
 
-
     public function sizes($select='*')
     {
         return $this->hasMany(ProductVariantPrice::class, 'product_id', 'id')

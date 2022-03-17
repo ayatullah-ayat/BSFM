@@ -69,92 +69,92 @@
                             </p>
                         </div>
 
-                        @php
-                            $brands = [];
-                        @endphp
+                        @if (count($product->brands))
+                            @php $brands = []; @endphp 
+                            @foreach ($product->brands as $brand)
+                            @php
+                                $brands[]= $brand->pivot->brand_name;
+                            @endphp
+                            @endforeach
 
-                        @foreach ($product->brands as $brand)
-                            
-                         @php
-                             $brands[]= $brand->pivot->brand_name;
-                         @endphp
-                        @endforeach
-
-                        <div class="single-prodect-model">
-                            <h3> ব্র্যান্ড
-                                : {{ count($brands) ? implode(',', $brands) : 'টি সার্ট মডেল নং- AT-505'}} </h3>
-                        </div>
+                            <div class="single-prodect-model">
+                                <h3> ব্র্যান্ড: {{ implode(',', $brands) ?? 'টি সার্ট মডেল নং- AT-505'}} </h3>
+                            </div>
+                        @endif
                     
     
                         <div class="single-prodect-color">
                             <!-- <div class="spacer"></div> -->
                             <h3> কালার </h3>
-    
-                            <div class=" ms-2 row" style="margin-left: -0.5rem!important;">
-                                <div class=" col-md-2 col-1 color selected" style="background-color: #F4DE17;"> <i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color" style="background-color: rgba(55, 158, 38, 0.93);"><i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color" style="background-color: rgba(64, 207, 199, 0.5);"><i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color" style="background-color: rgba(31, 71, 214, 0.4);"><i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color" style="background-color: #43475C;"><i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color "
-                                    style="background-color: rgba(255, 255, 255, 0.2); border: 1px solid #000000;"><i
-                                        class="fa-solid fa-check"></i></div>
-                                <div class=" col-md-2 col-1 color" style="background-color: #DC0029;"><i
-                                        class="fa-solid fa-check"></i></div>
-                            </div>
-    
+
+                            @isset( $product->productColors )
+                                <div class=" ms-2 row color_container" style="margin-left: -0.5rem!important;">
+                                    @foreach ($product->productColors as $indx => $item)
+                                        <div type="button" data-color="{{ $item->color_name  ?? ''}}" class=" col-md-2 col-1 color {{ $indx == 0 ? 'selected' : ''}} {{ matchColor($item->color_name) ? ' black' : '' }} " style="background-color: {{ $item->color_name }}; {{matchColor($item->color_name) ? 'box-shadow: 0px 0px 2px #000;' : '' }}"> <i class="fa-solid fa-check"></i></div>
+                                    @endforeach
+                                </div>
+                            @endisset
                         </div>
     
                         <div class="single-prodect-size">
                             <h3> সাইজ </h3>
                             <div class="row" style="margin-left: -0.5rem!important;">
-                                <div class=" col-md-2 col-1 size selected"><span>XXL-30</span> </div>
-                                <div class=" col-md-2 col-1 size"><span>S-30</span> </div>
-                                <div class=" col-md-2 col-1 size"><span>S-30</span> </div>
-                                <div class=" col-md-2 col-1 size"><span>S-30</span> </div>
-                                <div class=" col-md-2 col-1 size"><span>S-30</span> </div>
+                                @isset( $product->productSizes )
+                                    <div class=" ms-2 row size_container" style="margin-left: -0.5rem!important;">
+                                        @foreach ($product->productSizes as $indx => $item)
+                                            <div type="button" data-size="{{ $item->size_name  ?? ''}}" class=" col-md-2 col-1 size {{ $indx == 0 ? 'selected' : ''}}"> <span>{{ $item->size_name  ?? ''}}</span></div>
+                                        @endforeach
+                                    </div>
+                                @endisset
+
                             </div>
     
                         </div>
     
                         <div class="actions">
-    
+                            @php
+                                $stockQty = $product->total_stock_qty ?? 0;
+                            @endphp
+                            
+                            @if($stockQty > 0)
                             <div class="btn-group" role="group">
                                 <button type="button" id="minus" class="stateChange btn btn-light"><span class="fa fa-minus"></span></button>
-                                <button type="button" style="cursor:default;" class="btn btn-light" id="count" data-min="1" data-max="10">1</button>
+                                <button type="button" style="cursor:default;" class="btn btn-light" id="count" data-min="1" data-max="{{ $stockQty >= 10 ? 10 : $stockQty}}">1</button>
                                 <button type="button" id="plus" class="stateChange btn btn-light"><span class="fa fa-plus"></span></button>
                             </div>
+                            @else 
+                                <span class="text-danger fw-bold">Out of Stock</span>
+                            @endif 
     
-                            <div><button type="button" class="btn btn-dark">কার্ডে যুক্ত করুন</button></div>
-                            <div><button type="button" class="btn btn-danger">অর্ডার করুন</button></div>
-                            <div class="d-flex align-items-center text-danger" type="button"><span class="fa fa-heart fa-2x"></span></div>
+                            <div><button type="button" class="btn btn-dark" data-stockqty="{{$stockQty}}">কার্ডে যুক্ত করুন</button></div>
+                            <div><button type="button" class="btn btn-danger" data-stockqty="{{$stockQty}}">অর্ডার করুন</button></div>
+                            <div class="d-flex align-items-center text-danger" data-stockqty="{{$stockQty}}" type="button"><span class="fa fa-heart fa-2x"></span></div>
     
                         </div>
     
                         <div class="single-prodect-category">
                             <h3 class="mb-2"> ক্যাটাগরি সমূহঃ</h3>
                             <div class="d-flex flex-wrap gap-1">
-                                <div><button type="button" class="btn rounded btn-light me-2"> ম্যান ফ্যাশন </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
+                                @isset($product->category)
+                                    <div class="ms-2 row category_container" style="margin-left: -0.5rem!important;">
+                                        <div><button data-size="{{ $product->category->category_name  ?? ''}}" type="button" class="btn rounded btn-light me-2"> {{ $product->category->category_name  ?? ''}} </button></div>
+                                    </div>
+                                @endisset
                             </div>
                         </div>
     
                         <div class="single-prodect-category">
                             <h3 class="mb-2"> ট্যাগ সমূহঃ </h3>
                             <div class="d-flex flex-wrap  gap-1">
-                                <div><button type="button" class="btn rounded btn-light me-2"> ম্যান ফ্যাশন </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
-                                <div><button type="button" class="btn rounded btn-light me-2"> টি-শার্ট </button></div>
+
+                                @isset( $product->singleProductTags )
+                                    @foreach ($product->singleProductTags as $indx => $item)
+                                        <div type="button" data-tag="{{ $item->tag_name  ?? ''}}"  class="btn rounded btn-light me-2">{{ $item->tag_name  ?? ''}}</div>
+                                    @endforeach
+                                @endisset 
                             </div>
                         </div>
+
     
                     </div>
                 </div>
@@ -182,21 +182,7 @@
                                     <div class="col-md-12 p-5 tabs-product-comments">
     
                                         <p>
-                                            প্রিমিয়াম লাক্সারী টাইপের এই টি সার্টটিতে আপনি পাচ্ছেন ১০০% কটন, কম্ফোর্ট ও
-                                            ডিভাইন লাইফের ফিল,
-                                            যা আপনাকে সব সময় আরো এক ধাপ এগিয়ে নিতে সাহায্য করবে তীব্র বেগে। তাই আজই স্বপ্নের
-                                            সাজে নিজে সাজিয়ে তুলুন এক অন্যন নবায়নে।
-                                            প্রিমিয়াম লাক্সারী টাইপের এই টি সার্টটিতে আপনি পাচ্ছেন ১০০% কটন, কম্ফোর্ট ও
-                                            ডিভাইন লাইফের ফিল, যা আপনাকে সব সময় আরো এক ধাপ এগিয়ে নিতে সাহায্য করবে তীব্র
-                                            বেগে।
-                                            তাই আজই স্বপ্নের সাজে নিজে সাজিয়ে তুলুন এক অন্যন নবায়নে। প্রিমিয়াম লাক্সারী
-                                            টাইপের এই টি সার্টটিতে আপনি পাচ্ছেন ১০০% কটন,
-                                            কম্ফোর্ট ও ডিভাইন লাইফের ফিল, যা আপনাকে সব সময় আরো এক ধাপ এগিয়ে নিতে সাহায্য
-                                            করবে তীব্র বেগে। তাই আজই স্বপ্নের সাজে নিজে সাজিয়ে তুলুন এক অন্যন নবায়নে।
-                                            প্রিমিয়াম লাক্সারী টাইপের এই টি সার্টটিতে আপনি পাচ্ছেন ১০০% কটন, কম্ফোর্ট ও
-                                            ডিভাইন লাইফের ফিল,
-                                            যা আপনাকে সব সময় আরো এক ধাপ এগিয়ে নিতে সাহায্য করবে তীব্র বেগে। তাই আজই স্বপ্নের
-                                            সাজে নিজে সাজিয়ে তুলুন এক অন্যন নবায়নে।
+                                       {!! $product->product_description !!}
                                         </p>
     
                                     </div>
@@ -205,15 +191,9 @@
                             <div class="tab-pane" id="review">
                                 <div class="row border g-0 shadow-sm">
                                     <div class="col p-5 tabs-product-comments">
-    
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur iusto facere
-                                            voluptates
-                                            aliquam odio libero quis modi recusandae sint eaque consequatur suscipit officia
-                                            fugit hic
-                                            odit ipsum asperiores tempora quae ab, aut id! Architecto magni fugiat vero
-                                            unde,
-                                            excepturi perspiciatis! Recusandae consectetur eius facere aliquid eaque nostrum
-                                            placeat alias nihil!</p>
+                                        <p>
+                                            {!! $product->product_specification !!}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -457,6 +437,8 @@
     <script>
         $(function(){
     
+                $(document).on("click",'.color_container .color', selectColor)
+                $(document).on("click",'.size_container .size', selectSize)
                 $(document).on("click",'.stateChange', incrementDecrementCount)
     
                 $("#exzoom").exzoom({
@@ -507,6 +489,19 @@
     
     
             });
+
+
+            function selectColor(){
+                let currentElem = $(this);
+                $(document).find('.color_container .color').removeClass('selected')
+                currentElem.addClass('selected')
+            }
+
+            function selectSize(){
+                let currentElem = $(this);
+                $(document).find('.size_container .size').removeClass('selected')
+                currentElem.addClass('selected')
+            }
     
     
             function incrementDecrementCount(e){
