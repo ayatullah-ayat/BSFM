@@ -95,7 +95,7 @@
                 <div class="col-md-2" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color <span style="color: red;" class="req">*</span></label>
-                        <select name="color_ids" class="color" data-required id="color" data-placeholder="Select Color">
+                        <select name="color_ids" class="color" multiple data-required id="color" data-placeholder="Select Color">
                             @if($colors)
                                 @foreach ($colors as $item)
                                     <option value="{{ $item->variant_name }}">{{ $item->variant_name }}</option>
@@ -752,7 +752,7 @@
             {
                 selector        : `.color`,
                 type            : 'select',
-                selectedVal     : @json($product->colors && @count($product->colors) ? $product->colors[0]->color_name : null)
+                selectedVal     : @json($selectedColors ?? null)
             },
             {
                 selector        : `.size`,
@@ -773,7 +773,7 @@
             {
                 selector        : `.brand`,
                 type            : 'select',
-                selectedVal     : @json($product->brands && @count($product->colors) ? $product->brands[0]->id : null)
+                selectedVal     : @json($product->brands && @count($product->brands) ? $product->brands[0]->id : null)
             },
             {
                 selector        : `.currency`,
@@ -875,20 +875,20 @@
         if(!is_product_variant){
             variantPrices = [];
 
-            let sizes = $('#size').val();
-            if(sizes && sizes.length){
-                sizes.forEach(size => {
-                    variantPrices.push({
-                        color_name      : $('#color').val(),
-                        size_name       : size,
-                        unit_price      : Number($('#unit_price').val() ?? 0),
-                        sales_price     : Number($('#sale_price').val() ?? 0),
-                        wholesale_price : Number($('#wholesale_price').val() ?? 0),
-                        product_qty     : 0,
-                        stock_qty       : 0,
-                    })
-                })
-            }
+            // let sizes = $('#size').val();
+            // if(sizes && sizes.length){
+            //     sizes.forEach(size => {
+            //         variantPrices.push({
+            //             color_name      : $('#color').val(),
+            //             size_name       : size,
+            //             unit_price      : Number($('#unit_price').val() ?? 0),
+            //             sales_price     : Number($('#sale_price').val() ?? 0),
+            //             wholesale_price : Number($('#wholesale_price').val() ?? 0),
+            //             product_qty     : 0,
+            //             stock_qty       : 0,
+            //         })
+            //     })
+            // }
 
             
         }
@@ -902,6 +902,8 @@
             total_stock_price       : $('#total_sales_price').val() ?? 0,
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
             // sales_price             : $('#sale_price').val(),
+            colors                  : $('#color').val(),
+            sizes                   : $('#size').val(),
             product_qty             : $('#product_qty').val(), // total Product qty
             brand                   : $('.brand').val(),
             currency                : $('.currency').val(),

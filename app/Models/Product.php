@@ -31,6 +31,20 @@ class Product extends Model
         return $this->belongsTo(Subcategory::class, 'subcategory_id');
     }
 
+
+
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class, 'product_id');
+    }
+
+
+    public function productSizes()
+    {
+        return $this->hasMany(ProductSize::class, 'product_id');
+    }
+
+    // ->withPivot('color_name')
     
     public function colors($select='*')
     {

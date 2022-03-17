@@ -86,3 +86,17 @@ if (!function_exists('hasProfile')){
         return auth()->guard($guard)->user()->profile;
     }
 }
+
+if (!function_exists('salesPrice')){
+    function salesPrice($product){
+        return ($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100)))/ $product->total_product_qty ?? 0.0;
+    }
+}
+
+
+if (!function_exists('wholesalesPrice')) {
+    function wholesalesPrice($product)
+    {
+        return ($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0;
+    }
+}

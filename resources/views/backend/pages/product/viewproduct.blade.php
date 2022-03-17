@@ -47,6 +47,18 @@
                                 <th>Sub-Category</th>
                                 <td>{{ $product->subCategory->subcategory_name ?? 'N/A' }}</td>
                             </tr>
+                            @if(count($product->brands))
+                                @php
+                                    $brands = [];
+                                    foreach ($product->brands as $brand) {
+                                        $brands[]= $brand->brand_name;
+                                    }
+                                @endphp
+                            <tr>
+                                <th>Brand</th>
+                                <td>{{ implode(',', $brands) ?? 'N/A' }}</td>
+                            </tr>
+                            @endif 
                             <tr>
                                 <th>Description</th>
                                 <td>{!! $product->product_description ?? 'N/A' !!}</td>
@@ -64,9 +76,16 @@
                                 <th>Currency</th>
                                 <td>{{ $product->currency ?? 'N/A' }}</td>
                             </tr>
+                            <tr>
+                                <th>Discount (%)</th>
+                                <td>{{ $product->product_discount ?? 'N/A' }}</td>
+                            </tr>
                         </tbody>
                     </table>
 
+                    {{-- @dd($product, $product->is_product_variant) --}}
+
+                    @if($product->is_product_variant)
                     <div class="table-responsive">
                         <table class="table table-bordered"  width="100%" cellspacing="0">
                             <thead>
@@ -83,10 +102,8 @@
                                     <th>Unit Price</th></th>
                                     <th>Sales Price</th>
                                     <th>WholeSale Price</th>
-                                    @if($product->is_product_variant)
                                     <th>Product Qty</th>
                                     <th>Stock Qty</th>
-                                    @endif 
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,7 +126,9 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
 
+                    @if(!$product->is_product_variant)
                     <div class="table-responsive">
                         <table class="table table-bordered"  width="100%" cellspacing="0">
                             <thead>
@@ -121,26 +140,25 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Total Price</th>
-                                    <th>Total Stock Price</th>
-                                    <th>WholeSale Price</th>
-                                    <th>Discount (%)</th>
+                                    <th>Unit Price</th>
+                                    <th>Sales Price</th>
+                                    <th>Wholesale Price</th>
                                     <th>Total Qty</th>
                                     <th>Stock Qty</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{ $product->total_product_unit_price ?? 'N/A' }}</td>
-                                    <td>{{ $product->total_stock_price ?? 'N/A' }}</td>
-                                    <td>{{ $product->total_product_wholesale_price ?? 'N/A' }}</td>
-                                    <td>{{ $product->product_discount ?? 'N/A' }}</td>
+                                    <td>{{ ($product->total_product_unit_price / $product->total_product_qty) ?? 0.0 }}</td>
+                                    <td>{{ salesPrice($product) ?? 0.0 }}</td>
+                                    <td>{{ wholesalesPrice($product) ?? 0.0 }}</td>
                                     <td>{{ $product->total_product_qty ?? 'N/A' }}</td>
                                     <td>{{ $product->total_stock_qty ?? 'N/A' }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                    @endif
 
                     <div class="table-responsive">
                         <div class="row bg-danger text-white pl-3">

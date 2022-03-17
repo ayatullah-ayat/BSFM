@@ -15,14 +15,16 @@ trait ProductChecker
     private function createProduct(array $fields=[]){
         try {
 
-            // dd($fields['variant_prices']);
+            // dd($fields);
+
+            // dd($this->productFields($fields));
 
             $product = Product::create($this->productFields($fields));
             if(!$product)
                 throw new Exception("Unable to create product!", 403);
 
 
-            if(!isset($fields['variant_prices']) || !count($fields['variant_prices']))
+            if(boolval($product->is_product_variant) && !isset($fields['variant_prices']) && !count($fields['variant_prices']))
                 throw new Exception("Please select color & size!", 403);
 
             $brand_id   = $fields['brand'] ?? null;
@@ -43,8 +45,32 @@ trait ProductChecker
             if(isset($fields['product_gallerys'])){
                 $product->productImages()->createMany($fields['product_gallerys']);
             }
-                
-            $product->variants()->attach($fields['variant_prices']);
+            
+            if(boolval($product->is_product_variant)){
+                $product->variants()->attach($fields['variant_prices']);
+            }else{
+                $colors = [];
+                $sizes = [];
+
+                if(isset($fields['colors']) && count($fields['colors'])){
+                    foreach ($fields['colors'] as $color) {
+                        $colors[]=['color_name' => $color];
+                    }
+                }
+
+                $product->productColors()->createMany($colors);
+
+                if (isset($fields['sizes']) && count($fields['sizes'])) {
+                    foreach ($fields['sizes'] as $size) {
+                        $sizes[] = ['size_name' => $size];
+                    }
+                }
+
+                $product->productSizes()->createMany($sizes);
+
+            }
+
+            //colors sizes
                 
             return [
                 'success'   => true,
@@ -71,8 +97,8 @@ trait ProductChecker
             if(!$productUpdate)
                 throw new Exception("Unable to Update Product!", 403);
 
-            if (!isset($fields['variant_prices']) || !count($fields['variant_prices']))
-            throw new Exception("Please select color & size!", 403);
+            if (boolval($product->is_product_variant) && !isset($fields['variant_prices']) && !count($fields['variant_prices']))
+                throw new Exception("Please select color & size!", 403);
 
             $brand_id   = $fields['brand'] ?? null;
             $brand      = Brand::find($brand_id);
@@ -98,13 +124,38 @@ trait ProductChecker
                 $product->productImages()->createMany($fields['product_gallerys']);
             }
 
-            if(count($fields['variant_prices'])){
+            if($product->is_product_variant && count($fields['variant_prices'])){
 
                 foreach ($fields['variant_prices'] as $variant) {
                     $product->sizes()->delete();
+                    $product->productColors()->delete();
+                    $product->productSizes()->delete();
                     $product->sizes()->createMany($fields['variant_prices']);
                 }
                 // dd($variant);
+            }else{
+
+                $colors = [];
+                $sizes = [];
+
+                if (isset($fields['colors']) && count($fields['colors'])) {
+                    foreach ($fields['colors'] as $color) {
+                        $colors[] = ['color_name' => $color];
+                    }
+                }
+
+                $product->sizes()->delete();
+                $product->productColors()->delete();
+                $product->productColors()->createMany($colors);
+
+                if (isset($fields['sizes']) && count($fields['sizes'])) {
+                    foreach ($fields['sizes'] as $size) {
+                        $sizes[] = ['size_name' => $size];
+                    }
+                }
+
+                $product->productSizes()->delete();
+                $product->productSizes()->createMany($sizes);
             }
 
 
@@ -136,9 +187,6 @@ trait ProductChecker
             if (!$category)
                 throw new Exception("Category Not Found!", 403);
 
-            if (!$subcategory)
-                throw new Exception("Subcategory Not Found!", 403);
-
             return [
                 'category_id'                   => $data['category_id'] ?? null,
                 'subcategory_id'                => $data['subcategory_id'] ?? null,
@@ -150,7 +198,7 @@ trait ProductChecker
                 'product_description'           => $data['description'] ?? null,
                 'product_specification'         => $data['specification'] ?? null,
                 'product_thumbnail_image'       => $data['product_thumbnail_image'] ?? null,
-                'product_discount'              => $data['discount'] ?? null,
+                'product_discount'              => $data['discount'] ?? 0,
                 'total_product_qty'             => $data['product_qty'] ?? 0,
                 'total_product_unit_price'      => $data['total_product_unit_price'] ?? 0, 
                 'total_stock_qty'               => $data['product_qty'] ?? 0,
