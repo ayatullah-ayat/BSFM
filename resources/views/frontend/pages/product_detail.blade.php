@@ -14,13 +14,12 @@
                             <!-- Images -->
                             <div class="exzoom_img_box">
                                 <ul class='exzoom_img_ul'>
-                                    <!-- <li><img src="{{asset('assets/frontend/img/product/slider-6.png')}}"/></li> -->
-                                    <li><img src="https://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg" />
-                                    </li>
-                                    <li><img src="{{asset('assets/frontend/img/product/product-1.png')}}" /></li>
-                                    <li><img src="{{asset('assets/frontend/img/product/product-2.png')}}" /></li>
-                                    <li><img src="{{asset('assets/frontend/img/product/product-3.png')}}" /></li>
-                                    <li><img src="{{asset('assets/frontend/img/product/product-4.png')}}" /></li>
+                                    @isset($product->productImages)
+                                        @foreach ($product->productImages as $item)
+                                            <li><img src="{{ asset($item->product_image )}}" /></li>
+                                        @endforeach
+                                    @endisset
+                            
                                 </ul>
                             </div>
     
@@ -40,25 +39,52 @@
                     <div class="single-prodect-info">
     
                         <div class="single-prodect-title">
-                            <h2> টি সার্ট </h2>
+                            <h2>{{ $product->product_name }}</h2>
                         </div>
-    
+
+                        @if ( $product->total_product_unit_price && $product->total_product_qty )
+                        @php
+                            $totalprice = $product->total_product_unit_price;
+                            $totalqty = $product->total_product_qty;
+                            $unitprice = $totalprice / $totalqty;
+                        @endphp
+                        @endif
+
+                        @if ($product->total_product_unit_price && $product->product_discount)
+                            @php
+                                $totaldiscount = $product->total_product_unit_price * $product->product_discount / 100;
+                                $singlediscount = $totaldiscount / $product->total_product_qty ;
+                                $saleprice =  $unitprice - $singlediscount;
+                            @endphp
+                        @endif
+                        
                         <div class="single-prodect-offer-price d-flex">
-                            <h3> নির্ধারিত মূল্য- ১৫০ টাকা </h3>
-                            <h5> ২৫০ টাকা </h5>
+                            <h3> নির্ধারিত মূল্য- {{ $saleprice ?? '0.0' }} টাকা </h3>
+                            <h5> {{ $unitprice ?? '0.0' }} টাকা </h5>
                         </div>
     
                         <div class="single-prodect-description">
-                            <p>প্রিমিয়াম লাক্সারী টাইপের এই টি সার্টটিতে আপনি পাচ্ছেন ১০০% কটন, কম্ফোর্ট ও ডিভাইন লাইফের
-                                ফিল,
-                                যা আপনাকে সব সময় আরো এক ধাপ এগিয়ে নিতে সাহায্য করবে তীব্র বেগে। তাই আজই স্বপ্নের সাজে
-                                নিজে সাজিয়ে তুলুন এক অন্যন নবায়নে।
+                            <p>
+                                {!! $product->product_description !!}
                             </p>
                         </div>
-    
+
+                        @php
+                            $brands = [];
+                        @endphp
+
+                        @foreach ($product->brands as $brand)
+                            
+                         @php
+                             $brands[]= $brand->pivot->brand_name;
+                         @endphp
+                        @endforeach
+
                         <div class="single-prodect-model">
-                            <h3> টি সার্ট মডেল নং- AT-505 </h3>
+                            <h3> ব্র্যান্ড
+                                : {{ count($brands) ? implode(',', $brands) : 'টি সার্ট মডেল নং- AT-505'}} </h3>
                         </div>
+                    
     
                         <div class="single-prodect-color">
                             <!-- <div class="spacer"></div> -->

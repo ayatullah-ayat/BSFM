@@ -56,7 +56,7 @@ Route::group(['prefix' => ''],function(){
     // --------------------------- General Route goes Here ---------------------------------
     Route::get('/home',         [HomeController::class, 'index'])->name('home_index');
     Route::get('/shop',         [ShopController::class, 'index'])->name('shop_index');
-    Route::get('/shop/{slug}',  [ShopController::class, 'show'])->name('product_detail');
+    Route::get('/shop/{product}/{slug?}',  [ShopController::class, 'show'])->name('product_detail');
     Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
     Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
     Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');

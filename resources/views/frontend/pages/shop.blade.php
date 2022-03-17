@@ -167,29 +167,51 @@
             <div class="col-md-9 w-100">
                 <div class="row shopping-card-row">
 
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <a href="{{ route('product_detail','product-slug') }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
-                                        করুন </a>
+                    @isset($products)
+                        @foreach ($products as $item)
+                            <div class="mb-3">
+                                <div class="card __product-card">
+                                    <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
+                                    <img src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                                    <div class="card-body p-0">
+                                        <div class="card-product-title card-title text-center fw-bold">
+                                            <h5>{{ $item->product_name }}</h5>
+                                        </div>
+
+                                        @if ( $item->total_product_unit_price && $item->total_product_qty )
+                                            @php
+                                                $totalprice = $item->total_product_unit_price;
+                                                $totalqty = $item->total_product_qty;
+                                                $unitprice = $totalprice / $totalqty;
+                                            @endphp
+                                        @endif
+
+                                        @if ($item->total_product_unit_price && $item->product_discount)
+                                            @php
+                                                $totaldiscount = $item->total_product_unit_price * $item->product_discount / 100;
+                                                $singlediscount = $totaldiscount / $item->total_product_qty ;
+                                                $saleprice =  $unitprice - $singlediscount;
+                                            @endphp
+                                        @endif
+
+                                        <div class="card-product-price card-text text-center fw-bold">
+                                            <h5>বর্তমান মূুল্য {{$saleprice ?? '0.0'}} /= <span class="text-decoration-line-through text-danger">
+                                                {{ $unitprice ?? '0.0'}} /=</span></h5>
+                                        </div>
+                                        <div class="card-product-button d-flex justify-content-evenly">
+                                            <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
+                                                করুন</button>
+                                            <a href="{{ route('product_detail',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
+                                                করুন </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endisset
+                   
 
-                    <div class=" mb-3">
+                    {{-- <div class=" mb-3">
                         <div class="card __product-card">
                             <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
                             <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
@@ -208,385 +230,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class=" mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class=" mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class=" mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class=" mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class=" mb-3">
-                        <div class="card __product-card">
-                            <div class="card-wishlist" type="button"> <i class="fa-solid fa-heart"></i></div>
-                            <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top" alt="...">
-                            <div class="card-body p-0">
-                                <div class="card-product-title card-title text-center fw-bold">
-                                    <h5>টি-শার্ট</h5>
-                                </div>
-                                <div class="card-product-price card-text text-center fw-bold">
-                                    <h5>বর্তমান মূুল্য- ২২০/= <span class="text-decoration-line-through text-danger">
-                                            ২৫০/= </span></h5>
-                                </div>
-                                <div class="card-product-button d-flex justify-content-evenly">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                        করুন</button>
-                                    <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

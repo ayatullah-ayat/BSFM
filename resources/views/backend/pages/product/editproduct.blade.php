@@ -773,7 +773,7 @@
             {
                 selector        : `.brand`,
                 type            : 'select',
-                selectedVal     : @json($product->brands && @count($product->colors) ? $product->brands[0]->id : null)
+                selectedVal     : @json($product->brands && @count($product->brands) ? $product->brands[0]->id : null)
             },
             {
                 selector        : `.currency`,
