@@ -71,21 +71,21 @@
                                         @if($product->is_product_variant)
                                             <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else 
-                                            {{ $singleProduct->unit_price ?? 0.0 }} 
+                                            {{ ($product->total_product_unit_price / $product->total_product_qty) ?? 0.0 }} 
                                         @endif 
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
                                         <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                        {{ $singleProduct->sales_price ?? 0.0 }}
+                                        {{ salesPrice($product) ?? 0.0 }}
                                         @endif
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
                                             <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                            {{ $singleProduct->wholesale_price ?? 0.0 }}
+                                            {{ wholesalesPrice($product) ?? 0.0 }}
                                         @endif
                                     </td>
                                     <td>{{ $product->total_product_qty ?? 0.0 }}</td>

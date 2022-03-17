@@ -140,7 +140,8 @@ class ProductController extends Controller
         // dd($product->category->subCategories);
         // dd($product->sizes);
         $tags = [];
-        $selectedSizes = [];
+        $selectedSizes  = [];
+        $selectedColors = [];
         $unitPrice      = null;
         $salesPrice     = null;
         $wholesalesPrice= null;
@@ -154,14 +155,28 @@ class ProductController extends Controller
         if(isset($product->sizes)){
             foreach ($product->sizes as $size) {
                 $selectedSizes[]= $size->size_name;
-
-                if(!$product->is_product_variant && $unitPrice == null){
-                    $unitPrice          = $size->unit_price;
-                    $salesPrice         = $size->sales_price;
-                    $wholesalesPrice    = $size->wholesale_price;
-                }
             }
-            
+        }
+
+        // dd($product->productSizes);
+
+        if(isset($product->productSizes)){
+            foreach ($product->productSizes as $size) {
+                $selectedSizes[]= $size->size_name;
+            }
+        }
+
+        if(isset($product->productColors)){
+            foreach ($product->productColors as $color) {
+                $selectedColors[]= $color->color_name;
+            }
+        }
+
+
+        if (!$product->is_product_variant && $unitPrice == null) {
+            $unitPrice          = $product->total_product_unit_price / $product->total_product_qty;
+            $salesPrice         = salesPrice($product) ?? 0;
+            $wholesalesPrice    = wholesalesPrice($product) ?? 0;
         }
 
 
@@ -172,7 +187,7 @@ class ProductController extends Controller
         $colors     = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'color']])->get();
         $sizes      = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'size']])->get();
     
-        return view('backend.pages.product.editproduct', compact('unitPrice', 'salesPrice', 'wholesalesPrice', 'categories', 'tags', 'selectedSizes', 'product', 'brands', 'units', 'currencies', 'colors', 'sizes'));
+        return view('backend.pages.product.editproduct', compact('unitPrice', 'salesPrice', 'wholesalesPrice', 'categories', 'tags', 'selectedSizes', 'selectedColors','product', 'brands', 'units', 'currencies', 'colors', 'sizes'));
 
     }
     
@@ -282,6 +297,8 @@ class ProductController extends Controller
             $product->tags()->detach();
             $product->productImages()->delete();
             $product->variants()->detach();
+            $product->productColors()->delete();
+            $product->productSizes()->delete();
 
             DB::commit();
 
