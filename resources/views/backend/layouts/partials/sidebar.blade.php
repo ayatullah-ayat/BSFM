@@ -107,7 +107,7 @@
         </a>
         <div id="purchase" class="collapse" aria-labelledby="purchase" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.add-purchase') }}">New Purchase</a>
+                <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.manage-purchase') }}">Manage Purchase</a>
             </div>
         </div>

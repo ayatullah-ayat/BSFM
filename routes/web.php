@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\User\CartController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
@@ -181,14 +182,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{customer}',[CustomerController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/add-purchase', function () {
-        return view('backend.pages.purchase.addpurchase');
-    })->name('add-purchase');
+    // Route::get('/add-purchase', function () {
+    //     return view('backend.pages.purchase.addpurchase');
+    // })->name('add-purchase');
 
     Route::get('/manage-purchase', function () {
         return view('backend.pages.purchase.managepurchase');
     })->name('manage-purchase');
 
+
+    Route::group(['prefix' => 'purchase', 'as' => 'purchase.'], function () {
+        Route::get('/',             [PurchaseController::class, 'index'])->name('index');
+        Route::get('/create',       [PurchaseController::class, 'create'])->name('create');
+        // Route::post('/',            [ProductController::class, 'store'])->name('store');
+        // Route::get('/{product}',    [ProductController::class, 'show'])->name('show');
+        // Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
+        // Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
+        // Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    });
 
 
     Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
@@ -200,14 +211,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
     });
-
-    // Route::get('/add-product', function () {
-    //     return view('backend.pages.product.addproduct');
-    // })->name('add_product');
-
-    // Route::get('/manage-product', function () {
-    //     return view('backend.pages.product.manageproduct');
-    // })->name('manage_product');
 
 
 

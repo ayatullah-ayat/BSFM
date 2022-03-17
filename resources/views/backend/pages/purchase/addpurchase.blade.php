@@ -7,15 +7,19 @@
         <div class="container-fluid card p-5 shadow">
             <h4 class="text-dark font-weight-bold">Add Purchase List</h4>
             <div class="row">
-                <div class="col-md-4" data-col="col">
+                <div class="col-md-3" data-col="col">
                     <div class="form-group">
                         <label for="stuff"> Supplier<span style="color: red;" class="req">*</span></label>
-                        <select name="supplier" class="supplier" data-required id="supplier" data-placeholder="Select Supplier"></select>
+                        <select name="supplier" class="supplier" data-required id="supplier" data-placeholder="Select Supplier">
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}">{{ $supplier->supplier_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <span class="v-msg"></span>
                 </div>
 
-                <div class="col-md-4" data-col="col">
+                <div class="col-md-3" data-col="col">
                     <div class="form-group">
                         <label for="booking_date">Purchase Date <span style="color: red;" class="req">*</span></label>
                         <input type="text" data-required autocomplete="off" class="form-control" id="booking_date" name="booking_date">
@@ -23,12 +27,25 @@
                     <span class="v-msg"></span>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Invoice No.<span style="color: red;" class="req">*</span></label>
                         <input type="text" class="form-control" placeholder="">
                     </div>
                 </div>
+
+                <div class="col-md-3" data-col="col">
+                    <div class="form-group">
+                        <label for="stuff"> Currency<span style="color: red;" class="req">*</span></label>
+                        <select name="currency" class="currency" data-required id="currency" data-placeholder="Select currency">
+                            @foreach ($currencies as $currency)
+                            <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <span class="v-msg"></span>
+                </div>
+
 
                 <div class="col-md-12">
                     <div class="form-group">
@@ -46,10 +63,11 @@
                                     <th>Item Information</th>
                                     <th>Color</th>
                                     <th width="200">Size</th>
-                                    <th width="100" class="text-center">Qty</th>
-                                    <th width="150" class="text-center">Unit Price</th>
+                                    <th width="200">Unit</th>
+                                    <th width="130" class="text-center">Qty</th>
+                                    <th width="150" class="text-center">Purchase Price</th>
                                     <th width="150" class="text-center">Total</th>
-                                    <th width="100" class="text-center">
+                                    <th width="100" class="text-center align-middle">
                                         <button class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
                                     </th>
                                 </tr>
@@ -57,17 +75,35 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input type="text" class="form-control">
+                                        <select name="product_name" class="product_name" data-required id="product_name" data-placeholder="Search Or Type Product"></select>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
+                                            <select name="color" multiple class="color" data-required id="color" data-placeholder="Select Color">
+                                                @foreach ($colors as $color)
+                                                <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <span class="v-msg"></span>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="size" class="size" data-required id="size" multiple data-placeholder="Select Sizes"></select>
+                                            <select name="size" class="size" data-required id="size" multiple data-placeholder="Select Sizes">
+                                                @foreach ($sizes as $size)
+                                                <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <span class="v-msg"></span>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select name="unit" class="unit" data-required id="unit" data-placeholder="Select Unit">
+                                                @foreach ($units as $unit)
+                                                <option value="{{ $unit->unit_name }}">{{ $unit->unit_name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <span class="v-msg"></span>
                                     </td>
@@ -120,11 +156,24 @@
                 type            : 'select',
             },
             {
-                selector        : `#color`,
+                selector        : `.product_name`,
+                type            : 'select',
+                tags            : true,
+            },
+            {
+                selector        : `.color`,
                 type            : 'select',
             },
             {
-                selector        : `#size`,
+                selector        : `.size`,
+                type            : 'select',
+            },
+            {
+                selector        : `.currency`,
+                type            : 'select',
+            },
+            {
+                selector        : `.unit`,
                 type            : 'select',
             },
             {

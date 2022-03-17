@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Unit;
 
+use App\Models\Variant;
+use App\Models\Currency;
 use App\Models\Purchase;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class PurchaseController extends Controller
 {
@@ -16,7 +20,7 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        // 
     }
 
     /**
@@ -26,7 +30,13 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        //
+        $suppliers = Supplier::select('supplier_name', 'id')->where('is_active', 1)->get();
+        $units      = Unit::select('unit_name', 'id')->where('is_active', 1)->get();
+        $currencies = Currency::select('currency_name', 'id')->where('is_active', 1)->get();
+        $colors     = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'color']])->get();
+        $sizes      = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'size']])->get();
+
+        return view('backend.pages.purchase.addpurchase', compact('suppliers','units', 'currencies', 'colors', 'sizes'));
     }
 
     /**
