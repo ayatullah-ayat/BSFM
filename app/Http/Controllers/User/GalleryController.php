@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
@@ -15,7 +16,9 @@ class GalleryController extends Controller
     public function index()
     {
         //
-        return view('frontend.pages.gallery');
+        $gallery = Gallery::first();
+        // dd($gallery);
+        return view('frontend.pages.gallery', compact('gallery'));
     }
 
     /**

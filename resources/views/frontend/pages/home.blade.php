@@ -449,34 +449,36 @@
     
                         <div class="contact-form">
                             <h3 class="text-center">যোগাযোগ করুন </h3>
-    
-                            <form>
-    
+
                                 <div class="form-group form-group2">
                                     <input type="text" class="form-control form-control2 border mt-3"
-                                        id="exampleFormControlInput1" placeholder=" আপনার নাম ">
+                                        id="name" placeholder=" আপনার নাম ">
                                 </div>
     
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control2 border mt-3"
-                                        id="exampleFormControlInput1" placeholder=" ইমেইল অ্যাড্রেস ">
+                                        id="email" placeholder=" ইমেইল অ্যাড্রেস ">
                                 </div>
     
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control2 border mt-3"
-                                        id="exampleFormControlInput1" placeholder=" ফোন নাম্বার ">
+                                    <input type="number" class="form-control form-control2 border mt-3"
+                                        id="phone" placeholder=" ফোন নাম্বার ">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control2 border mt-3"
+                                        id="subject" placeholder="সাবজেক্ট">
                                 </div>
     
                                 <div class="form-group">
                                     <textarea style="resize: none;" class="form-control border mt-3"
-                                        id="exampleFormControlTextarea1" rows="20" cols="10"
+                                        id="message" rows="20" cols="10"
                                         placeholder=" আপনি কি চাচ্ছেন তা উল্লেখ করুন.... "></textarea>
                                 </div>
     
                                 <div class="form-group text-center text-lg-end  mt-3">
-                                    <button class="contact-button btn-outline-none border-0"> পাঠিয়ে দিন </button>
+                                    <button class="contact-button btn-outline-none border-0" id="contact_sent_btn"> পাঠিয়ে দিন </button>
                                 </div>
-                            </form>
     
                         </div>
     
@@ -572,12 +574,13 @@
 @endpush
 
 @push('js')
+
 <script>
     $(document).ready( function(){
         $(document).on('click', '.customize-btn', loadCustomizeProduct)
         $(document).on('click', '.customize-product-box', loadCustomizeProductPage)
+        $(document).on('click','#contact_sent_btn', submitToDatabase)
     });
-
 
     function loadCustomizeProduct(){
         let 
@@ -624,7 +627,6 @@
         });
     }
 
-
     function loadCustomizeProductPage(){
         let elem = $(this);
         $(document).find('.customize-product-box').find('.modal-card').removeClass('active')
@@ -633,6 +635,27 @@
         setTimeout(() => {
             window.open(elem.attr('data-href'),"_self");
         }, 1000);
+    }
+
+    function submitToDatabase(){
+        let obj = {
+            url     : `{{ route('contact_store')}}`, 
+            method  : "POST",
+            data    : formatData(),
+        };
+
+        ajaxRequest(obj, { reload: true, timer: 2000 })
+    }
+
+    function formatData(){
+        return {
+            name    : $('#name').val().trim(),
+            email   : $('#email').val(),
+            phone   : $('#phone').val(),
+            subject : $('#subject').val().trim(),
+            message : $('#message').val().trim(),
+            _token  : `{{csrf_token()}}`
+        }
     }
 
 </script>

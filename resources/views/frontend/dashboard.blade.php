@@ -34,16 +34,19 @@
                                         aria-selected="true"> ড্যাশবোর্ড </button>
                                     <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-profile" type="button" role="tab"
-                                        aria-controls="v-pills-profile" aria-selected="false"> প্রফাইল </button>
+                                        aria-controls="v-pills-profile" aria-selected="false"> প্রোফাইল </button>
                                     <button class="nav-link" id="v-pills-purchaseditems-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-purchaseditems" type="button" role="tab"
                                         aria-controls="v-pills-purchaseditems" aria-selected="false"> কেনা আইটেম </button>
                                     <button class="nav-link" id="v-pills-orderlist-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-orderlist" type="button" role="tab"
                                         aria-controls="v-pills-orderlist" aria-selected="false">অর্ডার লিস্ট </button>
+                                    <button class="nav-link" id="v-pills-wishlist-tab" data-bs-toggle="pill"
+                                        data-bs-target="#v-pills-wishlist" type="button" role="tab"
+                                        aria-controls="v-pills-wishlist" aria-selected="false">ওয়িশ লিস্ট </button>
                                     <button class="nav-link" id="v-pills-editprofile-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-editprofile" type="button" role="tab"
-                                        aria-controls="v-pills-editprofile" aria-selected="false"> ইডিট প্রফাইল </button>
+                                        aria-controls="v-pills-editprofile" aria-selected="false"> ইডিট প্রোফাইল </button>
                                     <button class="nav-link" id="v-pills-resetpass-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-resetpass" type="button" role="tab"
                                         aria-controls="v-pills-resetpass" aria-selected="false"> রিসেট পাসওয়ার্ড </button>
@@ -103,7 +106,7 @@
                                 <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
                                     aria-labelledby="v-pills-profile-tab">
                                     <div class="account-info">
-                                        <h2 class="mb-3"> প্রফাইল </h2>
+                                        <h2 class="mb-3"> প্রোফাইল </h2>
                                         <div class="row justify-content-between">
     
                                             <div class="col-md-4 order-md-2">
@@ -339,12 +342,72 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="v-pills-wishlist" role="tabpanel"
+                                    aria-labelledby="v-pills-wishlist-tab">
+                                    <div class="account-info ">
+                                        <h2 class="mb-3"> ওয়িশ লিস্ট </h2>
+                                       <div class="row parentOfWishLish {{ isset($wishListProducts) && count($wishListProducts) ? 'shopping-card-row' : '' }}">
+                                    
+                                        @isset($wishListProducts)
+                                        @forelse ($wishListProducts as $item)
+                                        <div class="mb-3 __product-card-parent-wish">
+                                            <div class="card __product-card">
+                                                <div class="card-wishlist {{ in_array($item->id,$wishLists) ? 'removeFromWish' : '' }}" data-productid="{{ $item->id }}" data-auth="{{ auth()->user()->id ?? null }}" style="z-index: 100;" type="button"> <i class="fa-solid fa-heart"></i></div>
+                                                <a href="{{ route('product_detail',$item->id ) }}">
+                                                    <img draggable="false" src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                                                </a>
+                                                <div class="card-body p-0">
+                                                    <div class="card-product-title card-title text-center fw-bold">
+                                                        <a href="{{ route('product_detail',$item->id ) }}" class="text-decoration-none text-dark">
+                                                            <h5>{{ $item->product_name }}</h5>
+                                                        </a>
+                                                    </div>
+                                    
+                                                    @if ( $item->total_product_unit_price && $item->total_product_qty )
+                                                    @php
+                                                    $totalprice = $item->total_product_unit_price;
+                                                    $totalqty = $item->total_product_qty;
+                                                    $unitprice = $totalprice / $totalqty;
+                                                    @endphp
+                                                    @endif 
+                                    
+                                                    <div class="card-product-price card-text text-center fw-bold">
+                                                        <h5>বর্তমান মূুল্য {{ salesPrice($item) ?? '0.0'}} /=
+                                                            @if($item->product_discount)
+                                                            <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
+                                                            @endif
+                                                        </h5>
+                                                    </div>
+                                                    <div class="card-product-button d-flex justify-content-evenly">
+                                                        <button type="button" data-productid="{{ $item->id }}" class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}"> {!! !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span> <i class=\'fa fa-circle-check\'></i> অলরেডি যুক্ত আছে</span>' !!}</button>
+                                                        <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @empty 
+                                        <div class="alert alert-danger w-100 py-4">
+                                            <h5>Your Wish List is Empty!</h5>
+                                        </div>
+                                        @endforelse
+                                          
+                                        @else 
+                                        <div class="alert alert-danger w-100 py-4">
+                                            <h5>Your Wish List is Empty!</h5>
+                                        </div>
+
+                                        @endisset
+                                    
+                                    </div>
+                                    </div>
+                                </div>
     
                                 <div class="tab-pane fade" id="v-pills-editprofile" role="tabpanel"
                                     aria-labelledby="v-pills-editprofile-tab">
     
                                     <div class="account-info">
-                                        <h2 class="mb-3"> ইডিট প্রফাইল </h2>
+                                        <h2 class="mb-3"> প্রোফাইল আপডেট করুন </h2>
                                         <div class="row">
     
                                             <div class="col-md-12 px-2 mb-3 d-flex align-items-center">
@@ -366,8 +429,10 @@
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control border"
-                                                        placeholder="আপনার নাম লিখুন" value="{{ $authUser->name ?? 'N/A' }}" name="full_name">
+                                                        placeholder="আপনার নাম লিখুন" data-required value="{{ $authUser->name ?? 'N/A' }}" name="full_name">
                                                 </div>
+
+                                                <div class="v-msg text-danger"></div>
                                             </div>
                                             
                                             <div class="col-md-6 px-2 mb-3">
@@ -380,9 +445,11 @@
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
                                                     <input type="email" class="form-control border"
+                                                        data-required
                                                         value="{{ $authUser->email ?? 'N/A' }}"
                                                         placeholder="আপনার ইমেইল লিখুন" name="email">
                                                 </div>
+                                                <div class="v-msg text-danger"></div>
                                             </div>
     
     
@@ -392,12 +459,13 @@
                                                         value="{{ $hasProfile ? $authUser->profile->mobile_no : 'N/A' }}"
                                                         placeholder="আপনার মোবাইল নাম্বার লিখুন" name="mobile_no">
                                                 </div>
+                                                <div class="v-msg text-danger"></div>
                                             </div>
     
     
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
-                                                    <select class="form-select form-control border">
+                                                    <select class="form-select form-control border" id="gender">
                                                         @php
                                                             $selectedDefault = "selected";
                                                             $address = null;
@@ -407,37 +475,39 @@
                                                             }
 
                                                         @endphp
-                                                        <option value="" {{ $selectedDefault }}> সিলেক্ট ইউর জেন্ডার </option>
+                                                        <option value="" {{ $selectedDefault }}> জেন্ডার সিলেক্ট করুন</option>
                                                         <option value="1" {{ $hasProfile && $authUser->profile->gender == 1 ? 'selected':'' }}> পুরুষ </option>
                                                         <option value="2" {{ $hasProfile && $authUser->profile->gender == 2 ? 'selected':'' }}> মহিলা </option>
                                                         <option value="3" {{ $hasProfile && $authUser->profile->gender == 3 ? 'selected':'' }}> অন্যান্য </option>
                                                     </select>
                                                 </div>
+
+                                                <div class="v-msg text-danger"></div>
                                             </div>
     
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
-                                                    <select class="form-select form-control border">
-                                                        <option selected> সিলেক্ট ইউর জেলা </option>
+                                                    <select class="form-select form-control border" id="district">
+                                                        <option selected> জেলা সিলেক্ট করুন </option>
                                                         <option value="2"> ঢাকা </option>
                                                         <option value="1"> রাজশাহী </option>
                                                         <option value="3"> বরিশাল </option>
                                                     </select>
                                                 </div>
+
+                                                <div class="v-msg text-danger"></div>
                                             </div>
     
                                             <div class="col-md-12 px-2 mb-3">
                                                 <div class="form-group">
-                                                    <textarea name="address" id="" style="resize:vertical" cols="5" rows="5"
+                                                    <textarea name="address" id="address" style="resize:vertical" cols="5" rows="5"
                                                         class=" border form-control"
                                                         placeholder="আপনার এড্রেস লিখুন !">{{ $address ?? '' }}</textarea>
                                                 </div>
                                             </div>
     
                                             <div class="col-md-4 mb-3">
-                                                <button
-                                                    class=" updatebtn btn btn-sm btn-danger text-white text-center px-5">
-                                                    আপডেট </button>
+                                                <button class="updatebtn btn btn-sm btn-danger text-white text-center px-5"> আপডেট </button>
                                             </div>
     
                                         </div>
@@ -479,4 +549,107 @@
 
 @push('css')
 <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/user_dashboard.css') }}">
+@endpush
+
+@push('js')
+    <script>
+        $(document).ready(function(){
+            $(document).on('change','#profileImageUploader', readFile)
+            $(document).on('click','.updatebtn', updateProfile)
+        })
+
+
+    function readFile() 
+    {
+        if (this.files && this.files[0]) 
+        {
+            let FR = new FileReader();
+            FR.addEventListener("load", function(e) {
+                $(document).find('#v-pills-editprofile .profile-img img').attr('src', e.target.result);
+            }); 
+            
+            FR.readAsDataURL( this.files[0] );
+        }
+    }
+
+
+    function updateAllProfileImages(){
+
+        let currentSrc = $(document).find('#v-pills-editprofile .profile-img img').attr('src');
+        $('.sidebar__info--thumbnail img').attr('src',currentSrc);
+        $('.top-header img').attr('src',currentSrc);
+    }
+
+
+    function updateProfile(){
+        // validation check
+        if(!checkRequired()) return false;
+
+
+        // send Request to DB
+        let data = userObject();
+
+        // update profile 
+
+        updateAllProfileImages()
+
+    }
+
+
+    function checkRequired(){
+        let 
+        isvalid= true,
+        fields = $(document).find(`[data-required]`);
+
+        [...fields].forEach(elem =>{
+            const element = $(elem);
+            const valueOfField = element.val().trim();
+            const nameAttr = element?.attr('name');
+            const type = element?.attr('type');
+
+            element.parent().parent().find('.v-msg').text(``);
+
+            if(!valueOfField){
+               element.parent().parent().find('.v-msg').text(`${capitalize(nameAttr)} is Required`)
+               isvalid = false;
+            }
+
+            if(valueOfField && type == "email" && !validateEmail(valueOfField)){
+                element.parent().parent().find('.v-msg').text(`Please Write a valid Email!`)
+            }
+        });
+
+        return isvalid;
+    }
+
+
+    
+function capitalize(str=""){
+    return str.replace('_', ' ').split(' ').map(x => {
+        return (x.charAt(0).toUpperCase() + x.substr(1, x.length))
+    }).join(' ')
+}
+
+
+
+const validateEmail = (email) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+};
+
+
+    function userObject(){
+        return {
+            full_name    : $('input[name="full_name"]').val().trim(),
+            username     : $('input[name="username"]').val().trim(),
+            email        : $('input[name="email"]').val().trim(),
+            mobile_no    : $('input[name="mobile_no"]').val().trim(),
+            gender       : $('#gender').val().trim(),
+            district     : $('#district').val().trim(),
+            address      : $('#address').val().trim(),
+            photo        : $(document).find('#v-pills-editprofile .profile-img img')?.attr("src") ?? null
+        };
+    }
+    </script>
 @endpush

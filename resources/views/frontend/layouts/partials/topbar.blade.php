@@ -19,7 +19,9 @@
                     @php
                         $path = auth()->user()->profile ? auth()->user()->profile->photo : null;
                     @endphp
+                    <a class="text-decoration-none text-dark" href="{{ route('dashboard.index') }}">
                       {!! profilePhoto($path,['class' => 'img-fluid rounded-circle', 'width' => '30px', 'draggable' => 'false'] ) !!}
+                    </a>
                 </div>
                 <h6><a class="text-decoration-none text-dark" href="{{ route('dashboard.index') }}">{{ auth()->user()->name ?? 'N/A' }}</a></h6>
                 @endguest

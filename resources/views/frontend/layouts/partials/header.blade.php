@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="cart-icon">
-                    <a href="{{ route('cart_index') }}"> <i class="fas fa-cart-shopping"></i><span class="cartvalue"> 0 </span></a>
+                    <a href="{{ route('cart_index') }}"> <i class="fas fa-cart-shopping"></i><span class="cartvalue"> {{ isset($productIds) && is_array($productIds) ? count($productIds) : 0 }} </span></a>
                 </div>
 
             </div>

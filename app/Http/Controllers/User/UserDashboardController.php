@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 class UserDashboardController extends Controller
 {
@@ -14,7 +16,16 @@ class UserDashboardController extends Controller
      */
     public function index()
     {
-        return view('frontend.dashboard');
+        $wishListProducts = null;
+        $wishLists = Cookie::get('wishLists'. auth()->user()->id ?? null);
+        if (!is_null($wishLists)) {
+            $wishLists      = unserialize($wishLists);
+            $uniqueProducts = array_unique($wishLists);
+            $wishListProducts= Product::whereIn('id', $uniqueProducts)->get();
+
+        }
+
+        return view('frontend.dashboard', compact('wishListProducts'));
     }
 
     /**

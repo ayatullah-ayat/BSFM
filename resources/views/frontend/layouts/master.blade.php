@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title','Micro Media')</title>
 
@@ -161,11 +162,15 @@
 <script src="{{ asset('frontend/libs/fontawesome6/all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>
 <script src="{{ asset('assets/backend/js/config.js') }}"></script>
+<script src="{{ asset('assets/common_assets/js/cart.js') }}"></script>
+<script src="{{ asset('assets/common_assets/js/wish.js') }}"></script>
 
 <script>
     $(document).ready(function(){
         $(document).on('click','.ordertraking > a', openTrackModal)
         $(document).on('change','.order-track-input', callToTrack)
+
+        activeNavMenu()
     })
 
 

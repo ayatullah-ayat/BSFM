@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
@@ -14,7 +16,16 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.cart');
+        $cartProducts=null;
+        $productIds = Cookie::get('productIds');
+        if (!is_null($productIds)) {
+            $productIds     = unserialize($productIds);
+            $uniqueProducts = array_unique($productIds);
+            $cartProducts   = Product::whereIn('id', $uniqueProducts)->get();
+            // dd($cartProducts);
+        }
+
+        return view('frontend.pages.cart', compact('cartProducts'));
     }
 
     /**
@@ -22,9 +33,12 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function updateCartProductQty(Request $request)
     {
-        //
+        //cartQtys
+        $cartQtys = $request->cartQtys;
+        Cookie::queue('cartQtys', serialize($cartQtys), 3600 * 10);
+
     }
 
     /**
@@ -33,10 +47,59 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function addToCart(Request $request)
     {
-        //
+
+        // $tracker = Tracker::hit($request->productId);
+
+        $productIds = Cookie::get('productIds');
+
+        if (!is_null($productIds)) {
+            $productIds = unserialize($productIds);
+        }
+
+        if (is_array($productIds) && (count($productIds) > 0)) {
+
+            if(!in_array($request->productId, $productIds)){
+                array_push($productIds, $request->productId);
+            }
+
+            $data = serialize($productIds);
+        } else {
+            $data = serialize([$request->productId]);
+        }
+
+        Cookie::queue('productIds', $data, 3600 * 10);
+
+        return response()->json($productIds);
+
     }
+
+
+
+    public function removeFromCart(Request $request)
+    {
+
+        $productIds = Cookie::get('productIds');
+        $data = [];
+        if (!is_null($productIds)) {
+            $productIds = unserialize($productIds);
+            if (($key = array_search($request->productId, $productIds)) !== false) {
+                unset($productIds[$key]);
+            }
+            $data = serialize($productIds);
+        }
+
+
+        Cookie::queue(Cookie::forget('productIds'));
+
+        Cookie::queue('productIds', $data, 3600 * 10);
+
+        return response()->json($productIds);
+    }
+
+
 
     /**
      * Display the specified resource.
@@ -71,6 +134,8 @@ class CartController extends Controller
     {
         //
     }
+
+    
 
     /**
      * Remove the specified resource from storage.

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 class ShopController extends Controller
 {
@@ -14,7 +16,11 @@ class ShopController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.shop');
+        $products = Product::orderByDesc('id')->get();
+
+        // Cookie::queue(Cookie::forget('productIds'));
+
+        return view('frontend.pages.shop', compact('products'));
     }
     
     /**
@@ -44,9 +50,9 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug=null)
+    public function show(Product $product, $slug=null)
     {
-        return view('frontend.pages.product_detail');
+        return view('frontend.pages.product_detail', compact('product'));
     }
 
     /**

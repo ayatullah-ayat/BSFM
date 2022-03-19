@@ -841,3 +841,9 @@ footer {
 }
 
 /* -------------------- order track -------------------  */
+
+
+.top-header img{
+    width: 30px;
+    aspect-ratio: 1 !important;
+}

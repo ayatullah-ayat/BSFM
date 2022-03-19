@@ -43,11 +43,11 @@ class ContactController extends Controller
             $data  = $request->all();
             $tax   = Contact::create($data);
             if(!$tax)
-                throw new Exception("Unable to sent contact!", 403);
+                throw new Exception("Unable to make request!", 403);
 
             return response()->json([
                 'success'   => true,
-                'msg'       => 'Contact Successfully!',
+                'msg'       => 'Request sent Successfully!',
                 'data'      => $tax
             ]);
                 

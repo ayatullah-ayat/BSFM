@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 class OrderController extends Controller
 {
@@ -12,9 +14,19 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Product $product)
     {
-        return view('frontend.pages.checkout');
+
+        $cartProducts = null;
+        $productIds = Cookie::get('productIds');
+        if (!is_null($productIds)) {
+            $productIds     = unserialize($productIds);
+            $uniqueProducts = array_unique($productIds);
+            $cartProducts   = Product::whereIn('id', $uniqueProducts)->get();
+            // dd($cartProducts);
+        }
+
+        return view('frontend.pages.checkout', compact('product', 'cartProducts'));
         //checkout
     }
 

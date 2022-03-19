@@ -363,9 +363,15 @@
     color: #DC0029 !important;
 }
 
+.card-wishlist.removeFromWish i {
+    color: #B6DC00 !important;
+}
+
 .__product-card .card-body {
     width: 100%;
     margin-top: 8px;
+    display: grid;
+    align-content: flex-end;
 }
 
 .__product-card img {

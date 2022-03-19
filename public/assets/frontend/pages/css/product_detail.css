@@ -96,6 +96,12 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: block !important;
+    color: #fff;
+}
+
+.color.selected.black svg,
+.color.selected.black i {
+    color: #000 !important;
 }
 
 .size {
@@ -300,6 +306,8 @@
 .__product-card .card-body {
     width: 100%;
     margin-top: 8px;
+    display: grid;
+    align-content: flex-end;
 }
 
 .__product-card img {
@@ -335,6 +343,12 @@
 
 .card-wishlist i {
     color: #DC0029 !important;
+}
+
+
+.card-wishlist.removeFromWish i,
+.removeFromWish span {
+    color: #B6DC00 !important;
 }
 
 

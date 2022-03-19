@@ -179,3 +179,34 @@ function fileToUpload(selector = '#img-preview', defaultSrc=false) {
     const file    = $(document).find(selector).attr('src');
     return pattern.test(file) ? file : null;
 }
+
+
+
+function capitalize(str=""){
+    return str.replace('_', ' ').split(' ').map(x => {
+        return (x.charAt(0).toUpperCase() + x.substr(1, x.length))
+    }).join(' ')
+}
+
+
+
+function activeNavMenu(){
+
+    let isActive = false;
+    const navBarParent = $(document).find('#navbarSupportedContent');
+    const navItems = navBarParent.find('.nav-item');
+    navItems.removeClass('active');
+
+    [...navItems].forEach(item => {
+
+        if ($(item).find('.nav-link').attr('href') == (window.location.href)){
+            $(item).addClass('active');
+            isActive = true;
+        }
+    })
+
+
+    if (!isActive){
+        navBarParent.find('.nav-item:nth-child(1)').addClass('active');
+    }
+}

@@ -14,24 +14,25 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\VariantController;
+use App\Http\Controllers\User\WishListController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\WebFooterController;
 
 
 
 // ------------ Frontend namespace ----------------------
 
 
+use App\Http\Controllers\Admin\WebFooterController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
-use App\Http\Controllers\Admin\SubcategoryController;
 
+use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
@@ -55,15 +56,22 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 
 Route::group(['prefix' => ''],function(){
     // --------------------------- General Route goes Here ---------------------------------
-    Route::get('/home',         [HomeController::class, 'index'])->name('home_index');
-    Route::get('/shop',         [ShopController::class, 'index'])->name('shop_index');
-    Route::get('/shop/{slug}',  [ShopController::class, 'show'])->name('product_detail');
-    Route::get('/cart',         [CartController::class, 'index'])->name('cart_index');
-    Route::get('/checkout',     [CustomerOrderController::class, 'index'])->name('checkout_index');
-    Route::get('/contact',      [CustomerContactController::class, 'index'])->name('contact_index');
-    Route::post('/',            [CustomerContactController::class, 'store'])->name('contact_store');
-    Route::get('/about-us',     [AboutController::class, 'index'])->name('about_index');
-    Route::get('/gallery',      [CustomerGalleryController::class, 'index'])->name('gallery_index');
+    Route::get('/home',                     [HomeController::class, 'index'])->name('home_index');
+    Route::get('/shop',                     [ShopController::class, 'index'])->name('shop_index');
+    Route::get('/shop/{product}/{slug?}',   [ShopController::class, 'show'])->name('product_detail');
+    Route::get('/checkout/{product?}',      [CustomerOrderController::class, 'index'])->name('checkout_index');
+    Route::get('/contact',                  [CustomerContactController::class, 'index'])->name('contact_index');
+    Route::post('/',                        [CustomerContactController::class, 'store'])->name('contact_store');
+    Route::get('/about-us',                 [AboutController::class, 'index'])->name('about_index');
+    Route::get('/gallery',                  [CustomerGalleryController::class, 'index'])->name('gallery_index');
+
+    Route::get('/cart',                     [CartController::class, 'index'])->name('cart_index');
+    Route::post('/add-to-cart',             [CartController::class, 'addToCart'])->name('add_to_cart');
+    Route::post('/remove-from-cart',        [CartController::class, 'removeFromCart'])->name('removeFromCart');
+    Route::post('/update-cart-qty',         [CartController::class, 'updateCartProductQty'])->name('updateCartProductQty');
+    
+    Route::post('/add-to-wish',             [WishListController::class, 'addToWish'])->name('addToWish');
+    Route::post('/remove-from-wish',        [WishListController::class, 'removeFromWish'])->name('removeFromWish');
     
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
