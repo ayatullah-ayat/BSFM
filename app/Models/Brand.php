@@ -12,7 +12,8 @@ class Brand extends Model
     
     public function products()
     {
-        return $this->hasMany(Product::class);
+        // return $this->hasMany(Product::class, 'brand_id');
+        return $this->belongsToMany(Product::class, 'product_brand')->withPivot('brand_name');
     }
 
 }

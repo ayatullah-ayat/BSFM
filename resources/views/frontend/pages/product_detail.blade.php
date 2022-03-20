@@ -14,6 +14,10 @@
                             <!-- Images -->
                             <div class="exzoom_img_box">
                                 <ul class='exzoom_img_ul'>
+                                    @if(isset($product->product_thumbnail_image))
+                                        <li><img src="{{ asset($product->product_thumbnail_image )}}" /></li>
+                                    @endif
+
                                     @isset($product->productImages)
                                         @foreach ($product->productImages as $item)
                                             <li><img src="{{ asset($item->product_image )}}" /></li>
@@ -285,7 +289,7 @@
     </section>
     
     <!-- Related Product Area-->
-    @includeIf('frontend.layouts.partials.other_product', ['product' => null])
+    @includeIf('frontend.layouts.partials.other_product', ['products' => $otherProducts ?? null ])
     
     <!-- Our Contact Area-->
     <section class="container-fluid call-center-area">

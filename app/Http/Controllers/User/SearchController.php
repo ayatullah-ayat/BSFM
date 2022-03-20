@@ -5,10 +5,12 @@ namespace App\Http\Controllers\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cookie;
+use App\Http\Services\ProductSearch;
+use App\Models\Custom\CustomServiceProduct;
 
-class ShopController extends Controller
+class SearchController extends Controller
 {
+    use ProductSearch;
     /**
      * Display a listing of the resource.
      *
@@ -16,16 +18,25 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('id')
-                    ->where('is_active', 1)
-                    ->where('is_publish', 1)
-                    ->get();
+        $query      = request('key');
+        $totalItems = 0;
+        $products   = $this->ecommerceProduct($query);
 
-        // Cookie::queue(Cookie::forget('productIds'));
+        if(count($products)){
+            $totalItems += count($products);
+        }
 
-        return view('frontend.pages.shop', compact('products'));
+        $customProducts   = $this->customizeProduct($query);
+
+        if (count($customProducts)) {
+            $totalItems += count($customProducts);
+        }
+
+        // dd($totalItems);
+
+        return view('frontend.pages.search_result', compact('products', 'customProducts', 'totalItems', 'query'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +46,7 @@ class ShopController extends Controller
     {
         //
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,26 +57,16 @@ class ShopController extends Controller
     {
         //
     }
-    
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product, $slug=null)
+    public function show($id)
     {
-
-        if(!$product) abort(404, "Product Not Found!");
-
-        $otherProducts = Product::where('category_id', $product->category_id)
-                        ->where('id','!=', $product->id)
-                        ->where('is_active', 1)
-                        ->where('is_publish', 1)
-                        ->get();
-
-
-        return view('frontend.pages.product_detail', compact('product', 'otherProducts'));
+        //
     }
 
     /**
@@ -101,4 +102,20 @@ class ShopController extends Controller
     {
         //
     }
+
+
+
+    public function searchProduct(Request $request)
+    {
+        if ($request->ajax()) {
+            $query          = $request->get('query');
+            $products       = $this->ecommerceProduct($query);
+            $customProducts = $this->customizeProduct($query);
+
+            $data = view('frontend.layouts.partials.search_list', compact('products', 'customProducts', 'query'))->render();
+            return response()->json($data);
+        }
+    }
+
+
 }

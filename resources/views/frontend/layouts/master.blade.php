@@ -164,6 +164,7 @@
 <script src="{{ asset('assets/backend/js/config.js') }}"></script>
 <script src="{{ asset('assets/common_assets/js/cart.js') }}"></script>
 <script src="{{ asset('assets/common_assets/js/wish.js') }}"></script>
+<script src="{{ asset('assets/common_assets/js/search.js') }}"></script>
 
 <script>
     $(document).ready(function(){

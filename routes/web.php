@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\User\AboutController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\User\SearchController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -20,18 +21,18 @@ use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
-use App\Http\Controllers\Admin\DashboardController;
 
 
 
 // ------------ Frontend namespace ----------------------
 
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\SmsSettignsController;
-use App\Http\Controllers\Admin\StockReportController;
 
+use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\User\UserDashboardController;
@@ -72,6 +73,10 @@ Route::group(['prefix' => ''],function(){
     
     Route::post('/add-to-wish',             [WishListController::class, 'addToWish'])->name('addToWish');
     Route::post('/remove-from-wish',        [WishListController::class, 'removeFromWish'])->name('removeFromWish');
+
+
+    Route::get('/search',                   [SearchController::class, 'index'])->name('searchResult');
+    Route::post('/search-products',         [SearchController::class, 'searchProduct'])->name('searchProduct');
     
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){

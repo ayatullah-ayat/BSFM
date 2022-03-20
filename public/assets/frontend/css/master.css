@@ -843,7 +843,54 @@ footer {
 /* -------------------- order track -------------------  */
 
 
-.top-header img{
+.top-header img {
     width: 30px;
     aspect-ratio: 1 !important;
+}
+
+#my-list {
+    position: absolute !important;
+    top: 31px;
+    left: 0px;
+    height: 300px;
+}
+
+#my-list a {
+    text-decoration: none !important;
+    color: #000;
+}
+
+#my-list li,
+#my-list li:hover a,
+#my-list li a,
+#my-list li a:hover {
+    border: none !important;
+}
+
+
+#my-list .dropdown-menu {
+    display: block;
+    min-width: 260px;
+    max-width: 300px;
+    min-height: max-content;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+
+#my-list .dropdown-menu li {
+    margin-bottom: 10px !important;
+    padding-left: 5px !important;
+}
+
+
+#my-list .dropdown-menu li img {
+    height: 40px;
+    aspect-ratio: 1/1 !important;
+    display: inline;
+    margin: 4px;
+}
+
+#my-list .dropdown-menu li .content-search {
+    line-height: 0 !important;
 }

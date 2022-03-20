@@ -9,4 +9,10 @@ class ProductTag extends Model
 {
     public $timestamps = false;
     protected $guarded = ['id'];
+
+
+    public function product(){
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
 }

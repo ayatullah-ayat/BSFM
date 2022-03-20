@@ -37,12 +37,13 @@
                     </li>
                 </ul>
 
-                <form class="d-flex justify-content-lg-end justify-content-start">
+                <form action="{{ route('searchResult') }}" autocomplete="off" class="d-flex justify-content-lg-end justify-content-start" style="position: relative !important;">
                     <div class="input-group border rounded">
-                        <input class="form-control" type="search" placeholder=" অনুসন্ধান করুন " aria-label="Search">
+                        <input class="form-control search-product" name="key" type="search" placeholder=" অনুসন্ধান করুন " aria-label="Search">
                         <button class="btn d-flex justify-content-center" type="submit"><i
                                 class="fas fa-search"></i></button>
                     </div>
+                    <div id="my-list"></div>
                 </form>
 
                 <div class="ordertraking">

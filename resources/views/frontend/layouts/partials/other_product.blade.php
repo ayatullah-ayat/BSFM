@@ -5,149 +5,73 @@
         </div>
         <div class="row">
             <div class="col-md-12">
+
+                @if(isset($products) && count($products))
                 <div class="product-slider">
                     <div class="slider" data-slick='{"slidesToShow": 5, "slidesToScroll": 5}'>
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" data-auth="{{ auth()->user()->id ?? null }}"
-                                    type="button"> <i class="fa-solid fa-heart"></i></div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @foreach($products as $product)
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" type="button"> <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            @if ( $item->total_product_unit_price && $item->total_product_qty )
+                                @php
+                                $totalprice = $item->total_product_unit_price;
+                                $totalqty   = $item->total_product_qty;
+                                $unitprice  = $totalprice / $totalqty ?? 0.0;
+                                @endphp
+                            @endif
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" type="button"> <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            <div class="col-md-3 px-2">
+                                <div class="card __product-card">
+                                    <div class="card-wishlist {{ in_array($product->id,$wishLists) ? 'removeFromWish' : 'addToWish' }}" 
+                                        data-auth="{{ auth()->user()->id ?? null }}"
+                                        data-productid="{{ $product->id }}" style="z-index: 100;"
+                                        type="button"> <i class="fa-solid fa-heart"></i></div>
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" type="button"> <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        <a href="{{ route('product_detail',$product->id ) }}">
+                                            <img draggable="false" src="{{asset( $product->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                                        </a>
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" type="button"> <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    <div class="card-body p-0">
+                                        <div class="card-product-title card-title text-center fw-bold">
+                                            <a href="{{ route('product_detail',$product->id ) }}" class="text-decoration-none text-dark">
+                                                <h5>{{ $product->product_name }}</h5>
+                                            </a>
+                                        </div>
 
-                        <div class="col-md-3 px-2">
-                            <div class="card __product-card">
-                                <div class="card-wishlist addToWish" type="button"> <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <img src="{{asset('assets/frontend/img/slider/slider-5.png')}}" class="card-img-top"
-                                    alt="...">
-                                <div class="card-body p-0">
-                                    <div class="card-product-title card-title text-center fw-bold">
-                                        <h5>টি-শার্ট</h5>
-                                    </div>
-                                    <div class="card-product-price card-text text-center fw-bold">
-                                        <h5>বর্তমান মূুল্য- ২২০/= <span
-                                                class="text-decoration-line-through text-danger"> ২৫০/= </span></h5>
-                                    </div>
-                                    <div class="card-product-button d-flex justify-content-evenly">
-                                        <button type="button" class="btn btn-sm btn-secondary btn-card">কার্ডে যুক্ত
-                                            করুন</button>
-                                        <button type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </button>
+                                        <div class="card-product-price card-text text-center fw-bold">
+                                            <h5>বর্তমান মূুল্য {{ salesPrice($product) ?? '0.0'}} /=
+                                                @if($product->product_discount)
+                                                <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
+                                                @endif
+                                            </h5>
+                                        </div>
+
+                                        <div class="card-product-button d-flex justify-content-evenly">
+                                            @if($product->total_stock_qty > 0)
+                                            <button type="button" data-productid="{{ $product->id }}"
+                                                class="btn btn-sm btn-secondary btn-card {{ !in_array($product->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}">
+                                                {!! !in_array($product->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span> <i class=\'fa fa-circle-check\'></i>
+                                                    অলরেডি যুক্ত আছে</span>' !!}</button>
+                                            <a href="{{ route('checkout_index',$product->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </a>
+                                            @else
+                                            <span class="text-danger">Out of Stock</span>
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                        @endforeach
 
                     </div>
                 </div>
+                @else 
+                <div class="alert alert-danger text-center">
+                    <h5>No Product Found!</h5>
+                </div>
+                @endif 
+
             </div>
         </div>
     </div>
