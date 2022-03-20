@@ -126,9 +126,10 @@
                                                         }
                                         
                                                     @endphp
+                                                    {{-- @dd($authUser) --}}
                                                     <ul>
                                                         <li><span class="text-danger fw-bold"> নামঃ </span> {{ $authUser->name ?? 'N/A' }} </li>
-                                                        <li><span class="text-danger fw-bold"> ইউজার নামঃ </span> {{ $authUser->name ?? 'N/A' }}</li>
+                                                        <li><span class="text-danger fw-bold"> ইউজার নামঃ </span> {{ $authUser->username ?? 'N/A' }}</li>
                                                         <li><span class="text-danger fw-bold"> ইমেইলঃ </span> {{ $authUser->email ?? 'N/A' }} </li>
                                                         <li><span class="text-danger fw-bold"> মোবাইলঃ </span> {{ $hasProfile ? $authUser->profile->mobile_no : 'N/A' }}</li>
                                                         <li><span class="text-danger fw-bold"> লিঙ্গঃ </span>{{ $gender ?? 'N/A' }} </li>
@@ -429,7 +430,7 @@
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control border"
-                                                        placeholder="আপনার নাম লিখুন" data-required value="{{ $authUser->name ?? 'N/A' }}" name="full_name">
+                                                        placeholder="আপনার নাম লিখুন" data-required value="{{ $authUser->name ?? 'N/A' }}" name="name">
                                                 </div>
 
                                                 <div class="v-msg text-danger"></div>
@@ -447,7 +448,8 @@
                                                     <input type="email" class="form-control border"
                                                         data-required
                                                         value="{{ $authUser->email ?? 'N/A' }}"
-                                                        placeholder="আপনার ইমেইল লিখুন" name="email">
+                                                        placeholder="আপনার ইমেইল লিখুন" name="email"
+                                                        readonly>
                                                 </div>
                                                 <div class="v-msg text-danger"></div>
                                             </div>
@@ -519,7 +521,28 @@
                                     aria-labelledby="v-pills-resetpass-tab">
                                     <div class="account-info">
                                         <h2> রিসেট পাসওয়ার্ড </h2>
+
+                                      <form id="passwordResetForm" method="POST" action="{{ route('dashboard.reset_password', auth()->user()->id ?? null )}}" autocomplete="off" autofill="off" autosave="off">
+                                        <div class="col-md-6 px-2 mb-3">
+                                            <div class="form-group">
+                                                <input type="password" class="form-control border" placeholder="পুরাতন পাসওয়ার্ড" name="old_password" id="old_password">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 px-2 mb-3">
+                                            <div class="form-group">
+                                                <input type="password" class="form-control border" placeholder="নতুন পাসওয়ার্ড" name="new_password" id="new_password">
+                                            </div>
+
+                                            <div class="my-3">
+                                                <button class="resetBtn btn btn-sm btn-danger text-white text-center px-5"> রিসেট পাসওয়ার্ড </button>
+                                                {{-- <a href="{{ route('password.request')}}" class="resetBtn btn btn-sm btn-dark text-white text-center px-5"> পাসওয়ার্ড ভুলে গেছেন </a> --}}
+                                            </div>
+                                        </div>
+                                      </form>
+    
                                     </div>
+
                                 </div>
     
                             </div>
@@ -553,9 +576,11 @@
 
 @push('js')
     <script>
+
         $(document).ready(function(){
             $(document).on('change','#profileImageUploader', readFile)
             $(document).on('click','.updatebtn', updateProfile)
+            $(document).on('submit','#passwordResetForm', resetPassword)
         })
 
 
@@ -572,7 +597,6 @@
         }
     }
 
-
     function updateAllProfileImages(){
 
         let currentSrc = $(document).find('#v-pills-editprofile .profile-img img').attr('src');
@@ -585,16 +609,26 @@
         // validation check
         if(!checkRequired()) return false;
 
+        // profile update ajax request
+        ajaxFormToken();
+
+        let id  = `{{ auth()->user()->id }}`;
+        let obj = {
+            url     : `{{ route('dashboard.update_profile', '') }}/${id}`, 
+            method  : "PUT",
+            data    : userObject(),
+        };
+
+        ajaxRequest(obj, { reload: true, timer: 2000 })
 
         // send Request to DB
-        let data = userObject();
+        // let data = userObject();
 
         // update profile 
 
         updateAllProfileImages()
 
     }
-
 
     function checkRequired(){
         let 
@@ -622,26 +656,21 @@
         return isvalid;
     }
 
+    function capitalize(str=""){
+        return str.replace('_', ' ').split(' ').map(x => {
+            return (x.charAt(0).toUpperCase() + x.substr(1, x.length))
+        }).join(' ')
+    }
 
-    
-function capitalize(str=""){
-    return str.replace('_', ' ').split(' ').map(x => {
-        return (x.charAt(0).toUpperCase() + x.substr(1, x.length))
-    }).join(' ')
-}
-
-
-
-const validateEmail = (email) => {
-  return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-};
-
+    const validateEmail = (email) => {
+        return email.match(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
 
     function userObject(){
         return {
-            full_name    : $('input[name="full_name"]').val().trim(),
+            name         : $('input[name="name"]').val().trim(),
             username     : $('input[name="username"]').val().trim(),
             email        : $('input[name="email"]').val().trim(),
             mobile_no    : $('input[name="mobile_no"]').val().trim(),
@@ -651,5 +680,26 @@ const validateEmail = (email) => {
             photo        : $(document).find('#v-pills-editprofile .profile-img img')?.attr("src") ?? null
         };
     }
+
+
+    function resetPassword(e){
+        e.preventDefault();
+        let 
+        form = $(this),
+        data = form.serialize();
+        ajaxFormToken();
+
+        let obj = {
+            url     : form.attr('action'), 
+            method  : "PUT",
+            data,
+        };
+
+        ajaxRequest(obj, { reload: false, timer: 2000 })
+
+        console.log(data);
+
+    }
+
     </script>
 @endpush

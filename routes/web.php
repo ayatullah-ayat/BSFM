@@ -46,6 +46,9 @@ use App\Http\Controllers\User\OrderController as CustomerOrderController;
 use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\ReviewController;
+
 // ------------ Frontend namespace ----------------------
 
 Route::redirect('/', '/home', 301);
@@ -72,7 +75,7 @@ Route::group(['prefix' => ''],function(){
     
     Route::post('/add-to-wish',             [WishListController::class, 'addToWish'])->name('addToWish');
     Route::post('/remove-from-wish',        [WishListController::class, 'removeFromWish'])->name('removeFromWish');
-    
+    Route::post('/{product}',               [ReviewController::class, 'update'])->name('create_review');
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
         Route::get('/{category_id}',[HomeController::class, 'getProduct'])->name('getCustomizeProduct');
@@ -83,6 +86,8 @@ Route::group(['prefix' => ''],function(){
     // --------------------------- Auth Route goes here ---------------------------------
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.','middleware'=>['auth:web', 'PreventBackHistory']], function () {
         Route::get('/', [UserDashboardController::class, 'index'])->name('index');
+        Route::put('/{user}', [ProfileController::class, 'update'])->name('update_profile');
+        Route::put('/{user}/reset', [ProfileController::class, 'passwordreset'])->name('reset_password');
     });
 
 });
