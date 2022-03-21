@@ -170,6 +170,7 @@
     $(document).ready(function(){
         $(document).on('click','.ordertraking > a', openTrackModal)
         $(document).on('change','.order-track-input', callToTrack)
+        $(document).on('click','.loadMoreBtn', loadMoreItems)
 
         activeNavMenu()
     })

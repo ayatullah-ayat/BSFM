@@ -81,7 +81,8 @@ Route::group(['prefix' => ''],function(){
     Route::get('/search',                   [SearchController::class, 'index'])->name('searchResult');
     Route::post('/search-products',         [SearchController::class, 'searchProduct'])->name('searchProduct');
     
-    Route::post('/{product}',               [ReviewController::class, 'update'])->name('create_review');
+    Route::post('/review/{product}',        [ReviewController::class, 'update'])->name('create_review');
+    Route::get('/review/{product}',         [ReviewController::class, 'show'])->name('show_review');
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
         Route::get('/{category_id}',[HomeController::class, 'getProduct'])->name('getCustomizeProduct');

@@ -108,3 +108,13 @@ if (!function_exists('matchColor')) {
         return preg_match('/white|#f{1,5}/im', $color_name);
     }
 }
+
+
+if (!function_exists('loadMoreButton')) {
+    function loadMoreButton($dataURI=null, $maxId="1", $limit="10", $btnClass="btn btn-dark btn-sm mx-5")
+    {
+        return "
+            <button data-uri=\"{$dataURI}\" class=\"{$btnClass} loadMoreBtn\" data-maxid=\"{$maxId}\" data-limit=\"{$limit}\">Load More</button>
+        ";
+    }
+}

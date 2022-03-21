@@ -217,11 +217,21 @@
                                     <div class="review-container">
 
                                         @if($product && $product->comments)
-                                        @foreach ($product->comments()->latest()->get() as $comment)
+
+                                        @php
+                                            $maxId       = 0;
+                                            $limit       = 10;
+                                            $commentData = $product->comments()->latest()->take($limit)->get();
+                                            $countReviews= $product->comments()->count();
+                                        @endphp
+                                        @foreach ($commentData as $comment)
+                                            @php
+                                                $maxId = $comment->id;
+                                            @endphp
+
                                             @if($comment->commentedBy)
                                             <div class="col tabs-product-comments d-flex">
                                                 
-                                                {{-- @dd($comment->commentedBy->profile) --}}
                                                 <div class="reviw-person">
                                                     @isset($comment->commentedBy->profile)
                                                     <img src="{{asset($comment->commentedBy->profile->photo ?? 'assets/frontend/img/comment/comment.png')}}" alt="reviw person">
@@ -231,8 +241,7 @@
                                                 </div>
 
                                                 <div class="comment-text">
-                                                    <h3> {{ $comment->commentedBy->username ?? $comment->commentedBy->name}} </h3>
-                                                    {{-- @dd($comment->ratting) --}}
+                                                    <h3> {{ $comment->commentedBy->username ?? $comment->commentedBy->name}}</h3>
                                                     <ul class="tabs-product-review mb-2 list-unstyled d-flex">
                                                         @for ($start=0; $start < 5; $start++)
                                                         <li><i class="fa-{{$start<$comment->ratting ? 'solid':'regular'}} fa-star"></i></li>
@@ -245,11 +254,17 @@
                                             </div>
                                             @endif 
                                         @endforeach
+
+                                        <div data-totalcount="{{ $countReviews }}" class="col-md-12 tabs-product-comments loadMoreContainer {{ $countReviews <= $limit ? 'd-none' : '' }} pt-0">
+                                            {{-- {{ $commentData->links() }} --}}
+                                            {!! loadMoreButton( route('show_review', $product->id),$maxId, $limit) !!}
+                                            
+                                        </div>
                                     @endif 
                                     </div>
 
                                     @guest
-                                    <div class="col-md-12 tabs-product-comments my-0" style="margin-left: 4%">
+                                    <div class="col-md-12 tabs-product-comments my-0 mb-5" style="margin-left: 3.6%">
                                         <a href="{{ route('login') }}" class="btn btn-danger btn-sm">Review & comment</a>
                                     </div>
                                     @endguest
@@ -434,7 +449,7 @@
             }
             
             function setStars(max){
-                for (var i=0; i <= max; i++){
+                for (var i=0; i < max; i++){
                    $('.star:eq('+i+')').addClass('fa-solid');
                 }
             }
