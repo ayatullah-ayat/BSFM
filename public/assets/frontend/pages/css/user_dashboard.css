@@ -432,3 +432,7 @@ input, ::placeholder, .form-select, textarea::placeholder {
 .btn-card {
     background: rgba(0, 0, 0, 0.8) !important;
 }
+
+#passwordResetForm .form-control{
+    width: 95% !important;
+}

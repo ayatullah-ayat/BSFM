@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReviewRequest;
 use App\Models\Product;
-use App\Models\Review;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -37,16 +37,16 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-   
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Review  $review
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Review $review)
+    public function show($id)
     {
         //
     }
@@ -54,10 +54,10 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Review  $review
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Review $review)
+    public function edit($id)
     {
         //
     }
@@ -66,24 +66,26 @@ class ReviewController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Review  $review
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ReviewRequest $request, Product $product)
     {
         try {
 
-            $data = $request->all();
-            $product->comments()->create([
+            $data = $request->only('ratting','comment','product_id');
+            $review = $product->comments()->create([
                 'ratting'       => $data['ratting'],
                 'body'          => $data['comment'],
                 'commented_by'  => auth()->guard('web')->user()->id ?? null
             ]);
 
             return response()->json([
-                'success'   => false,
-                'msg'       => 'Review Added Successfully'
+                'success'   => true,
+                'msg'       => 'Review Added Successfully',
+                'data'      => $review->with('product','commentedBy', 'commentedBy.profile')->orderByDesc('reviews.id')->first()
             ]);
+
         } catch (\Exception $th) {
             return response()->json([
                 'success'   => false,
@@ -96,10 +98,10 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Review  $review
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Review $review)
+    public function destroy($id)
     {
         //
     }

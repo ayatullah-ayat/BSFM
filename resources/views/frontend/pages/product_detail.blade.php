@@ -184,8 +184,8 @@
 
                         <ul class="nav nav-tabs" id="nav-tab" role="tablist">
                             <li class=" nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#des"> ডিসক্রিপশন </a></li>
-                            <li class="nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#review"> স্পেসিফিকেশন </a></li>
-                            <li class="nav-item bg-light"> <a class="nav-link active" data-bs-toggle="tab" href="#tag"> রিভিও </a></li>
+                            <li class="nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#specification"> স্পেসিফিকেশন </a></li>
+                            <li class="nav-item bg-light"> <a class="nav-link active" data-bs-toggle="tab" href="#reviews"> রিভিও </a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -200,7 +200,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="review">
+                            <div class="tab-pane" id="specification">
                                 <div class="row border g-0 shadow-sm">
                                     <div class="col p-5 tabs-product-comments">
                                         <p>
@@ -209,54 +209,60 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane active" id="tag">
+                            <div class="tab-pane active" id="reviews">
                                 <div class="border g-0 shadow-sm">
     
-                                    <div class="col tabs-product-comments d-flex">
-    
-                                        <div class="reviw-person">
-                                            <img src="{{asset('assets/frontend/img/comment/comment.png')}}" alt="reviw person">
-                                        </div>
-                                        <div class="comment-text">
-                                            <h3> অমুক রিভিও ভাই </h3>
-                                            <ul class="tabs-product-review mb-2 list-unstyled d-flex">
-                                                <li><i class="fa-solid fa-star"></i></li>
-                                                <li><i class="fa-solid fa-star"></i></li>
-                                                <li><i class="fa-solid fa-star"></i></li>
-                                                <li><i class="fa-solid fa-star-half-stroke"></i></li>
-                                                <li><i class="fa-regular fa-star"></i></li>
-    
-                                            </ul>
-                                            <p>
-                                                আমার বাংলা নিয়ে প্রথম কাজ করবার সুযোগ তৈরি হয়েছিল অভ্র নামক এক যুগান্তকারী
-                                                বাংলা সফ্‌টওয়্যার হাতে পাবার মধ্য দিয়ে।
-                                                এর পর একে একে বাংলা উইকিপিডিয়া, ওয়ার্ডপ্রেস বাংলা কোডেক্সসহ বিভিন্ন বাংলা
-                                                অনলাইন পত্রিকা তৈরির কাজ করতে করতে বাংলার সাথে নিজেকে বেঁধে নিয়েছি
-                                                আষ্টেপৃষ্ঠে।
-                                                বিশেষ করে অনলাইন পত্রিকা তৈরি করতে ডিযাইন করার সময়, সেই ডিযাইনকে কোডে
-                                                রূপান্তর করবার সময় বারবার অনুভব করেছি কিছু নমুনা লেখার।
-                                                যে লেখাগুলো ফটোশপে বসিয়ে বাংলায় ডিযাইন করা যাবে, আবার সেই লেখাই অনলাইনে
-                                                ব্যবহার করা যাবে।
-                                            </p>
-                                        </div>
-    
-                                    </div>
-                                    <div class="col-md-12 tabs-product-comments my-0" style="margin-left: 4%">
-                                        @guest
-                                        <a href="{{ route('login') }}" class="btn btn-danger btn-sm">Review & comment</a>
-                                        @endguest
-                                    </div>
-    
-                                    <div class="col tabs-product-comments d-flex">
-    
-                                        @auth
+                                    {{-- @dd($product->comments()->paginate(5)) --}}
 
-                                        <div class="reviw-person">
-                                            @if(isset(auth()->user()->profile))
-                                            <img src="{{asset('assets/frontend/img/comment/comment.png')}}" alt="reviw person">
-                                            @else 
-                                            <img src="{{asset('assets/frontend/img/comment/comment.png')}}" alt="reviw person">
+                                    <div class="review-container">
+
+                                        @if($product && $product->comments)
+                                        @foreach ($product->comments()->latest()->get() as $comment)
+                                            @if($comment->commentedBy)
+                                            <div class="col tabs-product-comments d-flex">
+                                                
+                                                {{-- @dd($comment->commentedBy->profile) --}}
+                                                <div class="reviw-person">
+                                                    @isset($comment->commentedBy->profile)
+                                                    <img src="{{asset($comment->commentedBy->profile->photo ?? 'assets/frontend/img/comment/comment.png')}}" alt="reviw person">
+                                                    @else 
+                                                    <img src="{{asset('assets/frontend/img/comment/comment.png')}}" alt="reviw person">
+                                                    @endisset
+                                                </div>
+
+                                                <div class="comment-text">
+                                                    <h3> {{ $comment->commentedBy->username ?? $comment->commentedBy->name}} </h3>
+                                                    {{-- @dd($comment->ratting) --}}
+                                                    <ul class="tabs-product-review mb-2 list-unstyled d-flex">
+                                                        @for ($start=0; $start < 5; $start++)
+                                                        <li><i class="fa-{{$start<$comment->ratting ? 'solid':'regular'}} fa-star"></i></li>
+                                                        @endfor 
+                                                    </ul>
+
+                                                    <p>{{ $comment->body ?? 'N/A'}}</p>
+                                                </div>
+            
+                                            </div>
                                             @endif 
+                                        @endforeach
+                                    @endif 
+                                    </div>
+
+                                    @guest
+                                    <div class="col-md-12 tabs-product-comments my-0" style="margin-left: 4%">
+                                        <a href="{{ route('login') }}" class="btn btn-danger btn-sm">Review & comment</a>
+                                    </div>
+                                    @endguest
+    
+                                    @auth
+                                    <div class="col tabs-product-comments d-flex">
+    
+                                        <div class="reviw-person">
+                                            @isset(auth()->user()->profile)
+                                            <img src="{{asset(auth()->user()->profile->photo ?? 'assets/frontend/img/comment/comment.png')}}" style="border: 1px solid rgb(138, 136, 136)" alt="Person">
+                                             @else 
+                                              <img src="{{asset('assets/frontend/img/comment/comment.png')}}" alt="Person">
+                                            @endisset
                                         </div>
     
                                         <div class="comment-text w-100">
@@ -275,8 +281,8 @@
                                             </div>
     
                                         </div>
-                                        @endauth
                                     </div>
+                                    @endauth
     
                                 </div>
                             </div>
@@ -338,7 +344,7 @@
                     let product_id = @json($product->id ?? null)
 
                     saveToDataBase({
-                        rating: ratedIndex,
+                        ratting: ratedIndex,
                         comment,
                         product_id
                     });
@@ -441,20 +447,76 @@
 
 
             function saveToDataBase(obj={}){
-	
+
+                ajaxFormToken();
+
                 $.ajax({
-                    url:"",
+                    url:`{{ route('create_review', '')}}/${obj?.product_id}`,
                     type:"POST",
       	            data: obj,
       	            cache: false,
-      	            success:function(rating){
-                      $('#rating').html(rating);
-                       console.log(rating);
+      	            success:function(res){
+                    //    console.log(res.data );
+
+                       if(res?.success){
+                           localStorage.setItem('ratedIndex', null);
+                           $('.comment-area textarea').val('');
+                           resetStarsColor()
+                           renderReview(res.data)
+                       }
       	            },
       	            error:function(error){
                         console.log(error);
                     }
 	            });
+            }
+
+            function renderReview(data){
+
+
+                // console.log(data);
+                // return false;
+
+                let boxContainer = $('.review-container');
+                let html = ``;
+                if(data){
+                    let profileSrc  = `${data?.commented_by?.profile?.photo ?? 'assets/frontend/img/comment/comment.png'}`;
+                    html = ` <div class="col tabs-product-comments d-flex">
+                                                
+                        <div class="reviw-person">
+                            ${
+                                data?.commented_by?.profile ?  `<img src="${APP_URL}/${profileSrc}" alt="reviw person">` : (
+                                    `<img src="${APP_URL}/assets/frontend/img/comment/comment.png" alt="reviw person">`
+                                )
+                            
+                            }
+                        </div>
+
+                        <div class="comment-text">
+                            <h3> ${data?.commented_by?.username ?? data?.commented_by?.name} </h3>
+                            <ul class="tabs-product-review mb-2 list-unstyled d-flex">
+                                ${
+                                    renderRattings(data?.ratting)
+                                }
+                            </ul>
+
+                            <p>${ data?.body ?? 'N/A'}</p>
+                        </div>
+
+                    </div>`;
+                }
+
+                boxContainer.prepend(html);
+            }
+
+
+            function renderRattings(ratting){
+                let rattingContent = ``;
+                for (let index = 0; index < 5; index++) {
+                    rattingContent += `<li><i class="fa-${ index < ratting ? 'solid':'regular'} fa-star"></i></li>`;
+                }
+
+                return rattingContent;
             }
 
 

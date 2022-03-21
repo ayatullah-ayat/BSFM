@@ -7,9 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
+
+    protected $fillable = ['ratting','commented_by','body'];
+
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class ,'commentable_id');
+    }
+
+    public function commentedBy()
+    {
+        return $this->belongsTo(User::class, 'commented_by');
     }
     
 }
