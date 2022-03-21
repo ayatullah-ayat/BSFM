@@ -214,7 +214,13 @@
             <div class="row">
                 <div class="readymade-products-content">
                     <div class="readymade-products">
-                        <a href="#"><img src="{{asset('assets/frontend/img/micromedia-image 1.png')}}" class="img-fluid" alt="micromedia-image"></a>
+                        {{-- @dd($shopbanners) --}}
+                        
+                        @if($shopbanners->banner_image)
+                                <a href="{{ route('shop_index')}}"><img src="{{ asset($shopbanners->banner_image) }}" class="img-fluid" alt="micromedia-image"></a>
+                            @else 
+                                <a href="#"><img src="{{asset('assets/frontend/img/micromedia-image 1.png')}}" class="img-fluid" alt="micromedia-image"></a>
+                        @endif
                     </div>
                 </div>
             </div>

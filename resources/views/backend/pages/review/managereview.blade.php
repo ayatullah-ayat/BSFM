@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Social Icon')
+@section('title','Manage Rewiew')
 
 @section('content')
     <div>
@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Social Icon Settings</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Social Icon</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Reviwe</a> </h6>
+                {{-- <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Review</i></button> --}}
             </div>
 
             <div class="card-body">
@@ -18,35 +18,45 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Facebook</th>
-                                <th>Twitter</th>
-                                <th>Instagram</th>
-                                <th>Linkedin</th>
+                                <th>User</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Product</th>
+                                <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            <tr>
-                                <td>01</td>
-                                <td>
-                                    <a href="#">http://facebook.com</a>
-                                </td>
-                                <td>
-                                    <a href="#">http://twitter.com</a>
-                                </td>
-                                <td>
-                                    <a href="#">http://instagram.com</a>
-                                </td>
-                                <td>
-                                    <a href="#">http://linkedin.com</a>
-                                </td>
-                                <td class="text-center">
-                                    {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
+                            @isset($reviews)
+                                @foreach ($reviews as $reviewItem)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            {{ $reviewItem->commentedBy->name ?? 'N/A' }}
+                                        </td>
+                                        <td>
+                                            {{ $reviewItem->ratting ?? 'N?A' }}
+                                        </td>
+                                        <td>
+                                            {{ $reviewItem->body ?? 'N/A' }}
+                                        </td>
+                                        <td>
+                                            {{ $reviewItem->product->product_name ?? 'N/A' }}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="{{ $reviewItem->id }}">
+                                                <label class="custom-control-label" for="{{ $reviewItem->id }}"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="{{ route('admin.review.destroy', $reviewItem->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endisset
 
                         </tbody>
 
@@ -62,7 +72,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Add Social Link</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Review</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -70,9 +80,13 @@
     
                 <div class="modal-body">
                     <div id="service-container">
-                        <div class="row">
+
+                        <div>
+                            this is custom review add section
+                        </div>
+                        {{-- <div class="row">
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Social Link Information</h5>
+                                <h5 class="font-weight-bold bg-custom-booking">Review Information</h5>
                                 <hr>
                             </div>
 
@@ -104,7 +118,7 @@
                                 </div>
                             </div>
     
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
     
@@ -140,6 +154,7 @@
 
             $(document).on('click','#add', createModal)
             $(document).on('click','#category_save_btn', submitToDatabase)
+            $(document).on('click' , '.delete', deleteToDatabase)
         });
 
 
@@ -180,6 +195,38 @@
 
         function createModal(){
             showModal('#categoryModal');
+        }
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
         }
 
         function submitToDatabase(){

@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Category pages')
+@section('title','Website Footer')
 
 @section('content')
     <div>

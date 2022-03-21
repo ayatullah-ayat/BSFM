@@ -69,6 +69,19 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#review" aria-expanded="true"
+            aria-controls="products">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Review</span>
+        </a>
+        <div id="review" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('admin.review.index') }}">Manage Review</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customers" aria-expanded="true"
             aria-controls="customers">
             <i class="fas fa-fw fa-cog"></i>
@@ -212,6 +225,7 @@
             </div>
         </div>
     </li>
+
 {{-- =========================================================================== --}}
     <div class="sidebar-heading">Custom Service & Account</div>
 
@@ -340,6 +354,7 @@
                 <a class="collapse-item" href="{{ route('admin.web_footer') }}">Web Footer</a>
                 <a class="collapse-item" href="{{ route('admin.social_icon') }}">Social Icon</a>
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Us</a>
+                <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
             </div>
         </div>
     </li>

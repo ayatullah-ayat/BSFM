@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Custom\CustomServiceCategory;
 use App\Models\Custom\CustomServiceProduct;
 use App\Models\Custom\OurCustomService;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -17,11 +18,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $customservices         = OurCustomService::where('is_active',1)->orderByDesc('id')->get();
-        $customservicecategories= CustomServiceCategory::where('is_active', 1)->orderByDesc('id')->get();
+        $customservices = OurCustomService::where('is_active',1)
+                        ->orderByDesc('id')
+                        ->get();
+
+        $customservicecategories = CustomServiceCategory::where('is_active', 1)
+                                ->orderByDesc('id')
+                                ->get();
+
         $serviceproducts        = CustomServiceProduct::get();
 
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts'));
+        $shopbanners = Shop::where('is_active', 1)->first();
+
+        // dd( $shopbanners);
+
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanners'));
     }
 
     /**
