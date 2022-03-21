@@ -209,7 +209,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: block !important;
+    color: #fff;
 }
+
+.color.selected.black svg, .color.selected.black i {
+    color: #000 !important;
+}
+
 
 .size {
     padding: 0px !important;
@@ -225,6 +231,10 @@
 .size.selected {
     border: 1px solid #DC0029;
     color: #DC0029;
+}
+
+.filterTagName.selected {
+    border: 1px solid #dc002859;
 }
 
 .size span {

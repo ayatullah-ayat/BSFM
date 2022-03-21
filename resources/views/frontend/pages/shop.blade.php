@@ -9,7 +9,12 @@
             <div class="col-md-3">
                 <div class="shop-sidebar">
 
-                    @includeIf('frontend.layouts.partials.shop_sidebar', ['category' => null])
+                    @includeIf('frontend.layouts.partials.shop_sidebar', [
+                        'categories'    =>$categories ?? null, 
+                        'productColor'  =>$productColors ?? null, 
+                        'productSize'   =>$productSize ?? null,
+                        'maxSalesPrice' => $maxSalesPrice ? $maxSalesPrice->max_sale_price : 0
+                    ])
 
                 </div>
             </div>
@@ -48,6 +53,7 @@
                                                 @endif 
                                             </h5>
                                         </div>
+
                                         <div class="card-product-button d-flex justify-content-evenly">
                                             @if($item->total_stock_qty > 0)
                                             <button type="button" data-productid="{{ $item->id }}" class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}"> {!!  !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span> <i class=\'fa fa-circle-check\'></i> অলরেডি যুক্ত আছে</span>' !!}</button>
@@ -56,6 +62,7 @@
                                             <span class="text-danger">Out of Stock</span>
                                             @endif 
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -92,78 +99,101 @@
         <script src="{{ asset('assets/common_assets/libs/jquery/jquery-ui.min.js') }}"> </script>
         <script>
             $(function(){
-        
-                    $(document).on("click",'.parentCategory', toggleChildrenCategories)
-        
-                    $(document).on("click",'.stateChange', incrementDecrementCount)
+
+                $(document).on("click",'.color_container .color', selectColor)
+                $(document).on("click",'.size_container .size', selectSize)
+                $(document).on("click",'.filterTagName', selectTag)
+    
+                $(document).on("click",'.parentCategory', toggleChildrenCategories)
+    
+                $(document).on("click",'.stateChange', incrementDecrementCount)
         
                         
-                    // ============Range Slider ================== 
-                 
-                        $("#slider-range").slider({
-                            range: true, 
-                            min: 0,
-                            max: 5000,
-                            step: 50,
-                            slide: function( event, ui ) {
-                                $( "#min-price").html(ui.values[ 0 ]);
-                                
-                                console.log(ui.values[0])
-                                
-                                suffix = '';
-                                if (ui.values[ 1 ] == $( "#max-price").data('max') ){
+                // ============Range Slider ================== 
+                
+                    $("#slider-range").slider({
+                        range: true, 
+                        min: 0,
+                        max:  $("#max-price").data('max'),
+                        step: 5,
+                        slide: function( event, ui ) {
+                            $( "#min-price").html(ui.values[ 0 ]);
+                            console.log(ui.values[0])
+                            suffix = '';
+                            if (ui.values[ 1 ] == $( "#max-price").data('max') ){
                                 suffix = ' +';
-                                }
-                                $( "#max-price").html(ui.values[ 1 ] + suffix);         
                             }
-                        })
+                            $( "#max-price").html(ui.values[ 1 ] + suffix);         
+                        }
+                    })
+    
+                // ============slider ================== 
         
-                    // ============slider ================== 
+            });
+
+
+            function selectColor(){
+                let 
+                currentElem = $(this);
+                currentElem.toggleClass('selected')
+
+                // updateSelectedStatus();
+            }
+
+            function selectSize(){
+                let 
+                currentElem = $(this);
+                currentElem.toggleClass('selected');
+            }
+
+            function selectTag(){
+                let 
+                currentElem = $(this);
+                currentElem.toggleClass('selected');
+            }
         
-                });
-        
-                function toggleChildrenCategories(){
-                    let 
-                    elem    = $(this),
-                    current = elem.attr('data-category'),
-                    target  = $(`.childer-category[data-parent=${current}]`),
-                    icon    = elem.find('.triggerIcon');
-                    target.toggle();
-        
-                    if(icon.hasClass('fa-angle-down')){
-                        icon.removeClass('fa-angle-down')
-                        icon.addClass('fa-angle-up')
-                    }else{
-                        icon.removeClass('fa-angle-up')
-                        icon.addClass('fa-angle-down')
-                    }
+            function toggleChildrenCategories(){
+                let 
+                elem    = $(this),
+                current = elem.attr('data-category'),
+                target  = $(`.childer-category[data-parent=${current}]`),
+                icon    = elem.find('.triggerIcon');
+                target.toggle();
+    
+                if(icon.hasClass('fa-angle-down')){
+                    icon.removeClass('fa-angle-down')
+                    icon.addClass('fa-angle-up')
+                }else{
+                    icon.removeClass('fa-angle-up')
+                    icon.addClass('fa-angle-down')
                 }
-        
-        
-                function incrementDecrementCount(e){
-                    let 
-                    countElem   = $('#count'),
-                    count       = Number(countElem.text() ?? 0 ),
-                    elem        = $(this),
-                    ref         = elem.attr('id'),
-                    pattern1    = /(plus|increment|increament)/im,
-                    pattern2    = /(minus|decrement|decreament)/im,
-                    minCount    = Number(countElem?.attr('data-min') ?? 1),
-                    maxCount    = Number(countElem?.attr('data-max') ?? 10);
-        
-                    if(pattern1.test(ref)){
-        
-                        count++;
-                        if(count > maxCount) count = maxCount;
-        
-                    }else if(pattern2.test(ref)){
-        
-                        count--;
-                        if(count < minCount) count = minCount;
-                    }
-        
-                    countElem.text(count);
+            }
+    
+    
+            function incrementDecrementCount(e){
+                let 
+                countElem   = $('#count'),
+                count       = Number(countElem.text() ?? 0 ),
+                elem        = $(this),
+                ref         = elem.attr('id'),
+                pattern1    = /(plus|increment|increament)/im,
+                pattern2    = /(minus|decrement|decreament)/im,
+                minCount    = Number(countElem?.attr('data-min') ?? 1),
+                maxCount    = Number(countElem?.attr('data-max') ?? 10);
+    
+                if(pattern1.test(ref)){
+    
+                    count++;
+                    if(count > maxCount) count = maxCount;
+    
+                }else if(pattern2.test(ref)){
+    
+                    count--;
+                    if(count < minCount) count = minCount;
                 }
+    
+                countElem.text(count);
+            }
                 
         </script>
 @endpush

@@ -43,6 +43,8 @@ use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
 use App\Http\Controllers\Admin\Custom\CustomServiceOrderController;
 use App\Http\Controllers\Admin\Custom\CustomServiceProductController;
 use App\Http\Controllers\Admin\Custom\CustomServiceCategoryController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\User\OrderController as CustomerOrderController;
 use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
@@ -81,19 +83,19 @@ Route::group(['prefix' => ''],function(){
     Route::get('/search',                   [SearchController::class, 'index'])->name('searchResult');
     Route::post('/search-products',         [SearchController::class, 'searchProduct'])->name('searchProduct');
     
-    Route::post('/{product}',               [ReviewController::class, 'update'])->name('create_review');
+    Route::post('/review/{product}',        [ReviewController::class, 'update'])->name('create_review');
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
-        Route::get('/{category_id}',[HomeController::class, 'getProduct'])->name('getCustomizeProduct');
+        Route::get('/{category_id}',        [HomeController::class, 'getProduct'])->name('getCustomizeProduct');
         Route::get('/custom-order/{customServiceProduct}', [UserCustomOrderController::class, 'show'])->name('customorder_show');
-        Route::post('/', [UserCustomOrderController::class, 'store'])->name('store');
+        Route::post('/',                    [UserCustomOrderController::class, 'store'])->name('store');
     });
 
     // --------------------------- Auth Route goes here ---------------------------------
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.','middleware'=>['auth:web', 'PreventBackHistory']], function () {
-        Route::get('/', [UserDashboardController::class, 'index'])->name('index');
-        Route::put('/{user}', [ProfileController::class, 'update'])->name('update_profile');
-        Route::put('/{user}/reset', [ProfileController::class, 'passwordreset'])->name('reset_password');
+        Route::get('/',                     [UserDashboardController::class, 'index'])->name('index');
+        Route::put('/{user}',               [ProfileController::class, 'update'])->name('update_profile');
+        Route::put('/{user}/reset',         [ProfileController::class, 'passwordreset'])->name('reset_password');
     });
 
 });
@@ -103,7 +105,7 @@ Route::group(['prefix' => ''],function(){
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
     
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard',                [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/tables', function () {
         return view('backend.demo.table');
@@ -308,6 +310,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
 
     // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
     
+    Route::group(['prefix' => 'shopbanners' , 'as' => 'shopbanner.'], function(){
+        Route::get('/',         [AdminShopController::class, 'index'])->name('index');
+        Route::post('/',        [AdminShopController::class, 'store'])->name('store');
+        Route::put('/{shop}',   [AdminShopController::class, 'update'])->name('update');
+        Route::delete('/{shop}',[AdminShopController::class, 'destroy'])->name('destroy');
+    });
+    
+    Route::group(['prefix' => 'reviews', 'as' => 'review.'], function(){
+        Route::get('/',             [AdminReviewController::class, 'index'])->name('index');
+        Route::post('/',            [AdminReviewController::class, 'store'])->name('store');
+        Route::put('/{review}',     [AdminReviewController::class, 'update'])->name('update');
+        Route::delete('/{review}',  [AdminReviewController::class, 'destroy'])->name('destroy');
+    });
+
+
 });
 
 
