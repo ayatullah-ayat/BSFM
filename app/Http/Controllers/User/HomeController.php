@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientLogos;
 use App\Models\Custom\CustomServiceCategory;
 use App\Models\Custom\CustomServiceProduct;
 use App\Models\Custom\OurCustomService;
@@ -30,9 +31,11 @@ class HomeController extends Controller
 
         $shopbanners = Shop::where('is_active', 1)->first();
 
+        $clientlogos = ClientLogos::orderByDesc('id')->get();
+        // dd($clientlogos);
         // dd( $shopbanners);
 
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanners'));
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanners', 'clientlogos'));
     }
 
     /**

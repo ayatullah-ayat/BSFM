@@ -1,4 +1,4 @@
-@extends('frontend.layouts.master')
+@extends('frontend.layouts.master', ['customservicecategories'=>$customservicecategories ?? null ])
 @section('title','Home')
 
 @section('content')
@@ -347,14 +347,20 @@
     
             <div class="client-details">
                 <div class="row d-flex align-items-center justify-content-center">
+
+
+                    @isset($clientlogos)
+                        {{-- @dd($clientlogos) --}}
+                        @foreach ($clientlogos as $clientlogo)
+                            <div class="col-md-2">
+                                <div class="single-client text-center m-1">
+                                    <img src="{{asset( $clientlogo->logo ?? null)}}" alt="">
+                                </div>
+                            </div>
+                        @endforeach
+                    @endisset
     
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-1.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
+                    {{-- <div class="col-md-2">
                         <div class="single-client text-center m-1">
                             <img src="{{asset('assets/frontend/img/our-client/our-client-2.png')}}" alt="">
                         </div>
@@ -419,7 +425,7 @@
                             <img src="{{asset('assets/frontend/img/our-client/our-client-10.png')}}" alt="">
                         </div>
                     </div>
-    
+     --}}
                 </div>
             </div>
     

@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\ClientLogosController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
@@ -84,6 +85,7 @@ Route::group(['prefix' => ''],function(){
     Route::post('/search-products',         [SearchController::class, 'searchProduct'])->name('searchProduct');
     
     Route::post('/review/{product}',        [ReviewController::class, 'update'])->name('create_review');
+    Route::get('/review/{product}',         [ReviewController::class, 'show'])->name('show_review');
     // --------------------------- Customize Route goes Here ---------------------------------------
     Route::group(['prefix' => 'customize', 'as' => 'customize.'], function(){
         Route::get('/{category_id}',        [HomeController::class, 'getProduct'])->name('getCustomizeProduct');
@@ -175,7 +177,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{admin}',  [AdminProfileController::class, 'update'])->name('profile_update');
     });
 
-
     Route::group(['prefix' => 'cms-settings', 'as' => 'cms_settings.'], function () {
 
         Route::group(['prefix' => 'gallery', 'as' => 'gallery.'], function () {
@@ -183,6 +184,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
             Route::post('/',            [GalleryController::class, 'store'])->name('store');
             Route::put('/{gallery}',    [GalleryController::class, 'update'])->name('update');
             Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::group(['prefix' => 'clientlogos', 'as' => 'clientlogo.'], function(){
+        Route::get('/',                     [ClientLogosController::class, 'index'])->name('index');
+            Route::post('/',                [ClientLogosController::class, 'store'])->name('store');
+            Route::put('/{clientLogos}',    [ClientLogosController::class, 'update'])->name('update');
+            Route::delete('/{clientLogos}', [ClientLogosController::class, 'destroy'])->name('destroy');
         });
 
 

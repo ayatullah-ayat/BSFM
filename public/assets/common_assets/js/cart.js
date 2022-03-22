@@ -34,7 +34,9 @@ function addToCart(e) {
         cache   : false,
         success : function (items) {
 
-            elem.html('<span> <i class=\'fa fa-circle-check\'></i> অলরেডি যুক্ত আছে</span>');
+            // <i class=\'fa fa-circle-check\'></i> 
+
+            elem.html('<span>অলরেডি যুক্ত আছে</span>');
             elem.removeClass('addToCart');
             elem.addClass('alreadyInCart');
               

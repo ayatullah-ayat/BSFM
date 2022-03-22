@@ -43,61 +43,68 @@
         <h1 class="search-heading"> ই-কমার্স সপ </h1>
 
         <div class="parent-container" >
-            <div class="row shopping-card-row">
+            @if(isset($products) && count($products))
+                <div class="row shopping-card-row">
             
-                @if(isset($products))
-            
-                @foreach ($products as $item)
-                <div class="card __product-card">
-                    <div class="card-wishlist {{ in_array($item->id,$wishLists) ? 'removeFromWish' : 'addToWish' }}"
-                        data-auth="{{ auth()->user()->id ?? null }}" data-productid="{{ $item->id }}" style="z-index: 100;"
-                        type="button"> <i class="fa-solid fa-heart"></i></div>
-                    <a href="{{ route('product_detail',$item->id ) }}">
-                        <img draggable="false" src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
-                    </a>
-                    <div class="card-body p-0">
-                        <div class="card-product-title card-title text-center fw-bold">
-                            <a href="{{ route('product_detail',$item->id ) }}" class="text-decoration-none text-dark">
-                                <h5>{{ $item->product_name }}</h5>
-                            </a>
-                        </div>
-            
-                        @if ( $item->total_product_unit_price && $item->total_product_qty )
-                        @php
-                        $totalprice = $item->total_product_unit_price;
-                        $totalqty = $item->total_product_qty;
-                        $unitprice = $totalprice / $totalqty ?? 0.0;
-                        @endphp
-                        @endif
-            
-            
-                        <div class="card-product-price card-text text-center fw-bold">
-                            <h5>বর্তমান মূুল্য {{ salesPrice($item) ?? '0.0'}} /=
-                                @if($item->product_discount)
-                                <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
-                                @endif
-                            </h5>
-                        </div>
-                        <div class="card-product-button d-flex justify-content-evenly">
-                            @if($item->total_stock_qty > 0)
-                            <button type="button" data-productid="{{ $item->id }}"
-                                class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}">
-                                {!! !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span>অলরেডি যুক্ত আছে</span>'
-                                !!}</button>
-                            <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
-                                করুন
-                            </a>
-                            @else
-                            <span class="text-danger">Out of Stock</span>
+                    @foreach ($products as $item)
+                    <div class="card __product-card">
+                        <div class="card-wishlist {{ in_array($item->id,$wishLists) ? 'removeFromWish' : 'addToWish' }}"
+                            data-auth="{{ auth()->user()->id ?? null }}" data-productid="{{ $item->id }}" style="z-index: 100;"
+                            type="button"> <i class="fa-solid fa-heart"></i></div>
+                        <a href="{{ route('product_detail',$item->id ) }}">
+                            <img draggable="false" src="{{asset( $item->product_thumbnail_image )}}" class="card-img-top" alt="...">
+                        </a>
+                        <div class="card-body p-0">
+                            <div class="card-product-title card-title text-center fw-bold">
+                                <a href="{{ route('product_detail',$item->id ) }}" class="text-decoration-none text-dark">
+                                    <h5>{{ $item->product_name }}</h5>
+                                </a>
+                            </div>
+                
+                            @if ( $item->total_product_unit_price && $item->total_product_qty )
+                            @php
+                            $totalprice = $item->total_product_unit_price;
+                            $totalqty = $item->total_product_qty;
+                            $unitprice = $totalprice / $totalqty ?? 0.0;
+                            @endphp
                             @endif
+                
+                
+                            <div class="card-product-price card-text text-center fw-bold">
+                                <h5>বর্তমান মূুল্য {{ salesPrice($item) ?? '0.0'}} /=
+                                    @if($item->product_discount)
+                                    <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
+                                    @endif
+                                </h5>
+                            </div>
+                            <div class="card-product-button d-flex justify-content-evenly">
+                                @if($item->total_stock_qty > 0)
+                                <button type="button" data-productid="{{ $item->id }}"
+                                    class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}">
+                                    {!! !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span>অলরেডি যুক্ত আছে</span>'
+                                    !!}</button>
+                                <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার
+                                    করুন
+                                </a>
+                                @else
+                                <span class="text-danger">Out of Stock</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
+                    @endforeach
+                
                 </div>
-                @endforeach
-            
-                @endif
-            
-            </div>
+            @else 
+                @if(count($customProducts) < 1)
+                    <div class="alert alert-danger px-5">
+                        <div class="inner">
+                            <h5>দুঃখিত!</h5>
+                            <h6>কোন রেজাল্ট পাওয়া যায়নি</h6>
+                        </div>
+                    </div>
+                @endif 
+            @endif
         </div>
 
 

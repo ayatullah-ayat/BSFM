@@ -355,6 +355,7 @@
                 <a class="collapse-item" href="{{ route('admin.social_icon') }}">Social Icon</a>
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
             </div>
         </div>
     </li>

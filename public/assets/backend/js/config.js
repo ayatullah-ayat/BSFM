@@ -210,3 +210,57 @@ function activeNavMenu(){
         navBarParent.find('.nav-item:nth-child(1)').addClass('active');
     }
 }
+
+
+function loadMoreItems(){
+
+    let 
+    elem    = $(this),
+    max_id  = elem.data('maxid'),
+    limit   = elem.data('limit');
+    uri     = elem.data('uri'),
+    targetTo= elem.parent(),
+    method  = elem?.data('method') ?? 'GET',
+    containerLoader = $(document).find('.loadMoreContainer'),
+    dataInsertElem  = $(document).find('[data-insert]');
+    dataInsert      = dataInsertElem.data('insert');
+
+    if (!uri) return false;
+    
+    ajaxFormToken();
+
+    $.ajax({
+        url     : uri,
+        type    : method,
+        data    : { max_id, limit },
+        cache   : false,
+        success : function (res) {
+            // console.log(res);
+            if(res?.html){
+
+                elem.data('maxid', res?.max_id);
+
+                if (res?.isLast) {
+                    elem.remove();
+                }
+                
+                if (dataInsertElem.length){
+                    dataInsertElem[dataInsert](res.html);
+                }else{
+                    containerLoader.before(res.html);
+                }
+
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+}
+
+
+
+
+
+//loadMoreBtn

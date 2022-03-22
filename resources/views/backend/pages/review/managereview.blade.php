@@ -29,7 +29,7 @@
                         <tbody>
                             @isset($reviews)
                                 @foreach ($reviews as $reviewItem)
-                                    <tr>
+                                    <tr data-review="{{ json_encode($reviewItem) }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
                                             {{ $reviewItem->commentedBy->name ?? 'N/A' }}
@@ -51,7 +51,7 @@
                                         </td>
                                         <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.review.destroy', $reviewItem->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </td>
                                     </tr>
@@ -67,12 +67,12 @@
     
     </div>
 
-    <div class="modal fade" id="categoryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal fade" id="reviewModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Create Review</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Update Review</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -80,52 +80,76 @@
     
                 <div class="modal-body">
                     <div id="service-container">
-
-                        <div>
-                            this is custom review add section
-                        </div>
-                        {{-- <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <h5 class="font-weight-bold bg-custom-booking">Review Information</h5>
                                 <hr>
                             </div>
-
-                            <div class="col-md-6">
+{{-- 
+                            <div class="col-md-6" data-col="col">
                                 <div class="form-group">
-                                    <label for="">Facebook</label>
-                                    <input name="facebook" id="" cols="0" rows="3" class="form-control" placeholder="Facebook Link" />
+                                    <label for="commented_by"> User</label>
+                                    <select name="commented_by " class="commented_by " data-required id="commented_by " data-placeholder="Select User">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div> --}}
+
+                            {{-- <div class="col-md-6" data-col="col">
+                                <div class="form-group">
+                                    <label for="commentable_id"> Product</label>
+                                    <select name="commentable_id " class="commentable_id " data-required id="commentable_id " data-placeholder="Select Product">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div> --}}
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="body">Review Body</label>
+                                    <textarea name="body" id="body" cols="30" rows="3" class="form-control"></textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12" data-col="col">
                                 <div class="form-group">
-                                    <label for="">Twitter</label>
-                                    <input name="twitter" id="" cols="0" rows="3" class="form-control" placeholder="Twitter Link" />
+                                    <label for="ratting">Star</label>
+                                    <select name="ratting" class="ratting" data-required id="ratting" data-placeholder="Select Ratting">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                    </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
+                         
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="">Instagram</label>
-                                    <input name="instagram" id="" cols="0" rows="3" class="form-control" placeholder="Instagram Link" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="">Linkedin</label>
-                                    <input name="linkedin" id="" cols="0" rows="3" class="form-control" placeholder="Linkedin Link" />
+                                    <label>Status</label><br>
+                                    <input type="radio" name="is_active" id="isActive" checked>
+                                    <label for="isActive">Confirm</label>
+                                    <input type="radio" name="is_active" id="isInActive">
+                                    <label for="isInActive">Pending</label>
                                 </div>
                             </div>
     
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
     
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="review_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -149,12 +173,31 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
     <script>
+        //   $(function() {
+        //     $('.toggle-class').change(function() {
+        //         var status = $(this).prop('checked') == true ? 1 : 0; 
+        //         var user_id = $(this).data('id'); 
+                
+        //         $.ajax({
+        //             type: "GET",
+        //             dataType: "json",
+        //             url: '/changeStatus',
+        //             data: {'status': status, 'user_id': user_id},
+        //             success: function(data){
+        //             console.log(data.success)
+        //             }
+        //         });
+        //     })
+        // })
+
         $(document).ready(function(){
             init();
-
-            $(document).on('click','#add', createModal)
-            $(document).on('click','#category_save_btn', submitToDatabase)
+            // $(document).on('click','#add', createModal)
+            // $(document).on('click','#review_save_btn', submitToDatabase)
             $(document).on('click' , '.delete', deleteToDatabase)
+            $(document).on('click', '.update', showUpdateModal)
+            $(document).on('click','#review_update_btn', updateToDatabase)
+            $(document).on('click', '#reset', resetForm)
         });
 
 
@@ -162,8 +205,18 @@
 
             let arr=[
                 {
-                    dropdownParent  : '#categoryModal',
-                    selector        : `#email_template`,
+                    dropdownParent  : '#reviewModal',
+                    selector        : `#ratting`,
+                    type            : 'select',
+                },
+                {
+                    dropdownParent  : '#reviewModal',
+                    selector        : `.commented_by`,
+                    type            : 'select',
+                },
+                {
+                    dropdownParent  : '#reviewModal',
+                    selector        : `.commentable_id`,
                     type            : 'select',
                 },
                 {
@@ -192,9 +245,8 @@
             // })
         }
 
-
-        function createModal(){
-            showModal('#categoryModal');
+        function resetForm(){
+             resetData();
         }
 
         function deleteToDatabase(e){
@@ -229,21 +281,86 @@
             }
         }
 
-        function submitToDatabase(){
-            //
+        function showUpdateModal(){
+            resetData();
 
+            let review = $(this).closest('tr').attr('data-review');
+
+            if(review){
+                review = JSON.parse(review);
+
+                $('#reviewModal').attr('data-id', review?.id)
+
+                $('#body').val(review?.body)
+
+                if(review?.is_active){
+                    $('#isActive').prop('checked',true)
+                }else{
+                    $('#isInActive').prop('checked',true)
+                }
+
+                showModal('#reviewModal');
+            }
+        }
+
+        function updateToDatabase(){
             ajaxFormToken();
 
+            let id  = $('#reviewModal').attr('data-id');
             let obj = {
-                url     : ``, 
-                method  : "POST",
-                data    : {},
+                url     : `{{ route('admin.review.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : formatData(),
             };
 
-            ajaxRequest(obj);
+            ajaxRequest(obj, { reload: true, timer: 2000 })
 
-            hideModal('#categoryModal');
+            resetData();
+
+            hideModal('#reviewModal');
         }
+
+        function formatData(){
+            return {
+                body            : $('#body').val().trim(),
+                ratting         : $('#ratting').val(), 
+                commentable_id  : $('#commentable_id ').val(), 
+                commented_by    : $('#commented_by').val(), 
+                is_active       : $('#isActive').is(':checked') ? 1 : 0,
+            }
+        }
+ 
+        function resetData(){
+                $('#body').val(null),
+                $('#ratting').val(null), 
+                $('#commentable_id ').val(null),
+                $('#commented_by').val(null), 
+                $('#isActive').prop('checked', true)
+        }
+
+        // function createModal(){
+        //     showModal('#reviewModal');
+        //     $('#supplier_save_btn').removeClass('d-none');
+        //     $('#supplier_update_btn').addClass('d-none');
+        //     $('#reviewModal .heading').text('Create');
+        //     resetData();
+        // }
+
+        // function submitToDatabase(){
+        //     //
+
+        //     ajaxFormToken();
+
+        //     let obj = {
+        //         url     : ``, 
+        //         method  : "POST",
+        //         data    : {},
+        //     };
+
+        //     ajaxRequest(obj);
+
+        //     hideModal('#reviewModal');
+        // }
 
     </script>
 @endpush
