@@ -15,9 +15,9 @@
                 <!-- --------------------- category start ---------------------  -->
                 @isset($categories)
                     @foreach ($categories as $category )
-                        <div class="category">
+                        <div class="category category_container">
                             <div class="form-check parentCategory" type="button" data-category="{{$category->id}}">
-                                <input type="checkbox" id="{{$category->id}}">
+                                <input name="category" type="checkbox" id="{{$category->id}}" value="{{$category->id}}">
                                 <label  for="{{$category->id}}" class="form-check-label {{ isset($category->subCategories) && count($category->subCategories) ? 'hasSub' : '' }}" type="button" data-categoryid="{{$category->id}}">{{$category->category_name}}</label>
                             </div>
                         </div>
@@ -50,31 +50,6 @@
                             @endforeach
                         @endisset
                     </div>
-
-                    {{-- <div class=" ms-2 row" style="margin-left: -0.5rem!important;">
-                        <div class="col-md-2 col-1 color selected" style="background-color: #F4DE17;"> <i
-                                class="fa-solid fa-check"></i> 
-                        </div>
-                        <div class=" col-md-2 col-1 color" style="background-color: rgba(55, 158, 38, 0.93);"><i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                        <div class=" col-md-2 col-1 color" style="background-color: rgba(64, 207, 199, 0.5);"><i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                        <div class=" col-md-2 col-1 color" style="background-color: rgba(31, 71, 214, 0.4);"><i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                        <div class=" col-md-2 col-1 color" style="background-color: #43475C;"><i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                        <div class=" col-md-2 col-1 color "
-                            style="background-color: rgba(255, 255, 255, 0.2); border: 1px solid #000000;"> <i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                        <div class=" col-md-2 col-1 color" style="background-color: #DC0029;"><i
-                                class="fa-solid fa-check"></i>
-                        </div>
-                    </div> --}}
 
                 </div>
             </div>
@@ -124,12 +99,12 @@
                     <div id="slider-range"
                         class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                         <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                        <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span><span
-                            tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                        <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                        <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span> 
                     </div>
                     <span id="min-price" data-currency="৳" class="slider-price">0</span> <span
-                        class="seperator">-</span> <span id="max-price" data-currency="৳" data-max="{{$maxSalesPrice}}"
-                        class="slider-price">{{$maxSalesPrice}} +</span>
+                        class="seperator">-</span> <span id="max-price" data-currency="৳" data-max="{{$maxSalesPrice + 5}}"
+                        class="slider-price">{{$maxSalesPrice + 4}}</span>
                 </div>
 
             </div>

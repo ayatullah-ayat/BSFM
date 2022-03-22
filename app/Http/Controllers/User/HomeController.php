@@ -28,11 +28,11 @@ class HomeController extends Controller
 
         $serviceproducts        = CustomServiceProduct::get();
 
-        $shopbanners = Shop::where('is_active', 1)->first();
+        $shopbanner = Shop::where('is_active', 1)->first();
 
         // dd( $shopbanners);
 
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanners'));
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner'));
     }
 
     /**

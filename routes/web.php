@@ -63,8 +63,11 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 Route::group(['prefix' => ''],function(){
     // --------------------------- General Route goes Here ---------------------------------
     Route::get('/home',                     [HomeController::class, 'index'])->name('home_index');
+
     Route::get('/shop',                     [ShopController::class, 'index'])->name('shop_index');
+    Route::post('/shop',                    [ShopController::class, 'ajaxFilter'])->name('shop_ajax_filter');
     Route::get('/shop/{product}/{slug?}',   [ShopController::class, 'show'])->name('product_detail');
+
     Route::get('/checkout/{product?}',      [CustomerOrderController::class, 'index'])->name('checkout_index');
     Route::get('/contact',                  [CustomerContactController::class, 'index'])->name('contact_index');
     Route::post('/',                        [CustomerContactController::class, 'store'])->name('contact_store');

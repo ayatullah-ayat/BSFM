@@ -22,7 +22,7 @@
 
             <div class="col-md-9 w-100">
                 @isset($products)
-                <div class="row shopping-card-row" data-insert="append">
+                <div class="row shopping-card-row" data-insert="append" data-filter-insert="html">
 
                     @php
                     $maxId = 0;
@@ -48,8 +48,8 @@
                                     @if ( $item->total_product_unit_price && $item->total_product_qty )
                                         @php
                                             $totalprice = $item->total_product_unit_price;
-                                            $totalqty = $item->total_product_qty;
-                                            $unitprice = $totalprice / $totalqty;
+                                            $totalqty   = $item->total_product_qty;
+                                            $unitprice  = $totalprice / $totalqty;
                                         @endphp
                                     @endif 
 
@@ -113,7 +113,9 @@
 @push('js')
         <script src="{{ asset('assets/common_assets/libs/jquery/jquery-ui.min.js') }}"> </script>
         <script>
+            let timeId = null;
             $(function(){
+                $(document).on("change",'.category_container input[name="category"]', filterBy)
 
                 $(document).on("click",'.color_container .color', selectColor)
                 $(document).on("click",'.size_container .size', selectSize)
@@ -133,12 +135,14 @@
                         step: 5,
                         slide: function( event, ui ) {
                             $( "#min-price").html(ui.values[ 0 ]);
-                            console.log(ui.values[0])
                             suffix = '';
                             if (ui.values[ 1 ] == $( "#max-price").data('max') ){
                                 suffix = ' +';
                             }
-                            $( "#max-price").html(ui.values[ 1 ] + suffix);         
+                            // console.log(ui.values[1], suffix)
+                            $( "#max-price").html(ui.values[ 1 ] + suffix);   
+                            
+                            filterBy();
                         }
                     })
     
@@ -152,6 +156,8 @@
                 currentElem = $(this);
                 currentElem.toggleClass('selected')
 
+                filterBy();
+
                 // updateSelectedStatus();
             }
 
@@ -159,13 +165,16 @@
                 let 
                 currentElem = $(this);
                 currentElem.toggleClass('selected');
+                filterBy();
             }
 
             function selectTag(){
                 let 
                 currentElem = $(this);
                 currentElem.toggleClass('selected');
+                filterBy();
             }
+
         
             function toggleChildrenCategories(){
                 let 
@@ -209,6 +218,105 @@
     
                 countElem.text(count);
             }
+
+
+            function filterBy(){
+
+                let 
+                category_ids= [],
+                colors      = [],
+                sizes       = [],
+                prices      = null,
+                tags        = [],
+                filterObj   = {};
+
+                clearTimeout(timeId)
+
+                timeId = setTimeout(() => {
+                    let categories    = $(document).find('input[name="category"]:checked');
+                    let colorElems    = $(document).find('.color_container .color.selected');
+                    let sizeElems     = $(document).find('.size_container .size.selected');
+                    let tagElems      = $(document).find('.filterTagName.selected');
+                    let minPrice      =  $('#min-price').text();
+                    let maxPrice      =  $('#max-price').text();
+
+                    categories.map((i, cat) => {
+                        category_ids.push($(cat).val());
+                    })
+
+                    colorElems.map((i, color) => {
+                        colors.push($(color).attr('data-color'));
+                    })
+
+                    sizeElems.map((i, size) => {
+                        sizes.push($(size).attr('data-size'));
+                    })
+
+                    prices = {
+                        minPrice,
+                        maxPrice
+                    };
+
+                    tagElems.map((i, tag) => {
+                        tags.push($(tag).attr('data-tag'));
+                    })
+                    
+                    filterObj = {
+                        category_ids: category_ids,
+                        colors      : colors,
+                        sizes       :  sizes,
+                        prices      : prices,
+                        tags        : tags
+                    };
+
+                    console.log(filterObj);
+                    shop_ajax_filter(filterObj);
+                }, 500);
+            }
+
+
+
+            function shop_ajax_filter(filterObj){
+
+                let 
+                elem            = $('.loadMoreBtn'),
+                // max_id          = elem.data('maxid'),
+                // limit           = elem.data('limit'),
+                method          = 'POST',
+                dataInsertElem  = $(document).find('[data-filter-insert]');
+                dataInsert      = dataInsertElem.data('filter-insert');
+                
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : APP_URL + '/shop',
+                    type    : method,
+                    data    : filterObj,
+                    cache   : false,
+                    success : function (res) {
+                        if(res?.html != null){
+                            
+                            console.log(res);
+                            // elem.data('maxid', res?.max_id);
+
+                            // if (res?.isLast) {
+                            //     elem.remove();
+                            // }
+                            
+                            // console.log(dataInsertElem, dataInsert);
+                            if (dataInsertElem.length){
+                                dataInsertElem[dataInsert](res.html);
+                            }
+
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+
+            }
+
                 
         </script>
 @endpush

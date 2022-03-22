@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Services\ProductSearch;
+use App\Models\Variant;
 use App\Models\Category;
 use App\Models\ProductTag;
 use App\Models\Subcategory;
-use App\Models\Variant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Services\ProductSearch;
 use Illuminate\Support\Facades\Cookie;
 
 class ShopController extends Controller
@@ -21,12 +22,15 @@ class ShopController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public $maxId = 0;
+    public $limit = 20;
      
     public function index()
     {
-        $maxId    = request()->max_id ?? 0;
-        $limit    = request()->limit ?? 20;
+        $maxId    = request()->max_id ?? $this->maxId;
+        $limit    = request()->limit ?? $this->limit;
         $operator = request()->operator ?? '<';
+        $filters  = request()->filter ?? null;
 
         $productSql   = Product::orderByDesc('created_at')
                     ->where('is_active', 1)
@@ -39,91 +43,16 @@ class ShopController extends Controller
                     ->take($limit)
                     ->get();
 
-        $cookieData = $this->productCookies();
-
         if (request()->ajax()){
-            $lastId         = 0;
-            $isLastRecord   = false;
-            $lastData       = Product::first();
-            if ($lastData) {
-                $lastId = $lastData->id;
-            }
 
-            $maxId          = 0;
-            $html           = "";
-
-
-            foreach ($products as $item) :
-
-                $maxId = $item->id;
-
-                if ($lastId == $maxId) $isLastRecord = true;
-
-                    $isInwish       = in_array($item->id, $cookieData['wishLists']) ? 'removeFromWish' : 'addToWish';
-                    $isInCart       = !in_array($item->id, $cookieData['productIds']) ? 'addToCart' : 'alreadyInCart';
-                    $cartContent    = !in_array($item->id, $cookieData['productIds']) ? 'কার্ডে যুক্ত করুন' : '<span>অলরেডি যুক্ত আছে</span>';
-                    $userId         = auth()->user()->id ?? null;
-                    $thumbnail      = asset($item->product_thumbnail_image);
-                    $route          = route('product_detail', $item->id);
-                    $route2         = route('checkout_index', $item->id);
-                    $unitprice      = 0.0;
-                    $salesPrice     = salesPrice($item) ?? 0.0;
-
-                    if ( $item->total_product_unit_price && $item->total_product_qty ):
-                        $totalprice = $item->total_product_unit_price;
-                        $totalqty   = $item->total_product_qty;
-                        $unitprice  = ($totalprice / $totalqty);
-                    endif; 
-
-
-                    $discountContent = "";
-                    if($item->product_discount){
-                        $discountContent .= "<span class=\"text-decoration-line-through text-danger\"> {$unitprice} /=</span>";
-                    }
-
-                    $buttonCentent = "";
-
-                    if($item->total_stock_qty > 0):
-                        $buttonCentent .= "<button type=\"button\" data-productid=\"{$item->id}\" class=\"btn btn-sm btn-secondary btn-card {$isInCart}\"> {$cartContent}</button>
-                        <a href=\"{$route2}\" type=\"button\" class=\"btn btn-sm btn-danger\"> অর্ডার করুন </a>";
-                    else:
-                        $buttonCentent .= "<span class=\"text-danger\">Out of Stock</span>";
-                    endif; 
-
-                    $html .= "<div class=\"mb-3\">
-                            <div class=\"card __product-card\">
-                                <div class=\"card-wishlist {$isInwish}\" data-auth=\"{$userId}\" data-productid=\"{$item->id}\" style=\"z-index: 100;\" type=\"button\"> <i class=\"fa-solid fa-heart\"></i></div>
-                                <a href=\"{$route}\">
-                                    <img draggable=\"false\" src=\"{$thumbnail}\" class=\"card-img-top\" alt=\"...\">
-                                </a>
-                                <div class=\"card-body p-0\">
-                                    <div class=\"card-product-title card-title text-center fw-bold\">
-                                        <a href=\"{$route}\" class=\"text-decoration-none text-dark\"><h5>{$item->product_name}</h5></a>
-                                    </div>
-
-                                    <div class=\"card-product-price card-text text-center fw-bold\">
-                                        <h5>বর্তমান মূুল্য {$salesPrice} /= {$discountContent} </h5>
-                                    </div>
-                                    <div class=\"card-product-button d-flex justify-content-evenly\">
-                                        {$buttonCentent}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ";
-
-            endforeach;
+            $response = $this->renderProduct($products);
 
             return response()->json([
-                'html'  => $html,
-                'max_id' => $maxId,
-                'isLast' => $isLastRecord
+                'html'      => $response['html'],
+                'max_id'    => $response['max_id'],
+                'isLast'    => $response['isLast']
             ]);
-
         }
-
-
-        $countProducts = Product::where('is_active', 1)->where('is_publish', 1)->count();
 
        $categories = Category::with('subCategories')
                     ->where('is_active', 1)
@@ -143,14 +72,109 @@ class ShopController extends Controller
 
        $tags = ProductTag::groupBy('tag_name')->get();
 
-       $maxSalesPrice = Product::selectRaw('ceil((max(total_product_unit_price) - max(total_product_unit_price) * (product_discount / 100)) / total_product_qty)  as max_sale_price')
+       $maxSalesPrice = Product::
+                    selectRaw('max(total_product_unit_price / total_product_qty ) max_sale_price')
                     ->where('is_active', 1)
                     ->where('is_publish', 1)
                     ->first();
 
+
+        $countProducts = Product::where('is_active', 1)->where('is_publish', 1)->count();
+        
+
         return view('frontend.pages.shop', compact('products', 'countProducts', 'limit' ,'tags', 'categories' , 'productColors' , 'productSize', 'maxSalesPrice'));
     }
-    
+
+
+    public function ajaxFilter()
+    {
+        $limit          = $this->limit;
+        $category_ids   = request()->category_ids ?? null;
+        $tags           = request()->tags ?? null;
+        $colors         = request()->colors ?? null;
+        $sizes          = request()->sizes ?? null;
+        $prices         = request()->prices ?? null;
+
+        $q = Product::selectRaw('products.*, 
+                product_variant_prices.color_name as v_color_name, 
+                product_color.color_name,
+                product_variant_prices.size_name as v_size_name, 
+                product_size.size_name
+            ')
+        ->where('products.is_active', 1)->where('products.is_publish', 1);
+
+        if($category_ids){
+            $q->whereIn('products.category_id', $category_ids);
+        }
+
+        if($prices){
+            $q->whereBetween(DB::raw('products.total_product_unit_price / products.total_product_qty'),[$prices['minPrice'], $prices['maxPrice']]);
+        }
+
+
+        $joinType = $colors && count($colors) ? 'join' : 'leftJoin';
+        $joinType2 = $sizes && count($sizes) ? 'join' : 'leftJoin';
+        $joinType3 = $tags && count($tags) ? 'join' : 'leftJoin';
+
+
+        if($tags){
+            $q->{$joinType3}('product_tags', 'product_tags.product_id','=', 'products.id')
+            ->whereIn('product_tags.tag_name', $tags);
+        }
+
+        $q->{$joinType}('product_color', function ($join) use($colors) {
+            $join->on('products.id', '=', 'product_color.product_id')
+            ->where('products.is_product_variant', '=', 0);
+            if($colors && count($colors)){
+                $join->whereIn('product_color.color_name', $colors);
+            }
+        });
+
+        $q->{$joinType2}('product_size', function ($join) use($sizes) {
+            $join->on('products.id', '=', 'product_size.product_id')
+            ->where('products.is_product_variant', '=', 0);
+
+            if ($sizes && count($sizes)) {
+                $join->whereIn('product_size.size_name', $sizes);
+            }
+
+        });
+
+
+        $q->leftJoin('product_variant_prices', function ($join) use ($colors, $sizes) {
+            $join->on('products.id', '=', 'product_variant_prices.product_id')
+            ->where('products.is_product_variant', '=', 1);
+            if ($colors && count($colors)) {
+                $join->whereIn('product_variant_prices.color_name', $colors);
+            }
+
+            if ($sizes && count($sizes)) {
+                $join->whereIn('product_variant_prices.size_name', $sizes);
+            }
+
+        });
+
+
+        $products = $q->groupBy('products.id')
+        ->orderByDesc('products.created_at')
+        ->orderBy('products.product_name')
+        ->orderBy('products.is_best_sale')
+        // ->limit($limit)
+        ->get();
+
+        if (request()->ajax()) {
+
+            $response = $this->renderProduct($products);
+
+            return response()->json([
+                'html'      => $response['html'],
+                'max_id'    => $response['max_id'],
+                'isLast'    => $response['isLast']
+            ]);
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

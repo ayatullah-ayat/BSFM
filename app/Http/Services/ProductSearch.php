@@ -152,6 +152,101 @@ trait ProductSearch
 
         return @unserialize($data);
     }
+
+
+
+    private function renderProduct($products){
+        try {
+            //
+
+            $cookieData     = $this->productCookies();
+            $lastId         = 0;
+            $isLastRecord   = false;
+            $lastData       = Product::first();
+            if ($lastData) {
+                $lastId = $lastData->id;
+            }
+
+            $maxId          = 0;
+            $html           = "";
+
+            foreach ($products as $item) :
+
+                $maxId = $item->id;
+
+                if ($lastId == $maxId) $isLastRecord = true;
+
+                $isInwish       = in_array($item->id, $cookieData['wishLists']) ? 'removeFromWish' : 'addToWish';
+                $isInCart       = !in_array($item->id, $cookieData['productIds']) ? 'addToCart' : 'alreadyInCart';
+                $cartContent    = !in_array($item->id, $cookieData['productIds']) ? 'কার্ডে যুক্ত করুন' : '<span>অলরেডি যুক্ত আছে</span>';
+                $userId         = auth()->user()->id ?? null;
+                $thumbnail      = asset($item->product_thumbnail_image);
+                $route          = route('product_detail', $item->id);
+                $route2         = route('checkout_index', $item->id);
+                $unitprice      = 0.0;
+                $salesPrice     = salesPrice($item) ?? 0.0;
+
+                if ($item->total_product_unit_price && $item->total_product_qty) :
+                    $totalprice = $item->total_product_unit_price;
+                    $totalqty   = $item->total_product_qty;
+                    $unitprice  = ($totalprice / $totalqty);
+                endif;
+
+
+                $discountContent = "";
+                if ($item->product_discount) {
+                    $discountContent .= "<span class=\"text-decoration-line-through text-danger\"> {$unitprice} /=</span>";
+                }
+
+                $buttonCentent = "";
+
+                if ($item->total_stock_qty > 0) :
+                    $buttonCentent .= "<button type=\"button\" data-productid=\"{$item->id}\" class=\"btn btn-sm btn-secondary btn-card {$isInCart}\"> {$cartContent}</button>
+                        <a href=\"{$route2}\" type=\"button\" class=\"btn btn-sm btn-danger\"> অর্ডার করুন </a>";
+                else :
+                    $buttonCentent .= "<span class=\"text-danger\">Out of Stock</span>";
+                endif;
+
+                $html .= "<div class=\"mb-3\">
+                            <div class=\"card __product-card\">
+                                <div class=\"card-wishlist {$isInwish}\" data-auth=\"{$userId}\" data-productid=\"{$item->id}\" style=\"z-index: 100;\" type=\"button\"> <i class=\"fa-solid fa-heart\"></i></div>
+                                <a href=\"{$route}\">
+                                    <img draggable=\"false\" src=\"{$thumbnail}\" class=\"card-img-top\" alt=\"...\">
+                                </a>
+                                <div class=\"card-body p-0\">
+                                    <div class=\"card-product-title card-title text-center fw-bold\">
+                                        <a href=\"{$route}\" class=\"text-decoration-none text-dark\"><h5>{$item->product_name}</h5></a>
+                                    </div>
+
+                                    <div class=\"card-product-price card-text text-center fw-bold\">
+                                        <h5>বর্তমান মূুল্য {$salesPrice} /= {$discountContent} </h5>
+                                    </div>
+                                    <div class=\"card-product-button d-flex justify-content-evenly\">
+                                        {$buttonCentent}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ";
+
+            endforeach;
+
+
+            return [
+                'html'   => $html,
+                'max_id' => $maxId,
+                'isLast' => $isLastRecord
+            ];
+
+        } catch (\Throwable $th) {
+
+            return [
+                'html'   => null,
+                'max_id' => 0,
+                'isLast' => false
+            ];
+        }
+    }
     
 
 
