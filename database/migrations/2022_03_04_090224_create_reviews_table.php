@@ -20,6 +20,7 @@ class CreateReviewsTable extends Migration
             $table->text('body')->nullable(); // comment
             $table->morphs('commentable'); // product_id 
             $table->unsignedBigInteger('commented_by')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

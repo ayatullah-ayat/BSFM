@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use DB;
+use Exception;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Requests\CustomOrderRequest;
-use App\Http\Services\CustomerChecker;
 use App\Http\Services\ImageChecker;
+use App\Http\Controllers\Controller;
+use App\Http\Services\CustomerChecker;
+use App\Http\Requests\CustomOrderRequest;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
-use Exception;
-use DB;
 
 class CustomOrderController extends Controller
 {
@@ -131,7 +132,14 @@ class CustomOrderController extends Controller
      */
     public function show(CustomServiceProduct $customServiceProduct)
     {
-        return view('frontend.pages.customorder', compact('customServiceProduct'));
+        $otherProducts = Product::select('*')
+            ->latest()
+            ->take(20)
+            ->where('is_active', 1)
+            ->where('is_publish', 1)
+            ->get();
+            
+        return view('frontend.pages.customorder', compact('customServiceProduct', 'otherProducts'));
     }
 
     /**

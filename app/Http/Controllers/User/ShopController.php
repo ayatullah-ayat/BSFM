@@ -6,12 +6,10 @@ use App\Models\Product;
 use App\Models\Variant;
 use App\Models\Category;
 use App\Models\ProductTag;
-use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Services\ProductSearch;
-use Illuminate\Support\Facades\Cookie;
 
 class ShopController extends Controller
 {
@@ -59,18 +57,18 @@ class ShopController extends Controller
                     ->orderByDesc('id')
                     ->get();
 
+        $productColors = Variant::orderByDesc('id')
+                ->where('variant_type', 'color')
+                ->where('is_active', 1)
+                ->get();
 
-       $productColors = Variant::orderByDesc('id')
-                    ->where('variant_type', 'color')
-                    ->where('is_active', 1)
-                    ->get();
+        $productSize = Variant::orderByDesc('id')
+                ->where('variant_type', 'size')
+                ->where('is_active', 1)
+                ->get();
 
-       $productSize = Variant::orderByDesc('id')
-                    ->where('variant_type', 'size')
-                    ->where('is_active', 1)
-                    ->get();
+        $tags = ProductTag::groupBy('tag_name')->get();
 
-       $tags = ProductTag::groupBy('tag_name')->get();
 
        $maxSalesPrice = Product::
                     selectRaw('max(total_product_unit_price / total_product_qty ) max_sale_price')

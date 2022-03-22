@@ -12,10 +12,10 @@
 
                             @foreach($products as $product)
 
-                                @if ( $item->total_product_unit_price && $item->total_product_qty )
+                                @if ( $product->total_product_unit_price && $product->total_product_qty )
                                     @php
-                                    $totalprice = $item->total_product_unit_price;
-                                    $totalqty   = $item->total_product_qty;
+                                    $totalprice = $product->total_product_unit_price;
+                                    $totalqty   = $product->total_product_qty;
                                     $unitprice  = $totalprice / $totalqty ?? 0.0;
                                     @endphp
                                 @endif

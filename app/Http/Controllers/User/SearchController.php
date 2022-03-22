@@ -19,8 +19,9 @@ class SearchController extends Controller
     public function index()
     {
         $query      = request('key');
+        $orderBy    = request('order_by') ?? 'created_at';
         $totalItems = 0;
-        $products   = $this->ecommerceProduct($query);
+        $products   = $this->ecommerceProduct($query, $orderBy);
 
         if(count($products)){
             $totalItems += count($products);
@@ -30,6 +31,16 @@ class SearchController extends Controller
 
         if (count($customProducts)) {
             $totalItems += count($customProducts);
+        }
+
+        if (request()->ajax()) {
+            $products       = $this->renderProduct($products);
+            $customProducts = $this->renderCustomizeProduct($customProducts);
+
+            return response()->json([
+                'productHTML'   => isset($products['html']) ? $products['html'] : $products,
+                'customizeHTML' => $customProducts,
+            ]);
         }
 
         // dd($totalItems);

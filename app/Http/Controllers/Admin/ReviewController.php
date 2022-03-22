@@ -72,28 +72,28 @@ class ReviewController extends Controller
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Review $review)
     {
-        // try {
+        try {
 
-        //     $data = $request->all();
-        //     $product->comments()->create([
-        //         'ratting'       => $data['ratting'],
-        //         'body'          => $data['comment'],
-        //         'commented_by'  => auth()->guard('web')->user()->id ?? null
-        //     ]);
+            $data           = $request->all();
+            $reviewsStatus  = $review->update($data);
+            if(!$reviewsStatus)
+                throw new Exception("Unable to Update Review!", 403);
 
-        //     return response()->json([
-        //         'success'   => false,
-        //         'msg'       => 'Review Added Successfully'
-        //     ]);
-        // } catch (\Exception $th) {
-        //     return response()->json([
-        //         'success'   => false,
-        //         'msg'       => $th->getMessage(),
-        //         'data'      => null
-        //     ]);
-        // }
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Review Updated Successfully!',
+                'data'      => $review->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**

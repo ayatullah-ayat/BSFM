@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductTag;
 use App\Models\Subcategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Custom\CustomServiceProduct;
 
@@ -15,33 +16,37 @@ trait ProductSearch
     
 
 
-    private function ecommerceProduct($query=null, $orderBy= "created_at"){
+    private function ecommerceProduct($query=null, $filter= "created_at"){
 
         $result = [];
         if($query){
 
-            $products=Product::orWhere('products.product_name', 'LIKE', "%{$query}%")
-                    ->leftJoin('product_tags', 'product_tags.product_id','=', 'products.id')
-                    ->leftJoin('product_brand', 'product_brand.product_id','=', 'products.id')
-                    ->orWhere('product_tags.tag_name', 'LIKE', "%{$query}%")
-                    ->orWhere('product_brand.brand_name', 'LIKE', "%{$query}%")
-                    ->orWhere('products.category_name', 'LIKE', "%{$query}%")
-                    ->orWhere('products.subcategory_name', 'LIKE', "%{$query}%")
-                    ->where('products.is_publish', 1)
-                    ->where('products.is_active', 1)
-                    ->groupBy('products.id')
-                    ->orderBy("products.{$orderBy}")
+            $q = Product::orWhere('products.product_name', 'LIKE', "%{$query}%")
+                ->leftJoin('product_tags', 'product_tags.product_id', '=', 'products.id')
+                ->leftJoin('product_brand', 'product_brand.product_id', '=', 'products.id')
+                ->orWhere('product_tags.tag_name', 'LIKE', "%{$query}%")
+                ->orWhere('product_brand.brand_name', 'LIKE', "%{$query}%")
+                ->orWhere('products.category_name', 'LIKE', "%{$query}%")
+                ->orWhere('products.subcategory_name', 'LIKE', "%{$query}%")
+                ->where('products.is_publish', 1)
+                ->where('products.is_active', 1);
+
+            if(preg_match("/max_price|max|max_/im", $filter)){
+                $q->selectRaw('*, max( (total_product_unit_price - (total_product_unit_price * (product_discount / 100) )) / total_product_qty ) max_price')
+                ->orderByDesc('max_price');
+            }else if(preg_match("/created_at|new|newest/im", $filter)){
+                $filter = "created_at";
+                $q->orderByDesc("products.{$filter}");
+            }
+            
+            $products = $q->groupBy('products.id')
                     ->orderBy('products.product_name')
                     ->orderBy('products.is_best_sale')
-                    // ->where('id', $operator, $maxId)
-                    // ->latest()
-                    // ->limit($limit)
                     ->get();
 
             if(count($products)){
                 $result = $products;
             }
-
             
         }
         
@@ -50,7 +55,7 @@ trait ProductSearch
     }
 
 
-    private function customizeProduct($query=null, $orderBy = "created_at"){
+    private function customizeProduct($query=null, $filter = "created_at"){
 
         $result = [];
         if($query){
@@ -60,7 +65,7 @@ trait ProductSearch
                     ->orWhere('product_name', 'LIKE', "%{$query}%")
                     ->where('is_active', 1)
                     ->orderBy('product_name')
-                    ->orderBy("{$orderBy}")
+                    ->orderBy("{$filter}")
                     ->get();
 
             if(count($products)){
@@ -246,6 +251,32 @@ trait ProductSearch
                 'isLast' => false
             ];
         }
+    }
+
+
+    private function renderCustomizeProduct($cProducts){
+
+        $html = "";
+        foreach ($cProducts as $item) {
+
+            if ($item->product_thumbnail): 
+                $imageSrc = asset($item->product_thumbnail);
+                $route = route('customize.customorder_show', $item->id);
+                $productName = $item->product_name ?? 'N/A';
+                $html .= "
+                    <div class=\"card card-box customize-product-box\">
+                        <a href=\"{$route}\">
+                            <div class=\"modal-card text-center\">
+                                <img src=\"{$imageSrc}\" class=\"pt-3\" alt=\"Product Image\">
+                                <p> {$productName} </p>
+                            </div>
+                        </a>
+                    </div>
+                    ";
+            endif;
+        }
+
+        return $html;
     }
     
 

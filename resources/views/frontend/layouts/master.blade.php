@@ -40,8 +40,8 @@
     {{-- ------------- content area ---------------------------  --}}
 
     {{-- -------- footer ------------------------------- --}}
-    @includeIf('frontend.layouts.partials.footer')
-    {{-- -------- footer ------------------------------- --}}
+    @includeIf('frontend.layouts.partials.footer', [ 'customservicecategories'=>$customservicecategories ?? null ])
+    {{-- -------- footer ---------------------------------}}
 
 
     <div class="modal fade" style="z-index: 22001;" id="orderTrackModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -169,6 +169,7 @@
 <script>
     $(document).ready(function(){
         $(document).on('click','.ordertraking > a', openTrackModal)
+        $(document).on('click','.ordertraking-footer > a', openTrackModal)
         $(document).on('change','.order-track-input', callToTrack)
         $(document).on('click','.loadMoreBtn', loadMoreItems)
 

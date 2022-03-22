@@ -35,9 +35,15 @@
                     <h3> কাস্টমাইজ </h3>
                 </div>
 
+                {{-- @dd($customservicecategories) category_name --}}
                 <div class="category-menu">
                     <ul class="list-unstyled">
-                        <li><a href=""> টি-সার্ট </a></li>
+                        @isset($customservicecategories)
+                            @foreach ( $customservicecategories as $customservicecategory )
+                                <li><a href="javascript:void(0)" class="customize-btn" data-categoryid="{{ $customservicecategory->id }}">{{ $customservicecategory->category_name }}</a></li>
+                            @endforeach
+                        @endisset
+                        {{-- <li><a href=""> টি-সার্ট </a></li>
                         <li><a href=""> পোলো টি-সার্ট </a></li>
                         <li><a href=""> চাবির রিং </a></li>
                         <li><a href=""> ক্যাপ </a></li>
@@ -49,7 +55,7 @@
                         <li><a href=""> শপিং ব্যাগ </a></li>
                         <li><a href=""> জ্যারসি</a></li>
                         <li><a href=""> ছাতা </a></li>
-                        <li><a href=""> ক্রিস্ট </a></li>
+                        <li><a href=""> ক্রিস্ট </a></li> --}}
 
                     </ul>
                 </div>
@@ -64,16 +70,14 @@
 
                 <div class="footer-menu">
                     <ul class="list-unstyled">
-                        <li><a href=""> এ্যাবাউট</a></li>
-                        <li><a href=""> কন্ট্যাক্ট </a></li>
-                        <li><a href=""> ব্লগ </a></li>
-                        <li><a href=""> এফ এ্যা কিউ </a></li>
-                        <li><a href=""> অর্ডার ট্রাক করুন </a></li>
-                        <li><a href=""> ক্যারির </a></li>
-                        <li><a href=""> একাউন্ট </a></li>
+                        <li><a href="{{ route('about_index')}}"> আমাদের সম্পর্কে</a></li>
+                        <li><a href="{{ route('contact_index')}}"> যোগাযোগ করুন </a></li>
+                        <li class="ordertraking-footer
+                        "><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
+                        <li><a href="{{ route('dashboard.index')}}"> একাউন্ট </a></li>
                     </ul>
                 </div>
-
+             
             </div>
 
             <div class="col-md-3">
