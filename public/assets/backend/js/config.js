@@ -215,35 +215,45 @@ function activeNavMenu(){
 function loadMoreItems(){
 
     let 
-    elem    = $(this),
-    max_id  = elem.data('maxid'),
-    limit   = elem.data('limit');
-    uri     = elem.data('uri'),
-    targetTo= elem.parent(),
-    method  = elem?.data('method') ?? 'GET',
+    elem            = $(this),
+    max_id          = elem.attr('data-maxid'),
+    limit           = elem.attr('data-limit');
     containerLoader = $(document).find('.loadMoreContainer'),
-    dataInsertElem  = $(document).find('[data-insert]');
+    uri             = elem.data('uri'),
+    targetTo        = elem.parent(),
+    method          = elem?.data('method') ?? 'GET',
+    totalCount      = containerLoader?.attr('data-totalcount');
+    dataInsertElem  = $(document).find('[data-insert]'),
     dataInsert      = dataInsertElem.data('insert');
 
     if (!uri) return false;
     
     ajaxFormToken();
 
+    let objectData = { max_id, limit};
+
+    if (elem?.attr('data-ajax-filter')){
+        objectData = { ...filterByData(), max_id, limit }
+        method     = "POST";
+    }
+
     $.ajax({
         url     : uri,
         type    : method,
-        data    : { max_id, limit },
+        data    : objectData,
         cache   : false,
         success : function (res) {
             // console.log(res);
             if(res?.html){
 
-                elem.data('maxid', res?.max_id);
+                elem.attr('data-maxid', res?.max_id);
 
-                if (res?.isLast) {
-                    elem.remove();
+                if (res?.isLast || totalCount && Number(res?.totalCount) < Number(limit)) {
+                    containerLoader.addClass('d-none');
+                }else{
+                    containerLoader.removeClass('d-none');
                 }
-                
+
                 if (dataInsertElem.length){
                     dataInsertElem[dataInsert](res.html);
                 }else{
@@ -258,6 +268,58 @@ function loadMoreItems(){
     });
 
 }
+
+
+
+
+function filterByData() {
+
+    let
+    category_ids= [],
+    colors      = [],
+    sizes       = [],
+    prices      = null,
+    tags        = [],
+    filterObj   = {};
+    categories  = $(document).find('input[name="category"]:checked'),
+    colorElems  = $(document).find('.color_container .color.selected'),
+    sizeElems   = $(document).find('.size_container .size.selected'),
+    tagElems    = $(document).find('.filterTagName.selected'),
+    minPrice    = $('#min-price').text(),
+    maxPrice    = $('#max-price').text();
+
+    categories.map((i, cat) => {
+        category_ids.push($(cat).val());
+    })
+
+    colorElems.map((i, color) => {
+        colors.push($(color).attr('data-color'));
+    })
+
+    sizeElems.map((i, size) => {
+        sizes.push($(size).attr('data-size'));
+    })
+
+    prices = {
+        minPrice,
+        maxPrice
+    };
+
+    tagElems.map((i, tag) => {
+        tags.push($(tag).attr('data-tag'));
+    })
+
+    filterObj = {
+        category_ids: category_ids,
+        colors: colors,
+        sizes: sizes,
+        prices: prices,
+        tags: tags
+    };
+
+    return filterObj;
+}
+
 
 
 

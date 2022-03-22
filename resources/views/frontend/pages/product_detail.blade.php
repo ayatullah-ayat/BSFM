@@ -618,7 +618,7 @@
                 const size = $(document).find('.size_container .size.selected').attr('data-size');
 
                 let href = $(this).attr('href');
-                open(`${href}?ref={{ uniqid() }}&q=${$('#count').text()}&c=${color}&s=${size}`,'_self')
+                open(`${href}?ref={{ uniqid() }}&q=${$('#count').text()??''}&c=${color ?? ''}&s=${size??''}`,'_self')
             }
             
     </script>

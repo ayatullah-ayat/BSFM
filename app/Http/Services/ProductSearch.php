@@ -160,7 +160,7 @@ trait ProductSearch
 
 
 
-    private function renderProduct($products){
+    private function renderProduct($products, $lastId=null){
         try {
             //
 
@@ -168,7 +168,7 @@ trait ProductSearch
             $lastId         = 0;
             $isLastRecord   = false;
             $lastData       = Product::first();
-            if ($lastData) {
+            if ($lastData && !$lastId) {
                 $lastId = $lastData->id;
             }
 

@@ -86,7 +86,7 @@
     
                     <form class="card">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="কুপন কোড ">
+                            <input type="text"  id="coupon" class="form-control" placeholder="কুপন কোড ">
                             <button type="submit" class="btn btn-danger"> রিডিম </button>
                         </div>
                     </form>
@@ -112,7 +112,22 @@
                                                 {{-- @dd($product) --}}
                                                 <tbody class="checkout-cart-tbody">
                                                     @if( isset($product) && $product->product_name)
-                                                    <tr data-productid="{{ $product->id }}">
+
+                                                    @php
+                                                        $color  = request('c');
+                                                        $size   = request('s');
+                                                        $qty    = request('q');
+                                                        $orderableData = [
+                                                            'product_id'    => $product->id,
+                                                            'color'         => $color,
+                                                            'size'          => $size,
+                                                            'qty'           => (int)$qty,
+                                                            'sales_price'   => salesPrice($product) ?? 0.0,
+                                                            'subtotal'      => (salesPrice($product) ?? 0.0) * (int)$qty,
+                                                        ];
+                                                    @endphp
+
+                                                    <tr data-productid="{{ $product->id }}" data-orderable-product="{{ json_encode($orderableData) }}">
                                                         <td class="align-middle">
                                                             <div class="cart-info">
                                                                 {{-- <a href="javascript:void(0)"><i class="fa-solid fa-xmark fa-lg"></i></a> --}}
@@ -143,18 +158,37 @@
                                                     
                                                     @foreach ($cartProducts as $k => $product)
                                                     
-                                                        @php $productQty = 1; @endphp
+                                                        @php 
+                                                        $productQty = 1; 
+                                                        $color  = null;
+                                                        $size   = null;
+                                                        $qty    = $productQty;
+                                                        @endphp 
                                                     
                                                         @foreach ($cartQtys as $cartQty)
                                                             @php
                                                             if(isset($cartQty['product_id']) && $cartQty['product_id'] == $product->id){
                                                                 $productQty = (int)$cartQty['qty'] ?? 1;
+                                                                $color  = $cartQty['color'] ?? null;
+                                                                $size   = $cartQty['size'] ?? null;
+                                                                $qty    = $productQty;
                                                                 break;
                                                             }
                                                             @endphp
                                                         @endforeach 
 
-                                                    <tr data-productid="{{ $product->id }}">
+                                                        @php
+                                                            $orderableData = [
+                                                            'product_id'    => $product->id,
+                                                            'color'         => $color,
+                                                            'size'          => $size,
+                                                            'qty'           => (int)$qty,
+                                                            'sales_price'   => salesPrice($product) ?? 0.0,
+                                                            'subtotal'      => (salesPrice($product) ?? 0.0) * (int)$qty,
+                                                            ];
+                                                        @endphp
+
+                                                    <tr data-productid="{{ $product->id }}" data-orderable-product="{{ json_encode($orderableData) }}">
                                                         <td class="align-middle">
                                                             <div class="cart-info">
                                                                 <a href="javascript:void(0)" data-productid="{{ $product->id }}" class="removeFromCheckout"><i
@@ -204,19 +238,21 @@
 
                     <!-- Checkout Shipment start-->
                     <h4 class="mb-3">শিপমেন্ট এড্রেসঃ</h4>
-                    <div class="row">
+                    <div class="row" id="shipment-form">
     
                         <div class="col-md-6 px-2 mb-3">
                             <div class="form-group">
-                                <input type="text" class="form-control border" placeholder="আপনার নাম লিখুন"
+                                <input type="text" class="form-control border" placeholder="আপনার নাম লিখুন" required
                                     name="full_name">
+                                    <span class="v-msg text-danger"></span>
                             </div>
                         </div>
     
                         <div class="col-md-6 px-2 mb-3">
                             <div class="form-group">
-                                <input type="text" class="form-control border" placeholder="আপনার মোবাইল নাম্বার লিখুন"
+                                <input type="text" class="form-control border" placeholder="আপনার মোবাইল নাম্বার লিখুন" required
                                     name="mobile_no">
+                                <span class="v-msg text-danger"></span>
                             </div>
                         </div>
     
@@ -224,27 +260,30 @@
                             <div class="form-group">
                                 <input type="email" class="form-control border" placeholder="আপনার ইমেইল লিখুন"
                                     name="email">
+                                <span class="v-msg text-danger"></span>
                             </div>
                         </div>
     
                         <div class="col-md-12 px-2 mb-3">
                             <div class="form-group">
-                                <textarea name="address" id="" style="resize:vertical" cols="30" rows="10"
+                                <textarea name="address" id="" style="resize:vertical" cols="30" rows="10" required
                                     class="form-control"
                                     placeholder="আপনার ঠিকানা লিখুন এবং সাথে বিভাগ , জেলা, পোস্টাল কোড ইত্যাদি !"></textarea>
+                                <span class="v-msg text-danger"></span>
                             </div>
                         </div>
     
                         <div class="col-md-12 px-2 mb-3">
                             <strong>Select a Payment</strong>
                             <div class="form-group">
-                                <input type="radio" name="payment_type" id="bkash">
+                                <input type="radio" name="payment_type" id="cashondelivery" checked value="Cash On Delivery">
+                                <label for="cashondelivery">Cash On Delivery</label>
+                                <input type="radio" name="payment_type" id="bkash" value="Bkash">
                                 <label for="bkash">Bkash</label>
-                                <!-- <input type="radio" name="payment_type" id="rocket">
-                                <label for="rocket">Rocket</label> -->
-                                <input type="radio" name="payment_type" id="sslcommerz" checked>
+                                <input type="radio" name="payment_type" id="sslcommerz" value="SSL Commerz">
                                 <label for="sslcommerz">SSL Commerz</label>
                             </div>
+                            <span class="v-msg text-danger payment-v-msg"></span>
     
                             <div class="payment-type-box">
                                 <div class="row">
@@ -259,9 +298,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 my-3">
-                                        <button class="btn btn-sm btn-danger text-white text-center"> <span
-                                                class="fa fa-paper-plane mx-1"
-                                                style="color: #fff !important;"></span>Proceed To Payment</button>
+                                        <button class="btn btn-sm btn-danger text-white text-center" id="makePayment"> <span class="fa fa-paper-plane mx-1" style="color: #fff !important;"></span>Proceed To Payment</button>
                                     </div>
                                 </div>
                             </div>
@@ -299,8 +336,13 @@
 
 @push('js')
 <script>
+
+        let timeId = null;
         $(function(){
             $(document).on("click",'.stateChange', incrementDecrementCount2)
+            $(document).on("change",'#coupon', applyCoupon)
+            $(document).on("change input",'[required]', checkSingleValidation)
+            $(document).on("click",'#makePayment', submitToMakeOrder)
         });
 
         function incrementDecrementCount2(e){
@@ -367,6 +409,164 @@
 
             $('#producterdum').text(totalProduct);
             $('#surbomot').text(grandTotal);
+        }
+
+
+        function getOrupdateProductInfo(){
+
+            let 
+            orderObject         = {};
+            total_product_price = Number($('#producterdum').text());
+            total_discount_price= Number($('#discount').text());
+            grand_total         = Number($('#surbomot').text());
+            rows                = [...$(document).find(`tr[data-productid]`)],
+            orderableDataArr    = [];
+
+            rows.forEach(row => {
+                let orderableData = $(row)?.attr('data-orderable-product') ? JSON.parse($(row)?.attr('data-orderable-product')) : null;
+                if(orderableData){
+                    orderableData.qty       = parseInt($(row).find('.count').text());
+                    orderableData.subtotal  = Number($(row).find('.subtotal').text());
+                }
+
+                orderableDataArr.push(orderableData);
+
+            });
+
+            orderObject = {
+                total_product_price,
+                total_discount_price,
+                grand_total,
+                products: orderableDataArr,
+            };
+
+            return orderObject;
+
+        }
+
+
+
+        function shipmentInfo(){
+            // form data
+            let name        = $('input[name="full_name"]').val();
+            let mobile_no   = $('input[name="mobile_no"]').val();
+            let email       = $('input[name="email"]').val();
+            let address     = $('textarea[name="address"]').val();
+            let payment_type= $('input[name="payment_type"]:checked').val();
+
+            return { name, mobile_no, email, address, payment_type};
+        }
+
+
+
+        function resetShipmentInfo(){
+            // form data
+            $('input[name="full_name"]').val('');
+            $('input[name="mobile_no"]').val('');
+            $('input[name="email"]').val('');
+            $('textarea[name="address"]').val('');
+            $('input#cashondelivery').prop('checked',true);
+
+        }
+
+
+        function validationErrorCheck(){
+            // form data
+            let 
+            isValid         = true;
+            parentWrapper   = $('#shipment-form');
+            
+            [...parentWrapper.find('[required]')].forEach(elem => {
+                const value = $(elem).val().trim();
+
+                $(elem).parent().find('.v-msg').text(``);
+
+                if(!value){
+                    $(elem).parent().find('.v-msg').text(`${capitalize($(elem).attr('name')) ?? 'This Field '} is Required!`);
+                    isValid = false;
+                }
+
+            });
+
+            if(!$('input[name="payment_type"]:checked').val()){
+                $('.payment-v-msg').text('Please Select a Payment Type!')
+                isValid = false;
+            }else{
+                $('.payment-v-msg').text('')
+            }
+
+            //payment_type
+
+            return isValid;
+
+        }
+
+
+        function checkSingleValidation(){
+            let elem = $(this);
+
+            if(!elem.val().trim()){
+                elem.parent().find('.v-msg').text(`${capitalize(elem.attr('name')) ?? 'This Field '} is Required!`);
+                elem.addClass('is-invalid')
+                return false;
+            }
+
+            elem.parent().find('.v-msg').text(``);
+            elem.removeClass('is-invalid')
+        }
+
+
+
+        function applyCoupon(){
+            let 
+            element     = $(this),
+            couponCode  = element.val();
+
+            console.log(couponCode);
+
+            // send ajax request 
+
+            // if success then add discount price 
+            
+        }
+
+
+        function submitToMakeOrder(){
+            //
+            let orderData   = getOrupdateProductInfo();
+            let shipmentData= shipmentInfo();
+
+            if(!orderData?.products?.length){
+                alert("Please select atleast 1 Product!")
+                return false;
+            }
+
+            // validation 
+            validationErrorCheck();
+
+            // make payment & send ajax request to insert order data
+            ajaxFormToken();
+
+            clearTimeout(timeId)
+
+            timeId = setTimeout(() => {
+                $.ajax({
+                    url     : '',
+                    type    : "POST",
+                    data    : { order: orderData, shipment: shipmentData},
+                    cache   : false,
+                    success : function (res) {
+                        console.log(res);
+
+                        // if success then reset form
+                        resetShipmentInfo();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }, 500);
+
         }
 
         

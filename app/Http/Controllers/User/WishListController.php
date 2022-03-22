@@ -61,7 +61,7 @@ class WishListController extends Controller
                 $data = serialize([$request->productId]);
             }
 
-            Cookie::queue('wishLists'. $customer_id, $data, 3600 * 10);
+            Cookie::queue('wishLists'. $customer_id, $data, 3600 * 30);
 
             return response()->json($wishLists);
 
@@ -103,7 +103,7 @@ class WishListController extends Controller
 
             Cookie::queue(Cookie::forget('wishLists'. $customer_id));
 
-            Cookie::queue('wishLists'. $customer_id, $data, 3600 * 10);
+            Cookie::queue('wishLists'. $customer_id, $data, 3600 * 30);
 
             return response()->json($wishLists);
 

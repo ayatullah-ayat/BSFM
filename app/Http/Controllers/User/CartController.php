@@ -37,7 +37,7 @@ class CartController extends Controller
     {
         //cartQtys
         $cartQtys = $request->cartQtys;
-        Cookie::queue('cartQtys', serialize($cartQtys), 3600 * 10);
+        Cookie::queue('cartQtys', serialize($cartQtys), 60);
 
     }
 

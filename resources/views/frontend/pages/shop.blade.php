@@ -79,7 +79,7 @@
                         
                 </div>
 
-                <div data-totalcount="{{ $countProducts }}" class="text-center loadMoreContainer {{ $countProducts <= $limit ? 'd-none' : '' }} pt-5">
+                <div data-totalcount="{{ $countProducts }}" data-ajax-filter="" class="text-center loadMoreContainer {{ $countProducts <= $limit ? 'd-none' : '' }} pt-5">
                     {!! loadMoreButton( route('shop_index'),$maxId, $limit) !!}
                 </div>
 
@@ -89,6 +89,8 @@
         </div>
     </div>
 </section>
+
+
 
 <!-- Our Contact Area-->
 <section class="container-fluid call-center-area">
@@ -269,7 +271,7 @@
                         tags        : tags
                     };
 
-                    console.log(filterObj);
+                    console.log(filterObj); 
                     shop_ajax_filter(filterObj);
                 }, 500);
             }
@@ -279,12 +281,15 @@
             function shop_ajax_filter(filterObj){
 
                 let 
+                elemContainer   = $('.loadMoreContainer'),
                 elem            = $('.loadMoreBtn'),
-                // max_id          = elem.data('maxid'),
-                // limit           = elem.data('limit'),
+                max_id          = elem.attr('data-maxid'),
+                limit           = elem.attr('data-limit'),
                 method          = 'POST',
                 dataInsertElem  = $(document).find('[data-filter-insert]');
                 dataInsert      = dataInsertElem.data('filter-insert');
+
+                elem.attr('data-ajax-filter', '');
                 
                 ajaxFormToken();
 
@@ -294,24 +299,33 @@
                     data    : filterObj,
                     cache   : false,
                     success : function (res) {
-                        if(res?.html != null){
-                            
-                            console.log(res);
-                            // elem.data('maxid', res?.max_id);
+                        // console.log(res, res?.max_id);
+                        elem.attr('data-maxid', res?.max_id);
 
-                            // if (res?.isLast) {
-                            //     elem.remove();
-                            // }
+                        elemContainer.attr('data-totalcount', Number(res?.totalCount));
+
+                        if(res?.html != null){
+
+                            elem.attr('data-ajax-filter', true);
+
+                            if (res?.isLast || Number(res?.totalCount) <= Number(limit)) {
+                                elemContainer.addClass('d-none');
+                            }else{
+                                elemContainer.removeClass('d-none');
+                            }
                             
                             // console.log(dataInsertElem, dataInsert);
                             if (dataInsertElem.length){
                                 dataInsertElem[dataInsert](res.html);
                             }
 
+                            // data-ajax=true
+
                         }
                     },
                     error: function (error) {
                         console.log(error);
+                        elem.attr('data-ajax-filter', '');
                     }
                 });
 

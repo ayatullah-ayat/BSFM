@@ -87,6 +87,9 @@ class ShopController extends Controller
     public function ajaxFilter()
     {
         $limit          = $this->limit;
+        $maxId          = request()->max_id;  //min record
+        $operator       = request()->operator ?? '<';
+
         $category_ids   = request()->category_ids ?? null;
         $tags           = request()->tags ?? null;
         $colors         = request()->colors ?? null;
@@ -153,21 +156,35 @@ class ShopController extends Controller
         });
 
 
+        if ($maxId) {
+            $q->where('products.id', $operator, $maxId);
+        }
+
+        $allProducts = $q->groupBy('products.id')->orderByDesc('products.id')->get();
+
         $products = $q->groupBy('products.id')
-        ->orderByDesc('products.created_at')
+        // ->orderByDesc('products.created_at')
+        ->orderByDesc('products.id')
         ->orderBy('products.product_name')
         ->orderBy('products.is_best_sale')
-        // ->limit($limit)
+        ->limit($limit)
         ->get();
+
 
         if (request()->ajax()) {
 
-            $response = $this->renderProduct($products);
+            $lastId   =  0;
+            if( $count = count($allProducts) ){
+                $lastId = $allProducts[$count-1]->id ?? 0;
+            }
+
+            $response = $this->renderProduct($products, $lastId);
 
             return response()->json([
                 'html'      => $response['html'],
                 'max_id'    => $response['max_id'],
-                'isLast'    => $response['isLast']
+                'isLast'    => $response['isLast'],
+                'totalCount'=> count($allProducts) ?? 0
             ]);
         }
 
