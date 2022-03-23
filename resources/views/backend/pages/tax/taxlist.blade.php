@@ -276,7 +276,6 @@
             }
         }
 
-
         function updateToDatabase(){
             ajaxFormToken();
 
@@ -293,8 +292,6 @@
 
             hideModal('#taxModal');
         }
-
-
 
         function formatData(){
             return {

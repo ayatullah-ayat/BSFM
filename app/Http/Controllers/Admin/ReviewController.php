@@ -84,7 +84,6 @@ class ReviewController extends Controller
             return response()->json([
                 'success'   => true,
                 'msg'       => 'Review Updated Successfully!',
-                'data'      => $review->first()
             ]);
                 
         } catch (\Exception $th) {

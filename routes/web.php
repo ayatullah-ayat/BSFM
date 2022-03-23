@@ -35,7 +35,9 @@ use App\Http\Controllers\Admin\SmsSettignsController;
 use App\Http\Controllers\Admin\StockReportController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
 use App\Http\Controllers\Admin\ClientLogosController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
@@ -333,6 +335,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [AdminReviewController::class, 'store'])->name('store');
         Route::put('/{review}',     [AdminReviewController::class, 'update'])->name('update');
         Route::delete('/{review}',  [AdminReviewController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'coupons', 'as' => 'coupon.'], function(){
+        Route::get('/',             [CouponController::class, 'index'])->name('index');
+        Route::post('/',            [CouponController::class, 'store'])->name('store');
+        Route::put('/{coupon}',     [CouponController::class, 'update'])->name('update');
+        Route::delete('/{coupon}',  [CouponController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'applycoupons', 'as' => 'applycoupon.'], function(){
+        Route::get('/',             [AdminApplyCouponController::class, 'index'])->name('index');
+        Route::post('/',          [AdminApplyCouponController::class, 'store'])->name('store');
+        Route::put('/{applyCoupon}',     [AdminApplyCouponController::class, 'update'])->name('update');
+        Route::delete('/{applyCoupon}',  [AdminApplyCouponController::class, 'destroy'])->name('destroy');
+        Route::get('/searchProduct',     [AdminApplyCouponController::class, 'searchProduct'])->name('searchProduct');
     });
 
 
