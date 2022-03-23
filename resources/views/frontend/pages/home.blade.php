@@ -160,7 +160,7 @@
                     @isset($clientlogos)
                         @foreach ($clientlogos as $clientlogo)
                             @php
-                            $maxClientLogoId = $customservicecategory->id;
+                            $maxClientLogoId = $clientlogo->id;
                             @endphp
 
                             @if($clientlogo->logo)

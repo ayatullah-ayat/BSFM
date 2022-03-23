@@ -14,9 +14,10 @@ class CreateApplyCouponsTable extends Migration
     public function up()
     {
         Schema::create('apply_coupons', function (Blueprint $table) {
-            $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->unsignedBigInteger('coupon_id');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
         });
     }
 

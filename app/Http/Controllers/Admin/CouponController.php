@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\CouponRequest;
 use App\Models\Coupon;
+use Exception;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -16,7 +17,8 @@ class CouponController extends Controller
      */
     public function index()
     {
-        //
+        $coupons = Coupon::orderByDesc('id')->get();
+        return view('backend.pages.coupon.managecoupon', compact('coupons'));
     }
 
     /**
@@ -35,10 +37,30 @@ class CouponController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CouponRequest $request)
     {
-        //
+        try {
+            $data      = $request->all();
+            $coupon   = Coupon::create($data);
+            if(!$coupon)
+                throw new Exception("Unable to create Coupon!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Coupon Created Successfully!',
+                'data'      => $coupon
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -71,7 +93,26 @@ class CouponController extends Controller
      */
     public function update(Request $request, Coupon $coupon)
     {
-        //
+        try {
+
+            $data           = $request->all();
+            $couponStatus   = $coupon->update($data);
+            if(!$couponStatus)
+                throw new Exception("Unable to Update Coupon!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Coupo Updated Successfully!',
+                'data'      => $coupon->first()
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
     }
 
     /**
@@ -82,6 +123,24 @@ class CouponController extends Controller
      */
     public function destroy(Coupon $coupon)
     {
-        //
+        try {
+
+            $isDeleted = $coupon->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete coupon!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Coupon Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+
+
 }

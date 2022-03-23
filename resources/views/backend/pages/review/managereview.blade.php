@@ -35,7 +35,7 @@
                                             {{ $reviewItem->commentedBy->name ?? 'N/A' }}
                                         </td>
                                         <td>
-                                            {{ $reviewItem->ratting ?? 'N?A' }}
+                                            {{ $reviewItem->ratting ?? 'N/A' }}
                                         </td>
                                         <td>
                                             {{ $reviewItem->body ?? 'N/A' }}
@@ -45,7 +45,7 @@
                                         </td>
                                         <td style="text-align: center;">
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="{{ $reviewItem->id }}">
+                                                <input type="checkbox" data-id="{{$reviewItem->id}}" {{ $reviewItem->is_approved ? 'checked':''}} class="custom-control-input is-approved" id="{{ $reviewItem->id }}">
                                                 <label class="custom-control-label" for="{{ $reviewItem->id }}"></label>
                                             </div>
                                         </td>
@@ -123,11 +123,11 @@
                                 <div class="form-group">
                                     <label for="ratting">Star</label>
                                     <select name="ratting" class="ratting" data-required id="ratting" data-placeholder="Select Ratting">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
+                                            <option value="1">1 Star</option>
+                                            <option value="2">2 Star</option>
+                                            <option value="3">3 Star</option>
+                                            <option value="4">4 Star</option>
+                                            <option value="5">5 Star</option>
                                     </select>
                                 </div>
                             </div>
@@ -192,7 +192,7 @@
 
         $(document).ready(function(){
             init();
-            // $(document).on('click','#add', createModal)
+            $(document).on('change','.is-approved', changeStatus)
             // $(document).on('click','#review_save_btn', submitToDatabase)
             $(document).on('click' , '.delete', deleteToDatabase)
             $(document).on('click', '.update', showUpdateModal)
@@ -293,11 +293,13 @@
 
                 $('#body').val(review?.body)
 
-                if(review?.is_active){
+                if(review?.is_approved){
                     $('#isActive').prop('checked',true)
                 }else{
                     $('#isInActive').prop('checked',true)
                 }
+
+                $('#ratting').select2().val(review.ratting).trigger('change');
 
                 showModal('#reviewModal');
             }
@@ -326,7 +328,7 @@
                 ratting         : $('#ratting').val(), 
                 commentable_id  : $('#commentable_id ').val(), 
                 commented_by    : $('#commented_by').val(), 
-                is_active       : $('#isActive').is(':checked') ? 1 : 0,
+                is_approved     : $('#isActive').is(':checked') ? 1 : 0,
             }
         }
  
@@ -338,29 +340,30 @@
                 $('#isActive').prop('checked', true)
         }
 
-        // function createModal(){
-        //     showModal('#reviewModal');
-        //     $('#supplier_save_btn').removeClass('d-none');
-        //     $('#supplier_update_btn').addClass('d-none');
-        //     $('#reviewModal .heading').text('Create');
-        //     resetData();
-        // }
+       function changeStatus(){
+           let elem     = $(this),
+           is_approved  = elem.prop("checked"),
+           id           = elem.attr('data-id');
 
-        // function submitToDatabase(){
-        //     //
+           ajaxFormToken();
 
-        //     ajaxFormToken();
-
-        //     let obj = {
-        //         url     : ``, 
-        //         method  : "POST",
-        //         data    : {},
-        //     };
-
-        //     ajaxRequest(obj);
-
-        //     hideModal('#reviewModal');
-        // }
+           $.ajax({
+               url      :`{{ route('admin.review.update', '' ) }}/${id}`, 
+               method   :'PUT',
+               data     : {is_approved: Number(is_approved)},
+               success(res){
+                   if(res?.success){
+                       elem.prop("checked", is_approved);
+                        _toastMsg(res?.msg ?? 'Success!', 'success', 500);
+                   }
+               },
+               error(err){
+                   console.log(err);
+                   elem.prop("checked", !is_approved);
+                   _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!');
+               },
+           })
+       }
 
     </script>
 @endpush

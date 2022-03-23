@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApplyCoupon;
+use App\Models\Coupon;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ApplyCouponController extends Controller
@@ -15,7 +17,30 @@ class ApplyCouponController extends Controller
      */
     public function index()
     {
-        //
+        $coupons = Coupon::with('applycoupons')
+                ->where('status', 1)
+                ->whereDate('coupon_validity','>=', date('Y-m-d'))
+                ->orderByDesc('id')
+                ->get();
+
+        // dd( $coupons->applycoupons);
+
+        return view('backend.pages.coupon.applycoupon', compact('coupons'));
+    }
+
+    public function searchProduct(){
+
+        $productName = request('term')['term'] ?? null;
+
+        if(!$productName) return;
+
+        $products = Product::where('is_active', 1)
+                    ->where('is_publish', 1)
+                    ->where('product_name', 'like', "%{$productName}%")
+                    ->orderByDesc('id')
+                    ->get();
+
+        return response()->json($products);
     }
 
     /**

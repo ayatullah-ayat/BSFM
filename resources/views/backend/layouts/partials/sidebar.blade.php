@@ -69,6 +69,20 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#coupon" aria-expanded="true"
+            aria-controls="products">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Coupon</span>
+        </a>
+        <div id="coupon" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('admin.coupon.index') }}">Manage Coupon</a>
+                <a class="collapse-item" href="{{ route('admin.applycoupon.index') }}">Apply Coupon</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#review" aria-expanded="true"
             aria-controls="products">
             <i class="fas fa-fw fa-cog"></i>

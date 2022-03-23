@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
 
-    protected $fillable = ['ratting','commented_by','body'];
+    protected $fillable = ['ratting','commented_by','body','is_approved'];
 
     public function product()
     {

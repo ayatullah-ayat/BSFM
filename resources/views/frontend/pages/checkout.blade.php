@@ -517,12 +517,16 @@
 
 
 
-        function applyCoupon(){
+        function applyCoupon(e){
+            e.preventDefault();
+
             let 
             element     = $(this),
             couponCode  = element.val();
 
             console.log(couponCode);
+
+            // $('#discount').text()
 
             // send ajax request 
 

@@ -229,7 +229,7 @@
                                                 $maxId = $comment->id;
                                             @endphp
 
-                                            @if($comment->commentedBy)
+                                            @if($comment->commentedBy && boolval($comment->is_approved))
                                             <div class="col tabs-product-comments d-flex">
                                                 
                                                 <div class="reviw-person">
