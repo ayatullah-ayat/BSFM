@@ -894,3 +894,8 @@ footer {
 #my-list .dropdown-menu li .content-search {
     line-height: 0 !important;
 }
+
+
+footer a:hover{
+    color: #DC0029 !important;
+}

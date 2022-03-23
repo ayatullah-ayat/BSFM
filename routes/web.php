@@ -64,6 +64,7 @@ Route::redirect('/admin', '/admin/dashboard', 301);
 Route::group(['prefix' => ''],function(){
     // --------------------------- General Route goes Here ---------------------------------
     Route::get('/home',                     [HomeController::class, 'index'])->name('home_index');
+    Route::post('/home-client-logos',       [HomeController::class, 'home_client_loadmore'])->name('home_client_loadmore');
 
     Route::get('/shop',                     [ShopController::class, 'index'])->name('shop_index');
     Route::post('/shop',                    [ShopController::class, 'ajaxFilter'])->name('shop_ajax_filter');

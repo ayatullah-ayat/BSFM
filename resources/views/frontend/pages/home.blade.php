@@ -36,9 +36,16 @@
     
         <div class="container">
             <div class="row">
+                @php
+                    $maxCatId = 0;
+                @endphp
 
                 @isset($customservicecategories)
                     @foreach ($customservicecategories as $customservicecategory)
+                        @php
+                        $maxCatId = $customservicecategory->id;
+                        @endphp
+
                         <div class="col-md-4 col-sm-12 mb-2">
                             <div class="product-content d-flex">
         
@@ -61,136 +68,8 @@
                     @endforeach
                 @endisset
     
-                {{-- <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/sdafasdfsa.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" type="button" class="product-button" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/Polo-T-Shirt-Final.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/product-5.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/product-6.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/product-7.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/product-8.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div>
-    
-                <div class="col-md-4 col-sm-12">
-                    <div class="product-content d-flex">
-    
-                        <div class="product-img">
-                            <img src="{{asset('assets/frontend/img/product/product-9.png')}}" alt="Product img">
-                        </div>
-    
-                        <div class="product-details text-center">
-                            <h3 class="product-title"> জার্সি </h3>
-                            <p class="product-text"> আপনার কাস্টমাইজ ডিজাইন করা জার্সি আজই অর্ডার করে ফেলুন। </p>
-                            <a href="#" class="product-button"> কাস্টমাইজ করুন </a>
-                        </div>
-    
-                    </div>
-                </div> --}}
-    
-                <div class="product-ses-more text-center">
-                    <a href="#"> আরও কাস্টমাইজ প্রোডাক্ট দেখুন </a>
+                <div data-totalcount="{{ $countCustomservicecategories ?? 0 }}" class="product-ses-more text-center loadMoreContainer {{ $countCustomservicecategories <= $limit ? 'd-none' : '' }}">
+                    <a href="javascript:void(0)" data-uri="{{ route('home_index') }}" class="loadMoreBtn" data-maxid="{{ $maxCatId }}" data-limit="{{ $limit }}"> আরও কাস্টমাইজ প্রোডাক্ট দেখুন </a>
                 </div>
     
             </div>
@@ -217,7 +96,7 @@
                         @if($shopbanner && $shopbanner->banner_image)
                                 <a href="{{ route('shop_index')}}"><img src="{{ asset($shopbanner->banner_image) }}" class="img-fluid" alt="micromedia-image"></a>
                             @else 
-                                <a href="#"><img src="{{asset('assets/frontend/img/micromedia-image 1.png')}}" class="img-fluid" alt="micromedia-image"></a>
+                                <a href="{{ route('shop_index')}}"><img src="{{asset('assets/frontend/img/micromedia-image 1.png')}}" class="img-fluid" alt="micromedia-image"></a>
                         @endif
                     </div>
                 </div>
@@ -243,7 +122,6 @@
             <div class="row">
                 @isset($customservices)
                     @foreach ($customservices as $customservice)
-                    {{-- @dd() --}}
                         <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
                             <div class="card service-card">
                                 <img draggable="false" class="card-img-top" src="{{ asset($customservice->service_thumbnail) }}" alt="Card image cap">
@@ -256,77 +134,6 @@
                         </div>
                     @endforeach
                 @endisset
-                {{-- <td>
-                    @if($service->service_thumbnail)
-                        <img src="{{ asset($service->service_thumbnail) }}" style="width: 80px;" alt="service Image">
-                    @else 
-                        <img src="" style="width: 80px;" alt="service Image">
-                    @endif
-                </td> --}}
-                {{-- <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-2.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> ক্রিন প্রিন্ট/রাবার প্রিন্ট। </p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-3.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> ডি.টি.জি/সাবলিমেশন প্রিন্ট। </p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-4.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> ডিজিটাল এমবধয়ডারি। </p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-5.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> এক্রিলিক ভব ফিনিশিং. </p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-6.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> ইউভি প্রিন্ট। </p>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-                    <div class="card service-card">
-                        <img class="card-img-top" src="{{asset('assets/frontend/img/service/service-7.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> সিরামিক্স ফায়ার প্রিন্ট। </p>
-                        </div>
-                    </div>
-    
-                </div>
-
-                <div class="col-md-3 col-12 mt-4 d-flex align-items-center justify-content-center">
-    
-                    <div class="card service-card">
-                        <img class="card-img-top img-fluid" src="{{asset('assets/frontend/img/service/service-8.png')}}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text text-center"> সাবলিমেশন মগ প্রিন্ট। </p>
-                        </div>
-                    </div>
-                </div> --}}
     
             </div>
     
@@ -344,91 +151,35 @@
             </div>
     
             <div class="client-details">
-                <div class="row d-flex align-items-center justify-content-center">
+                <div class="row d-flex align-items-center justify-content-center loadMoreContainerlogosparent">
 
+                    @php
+                        $maxClientLogoId = 0;
+                    @endphp
 
                     @isset($clientlogos)
-                        {{-- @dd($clientlogos) --}}
                         @foreach ($clientlogos as $clientlogo)
+                            @php
+                            $maxClientLogoId = $customservicecategory->id;
+                            @endphp
+
+                            @if($clientlogo->logo)
                             <div class="col-md-2">
                                 <div class="single-client text-center m-1">
                                     <img src="{{asset( $clientlogo->logo ?? null)}}" alt="">
                                 </div>
                             </div>
+                            @endif 
+
                         @endforeach
                     @endisset
-    
-                    {{-- <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-2.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-3.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-4.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-5.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-6.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-7.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-8.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-9.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-10.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-8.png')}}" alt="">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-2">
-                        <div class="single-client text-center m-1">
-                            <img src="{{asset('assets/frontend/img/our-client/our-client-10.png')}}" alt="">
-                        </div>
-                    </div>
-     --}}
                 </div>
             </div>
-    
-            <div class="product-ses-more text-center">
-                <a href="#"> আরও ক্লাইন্ট দেখুন </a>
+
+            <div data-totalcount="{{ $countClientLogos ?? 0 }}"
+                class="product-ses-more text-center loadMoreContainerlogos {{ $countClientLogos <= $clientLogosLimit ? 'd-none' : '' }}">
+                <a href="javascript:void(0)" data-uri="{{ route('home_client_loadmore') }}" class="loadMoreBtnClientLogo" data-maxid="{{ $maxClientLogoId }}"
+                    data-limit="{{ $clientLogosLimit }}"> আরও ক্লাইন্ট দেখুন </a>
             </div>
     
         </div>
@@ -534,38 +285,7 @@
     
                 <div class="modal-body">
     
-                    <div class="grid-product-container">
-    
-                        {{-- <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-    
-                        <div class="card-box">
-                            <div class="card modal-card text-center">
-                                <img class="pt-3" src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                <p> পলিস্টার টি-শার্ট </p>
-                            </div>
-                        </div>
-     --}}
-    
-                    </div>
+                    <div class="grid-product-container"> </div>
     
     
                 </div>
@@ -590,6 +310,7 @@
         $(document).on('click', '.customize-btn', loadCustomizeProduct)
         $(document).on('click', '.customize-product-box', loadCustomizeProductPage)
         $(document).on('click','#contact_sent_btn', submitToDatabase)
+        $(document).on('click','.loadMoreBtnClientLogo', loadMoreLogos)
     });
 
     function loadCustomizeProduct(){

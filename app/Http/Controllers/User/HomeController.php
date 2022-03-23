@@ -17,23 +17,86 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $maxId = 0;
+    protected $limit = 12;
+    protected $clientLogosLimit = 12;
+
     public function index()
     {
+        $maxId    = request()->max_id ?? $this->maxId;
+        $limit    = request()->limit ?? $this->limit;
+        $operator = request()->operator ?? '<';
+
+
         $customservices = OurCustomService::where('is_active',1)
                         ->orderByDesc('id')
                         ->get();
 
-        $customservicecategories = CustomServiceCategory::where('is_active', 1)
-                                ->orderByDesc('id')
+        $countCustomservicecategories= CustomServiceCategory::where('is_active', 1)->count();
+
+
+        $sql = CustomServiceCategory::where('is_active', 1);
+        if ($maxId) {
+            $sql->where('id', $operator, $maxId);
+        }
+
+        $customservicecategories = $sql->latest()
+                                ->take($limit)
                                 ->get();
+
+        if (request()->ajax()) {
+
+            $response = $this->renderCustomServiceCategory($customservicecategories);
+
+            return response()->json([
+                'html'      => $response['html'],
+                'max_id'    => $response['max_id'],
+                'isLast'    => $response['isLast']
+            ]);
+        }
+
 
         $serviceproducts        = CustomServiceProduct::where('is_active', 1)->get();
 
         $shopbanner = Shop::where('is_active', 1)->first();
 
-        $clientlogos = ClientLogos::orderByDesc('id')->get();
+        $clientLogosLimit = $this->clientLogosLimit;
 
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos'));
+        $clientlogos = ClientLogos::orderByDesc('id')
+            ->take($clientLogosLimit)
+            ->get();
+
+        $countClientLogos = ClientLogos::count();
+
+
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
+    }
+
+
+    public function home_client_loadmore(){
+        $maxId    = request()->max_id ?? $this->maxId;
+        $limit    = request()->limit ?? $this->clientLogosLimit;
+        $operator = request()->operator ?? '<';
+
+        $sql = ClientLogos::orderByDesc('id');
+        if ($maxId) {
+            $sql->where('id', $operator, $maxId);
+        }
+
+        $clientLogos = $sql->take($limit)->get();
+
+        if (request()->ajax()) {
+
+            $response = $this->renderClientLogos($clientLogos);
+
+            return response()->json([
+                'html'      => $response['html'],
+                'max_id'    => $response['max_id'],
+                'isLast'    => $response['isLast']
+            ]);
+        }
+
     }
 
     /**
@@ -119,5 +182,107 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    private function renderCustomServiceCategory($customservicecategories){
+    
+       try{
+
+
+            $lastId         = 0;
+            $isLastRecord   = false;
+            $lastData       = CustomServiceCategory::first();
+            if ($lastData) {
+                $lastId = $lastData->id;
+            }
+
+            $maxCatId       = 0;
+            $html           = "";
+
+            if ($customservicecategories) :
+                foreach ($customservicecategories as $customservicecategory) :
+                    $maxCatId = $customservicecategory->id;
+                    if ($lastId == $maxCatId) $isLastRecord = true;
+
+                    $imageSRC = $customservicecategory->category_thumbnail ? asset($customservicecategory->category_thumbnail) : asset('assets/frontend/img/product/1234.png');
+                    $html .= "<div class=\"col-md-4 col-sm-12 mb-2\">
+                            <div class=\"product-content d-flex\">
+        
+                                <div class=\"product-img\">
+                                     <img src=\"{$imageSRC}\" alt=\"Product img\">
+                                </div>
+            
+                                <div class=\"product-details text-center\">
+                                    <h3 class=\"product-title\"> {$customservicecategory->category_name} </h3>
+                                    <p class=\"product-text\">  {$customservicecategory->category_description} </p>
+                                    <a href=\"javascript:void(0)\" id=\"category_id\" data-categoryid=\"{$customservicecategory->id}\" type=\"button\" class=\"product-button customize-btn\"> কাস্টমাইজ করুন </a>
+                                </div>
+            
+                            </div>
+                        </div>";
+                endforeach;
+            endif;
+
+         return [
+                'html'   => $html,
+                'max_id' => $maxCatId,
+                'isLast' => $isLastRecord
+            ];
+
+        } catch (\Throwable $th) {
+
+            return [
+                'html'   => null,
+                'max_id' => 0,
+                'isLast' => false
+            ];
+        }
+    }
+
+
+    private function renderClientLogos($logos)
+    {
+
+        try {
+
+
+            $lastId         = 0;
+            $isLastRecord   = false;
+            $lastData       = ClientLogos::first();
+            if ($lastData) {
+                $lastId = $lastData->id;
+            }
+
+            $maxLogoId       = 0;
+            $html           = "";
+
+            if ($logos) :
+                foreach ($logos as $clientlogo) :
+                    $maxLogoId = $clientlogo->id;
+                    if ($lastId == $maxLogoId) $isLastRecord = true;
+
+                    $imageSRC = $clientlogo->logo ? asset($clientlogo->logo) : null;
+                    $html .= "<div class=\"col-md-2\">
+                                <div class=\"single-client text-center m-1\">
+                                    <img src=\"{$imageSRC}\" alt=\"Logo\">
+                                </div>
+                            </div>";
+                endforeach;
+            endif;
+
+            return [
+                'html'   => $html,
+                'max_id' => $maxLogoId,
+                'isLast' => $isLastRecord
+            ];
+        } catch (\Throwable $th) {
+
+            return [
+                'html'   => null,
+                'max_id' => 0,
+                'isLast' => false
+            ];
+        }
     }
 }

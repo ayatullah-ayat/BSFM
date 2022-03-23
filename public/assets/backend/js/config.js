@@ -323,6 +323,54 @@ function filterByData() {
 
 
 
+function loadMoreLogos() {
+
+    let
+    elem            = $(this),
+    max_id          = elem.attr('data-maxid'),
+    limit           = elem.attr('data-limit');
+    containerLoader = $(document).find('.loadMoreContainerlogos'),
+    uri             = elem.data('uri'),
+    totalCount      = containerLoader?.attr('data-totalcount');
+
+    if (!uri) return false;
+
+    ajaxFormToken();
+
+    let objectData = { max_id, limit };
+
+    $.ajax({
+        url : uri,
+        type: "POST",
+        data: objectData,
+        cache: false,
+        success: function (res) {
+            // console.log(res);
+            if (res?.html) {
+
+                elem.attr('data-maxid', res?.max_id);
+
+                if (res?.isLast || totalCount && Number(res?.totalCount) < Number(limit)) {
+                    containerLoader.addClass('d-none');
+                } else {
+                    containerLoader.removeClass('d-none');
+                }
+
+                $('.loadMoreContainerlogosparent').append(res.html);
+
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+}
+
+
+
+
+
 
 
 
