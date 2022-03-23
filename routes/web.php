@@ -348,8 +348,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::group(['prefix' => 'applycoupons', 'as' => 'applycoupon.'], function(){
         Route::get('/',                     [AdminApplyCouponController::class, 'index'])->name('index');
         Route::post('/',                    [AdminApplyCouponController::class, 'store'])->name('store');
-        Route::put('/{applyCoupon}',        [AdminApplyCouponController::class, 'update'])->name('update');
-        Route::delete('/{applyCoupon}',     [AdminApplyCouponController::class, 'destroy'])->name('destroy');
+        Route::put('/{coupon}',             [AdminApplyCouponController::class, 'update'])->name('update');
+        Route::delete('/{coupon}',          [AdminApplyCouponController::class, 'destroy'])->name('destroy');
         Route::get('/searchProduct',        [AdminApplyCouponController::class, 'searchProduct'])->name('searchProduct');
         Route::get('/searchProductCategory',[AdminApplyCouponController::class, 'searchProductCategory'])->name('searchProductCategory');
     });
