@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
 use App\Http\Controllers\Admin\Custom\CustomServiceOrderController;
 use App\Http\Controllers\Admin\Custom\CustomServiceProductController;
 use App\Http\Controllers\Admin\Custom\CustomServiceCategoryController;
+use App\Http\Controllers\Admin\OfficeAccountController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\User\OrderController as CustomerOrderController;
@@ -353,6 +354,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/searchProduct',        [AdminApplyCouponController::class, 'searchProduct'])->name('searchProduct');
         Route::get('/searchProductCategory',[AdminApplyCouponController::class, 'searchProductCategory'])->name('searchProductCategory');
         Route::get('/getCouponData',        [AdminApplyCouponController::class, 'getCouponData'])->name('getCouponData');
+    });
+
+    Route::group(['prefix' => 'officeacounts', 'as' => 'officeacount.'], function(){
+        Route::get('/',                    [OfficeAccountController::class, 'index'])->name('index');
+        Route::post('/',                   [OfficeAccountController::class, 'store'])->name('store');
+        Route::put('/{officeAccount}',     [OfficeAccountController::class, 'update'])->name('update');
+        Route::delete('/{officeAccount}',  [OfficeAccountController::class, 'destroy'])->name('destroy');
     });
 
 
