@@ -28,15 +28,16 @@
 
                             @isset($applycoupons)
                                 @foreach ($applycoupons as $applycoupon)
-                                    <tr>
+                                {{-- @dd($applycoupon) --}}
+                                    <tr coupon-data="{{ json_encode($applycoupon) }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $applycoupon->coupon->coupon_name ?? 'N/A' }}</td>
                                         <td>{{ $applycoupon->coupon_code ?? 'N/A'}}</td>
                                         <td>{{ ucfirst($applycoupon->coupon->coupon_type) ?? 'N/A'}}</td>
                                         <td class="text-center">
-                                            <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                            <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                            <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                            <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none detail"></a>
+                                            <a data-couponid="{{$applycoupon->coupon->id}}" href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
+                                            <a href="{{ route('admin.applycoupon.destroy', $applycoupon->coupon_id)}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -109,7 +110,98 @@
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="apply_coupon_btn" type="button" class="apply_coupon_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="apply_coupon_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="CouponUpdateModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Update Apply Coupon</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body">
+                    <div id="service-container">
+                        <div class="row">
+
+                            {{-- <div class="col-md-12">
+                                <h5 class="font-weight-bold bg-custom-booking">Update Apply Coupon Information</h5>
+                                <hr>
+                            </div> --}}
+                            
+                            <div class="col-md-12" data-col="col">
+                                <div class="form-group">
+                                    <label for="coupon_id_update">Select Coupon</label>
+                                    <select name="coupon_id_update" data-selected-coupontype="" class="coupon_id_update" data-required id="coupon_id_update" data-placeholder="Select Coupon">
+                                        @isset($coupons)
+                                            @foreach ($coupons as $coupon)
+                                                @if (count($coupon->applycoupons))
+                                                <option value="{{ $coupon->id }}" data-coupontype="{{$coupon->coupon_type}}">{{ $coupon->coupon_name }}</option>
+                                                @endif
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                                <span class="v-msg"></span>
+                            </div>
+
+                            <div class="col-md-12 d-none" data-col="col">
+                                <div class="form-group">
+                                    <label for="category_id_update">Select Categories</label>
+                                    <select name="category_id_update" multiple class="category_id_update" data-required id="category_id_update" data-placeholder="Select Category"></select>
+                                </div>
+                                <span class="v-msg"></span>
+                            </div>
+
+                            <div class="col-md-12 d-none" data-col="col">
+                                <div class="form-group">
+                                    <label for="product_id">Select Products</label>
+                                    <select name="product_id" multiple class="product_id" data-required id="product_id" data-placeholder="Select Product"></select>
+                                </div>
+                                <span class="v-msg"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
+                        <button id="coupon_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Update</span></button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="applyCouponDatailModal"  tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Category Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body" id="modalDetail"></div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -167,34 +259,12 @@
             $(document).on('click','#add', createModal)
             $(document).on('click','#apply_coupon_btn', submitToDatabase)
             $(document).on('change','.coupon_id', visibleRelatedSelect2)
+            $(document).on('click', '.delete', deleteToDatabase)
+            $(document).on('click','.detail', showDataToModal)
+
+            $(document).on('click', '.update', showUpdateModal)
+            $(document).on('click','#coupon_update_btn', updateToDatabase)
         });
-
-
-
-        function visibleRelatedSelect2(){
-            let 
-            elem                = $(this),
-            selectedCouponType  = elem.find(':selected').attr('data-coupontype'),
-            patternCat          = /category/im;
-            patternProduct      = /include|exclude/im;
-
-            elem.attr('data-selected-coupontype', selectedCouponType);
-
-            if(patternCat.test(selectedCouponType)){
-
-                $('.category_id').parent().parent().removeClass('d-none');
-                $('.product_id').parent().parent().addClass('d-none');
-                $('.category_id').val(null).trigger('change')
-
-            }else if(patternProduct.test(selectedCouponType)){
-
-                $('.category_id').parent().parent().addClass('d-none');
-                $('.product_id').parent().parent().removeClass('d-none');
-                $('.product_id').val(null).trigger('change')
-            }
-
-        }
-
 
         function init(){
 
@@ -207,6 +277,11 @@
                 {
                     dropdownParent  : '#applyCouponModal',
                     selector        : `#user_id`,
+                    type            : 'select',
+                },
+                {
+                    dropdownParent  : '#CouponUpdateModal',
+                    selector        : `#coupon_id_update`,
                     type            : 'select',
                 },
             ];
@@ -273,16 +348,152 @@
                     }
                 }
             });
+
+            $("#category_id_update").select2({
+                theme : 'bootstrap4',
+                minimumInputLength: 2,
+                // tags: [],
+                ajax: {
+                    url         : URL2,
+                    dataType    : 'json',
+                    type        : "GET",
+                    quietMillis : 50,
+                    data        : function (term) {
+                        return {
+                            term: term
+                        };
+                    },
+                    processResults     : function (data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function (item) {
+
+                                return {
+                                    text: item.category_name ?? 'N/A',
+                                    id: item.category_id
+                                }
+                            })
+                        };
+                    }
+                }
+            });
         }
 
+        function showUpdateModal(){
+            let couponid = $(this).attr('data-couponid');
+
+            if(couponid){
+                // coupon = JSON.parse(coupon);
+
+                $('#CouponUpdateModal .heading').text('Edit').attr('data-id', couponid)
+                $('#coupon_id_update').val(couponid).trigger('change')
+
+                showModal('#CouponUpdateModal');
+            }
+        }
+
+        category_id_update
+
+        function updateToDatabase(){
+            ajaxFormToken();
+
+            let id  = $('#CouponUpdateModal .heading').attr('data-id');
+            let obj = {
+                url     : `{{ route('admin.applycoupon.update', '' ) }}/${id}`, 
+                method  : "PUT",
+                data    : {
+                    coupon_id  : $('#coupon_id').val(),
+                    category_id: $('#category_id').val(),
+                    product_id : $('#product_id').val(),
+                },
+            };
+
+            ajaxRequest(obj, { reload: true, timer: 2000 })
+
+            // hideModal('#CouponUpdateModal');
+        }
+
+        function showDataToModal(){
+            let 
+            elem        = $(this),
+            tr          = elem.closest('tr'),
+            coupon    = tr?.attr('coupon-data') ? JSON.parse(tr.attr('coupon-data')) : null,
+            modalDetailElem = $('#modalDetail');
+
+            if(category){
+                let html = `
+                <table class="table table-sm table-bordered table-striped">
+                    <tr>
+                        <th>Heading for apply coupon</th>
+                    </tr>
+                </table>
+                `;
+
+                modalDetailElem.html(html);
+            }
+
+            $('#applyCouponDatailModal').modal('show')
+        }
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
+
+        function visibleRelatedSelect2(){
+            let 
+            elem                = $(this),
+            selectedCouponType  = elem.find(':selected').attr('data-coupontype'),
+            patternCat          = /category/im;
+            patternProduct      = /include|exclude/im;
+
+            elem.attr('data-selected-coupontype', selectedCouponType);
+
+            if(patternCat.test(selectedCouponType)){
+
+                $('.category_id').parent().parent().removeClass('d-none');
+                $('.product_id').parent().parent().addClass('d-none');
+                $('.category_id').val(null).trigger('change')
+
+            }else if(patternProduct.test(selectedCouponType)){
+
+                $('.category_id').parent().parent().addClass('d-none');
+                $('.product_id').parent().parent().removeClass('d-none');
+                $('.product_id').val(null).trigger('change')
+            }
+
+        }
 
         function createModal(){
             showModal('#applyCouponModal');
         }
 
         function submitToDatabase(){
-            //
-
             ajaxFormToken();
 
             let obj = {
