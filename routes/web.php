@@ -353,6 +353,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{coupon}',          [AdminApplyCouponController::class, 'destroy'])->name('destroy');
         Route::get('/searchProduct',        [AdminApplyCouponController::class, 'searchProduct'])->name('searchProduct');
         Route::get('/searchProductCategory',[AdminApplyCouponController::class, 'searchProductCategory'])->name('searchProductCategory');
+        Route::get('/getCouponData',        [AdminApplyCouponController::class, 'getCouponData'])->name('getCouponData');
     });
 
     Route::group(['prefix' => 'officeacounts', 'as' => 'officeacount.'], function(){
