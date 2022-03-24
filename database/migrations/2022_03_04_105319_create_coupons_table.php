@@ -25,6 +25,8 @@ class CreateCouponsTable extends Migration
             $table->unsignedBigInteger('min_bill_limit')->nullable();
             $table->unsignedBigInteger('max_bill_limit')->nullable();
             $table->boolean('status')->default(0);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

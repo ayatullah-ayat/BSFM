@@ -19,9 +19,8 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Coupon Name</th>
-                                <th>Category Name</th>
-                                <th>Product Name</th>
-                                <th>User</th>
+                                <th>Coupon Code</th>
+                                <th>Coupon Type</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -31,12 +30,11 @@
                                 @foreach ($applycoupons as $applycoupon)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $applycoupon->coupons->coupon_name }}</td>
-                                        <td>{{ $applycoupon}}</td>
-                                        <td>{{ $applycoupon}}</td>
-                                        <td>{{ $applycoupon}}</td>
+                                        <td>{{ $applycoupon->coupon->coupon_name ?? 'N/A' }}</td>
+                                        <td>{{ $applycoupon->coupon_code ?? 'N/A'}}</td>
+                                        <td>{{ ucfirst($applycoupon->coupon->coupon_type) ?? 'N/A'}}</td>
                                         <td class="text-center">
-                                            {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                            <a href="" class="fa fa-eye text-info text-decoration-none"></a>
                                             <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                             <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
                                         </td>
@@ -91,12 +89,7 @@
                             <div class="col-md-12 d-none" data-col="col">
                                 <div class="form-group">
                                     <label for="category_id">Select Categories</label>
-                                    <select name="category_id" multiple class="category_id" data-required id="category_id" data-placeholder="Select Category">
-                                        <option value="include">Include</option>
-                                        <option value="exclude">Exclude</option>
-                                        <option value="category">Category</option>
-                                        {{-- <option value="user">User</option> --}}
-                                    </select>
+                                    <select name="category_id" multiple class="category_id" data-required id="category_id" data-placeholder="Select Category"></select>
                                 </div>
                                 <span class="v-msg"></span>
                             </div>
@@ -116,7 +109,7 @@
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="category_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="apply_coupon_btn" type="button" class="apply_coupon_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -143,6 +136,21 @@
             padding: 0 5px;
             color: #fff !important;
         }
+
+        .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+            float: left;
+            padding: 0;
+            padding-right: 0px;
+            padding-right: .75rem;
+            margin-top: calc(.375rem - 2px);
+            margin-right: .375rem;
+            color: #fff !important;
+            cursor: pointer;
+            border-radius: .2rem;
+            background-color: #0f3aa4 !important;
+            border: 1px solid #0f3aa4 !important;
+        }
+
     </style>
 @endpush
 
@@ -157,15 +165,10 @@
             init();
 
             $(document).on('click','#add', createModal)
-            $(document).on('click','#category_save_btn', submitToDatabase)
+            $(document).on('click','#apply_coupon_btn', submitToDatabase)
             $(document).on('change','.coupon_id', visibleRelatedSelect2)
-            $(document).on('keyup','.product_id', getProduct)
         });
 
-
-        function getProduct(){
-            console.log($(this));
-        }
 
 
         function visibleRelatedSelect2(){
@@ -173,16 +176,21 @@
             elem                = $(this),
             selectedCouponType  = elem.find(':selected').attr('data-coupontype'),
             patternCat          = /category/im;
+            patternProduct      = /include|exclude/im;
 
             elem.attr('data-selected-coupontype', selectedCouponType);
 
             if(patternCat.test(selectedCouponType)){
-                // show category 
+
                 $('.category_id').parent().parent().removeClass('d-none');
                 $('.product_id').parent().parent().addClass('d-none');
-            }else{
+                $('.category_id').val(null).trigger('change')
+
+            }else if(patternProduct.test(selectedCouponType)){
+
                 $('.category_id').parent().parent().addClass('d-none');
                 $('.product_id').parent().parent().removeClass('d-none');
+                $('.product_id').val(null).trigger('change')
             }
 
         }
@@ -198,17 +206,6 @@
                 },
                 {
                     dropdownParent  : '#applyCouponModal',
-                    selector        : `#category_id`,
-                    type            : 'select',
-                },
-                // {
-                //     dropdownParent  : '#applyCouponModal',
-                //     selector        : `#product_id`,
-                //     type            : 'select',
-                //     tags: true
-                // },
-                {
-                    dropdownParent  : '#applyCouponModal',
                     selector        : `#user_id`,
                     type            : 'select',
                 },
@@ -217,10 +214,12 @@
             globeInit(arr);
 
             const URL = "{{ route('admin.applycoupon.searchProduct')}}";
+            const URL2= "{{ route('admin.applycoupon.searchProductCategory')}}";
 
             $("#product_id").select2({
-                // minimumInputLength: 2,
-                tags: [],
+                theme : 'bootstrap4',
+                minimumInputLength: 2,
+                // tags: [],
                 ajax: {
                     url         : URL,
                     dataType    : 'json',
@@ -246,21 +245,34 @@
                 }
             });
 
-            // $(`#stuff`).select2({
-            //     width           : '100%',
-            //     dropdownParent  : $('#categoryModal'),
-            //     theme           : 'bootstrap4',
-            // }).val(null).trigger('change')
+            $("#category_id").select2({
+                theme : 'bootstrap4',
+                minimumInputLength: 2,
+                // tags: [],
+                ajax: {
+                    url         : URL2,
+                    dataType    : 'json',
+                    type        : "GET",
+                    quietMillis : 50,
+                    data        : function (term) {
+                        return {
+                            term: term
+                        };
+                    },
+                    processResults     : function (data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, function (item) {
 
-
-            // $('#booking_date').datepicker({
-            //     autoclose : true,
-            //     clearBtn : false,
-            //     todayBtn : true,
-            //     todayHighlight : true,
-            //     orientation : 'bottom',
-            //     format : 'yyyy-mm-dd',
-            // })
+                                return {
+                                    text: item.category_name ?? 'N/A',
+                                    id: item.category_id
+                                }
+                            })
+                        };
+                    }
+                }
+            });
         }
 
 
@@ -274,14 +286,18 @@
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{ route('admin.applycoupon.store')}}`, 
                 method  : "POST",
-                data    : {},
+                data    : {
+                    coupon_id  : $('#coupon_id').val(),
+                    category_id: $('#category_id').val(),
+                    product_id : $('#product_id').val(),
+                },
             };
 
-            ajaxRequest(obj);
+            ajaxRequest(obj,{ reload: true, timer: 2000 });
 
-            hideModal('#applyCouponModal');
+            // hideModal('#applyCouponModal');
         }
 
     </script>

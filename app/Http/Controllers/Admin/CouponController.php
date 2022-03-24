@@ -40,7 +40,8 @@ class CouponController extends Controller
     public function store(CouponRequest $request)
     {
         try {
-            $data      = $request->all();
+            $data               = $request->all();
+            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $coupon   = Coupon::create($data);
             if(!$coupon)
                 throw new Exception("Unable to create Coupon!", 403);
@@ -95,7 +96,9 @@ class CouponController extends Controller
     {
         try {
 
-            $data           = $request->all();
+            $data               = $request->all();
+            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
+
             $couponStatus   = $coupon->update($data);
             if(!$couponStatus)
                 throw new Exception("Unable to Update Coupon!", 403);
@@ -128,6 +131,8 @@ class CouponController extends Controller
             $isDeleted = $coupon->delete();
             if(!$isDeleted)
                 throw new Exception("Unable to delete coupon!", 403);
+
+            $coupon->applycoupons()->delete();
                 
             return response()->json([
                 'success'   => true,

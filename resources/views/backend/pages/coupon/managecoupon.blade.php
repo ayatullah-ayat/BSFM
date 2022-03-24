@@ -77,6 +77,20 @@
                                 <hr>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="coupon_name">Coupon Name</label>
+                                    <input type="text" name="coupon_name" id="coupon_name" class="form-control" placeholder="Coupon Name" />
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="coupon_code">Coupon Code</label>
+                                    <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon Code" />
+                                </div>
+                            </div>
+
                             <div class="col-md-6" data-col="col">
                                 <div class="form-group">
                                     <label for="discount_type">Discount Type</label>
@@ -92,27 +106,12 @@
                                 <div class="form-group">
                                     <label for="coupon_type">Coupon Type</label>
                                     <select name="coupon_type" class="coupon_type" data-required id="coupon_type" data-placeholder="Select Coupon Type">
-                                        <option value="include">Include</option>
-                                        <option value="exclude">Exclude</option>
-                                        <option value="category">Category</option>
-                                        {{-- <option value="user">User</option> --}}
+                                        <option value="include">Include Product</option>
+                                        <option value="exclude">Exclude Product</option>
+                                        <option value="category">Product Category</option>
                                     </select>
                                 </div>
                                 <span class="v-msg"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="coupon_name">Coupon Name</label>
-                                    <input type="text" name="coupon_name" id="coupon_name" class="form-control" placeholder="Coupon Name" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="coupon_code">Coupon Code</label>
-                                    <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon Code" />
-                                </div>
                             </div>
 
                             <div class="col-md-6">
@@ -125,7 +124,7 @@
                             <div class="col-md-6" data-col="col">
                                 <div class="form-group">
                                     <label for="coupon_validity">Coupon Validity</label>
-                                    <input type="date" data-required="" autocomplete="off" class="form-control" id="coupon_validity" name="coupon_validity" placeholder="Validity Date">
+                                    <input type="text" data-required="" autocomplete="off" class="form-control" id="coupon_validity" name="coupon_validity" placeholder="Validity Date">
                                 </div>
                                 <span class="v-msg"></span>
                             </div>
@@ -133,7 +132,7 @@
                             <div class="col-md-6" data-col="col">
                                 <div class="form-group">
                                     <label for="usage_limit">Usage Limit</label>
-                                    <input type="text" class="form-control" id="usage_limit" name="usage_limit" placeholder="Min Price Limit">
+                                    <input type="text" class="form-control" id="usage_limit" name="usage_limit" placeholder="User Usage Limit">
                                 </div>
                             </div>
 
@@ -338,8 +337,10 @@
 
                 $('#couponModal .heading').text('Edit').attr('data-id', coupon?.id)
 
-                $('#discount_type').select2().val(coupon.discount_type).trigger('change');
-                $('#coupon_type').select2().val(coupon.coupon_type).trigger('change');
+                $('#discount_type').val(coupon.discount_type).trigger('change');
+                $('#coupon_type').val(coupon.coupon_type).trigger('change');
+                // $('#discount_type').select2().val(coupon.discount_type).trigger('change');
+                // $('#coupon_type').select2().val(coupon.coupon_type).trigger('change');
                 $('#coupon_name').val(coupon?.coupon_name)
                 $('#coupon_code').val(coupon?.coupon_code)
                 $('#coupon_discount').val(coupon?.coupon_discount)
