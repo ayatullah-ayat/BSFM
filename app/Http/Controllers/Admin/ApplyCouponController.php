@@ -63,6 +63,19 @@ class ApplyCouponController extends Controller
         return response()->json($products);
     }
 
+
+    public function getCouponData(Request $request){
+
+        $coupon_id  = request('coupon_id');
+        $coupon_type= request('coupon_type');
+
+        $applycoupons = ApplyCoupon::where('coupon_id', $coupon_id)
+                    ->orderByDesc('created_at')
+                    ->get();
+
+        return response()->json($applycoupons);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -213,11 +226,12 @@ class ApplyCouponController extends Controller
 
             $updatedData = [];
 
+            $appliedBy = $coupon->applycoupons && count($coupon->applycoupons) ? $coupon->applycoupons[0]->applied_by : (auth()->guard('admin')->user()->id ?? null);
+            
             if (preg_match("/category/im", $coupon->coupon_type)) {
                 if (isset($data['category_id']) && !count($data['category_id']))
                 throw new Exception("Please Try again!", 403);
 
-                $appliedBy = $coupon->applycoupons && count($coupon->applycoupons) ? $coupon->applycoupons[0]->applied_by : (auth()->guard('admin')->user()->id ?? null);
 
                 foreach ($data['category_id'] as $category_id) {
                     $category = Category::find($category_id);
