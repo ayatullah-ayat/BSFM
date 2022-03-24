@@ -102,7 +102,7 @@ class CouponController extends Controller
 
             return response()->json([
                 'success'   => true,
-                'msg'       => 'Coupo Updated Successfully!',
+                'msg'       => 'Coupon Updated Successfully!',
                 'data'      => $coupon->first()
             ]);
                 
