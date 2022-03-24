@@ -240,6 +240,20 @@
         </div>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#account_management" aria-expanded="true"
+            aria-controls="currency">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Account Management</span>
+        </a>
+        <div id="account_management" class="collapse" aria-labelledby="currency" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {{-- <a class="collapse-item" href="#">New Currency</a> --}}
+                <a class="collapse-item" href="{{route('admin.officeacount.index')}}">Manage Account</a>
+            </div>
+        </div>
+    </li>
+
 {{-- =========================================================================== --}}
     <div class="sidebar-heading">Custom Service & Account</div>
 
