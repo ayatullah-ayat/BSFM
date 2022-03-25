@@ -219,17 +219,24 @@
                                         @if($product && $product->comments)
 
                                         @php
+                                            $is_approved = 0;
                                             $maxId       = 0;
                                             $limit       = 10;
-                                            $commentData = $product->comments()->latest()->take($limit)->get();
-                                            $countReviews= $product->comments()->count();
+                                            $commentData = $product->comments()->latest()->where('is_approved', 1)->take($limit)->get();
+                                            $countReviews= $product->comments()->where('is_approved', 1)->count();
                                         @endphp
+
                                         @foreach ($commentData as $comment)
                                             @php
                                                 $maxId = $comment->id;
                                             @endphp
 
                                             @if($comment->commentedBy && boolval($comment->is_approved))
+
+                                                @php
+                                                $is_approved = boolval($comment->is_approved);
+                                                @endphp
+
                                             <div class="col tabs-product-comments d-flex">
                                                 
                                                 <div class="reviw-person">
@@ -255,7 +262,7 @@
                                             @endif 
                                         @endforeach
 
-                                        <div data-totalcount="{{ $countReviews }}" class="col-md-12 tabs-product-comments loadMoreContainer {{ $countReviews <= $limit ? 'd-none' : '' }} pt-0">
+                                        <div data-totalcount="{{ $countReviews }}" class="col-md-12 tabs-product-comments loadMoreContainer {{ $countReviews <= $limit || !$is_approved ? 'd-none' : '' }} pt-0">
                                             {{-- {{ $commentData->links() }} --}}
                                             {!! loadMoreButton( route('show_review', $product->id),$maxId, $limit) !!}
                                             

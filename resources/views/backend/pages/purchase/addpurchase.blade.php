@@ -58,7 +58,7 @@
                 <div class="col-md-12">
                     <div class="table-responsive w-100">
                         <table class="table table-bordered table-sm">
-                            <thead class="bg-dark text-white">
+                            <thead class="bg-danger text-white">
                                 <tr>
                                     <th>Item Information</th>
                                     <th>Color</th>
@@ -68,11 +68,11 @@
                                     <th width="150" class="text-center">Purchase Price</th>
                                     <th width="150" class="text-center">Total</th>
                                     <th width="100" class="text-center align-middle">
-                                        <button class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
+                                        <button class="btn btn-sm btn-info" id="addNewRow"><i class="fa fa-plus"></i></button>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="purchase-body">
                                 <tr>
                                     <td>
                                         <select name="product_name" class="product_name" data-required id="product_name" data-placeholder="Search Or Type Product"></select>
@@ -108,25 +108,32 @@
                                         <span class="v-msg"></span>
                                     </td>
                                     <td >
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control qty state_change">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control purchase-price state_change">
                                     </td>
                                     <td>
-                                        <input type="number" readonly class="form-control">
+                                        <input type="number" readonly class="form-control subtotal">
                                     </td>
                                     <td class="text-center">
                                         <i class="fa fa-times text-danger fa-lg" type="button"></i>
                                     </td>
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr class="">
+                                    <th colspan="4"></th>
+                                    <th colspan="2" id="total_qty" class="px-4">0</th>
+                                    <th colspan="2" id="grandtotal" class="px-4">0</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-end">
-                    <button class="btn btn-success text-right outline-none"> <i class="fa fa-save"></i> Submit</button>
+                    <button class="btn btn-success text-right outline-none" id="purchase-btn"> <i class="fa fa-save"></i> Submit</button>
                 </div>
 
             </div>
@@ -143,9 +150,156 @@
     $(document).ready(function(){
         init();
 
+        $(document).on('click','#addNewRow', createNewRow)
+        $(document).on('click','.fa-times', removeRow)
         $(document).on('click','#add', createModal)
-        $(document).on('click','#category_save_btn', submitToDatabase)
+        $(document).on('click','#purchase-btn', submitToDatabase)
+        $(document).on('input keyup change','.state_change', calcSubTotal)
     });
+
+
+
+    function calcSubTotal(){
+        //purchase-price
+
+        let 
+        elem        = $(this),
+        qtyElem     = elem.closest('tr').find('.qty'),
+        qty         = qtyElem.val().trim(),
+        priceElem   = elem.closest('tr').find('.purchase-price'),
+        price       = priceElem.val().trim(),
+        subtotalElem= elem.closest('tr').find('.subtotal');
+
+
+        if(Number(qty) < 0){
+            qtyElem.val(0);
+            qty = 0;
+        }
+
+        if(Number(price) < 0){
+            qtyElem.val(0);
+            price = 0;
+        }
+
+
+        let subtotal = Number(qty) * Number(price);
+
+        subtotalElem.val(subtotal)
+
+
+        summary()
+
+
+    }
+
+
+
+    function summary(){
+        let rows        = $('#purchase-body').find('tr');
+        let total_qty   = 0;
+        let grandtotal  = 0;
+
+        [...rows].forEach( row => {
+            total_qty += Number($(row).find('.qty').val() ?? 0);
+            grandtotal += Number($(row).find('.subtotal').val() ?? 0);
+        });
+
+
+        $('#total_qty').text(total_qty);
+        $('#grandtotal').text(grandtotal);
+    }
+
+    function removeRow(){
+        let 
+        row = $(this).closest('tr'),
+        rows= $('#purchase-body').find('tr');
+
+        if(rows.length <= 1)
+        {
+            alert("You can't delete This Row ?")
+            return false;
+        }
+
+        row.remove();
+
+        summary()
+    }
+
+
+    function createNewRow(){
+
+        let ref = new Date().getTime();
+
+        let html = `<tr>
+            <td>
+                <select name="product_name" class="product_name" data-required id="product_name_${ref}" data-placeholder="Search Or Type Product"></select>
+            </td>
+            <td>
+                <div class="form-group">
+                    <select name="color" multiple class="color" data-required id="color_${ref}" data-placeholder="Select Color">
+                        @foreach ($colors as $color)
+                        <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <span class="v-msg"></span>
+            </td>
+            <td>
+                <div class="form-group">
+                    <select name="size" class="size" data-required id="size_${ref}" multiple data-placeholder="Select Sizes">
+                        @foreach ($sizes as $size)
+                        <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <span class="v-msg"></span>
+            </td>
+            <td>
+                <div class="form-group">
+                    <select name="unit" class="unit" data-required id="unit_${ref}" data-placeholder="Select Unit">
+                        @foreach ($units as $unit)
+                        <option value="{{ $unit->unit_name }}">{{ $unit->unit_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <span class="v-msg"></span>
+            </td>
+            <td>
+                <input type="number" class="form-control qty state_change">
+            </td>
+            <td>
+                <input type="number" class="form-control purchase-price state_change">
+            </td>
+            <td>
+                <input type="number" readonly class="form-control subtotal">
+            </td>
+            <td class="text-center">
+                <i class="fa fa-times text-danger fa-lg" type="button"></i>
+            </td>
+        </tr>`;
+
+
+        $('#purchase-body').append(html)
+
+        $(`#product_name_${ref}`).select2({
+            width : '100%',
+            theme : 'bootstrap4',
+            tags  : true,
+        }).val(null).trigger('change')
+        $(`#color_${ref}`).select2({
+            width : '100%',
+            theme : 'bootstrap4',
+        }).val(null).trigger('change')
+        $(`#size_${ref}`).select2({
+            width : '100%',
+            theme : 'bootstrap4',
+        }).val(null).trigger('change')
+        $(`#unit_${ref}`).select2({
+            width : '100%',
+            theme : 'bootstrap4',
+        }).val(null).trigger('change')
+
+    }
 
 
     function init(){
@@ -184,22 +338,6 @@
         ];
 
         globeInit(arr);
-
-        // $(`#stuff`).select2({
-        //     width           : '100%',
-        //     dropdownParent  : $('#categoryModal'),
-        //     theme           : 'bootstrap4',
-        // }).val(null).trigger('change')
-
-
-        // $('#booking_date').datepicker({
-        //     autoclose : true,
-        //     clearBtn : false,
-        //     todayBtn : true,
-        //     todayHighlight : true,
-        //     orientation : 'bottom',
-        //     format : 'yyyy-mm-dd',
-        // })
     }
 
 
@@ -209,6 +347,10 @@
 
     function submitToDatabase(){
         //
+
+
+
+        return false;
 
         ajaxFormToken();
 
@@ -221,6 +363,11 @@
         ajaxRequest(obj);
 
         hideModal('#categoryModal');
+    }
+
+
+    function formatData(){
+        //
     }
 
 </script>

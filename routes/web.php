@@ -74,10 +74,16 @@ Route::group(['prefix' => ''],function(){
     Route::get('/shop/{product}/{slug?}',   [ShopController::class, 'show'])->name('product_detail');
 
     Route::get('/checkout/{product?}',      [CustomerOrderController::class, 'index'])->name('checkout_index');
+    Route::post('/checkcoupon',             [CustomerOrderController::class, 'checkCoupon'])->name('checkCoupon');
+    Route::post('/removecoupon',            [CustomerOrderController::class, 'removeCoupon'])->name('removeCoupon');
+    Route::post('/create-order',            [CustomerOrderController::class, 'store'])->name('store_order');
+    Route::post('/track-order',             [CustomerOrderController::class, 'trackOrder'])->name('trackOrder');
+
     Route::get('/contact',                  [CustomerContactController::class, 'index'])->name('contact_index');
     Route::post('/',                        [CustomerContactController::class, 'store'])->name('contact_store');
     Route::get('/about-us',                 [AboutController::class, 'index'])->name('about_index');
     Route::get('/gallery',                  [CustomerGalleryController::class, 'index'])->name('gallery_index');
+
 
     Route::get('/cart',                     [CartController::class, 'index'])->name('cart_index');
     Route::post('/add-to-cart',             [CartController::class, 'addToCart'])->name('add_to_cart');

@@ -10,7 +10,7 @@
                 @php
                     $pQty           = 1;
                     $totalPrice     = 0;
-                    $couponPrice    =0;
+                    $couponPrice    = session('coupon') ? session('coupon')['total_discount_amount'] : 0;
                     $grandtotalPrice=0;
                 @endphp
 
@@ -67,11 +67,13 @@
                                 <h6 class="my-0"> প্রোডাক্ট দাম (৳): </h6>
                             </div>
                             <span class="text-muted" id="producterdum">{{ $totalPrice ?? 0.0 }}</span>
-                        </li>
+                        </li> 
     
                         <li class="list-group-item d-flex justify-content-between bg-light">
                             <div class="text-success">
-                                <h6 class="my-0"> ডিসকাউন্ট (৳): </h6>
+                                <h6 class="my-0"> ডিসকাউন্ট (৳): <span type="button" class="remove-coupon" data-coupon="{{ session('coupon') ? session('coupon')['coupon_code'] : ''}}">
+                                    {!! session('coupon') ? '<i class="fa fa-trash"></i>' : ''!!}
+                                </span> </h6>
     
                             </div>
                             <span class="text-success" id="discount">{{ $couponPrice }}</span>
@@ -79,17 +81,18 @@
     
                         <li class="list-group-item d-flex justify-content-between">
                             <span> সর্বমোট (৳):</span>
-                            <strong id="surbomot"> {{ $grandtotalPrice + $couponPrice }} </strong>
+                            <strong id="surbomot"> {{ $grandtotalPrice - $couponPrice }} </strong>
                         </li>
     
                     </ul>
-    
-                    <form class="card">
+
+                    <form id="couponForm" class="card" action="{{ route('checkCoupon')}}" method="POST">
                         <div class="input-group">
                             <input type="text"  id="coupon" class="form-control" placeholder="কুপন কোড ">
                             <button type="submit" class="btn btn-danger"> রিডিম </button>
                         </div>
                     </form>
+                    <p class="alert my-2 py-1" id="coupon_msg"></p>
                 </div>
     
                 <div class="col-md-8 order-md-1">
@@ -278,16 +281,16 @@
                             <div class="form-group">
                                 <input type="radio" name="payment_type" id="cashondelivery" checked value="Cash On Delivery">
                                 <label for="cashondelivery">Cash On Delivery</label>
-                                <input type="radio" name="payment_type" id="bkash" value="Bkash">
+                                {{-- <input type="radio" name="payment_type" id="bkash" value="Bkash">
                                 <label for="bkash">Bkash</label>
                                 <input type="radio" name="payment_type" id="sslcommerz" value="SSL Commerz">
-                                <label for="sslcommerz">SSL Commerz</label>
+                                <label for="sslcommerz">SSL Commerz</label> --}}
                             </div>
                             <span class="v-msg text-danger payment-v-msg"></span>
     
                             <div class="payment-type-box">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="text" class="form-control border" name="card_no">
                                         </div>
@@ -296,9 +299,9 @@
                                         <div class="form-group">
                                             <input type="text" class="form-control border" name="card_no">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-4 my-3">
-                                        <button class="btn btn-sm btn-danger text-white text-center" id="makePayment"> <span class="fa fa-paper-plane mx-1" style="color: #fff !important;"></span>Proceed To Payment</button>
+                                        <button class="btn btn-sm btn-danger text-white text-center" id="makePayment"> <span class="fa fa-paper-plane mx-1" style="color: #fff !important;"></span>Place Order</button>
                                     </div>
                                 </div>
                             </div>
@@ -340,9 +343,10 @@
         let timeId = null;
         $(function(){
             $(document).on("click",'.stateChange', incrementDecrementCount2)
-            $(document).on("change",'#coupon', applyCoupon)
+            $(document).on("submit",'#couponForm', applyCoupon)
             $(document).on("change input",'[required]', checkSingleValidation)
             $(document).on("click",'#makePayment', submitToMakeOrder)
+            $(document).on("click",'.remove-coupon', removeCoupon)
         });
 
         function incrementDecrementCount2(e){
@@ -384,7 +388,6 @@
             
         }
 
-
         function overview2(){
             let 
             pattern         = /^[+-]?\d+(\.\d+)$/im,
@@ -400,7 +403,7 @@
             })
 
 
-            grandTotal = Number(totalProduct) + Number(disCountPrice)
+            grandTotal = Number(totalProduct) - Number(disCountPrice)
 
             if(pattern.test(totalProduct)){
                 totalProduct = totalProduct.toFixed(3);
@@ -410,7 +413,6 @@
             $('#producterdum').text(totalProduct);
             $('#surbomot').text(grandTotal);
         }
-
 
         function getOrupdateProductInfo(){
 
@@ -444,8 +446,6 @@
 
         }
 
-
-
         function shipmentInfo(){
             // form data
             let name        = $('input[name="full_name"]').val();
@@ -457,8 +457,6 @@
             return { name, mobile_no, email, address, payment_type};
         }
 
-
-
         function resetShipmentInfo(){
             // form data
             $('input[name="full_name"]').val('');
@@ -468,7 +466,6 @@
             $('input#cashondelivery').prop('checked',true);
 
         }
-
 
         function validationErrorCheck(){
             // form data
@@ -501,7 +498,6 @@
 
         }
 
-
         function checkSingleValidation(){
             let elem = $(this);
 
@@ -516,22 +512,121 @@
         }
 
 
-
         function applyCoupon(e){
             e.preventDefault();
 
             let 
-            element     = $(this),
-            couponCode  = element.val();
+            form        = $(this),
+            method      = form.attr('method'),
+            url         = form.attr('action'),
+            couponCode  = form.find('#coupon').val(),
+            producterdumElem= $('#producterdum');
+            productPrice= Number(producterdumElem.text());
 
-            console.log(couponCode);
+            let orderData   = getOrupdateProductInfo();
 
-            // $('#discount').text()
+            if(!orderData?.products?.length){
+                alert("Please select atleast 1 Product!")
+                return false;
+            }
 
-            // send ajax request 
+            clearTimeout(timeId)
+
+            ajaxFormToken();
+
+            timeId = setTimeout(() => {
+                $.ajax({
+                    url     : url,
+                    type    : method ?? "POST",
+                    data    : { order: orderData, coupon: couponCode},
+                    cache   : false,
+                    success : function (res) {
+
+                        if(res.success){
+                            $('#discount').text(res.data.total_discount_amount);
+                            form.find('#coupon').val('');
+                            $('#surbomot').text( Number(productPrice - Number(res.data.total_discount_amount)).toFixed(2));
+                            $('.remove-coupon').html('<i class="fa fa-trash"></i>')
+                            $('.remove-coupon').attr('data-coupon', couponCode);
+                            $('#coupon_msg').text(res?.msg).addClass('alert-success').removeClass('alert-danger')
+                        }else{
+                            $('#coupon_msg').text(res?.msg).addClass('alert-danger').removeClass('alert-success')
+                            form.find('#coupon').val('');
+                        }
+
+                        setTimeout(()=>{
+                            $('#coupon_msg').text('').removeClass('alert-danger').removeClass('alert-success')
+                        },3000)
+                        
+                        console.log(res);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $('#coupon_msg').text(error.responseJSON?.msg).addClass('alert-danger').removeClass('alert-success')
+                        setTimeout(()=>{
+                            $('#coupon_msg').text('').removeClass('alert-danger').removeClass('alert-success')
+                        },3000)
+
+                        form.find('#coupon').val('');
+
+                    }
+                });
+            }, 500);
 
             // if success then add discount price 
             
+        }
+
+        function removeCoupon(){
+            let elem = $(this),
+            coupon          = elem.attr('data-coupon'),
+            discountElem    =  $('#discount'),
+            surbomotElem    =  $('#surbomot'),
+            producterdum    =  Number($('#producterdum').text() ?? 0),
+            discountAmount  =  Number(discountElem.text() ?? 0);
+            grandAmount     =  Number(surbomotElem.text() ?? 0);
+
+            clearTimeout(timeId)
+
+            ajaxFormToken();
+
+            timeId = setTimeout(() => {
+                $.ajax({
+                    url     : `{{ route('removeCoupon') }}`,
+                    type    : "POST",
+                    data    : { coupon: coupon},
+                    cache   : false,
+                    success : function (res) {
+
+                        if(res.success){
+
+                            let currentGTotal = grandAmount + Number(res?.total_discount_amount ?? 0);
+                            $('#discount').text( 0);
+                            $('#surbomot').text( Number(currentGTotal).toFixed(3) );
+                            elem.html('');
+                            elem.attr('data-coupon', '');
+                            $('#coupon_msg').text(res?.msg).addClass('alert-success').removeClass('alert-danger')
+                        }else{
+                            $('#coupon_msg').text(res?.msg).removeClass('alert-success').addClass('alert-danger')
+                        }
+
+                        setTimeout(()=>{
+                            $('#coupon_msg').text('').removeClass('alert-danger').removeClass('alert-success')
+                        },3000)
+                        
+                        console.log(res);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $('#coupon_msg').text(error.responseJSON?.msg).removeClass('alert-success').addClass('alert-danger')
+
+                        setTimeout(()=>{
+                            $('#coupon_msg').text('').removeClass('alert-danger').removeClass('alert-success')
+                        },3000)
+                    }
+                });
+            }, 500);
+            //
         }
 
 
@@ -555,7 +650,7 @@
 
             timeId = setTimeout(() => {
                 $.ajax({
-                    url     : '',
+                    url     : `{{ route('store_order') }}`,
                     type    : "POST",
                     data    : { order: orderData, shipment: shipmentData},
                     cache   : false,
@@ -564,6 +659,10 @@
 
                         // if success then reset form
                         resetShipmentInfo();
+
+                        setTimeout(()=>{
+                            window.location.reload();
+                        },2000)
                     },
                     error: function (error) {
                         console.log(error);

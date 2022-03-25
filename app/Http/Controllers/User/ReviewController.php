@@ -55,13 +55,14 @@ class ReviewController extends Controller
         $comments = $product->comments()
                     ->with('product','commentedBy', 'commentedBy.profile')
                     ->where('id', $operator, $maxId)
+                    ->where('is_approved', 1)
                     ->latest()
                     ->limit($limit)
                     ->get();
 
         $lastId         = 0;
         $isLastRecord   = false;
-        $lastData       = $product->comments()->first();
+        $lastData       = $product->comments()->where('is_approved', 1)->first();
         if($lastData){
             $lastId = $lastData->id;
         }

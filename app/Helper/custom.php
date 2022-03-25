@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('check_internet')) {
@@ -116,5 +117,13 @@ if (!function_exists('loadMoreButton')) {
         return "
             <button data-uri=\"{$dataURI}\" class=\"{$btnClass} loadMoreBtn\" data-filter-maxid=\"\" data-maxid=\"{$maxId}\" data-limit=\"{$limit}\">Load More</button>
         ";
+    }
+}
+
+
+if (!function_exists('getUnreadNotification')) {
+    function getUnreadNotification()
+    {
+        return Notification::whereNull('read_at')->get();
     }
 }

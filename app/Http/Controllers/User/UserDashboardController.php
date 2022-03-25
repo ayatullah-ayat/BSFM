@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Support\Facades\Cookie;
 
 class UserDashboardController extends Controller
@@ -25,7 +26,22 @@ class UserDashboardController extends Controller
 
         }
 
-        return view('frontend.dashboard', compact('wishListProducts'));
+
+        $orders = Order::where('customer_id', auth()->guard('web')->user()->id ?? null )
+                ->with('orderDetails')
+                ->get();
+
+
+        $pendingOrders = Order::where('customer_id', auth()->guard('web')->user()->id ?? null)
+                ->where('status', 'pending')
+                ->count();
+
+        $completedOrders = Order::where('customer_id', auth()->guard('web')->user()->id ?? null)
+                ->where('status', 'completed')
+                ->count();
+
+
+        return view('frontend.dashboard', compact('wishListProducts', 'orders', 'pendingOrders', 'completedOrders'));
     }
 
     /**

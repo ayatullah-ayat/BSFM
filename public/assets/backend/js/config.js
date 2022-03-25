@@ -369,6 +369,53 @@ function loadMoreLogos() {
 
 
 
+function trackStatusRender(data){
+    let statusBar = "";
+
+    if ( data.status == 'pending'){
+        statusBar = `<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Pending</span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Order
+                                    Confirmed</span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Order
+                                    Processing </span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Delivered</span> </div>`;
+    } else if(data.status == 'confirm'){
+        statusBar = `<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Pending</span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Confirmed</span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Order
+                                    Processing </span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Delivered</span> </div>`;
+    } else if(data.status == 'processing'){
+        statusBar = `<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Pending</span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Confirmed</span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Processing </span> </div>
+                            <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Delivered</span> </div>`;
+    } else if ( data.status == 'completed'){
+        statusBar = `<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Pending</span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Confirmed</span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Order Processing </span> </div>
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                    class="text">Delivered </span> </div>`;
+    }
+
+
+    return statusBar;
+}
+
+
+
 
 
 

@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
 
             $table->date('order_date');
             $table->string('order_no');
+            $table->string('coupon_code')->nullable();
             $table->text('order_sizes')->nullable();
             $table->text('order_colors')->nullable();
 

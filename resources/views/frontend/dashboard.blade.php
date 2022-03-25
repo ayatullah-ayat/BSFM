@@ -35,9 +35,9 @@
                                     <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-profile" type="button" role="tab"
                                         aria-controls="v-pills-profile" aria-selected="false"> প্রোফাইল </button>
-                                    <button class="nav-link" id="v-pills-purchaseditems-tab" data-bs-toggle="pill"
+                                    {{-- <button class="nav-link" id="v-pills-purchaseditems-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-purchaseditems" type="button" role="tab"
-                                        aria-controls="v-pills-purchaseditems" aria-selected="false"> কেনা আইটেম </button>
+                                        aria-controls="v-pills-purchaseditems" aria-selected="false"> কেনা আইটেম </button> --}}
                                     <button class="nav-link" id="v-pills-orderlist-tab" data-bs-toggle="pill"
                                         data-bs-target="#v-pills-orderlist" type="button" role="tab"
                                         aria-controls="v-pills-orderlist" aria-selected="false">অর্ডার লিস্ট </button>
@@ -70,32 +70,21 @@
                                         <div class="row g-3">
                                             <div class="col-md-4">
                                                 <div class="box">
-                                                    <h2 class="title"> My Account </h2>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="box">
-                                                    <h2 class="title"> My Balance </h2>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="box border">
                                                     <h2 class="title">Total Orders </h2>
+                                                    <h4 class="title" style="border: none !important; font-size: 24px">{{ count($orders) ?? 0 }}</h4>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="box">
                                                     <h2 class="title"> Pending Orders </h2>
+                                                    <h4 class="title" style="border: none !important; font-size: 24px">{{ $pendingOrders ?? 0 }}</h4>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-4">
                                                 <div class="box">
-                                                    <h2 class="title"> Recent Orders</h2>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="box">
-                                                    <h2 class="title"> My Account </h2>
+                                                    <h2 class="title"> Completed Orders</h2>
+                                                    <h4 class="title" style="border: none !important; font-size: 24px">{{ $completedOrders ?? 0 }}</h4>
                                                 </div>
                                             </div>
     
@@ -249,94 +238,44 @@
                                             <table id="user-product-oderlist" class="table table-striped w-100">
                                                 <thead class="bg-danger">
                                                     <tr class="text-white">
-                                                        <th> প্রডাক্ট নাম </th>
+                                                        <th> অর্ডার তারিখ</th>
                                                         <th> অর্ডার </th>
                                                         <th>মোট অর্ডার</th>
-                                                        <th> পরিমাণ </th>
-                                                        <th> সময় </th>
-                                                        <th> মূল্য </th>
+                                                        <th>মোট পরিমাণ </th>
+                                                        <th>মোট মূল্য </th>
+                                                        <th>অবস্থান </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td class="order-product align-middle">
-                                                            <div class="inner-wrap">
-                                                                <img src="{{asset('assets/frontend/img/product/product-1.png')}}" alt="">
-                                                                <p>Garrett Winters System Architect Lorem ipsum dolor, sit
-                                                                    amet consectetur adipisicing elit. Id dignissimos ea
-                                                                    pariatur aliquid molestiae perspiciatis corrupti totam
-                                                                    minus omnis provident rem, distinctio explicabo at
-                                                                    maiores a quis, vitae suscipit optio. </p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">System Architect</td>
-                                                        <td class="align-middle">Edinburgh</td>
-                                                        <td class="align-middle">61</td>
-                                                        <td class="align-middle">2011/04/25</td>
-                                                        <td class="align-middle">$320,800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="order-product">
-                                                            <div class="inner-wrap">
-                                                                <img src="{{asset('assets/frontend/img/product/product-2.png')}}" alt="">
-                                                                <p>Garrett Winters System Architect weqrqwrwq </p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">Accountant</td>
-                                                        <td class="align-middle">Edinburgh</td>
-                                                        <td class="align-middle">61</td>
-                                                        <td class="align-middle">2011/04/25</td>
-                                                        <td class="align-middle">$320,800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="order-product">
-                                                            <div class="inner-wrap">
-                                                                <img src="{{asset('assets/frontend/img/product/product-3.png')}}" alt="">
-                                                                <p>Garrett Winters System Architect weqrqwrwq </p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">Accountant</td>
-                                                        <td class="align-middle">Edinburgh</td>
-                                                        <td class="align-middle">61</td>
-                                                        <td class="align-middle">2011/04/25</td>
-                                                        <td class="align-middle">$320,800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="order-product">
-                                                            <div class="inner-wrap">
-                                                                <img src="{{asset('assets/frontend/img/product/product-4.png')}}" alt="">
-                                                                <p>Garrett Winters System Architect weqrqwrwq </p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">Accountant</td>
-                                                        <td class="align-middle">Edinburgh</td>
-                                                        <td class="align-middle">61</td>
-                                                        <td class="align-middle">2011/04/25</td>
-                                                        <td class="align-middle">$320,800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="order-product">
-                                                            <div class="inner-wrap">
-                                                                <img src="{{asset('assets/frontend/img/product/product-5.png')}}" alt="">
-                                                                <p>Garrett Winters System Architect weqrqwrwq </p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-middle">Accountant</td>
-                                                        <td class="align-middle">Edinburgh</td>
-                                                        <td class="align-middle">61</td>
-                                                        <td class="align-middle">2011/04/25</td>
-                                                        <td class="align-middle">$320,800</td>
-                                                    </tr>
+
+                                                    @if( isset($orders) && count($orders))
+
+                                                    @foreach ($orders as $item)
+                                                        {{-- @dd($item)) --}}
+                                                        @foreach ($item->orderDetails as $detail)
+                                                            @php $detail->product; @endphp
+                                                        @endforeach
+
+                                                        <tr data-product="{{ $item->orderDetails ? json_encode($item->orderDetails) : null }}" class="product-order" title="double click to show details">
+                                                            <td class="align-middle">{{ $item->order_date ?? 'N/A' }}</td>
+                                                            <td class="align-middle">{{ $item->order_no ?? 'N/A' }}</td>
+                                                            <td class="align-middle">{{ $item->orderDetails ? count($item->orderDetails) : 0 }}</td>
+                                                            <td class="align-middle">{{ $item->order_total_qty ?? 0 }}</td>
+                                                            <td class="align-middle">{{ $item->order_total_price ?? 0.0 }}</td>
+                                                            <td class="align-middle">{{ $item->status ?? 'N/A' }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    @endif 
     
                                                 </tbody>
                                                 <tfoot>
-                                                    <tr class="text-center">
-                                                        <th> প্রডাক্ট নাম </th>
+                                                    <tr>
+                                                        <th> অর্ডার তারিখ</th>
                                                         <th> অর্ডার </th>
                                                         <th>মোট অর্ডার</th>
-                                                        <th> পরিমাণ </th>
-                                                        <th> সময় </th>
-                                                        <th> মূল্য </th>
+                                                        <th>মোট পরিমাণ </th>
+                                                        <th>মোট মূল্য </th>
+                                                        <th>অবস্থান </th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -568,6 +507,44 @@
         </div>
     </section>
 
+
+
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel">Order Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </button>
+                </div>
+    
+                <div class="modal-body" id="orderDetailsInfo">
+                    <table id="user-order-products" class="table table-sm table-striped w-100">
+                        <thead class="bg-danger">
+                            <tr class="text-white">
+                                <th> প্রডাক্ট নাম </th>
+                                <th> অর্ডার </th>
+                                <th>মূল্য </th>
+                                <th>মোট পরিমাণ </th>
+                                <th>মোট মূল্য </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('css')
@@ -578,11 +555,47 @@
     <script>
 
         $(document).ready(function(){
+            $(document).on('dblclick','.product-order', getProducts)
             $(document).on('change','#profileImageUploader', readFile)
             $(document).on('click','.updatebtn', updateProfile)
             $(document).on('submit','#passwordResetForm', resetPassword)
         })
 
+
+    function getProducts(){
+        let elem = $(this),
+        products = elem?.attr('data-product') ? JSON.parse(elem.attr('data-product')) : null;
+
+        if(products){
+            $('#orderDetailsModal').modal('show');
+
+            let html = "";
+            if(products.length){
+                products.forEach(product => {
+                    let APP_URL = location.origin;
+                    let src = `${product.product.product_thumbnail_image ? `${APP_URL}/${product.product.product_thumbnail_image}`  : `{{ asset('assets/frontend/img/product/product-1.png') }}`}`;
+                    html += `<tr>
+                        <td class="order-product align-middle">
+                            <div class="inner-wrap">
+                                <img src="${src}" alt="" class="mx-1">
+                                <p>${product.product_name ?? 'N/A'}</p>
+                            </div>
+                        </td>
+                        <td class="align-middle">${product.order_no ?? 'N/A'}</td>
+                        <td class="align-middle">${(product.product_price - product.discount_price) ?? 0}</td>
+                        <td class="align-middle">${product.product_qty ?? '0'}</td>
+                        <td class="align-middle">${ product.subtotal ?? 0.0 }</td>
+                    </tr>`;
+                })
+            }
+
+
+            $('#orderDetailsInfo tbody').html(html)
+
+
+        }
+
+    }
 
     function readFile() 
     {
