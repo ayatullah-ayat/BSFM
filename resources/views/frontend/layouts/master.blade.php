@@ -160,7 +160,7 @@
             
                             <div class="col-md-2">
                                 <b> Mobile No. </b><br>
-                                ${data?.customer?.customer_phone ?? 'N/A'}
+                                ${data?.customer_phone ?? 'N/A'}
                             </div>
             
                             <div class="col-md-2">

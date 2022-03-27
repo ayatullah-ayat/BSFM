@@ -56,6 +56,7 @@ use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
+use App\Http\Controllers\Admin\OtherOrderController;
 
 // ------------ Frontend namespace ----------------------
 
@@ -378,6 +379,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',                   [OfficeAccountController::class, 'store'])->name('store');
         Route::put('/{officeAccount}',     [OfficeAccountController::class, 'update'])->name('update');
         Route::delete('/{officeAccount}',  [OfficeAccountController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'otherOrders', 'as' => 'otherOrder.'], function(){
+        Route::get('/',                    [OtherOrderController::class, 'index'])->name('index');
+        Route::post('/',                   [OtherOrderController::class, 'store'])->name('store');
+        Route::put('/{otherOrder}',        [OtherOrderController::class, 'update'])->name('update');
+        Route::delete('/{otherOrder}',     [OtherOrderController::class, 'destroy'])->name('destroy');
     });
 
 

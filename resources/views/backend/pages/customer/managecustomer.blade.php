@@ -255,7 +255,7 @@
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
             resetData()
-            hideModal('#customerModal');
+            // hideModal('#customerModal');
         }
 
         function showUpdateModal(){

@@ -3,7 +3,8 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://127.0.0.1:8000/admin/dashboard">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+            {{-- <i class="fas fa-laugh-wink"></i> --}}
+            <i class="ti-home"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Admin</div>
     </a>
@@ -13,8 +14,9 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="http://127.0.0.1:8000/admin/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
+            {{-- <i class="fa fa-home" aria-hidden="true"></i> --}}
             <span>Dashboard</span></a>
     </li>
 
@@ -22,13 +24,14 @@
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">Master Info</div>
+    <div class="sidebar-heading">Ecommerce</div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#sales" aria-expanded="true"
             aria-controls="sales">
-            <i class="fas fa-fw fa-cog"></i>
+            {{-- <i class="fas fa-fw fa-cog"></i> --}}
+            <i class="fas fa-chart-line"></i>
             <span>Sales</span>
         </a>
         <div id="sales" class="collapse" aria-labelledby="sales" data-parent="#accordionSidebar">
@@ -43,7 +46,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#orders" aria-expanded="true"
             aria-controls="orders">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fa fa-truck"></i>
             <span>Orders</span>
         </a>
         <div id="orders" class="collapse" aria-labelledby="orders" data-parent="#accordionSidebar">
@@ -57,8 +60,8 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#products" aria-expanded="true"
             aria-controls="products">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Product</span>
+            <i class="fas fa-shopping-bag"></i>
+            <span>Products</span>
         </a>
         <div id="products" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -69,67 +72,24 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#coupon" aria-expanded="true"
-            aria-controls="products">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Coupon</span>
+        <a class="nav-link" href="{{ route('admin.customer.index') }}">
+            <i class="fas fa-users"></i>
+            <span>Customers</span>
         </a>
-        <div id="coupon" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.coupon.index') }}">Manage Coupon</a>
-                <a class="collapse-item" href="{{ route('admin.applycoupon.index') }}">Apply Coupon</a>
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#review" aria-expanded="true"
-            aria-controls="products">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Review</span>
-        </a>
-        <div id="review" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.review.index') }}">Manage Review</a>
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customers" aria-expanded="true"
-            aria-controls="customers">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Customer</span>
-        </a>
-        <div id="customers" class="collapse" aria-labelledby="customers" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Customer</a> --}}
-                <a class="collapse-item" href="{{ route('admin.customer.index') }}">Manage Customer</a>
-                {{-- <a class="collapse-item" href="#">Customer Ledger</a> --}}
-            </div>
-        </div>
     </li>
 
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#suppliers" aria-expanded="true"
-            aria-controls="suppliers">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Supplier</span>
+        <a class="nav-link" href="{{ route('admin.supplier.index')}}">
+            <i class="fas fa-users"></i>
+            <span>Suppliers</span>
         </a>
-        <div id="suppliers" class="collapse" aria-labelledby="suppliers" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Supplier</a>
-                <a class="collapse-item" href="{{ route('admin.supplier.index')}}">Manage Supplier</a>
-                {{-- <a class="collapse-item" href="buttons.html">Supplier Ledger</a> --}}
-            </div>
-        </div>
     </li>
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#purchase" aria-expanded="true"
             aria-controls="purchase">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-cart-arrow-down"></i>
             <span>Purchase</span>
         </a>
         <div id="purchase" class="collapse" aria-labelledby="purchase" data-parent="#accordionSidebar">
@@ -143,153 +103,116 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#category" aria-expanded="true"
             aria-controls="category">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-list"></i>
             <span>Category</span>
         </a>
         <div id="category" class="collapse" aria-labelledby="category" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Category</a> --}}
-                <a class="collapse-item" href="{{ route('admin.category.index')}}">Manage Category</a>
-                <a class="collapse-item" href="{{ route('admin.subcategory.index')}}">Manage Sub Category</a>
+                <a class="collapse-item" href="{{ route('admin.category.index')}}">Category</a>
+                <a class="collapse-item" href="{{ route('admin.subcategory.index')}}">Sub Category</a>
             </div>
         </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#brand" aria-expanded="true"
-            aria-controls="brand">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Brand</span>
+        <a class="nav-link" href="{{ route('admin.brand.index')}}" >
+            <i class="fab fa-apple"></i>
+            <span>Brands</span>
         </a>
-        <div id="brand" class="collapse" aria-labelledby="brand" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Brand</a> --}}
-                <a class="collapse-item" href="{{ route('admin.brand.index')}}">Manage Brand</a>
-            </div>
-        </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#variant" aria-expanded="true"
-            aria-controls="variant">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Variant</span>
+        <a class="nav-link" href="{{ route('admin.variant.index')}}">
+            <i class="fa fa-palette"></i>
+            <span>Variants</span>
         </a>
-        <div id="variant" class="collapse" aria-labelledby="variant" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Variant</a> --}}
-                <a class="collapse-item" href="{{ route('admin.variant.index')}}">Manage Variant</a>
-            </div>
-        </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#unit" aria-expanded="true"
-            aria-controls="unit">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Unit</span>
+        <a class="nav-link" href="{{ route('admin.unit.index')}}" >
+            <i class="fa fa-weight"></i>
+            <span>Units</span>
         </a>
-        <div id="unit" class="collapse" aria-labelledby="unit" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Unit</a> --}}
-                <a class="collapse-item" href="{{ route('admin.unit.index')}}">Manage Unit</a>
-            </div>
-        </div>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#gallery" aria-expanded="true"
-            aria-controls="gallery">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Product Image Gallery</span>
-        </a>
-        <div id="gallery" class="collapse" aria-labelledby="gallery" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Manage Image Gallery</a>
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#tax" aria-expanded="true"
             aria-controls="tax">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fa fa-bullseye"></i>
             <span>Tax</span>
         </a>
         <div id="tax" class="collapse" aria-labelledby="tax" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Tax</a> --}}
                 <a class="collapse-item" href="{{route('admin.tax.index')}}">Manage Tax</a>
-                {{-- <a class="collapse-item" href="#">Tax Setting</a> --}}
             </div>
         </div>
-    </li>
+    </li> --}}
 
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#currency" aria-expanded="true"
-            aria-controls="currency">
-            <i class="fas fa-fw fa-cog"></i>
+        <a class="nav-link" href="{{route('admin.currency.index')}}">
+            <i class="fa fa-coins"></i>
             <span>Currency</span>
         </a>
-        <div id="currency" class="collapse" aria-labelledby="currency" data-parent="#accordionSidebar">
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#coupon" aria-expanded="true"
+            aria-controls="products">
+            <i class="fas fa-gift"></i>
+            <span>Coupon</span>
+        </a>
+        <div id="coupon" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Currency</a> --}}
-                <a class="collapse-item" href="{{route('admin.currency.index')}}">Manage Currency</a>
+                <a class="collapse-item" href="{{ route('admin.coupon.index') }}">Manage Coupon</a>
+                <a class="collapse-item" href="{{ route('admin.applycoupon.index') }}">Apply Coupon</a>
             </div>
         </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#account_management" aria-expanded="true"
-            aria-controls="currency">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Account Management</span>
+        <a class="nav-link" href="{{ route('admin.review.index') }}">
+            <i class="fas fa-comments"></i>
+            <span>Reviews</span>
         </a>
-        <div id="account_management" class="collapse" aria-labelledby="currency" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                {{-- <a class="collapse-item" href="#">New Currency</a> --}}
-                <a class="collapse-item" href="{{route('admin.officeacount.index')}}">Manage Account</a>
-            </div>
-        </div>
     </li>
 
 {{-- =========================================================================== --}}
-    <div class="sidebar-heading">Custom Service & Account</div>
+    <div class="sidebar-heading">Customize Service & Account</div>
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#custom_service" aria-expanded="true"
             aria-controls="custom_service">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Custom Services</span>
+            <i class="fab fa-servicestack"></i>
+            <span>Customize Services</span>
         </a>
         <div id="custom_service" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.customservicecategory.index') }}">Custom Service Category</a>
-                <a class="collapse-item" href="{{ route('admin.customserviceproduct.index') }}">Custom Product</a>
-                <a class="collapse-item" href="{{ route('admin.customservice.index') }}">Custom Service</a>
+                <a class="collapse-item" href="{{ route('admin.customservice.index') }}">Service</a>
+                <a class="collapse-item" href="{{ route('admin.customservicecategory.index') }}">Service Category</a>
+                <a class="collapse-item" href="{{ route('admin.customserviceproduct.index') }}">Customize Product</a>
             </div>
         </div>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#custom_orders" aria-expanded="true"
-            aria-controls="custom_orders">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Custom Orders</span>
+        <a class="nav-link" href="{{ route('admin.customserviceorder.index') }}">
+            <i class="fas fa-truck"></i>
+            <span>Customize Orders</span>
         </a>
-        <div id="custom_orders" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="#">New Order</a>
-                <a class="collapse-item" href="{{ route('admin.customserviceorder.index') }}">Manage Custom Order</a>
-            </div>
-        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.otherOrder.index') }}">
+            <i class="fas fa-truck"></i>
+            <span>Other Orders</span>
+        </a>
     </li>
     
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#account" aria-expanded="true"
             aria-controls="account">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fa fa-landmark"></i>
             <span>Account</span>
         </a>
         <div id="account" class="collapse" aria-labelledby="account" data-parent="#accordionSidebar">
@@ -298,6 +221,14 @@
                 <a class="collapse-item" href="#">Report</a>
             </div>
         </div>
+    </li> --}}
+
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.officeacount.index')}}">
+            <i class="fa fa-landmark"></i>
+            <span>Account Management</span>
+        </a>
     </li>
 
     {{-- =========================================================================== --}}
@@ -307,7 +238,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Stock" aria-expanded="true"
             aria-controls="Stock">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fa fa-poll-h"></i>
             <span>Stock</span>
         </a>
         <div id="Stock" class="collapse" aria-labelledby="Stock" data-parent="#accordionSidebar">
@@ -322,7 +253,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Report" aria-expanded="true"
             aria-controls="Report">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-fw fa-chart-area"></i>
             <span>Report</span>
         </a>
         <div id="Report" class="collapse" aria-labelledby="Report" data-parent="#accordionSidebar">
@@ -384,35 +315,13 @@
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Our Gallery</a>
             </div>
         </div>
     </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
-
-    <div class="sidebar-heading">
-        Addons
-    </div>
-
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url('/admin/charts') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url('/admin/tables') }}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
