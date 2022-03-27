@@ -48,8 +48,8 @@
         </a>
         <div id="orders" class="collapse" aria-labelledby="orders" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.order_add') }}">New Order</a>
-                <a class="collapse-item" href="{{ route('admin.order_manage') }}">Manage Order</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_orders.order_add') }}">New Order</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_orders.order_manage') }}">Manage Order</a>
             </div>
         </div>
     </li>

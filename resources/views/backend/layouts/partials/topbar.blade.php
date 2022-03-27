@@ -77,9 +77,7 @@
                             $body       = $data ? json_decode($data->body) : null;
                         @endphp
 
-                        {{-- @dump($body) --}}
-
-                    <a class="dropdown-item d-flex align-items-center {{ $cls }}" href="#">
+                    <a class="dropdown-item d-flex align-items-center {{ $cls }}" href="{{ route('admin.ecom_orders.show', [$data->order_id, $notification->id]) }}">
                         <div class="mr-3">
                             <div class="icon-circle bg-success">
                                 <i class="fas fa-donate text-white"></i>
