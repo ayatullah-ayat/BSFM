@@ -246,7 +246,7 @@
                         <div class="col-md-6 px-2 mb-3">
                             <div class="form-group">
                                 <input type="text" class="form-control border" placeholder="আপনার নাম লিখুন" required
-                                    name="full_name">
+                                    name="full_name" value="@auth{{auth()->guard('web')->user()->name ?? ''}}@endauth">
                                     <span class="v-msg text-danger"></span>
                             </div>
                         </div>
@@ -254,7 +254,9 @@
                         <div class="col-md-6 px-2 mb-3">
                             <div class="form-group">
                                 <input type="text" class="form-control border" placeholder="আপনার মোবাইল নাম্বার লিখুন" required
-                                    name="mobile_no">
+                                    name="mobile_no"
+                                    value="@auth{{auth()->guard('web')->user()->profile ? auth()->guard('web')->user()->profile->mobile_no : ''}}@endauth"
+                                    >
                                 <span class="v-msg text-danger"></span>
                             </div>
                         </div>
@@ -262,7 +264,10 @@
                         <div class="col-md-12 px-2 mb-3">
                             <div class="form-group">
                                 <input type="email" class="form-control border" placeholder="আপনার ইমেইল লিখুন"
-                                    name="email">
+                                    readonly
+                                    name="email"
+                                    value="@auth{{auth()->guard('web')->user()->email ?? ''}}@endauth"
+                                    >
                                 <span class="v-msg text-danger"></span>
                             </div>
                         </div>
@@ -641,7 +646,8 @@
             }
 
             // validation 
-            validationErrorCheck();
+
+            if(!validationErrorCheck()) return false;
 
             // make payment & send ajax request to insert order data
             ajaxFormToken();
@@ -658,11 +664,15 @@
                         console.log(res);
 
                         // if success then reset form
-                        resetShipmentInfo();
 
-                        setTimeout(()=>{
-                            window.location.reload();
-                        },2000)
+                        if(res?.success){
+
+                            resetShipmentInfo();
+    
+                            setTimeout(()=>{
+                                window.location.reload();
+                            },2000)
+                        }
                     },
                     error: function (error) {
                         console.log(error);

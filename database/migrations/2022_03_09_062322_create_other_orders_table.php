@@ -16,7 +16,7 @@ class CreateOtherOrdersTable extends Migration
         Schema::create('other_orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
-            $table->string('customer_name');
+            $table->string('customer_name')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->string('category_name')->nullable();
             $table->string('moible_no')->nullable();

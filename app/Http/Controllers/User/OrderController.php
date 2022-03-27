@@ -14,6 +14,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomOrderRequest;
 use App\Http\Services\CouponChecker;
 use App\Models\Custom\CustomServiceOrder;
+use App\Models\Customer;
+use App\Models\CustomerType;
+use App\Models\ProductVariantPrice;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cookie;
 
@@ -215,6 +218,8 @@ class OrderController extends Controller
 
             $order_no = auth()->guard('web')->check() ? uniqid() . '_' . auth()->guard('web')->user()->id  : uniqid();
 
+            DB::beginTransaction();
+            
             foreach ($data['products'] as $product) {
                 $totalQty += (int)$product['qty'];
                 if(isset($product['color']) && !is_null($product['color'])){
@@ -248,38 +253,100 @@ class OrderController extends Controller
                     'discount_price'    => $couponDiscountSingleProduct,
                     'subtotal'          => (floatval($product['subtotal']) - floatval($couponDiscountSingleProduct)) ?? 0,
                 ];
+
+                $singleProduct = Product::find($product['product_id']);
+
+                $updateproduct = $singleProduct->update([
+                    'total_stock_qty'       => $singleProduct->total_stock_qty - (int)$product['qty'],
+                    'total_stock_price'     => $singleProduct->total_stock_price - floatval($product['sales_price']),
+                    'total_stock_out_qty'   => $singleProduct->total_stock_out_qty + (int)$product['qty'],
+                    'total_stock_out_price' => $singleProduct->total_stock_out_price + floatval($product['sales_price']),
+                ]);
+
+                if(!$updateproduct)
+                   throw new Exception("Unable to Update Stock Qty!", 403);
+                
+                if($singleProduct->is_product_variant){
+                    $variantStocks = ProductVariantPrice::where('product_id', $product['product_id'])
+                    ->where('color_name', $product['color'] ?? null)
+                    ->where('size_name', $product['size'] ?? null)
+                    ->get();
+
+                    foreach ($variantStocks as $variantStock) {
+                        ProductVariantPrice::find($variantStock->id)
+                        ->update([
+                            'stock_qty'     => $variantStock->stock_qty - (int)$product['qty'],
+                            'stock_out_qty' => $variantStock->stock_out_qty + (int)$product['qty'],
+                        ]);
+                    }
+                }
+                   
+            }
+
+            if($totalQty < 1) 
+               throw new Exception("Invalid Quantity!", 403);
+               
+            $userId   = auth()->guard('web')->user()->id ?? null;
+            $customer = $this->getCustomer($userId);
+            if(!$customer){
+
+                $existCustomer = Customer::where('customer_phone',$req['shipment']['mobile_no'] ?? null)->first();
+                if($existCustomer)
+                    throw new Exception("Phone Already Exists!", 403);
+                    
+                $customer = Customer::create(
+                    [ 
+                        'user_id'          => $userId, 
+                        'customer_name'    => $req['shipment']['name'] ?? null, 
+                        'customer_email'   => $req['shipment']['email'] ?? null,
+                        'customer_phone'   => $req['shipment']['mobile_no'] ?? null,
+                        'customer_address' => $req['shipment']['address'] ?? null,
+                        'is_active'        => 1,
+                    ]
+                );
+
+                if(!$customer)
+                    throw new Exception("Unable to create Customer!", 403);
+                     
+            }
+
+            $customerCheck = $this->checkCustomerExists($customer->id);
+            if(!$customerCheck){
+                CustomerType::create([
+                    'customer_id'   => $customer->id,
+                    'customer_type' => 'ecommerce',
+                ]);
             }
                 
             $orderData = [
-                'customer_id'       => auth()->guard('web')->user()->id ?? null,
-                'customer_name'     => auth()->guard('web')->user()->name ?? null,
+                'user_id'           => $userId,
+                'customer_id'       => $customer->id ?? null,
+                'customer_name'     => $req['shipment']['name'] ?? null,
+                'customer_phone'    => $req['shipment']['mobile_no'] ?? null,
                 'order_date'        => date('Y-m-d'),
                 'order_no'          => $order_no,
                 'coupon_code'       => session('coupon') ? session('coupon')['coupon_code'] : null,
                 'order_sizes'       => count($sizes) ? implode(',', $sizes) : null,
                 'order_colors'      => count($colors) ? implode(',', $colors) : null,
-                'shipping_address'  => null,
+                'shipping_address'  => $req['shipment']['address'] ?? null,
+                'payment_type'      => $req['shipment']['payment_type'] ?? null,
+                'payment_total_price'=> 0,
                 'shipment_cost'     => 0,
                 'service_charge'    => 0,
                 'discount_price'    => $data['total_discount_price'],
                 'order_total_qty'   => $totalQty,
                 'order_total_price' => $data['grand_total'],
-                'order_note'        => null
+                'order_note'        => null,
             ];
 
-            DB::beginTransaction();
             $order = Order::create($orderData);
             if(!$order)
                 throw new Exception("Unable to place order!", 403);
 
-
             $order->orderDetails()->createMany($orderDetail);
-                
-
-            
-            
             
             Event::dispatch(new OrderEvent($order));
+
             DB::commit();
 
             // Mail::to($booking->client)->send(new BookingConfirmationMail($booking));
@@ -314,6 +381,17 @@ class OrderController extends Controller
         if(!$product) return null;
 
         return $product->product_name;
+    }
+
+
+    private function getCustomer($id=null){
+       return Customer::orWhere('user_id',$id)
+            ->orWhere('customer_email', auth()->guard('web')->user()->email ?? null)
+            ->first();
+    }
+
+    private function checkCustomerExists($id=null){
+       return CustomerType::where('customer_id',$id)->where('customer_type','ecommerce')->first();
     }
 
     /**

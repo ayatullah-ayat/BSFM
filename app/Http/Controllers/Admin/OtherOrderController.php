@@ -40,7 +40,13 @@ class OtherOrderController extends Controller
     public function store(Request $request)
     {
         try {
-            $data               = $request->all();
+            
+            $data = $request->all();
+
+            if(!$request->order_no){
+                $data['order_no'] =  uniqid();
+            }
+
             $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
             $orderorder   = OtherOrder::create($data);
             if(!$orderorder)
@@ -89,12 +95,15 @@ class OtherOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * 
+     * $data['order_no']               =  uniqid();
      */
     public function update(Request $request, OtherOrder $otherOrder)
     {
         try {
 
-            $data               = $request->all();
+            $data = $request->all();
+
             $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
             $orderstatus        = $otherOrder->update($data);
             if(!$orderstatus)

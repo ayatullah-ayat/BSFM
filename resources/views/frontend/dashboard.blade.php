@@ -320,8 +320,12 @@
                                                         </h5>
                                                     </div>
                                                     <div class="card-product-button d-flex justify-content-evenly">
+                                                        @if($item->total_stock_qty > 0)
                                                         <button type="button" data-productid="{{ $item->id }}" class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}"> {!! !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span> <i class=\'fa fa-circle-check\'></i> অলরেডি যুক্ত আছে</span>' !!}</button>
                                                         <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </a>
+                                                        @else 
+                                                        <span class="text-danger">Out of Stock</span>
+                                                        @endif 
                                                     </div>
                                                 </div>
                                             </div>
@@ -378,7 +382,8 @@
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control border"
-                                                        placeholder="আপনার ইউজার নাম লিখুন" name="username">
+                                                        placeholder="আপনার ইউজার নাম লিখুন" name="username"
+                                                        value="{{ $authUser->username ?? ''}}">
                                                 </div>
                                             </div>
     
@@ -429,10 +434,10 @@
                                             <div class="col-md-6 px-2 mb-3">
                                                 <div class="form-group">
                                                     <select class="form-select form-control border" id="district">
-                                                        <option selected> জেলা সিলেক্ট করুন </option>
-                                                        <option value="2"> ঢাকা </option>
-                                                        <option value="1"> রাজশাহী </option>
-                                                        <option value="3"> বরিশাল </option>
+                                                        <option selected value=""> জেলা সিলেক্ট করুন </option>
+                                                        @foreach ($districts as $district) 
+                                                        <option value="{{ $district }}" {{ $hasProfile && $authUser->profile->district == $district ? 'selected' : '' }}> {{ $district }} </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
 
@@ -572,6 +577,7 @@
             let html = "";
             if(products.length){
                 products.forEach(product => {
+
                     let APP_URL = location.origin;
                     let src = `${product.product.product_thumbnail_image ? `${APP_URL}/${product.product.product_thumbnail_image}`  : `{{ asset('assets/frontend/img/product/product-1.png') }}`}`;
                     html += `<tr>

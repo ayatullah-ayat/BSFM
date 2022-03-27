@@ -47,6 +47,13 @@ function addToCart(e) {
 
             cartBadge.html(products.length || 1);
 
+            if(!elem?.attr('data-detail')){
+                setTimeout(function(){
+                    open(`${location.origin}/shop/${id}`,'_self')
+                },500)
+            }
+
+
         },
         error   : function (xhr, status, error) {
             console.log("An AJAX error occured: " + status + "\nError: " + error);

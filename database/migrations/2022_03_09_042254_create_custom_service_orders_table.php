@@ -17,6 +17,7 @@ class CreateCustomServiceOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('customer_name');
+            $table->string('customer_phone')->nullable();
             $table->text('customer_address')->nullable();
             $table->unsignedBigInteger('custom_service_product_id')->nullable();
             $table->string('custom_service_product_name')->nullable();

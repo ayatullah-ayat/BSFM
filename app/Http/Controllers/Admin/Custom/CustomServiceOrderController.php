@@ -69,6 +69,12 @@ class CustomServiceOrderController extends Controller
 
             $order_attachment   = $request->order_attachment;
             $data               = $request->all();
+
+            $product_id = $request->custom_service_product_id;
+            if($product_id){
+                $data['custom_service_product_name']= $this->getProductName($product_id);
+            }
+
             $fileLocation       = null;
     
             if($order_attachment){
@@ -142,6 +148,18 @@ class CustomServiceOrderController extends Controller
     }
 
 
+    private function getProductName($id=null){
+        
+        $customproduct = CustomServiceProduct::selectRaw(
+            'product_name, id'
+        )->where('id', $id)->first();
+
+        if($customproduct) return $customproduct->product_name;
+
+        return null;
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -181,6 +199,11 @@ class CustomServiceOrderController extends Controller
             $data               = $request->all();
             $order_attachment   = $request->order_attachment;
             $fileLocation       = $customServiceOrder->order_attachment;
+
+            $product_id = $request->custom_service_product_id;
+            if($product_id){
+                $data['custom_service_product_name']= $this->getProductName($product_id);
+            }
 
             if ($order_attachment) {
                 //file, dir

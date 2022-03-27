@@ -86,7 +86,6 @@ class ProfileController extends Controller
             if($user->email !== $request->email)
                 throw new Exception("Email can't be change!");
 
-                // dd($data['username'], $user);
             $user->update([
                 'name'      => $data['name'],
                 'username'  => $data['username'],
@@ -117,7 +116,7 @@ class ProfileController extends Controller
                 'gender'    => $data['gender'],
                 'address'   => $data['address'] ?? null
             ];
-            
+
             if(!$user->profile){
                 // dd($user->profile);
                 $profilestatus = $user->profile()->create($arrData);

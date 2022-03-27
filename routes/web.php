@@ -75,7 +75,7 @@ Route::group(['prefix' => ''],function(){
     Route::post('/shop',                    [ShopController::class, 'ajaxFilter'])->name('shop_ajax_filter');
     Route::get('/shop/{product}/{slug?}',   [ShopController::class, 'show'])->name('product_detail');
 
-    Route::get('/checkout/{product?}',      [CustomerOrderController::class, 'index'])->name('checkout_index');
+    Route::get('/checkout/{product?}',      [CustomerOrderController::class, 'index'])->name('checkout_index')->middleware('auth:web');
     Route::post('/checkcoupon',             [CustomerOrderController::class, 'checkCoupon'])->name('checkCoupon');
     Route::post('/removecoupon',            [CustomerOrderController::class, 'removeCoupon'])->name('removeCoupon');
     Route::post('/create-order',            [CustomerOrderController::class, 'store'])->name('store_order');

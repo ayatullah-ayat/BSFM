@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Route;
 
 class AuthenticatedSessionController extends Controller
 {

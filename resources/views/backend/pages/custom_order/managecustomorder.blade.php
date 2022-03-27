@@ -33,7 +33,7 @@
 
                             @isset($customserviceorders)
                                 @foreach ($customserviceorders as $customserviceorder)
-                                    <tr customorder-data="{{ json_encode($customserviceorder) }}">
+                                    <tr customorder-data="{{ json_encode($customserviceorder) }}" data-category="{{ $customserviceorder->product ? $customserviceorder->product->category_id : ''}}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $customserviceorder->order_no }}</td>
                                         <td>{{ $customserviceorder->created_at }}</td>
@@ -406,7 +406,10 @@
         function showUpdateModal(){
             resetData();
             let customOrder = $(this).closest('tr').attr('customorder-data');
+            let category_id = $(this).closest('tr').attr('data-category');
             if(customOrder){
+
+                console.log(category_id, $(this).closest('tr'));
 
                 $('#customOrder_save_btn').addClass('d-none');
                 $('#customOrder_update_btn').removeClass('d-none');
@@ -415,22 +418,16 @@
 
                 $('#customServiceOrderModal .heading').text('Edit').attr('data-id', customOrder?.id)
 
-                $('#category_id').val(customOrder?.category_id).trigger('change')
+                $('#category_id').val(category_id).trigger('change')
 
                 setTimeout(() => {
-                 $('#product_id').val(customOrder?.product_id).trigger('change')
+                 $('#product_id').val(customOrder?.custom_service_product_id).trigger('change')
                 }, 1000);
 
                 $('#customer_name').val(customOrder?.customer_name)
                 $('#customer_phone').val(customOrder?.customer_phone)
                 $('#customer_address').val(customOrder?.customer_address)
-                $('#customer_phone').val(customOrder?.customer_phone)
 
-                // if(customOrder?.status){
-                //     $('#isActive').prop('checked',true)
-                //     }else{
-                //     $('#isInActive').prop('checked',true)
-                // }
                 // show previos image on modal
                 $(document).find('#img-preview').attr('src', `{{ asset('') }}${customOrder.order_attachment}`);
 
@@ -476,13 +473,11 @@
         function formatData(){
             return {
                 category_id                 : $('#category_id').val(),
-                product_id                  : $('#product_id').val(),
                 customer_name               : $('#customer_name').val(),
                 customer_phone              : $('#customer_phone').val(),
                 customer_address            : $('#customer_address').val().trim(),
                 _token                      : `{{ csrf_token()}}`,
                 custom_service_product_id   : $('#product_id').val(),
-                custom_service_product_name : $('#product_name').val(),
                 order_attachment            : fileToUpload('#img-preview'),
             }
         }
@@ -494,7 +489,6 @@
             $('#customer_name').val(null),
             $('#customer_phone').val(null),
             $('#customer_address').val(null),
-            $('#product_id').val(null),
             $('#product_name').val(null),
             $('#order_attachment').val(null),
             fileToUpload('#img-preview')

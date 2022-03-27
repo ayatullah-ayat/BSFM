@@ -41,11 +41,11 @@
                                         <td>{{ $otherOrder->order_date ?? 'N/A' }}</td>
                                         <td>{{ $otherOrder->order_no  ?? 'N/A' }}</td>
                                         <td>{{ $otherOrder->category_name  ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->order_qty  ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->price  ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->total_order_price  ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->advance_balance  ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->due_price  ?? 'N/A' }}</td>
+                                        <td>{{ $otherOrder->order_qty  ?? '0.0' }}</td>
+                                        <td>{{ $otherOrder->price  ?? '0.0' }}</td>
+                                        <td>{{ $otherOrder->total_order_price  ?? '0.0' }}</td>
+                                        <td>{{ $otherOrder->advance_balance  ?? '0.0' }}</td>
+                                        <td>{{ $otherOrder->due_price  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->moible_no  ?? 'N/A' }}</td>
                                         <td>{{ $otherOrder->institute_description  ?? 'N/A' }}</td>
                                         <td>{{ $otherOrder->note  ?? 'N/A' }}</td>

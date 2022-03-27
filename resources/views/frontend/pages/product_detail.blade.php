@@ -137,7 +137,7 @@
                             @endif 
     
                             @if($stockQty > 0)
-                            <div><button type="button" class="btn btn-dark {{ $stockQty > 0 ? 'addToCart' : '' }} {{ !in_array($product->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}" data-productid="{{ $product->id }}" data-stockqty="{{$stockQty}}">{!!  !in_array( $product->id, $productIds) ? 'কার্ডে যুক্ত করুন' :'<span> <i class=\'fa fa-circle-check\'></i> অলরেডি যুক্ত আছে</span>' !!}</button></div>
+                            <div><button type="button" data-detail="true" class="btn btn-dark {{ $stockQty > 0 ? 'addToCart' : '' }} {{ !in_array($product->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}" data-productid="{{ $product->id }}" data-stockqty="{{$stockQty}}">{!!  !in_array( $product->id, $productIds) ? 'কার্ডে যুক্ত করুন' :'<span>অলরেডি যুক্ত আছে</span>' !!}</button></div>
                             <div><a href="{{ $stockQty > 0 ? route('checkout_index',$product->id ) : 'javascript:void(0)' }}" type="button" class="btn btn-danger checkoutToGo" data-stockqty="{{$stockQty}}">অর্ডার করুন</a></div>
                             <div data-auth="{{ auth()->user()->id ?? null }}" class="d-flex align-items-center text-danger {{ in_array($product->id,$wishLists) ? 'removeFromWish' : 'addToWish' }}" data-productid="{{ $product->id }}" data-stockqty="{{$stockQty}}" type="button"><span class="fa fa-heart fa-2x"></span></div>
                             @endif 

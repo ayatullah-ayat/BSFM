@@ -15,4 +15,9 @@ class CustomServiceOrder extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function product()
+    {
+        return $this->belongsTo(CustomServiceProduct::class,'custom_service_product_id');
+    }
+
 }

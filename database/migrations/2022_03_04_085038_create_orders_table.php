@@ -15,8 +15,11 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('customer_name')->nullable();
+            $table->string('customer_phone')->nullable();
+            $table->string('payment_type')->nullable();
 
             $table->date('order_date');
             $table->string('order_no');
@@ -34,6 +37,7 @@ class CreateOrdersTable extends Migration
 
             $table->unsignedBigInteger('order_total_qty')->default(0)->comment('grand_qty');
             $table->float('order_total_price', 10, 3)->default(0)->comment('grand_total');
+            $table->float('payment_total_price', 10, 3)->default(0)->comment('summary of total payment');
 
             $table->text('order_note')->nullable();
 

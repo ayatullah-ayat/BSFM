@@ -67,7 +67,7 @@
                                     <div class="card-product-button d-flex justify-content-evenly">
                                         @if($item->total_stock_qty > 0)
                                         <button type="button" data-productid="{{ $item->id }}" class="btn btn-sm btn-secondary btn-card {{ !in_array($item->id,$productIds) ? 'addToCart' : 'alreadyInCart' }}"> {!!  !in_array($item->id,$productIds) ? 'কার্ডে যুক্ত করুন' :'<span>অলরেডি যুক্ত আছে</span>' !!}</button>
-                                        <a href="{{ route('checkout_index',$item->id ) }}" type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </a>
+                                        <a href="{{ route('checkout_index',$item->id ) }}?ref={{ uniqid() }}" type="button" class="btn btn-sm btn-danger"> অর্ডার করুন </a>
                                         @else 
                                         <span class="text-danger">Out of Stock</span>
                                         @endif 
