@@ -62,11 +62,18 @@ class OrderController extends Controller
             if(!$order_no)
                 throw new Exception("Please Input Order No!", 403);
 
-            $order = Order::with('customer')->where('order_no', $order_no)->first();
+            $order = Order::with('customer')
+                    ->where('order_no', $order_no)
+                    ->where('status','!=', 'cancelled')
+                    ->where('status','!=', 'returned')
+                    ->first();
 
             // dd($order);
 
-            $customOrder = CustomServiceOrder::selectRaw('*, convert(created_at, DATE) as order_date')->where('order_no', $order_no)->first();
+            $customOrder = CustomServiceOrder::selectRaw('*, convert(created_at, DATE) as order_date')
+                        ->where('status', '!=', 'cancelled')
+                        ->where('status', '!=', 'returned')
+                        ->where('order_no', $order_no)->first();
 
             $orderData = null;
             $order_from = null;

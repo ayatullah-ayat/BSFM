@@ -30,7 +30,7 @@ class CreateOrdersTable extends Migration
 
             $table->float('discount_price',10,3)->default(0);
 
-            $table->enum('status', ['pending', 'processing', 'completed', 'rejected', 'cancelled', 'returned'])->default('pending');
+            $table->enum('status', ['pending', 'confirm', 'processing', 'completed', 'cancelled', 'returned'])->default('pending');
 
             $table->unsignedBigInteger('order_total_qty')->default(0)->comment('grand_qty');
             $table->float('order_total_price', 10, 3)->default(0)->comment('grand_total');

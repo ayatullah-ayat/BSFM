@@ -10,7 +10,7 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Order</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
+                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_orders.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
             </div>
 
             <div class="card-body">
@@ -20,8 +20,8 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Order NO</th>
+                                <th>Order Date</th>
                                 <th>Customer Name</th>
-                                <th>Date</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>
                                 <th width="70" class="text-center">Action</th>
@@ -29,69 +29,45 @@
                         </thead>
                         <tbody>
 
-                            <tr>
-                                <td>01</td>
-                                <td>std000001</td>
-                                <td>Alauddin</td>
-                                <td>03/03/2022</td>
-                                <td>5000.00Tk</td>
-                                <td class="text-center">
-                                    <span class="badge badge-success">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>01</td>
-                                <td>std000001</td>
-                                <td>Alauddin</td>
-                                <td>03/03/2022</td>
-                                <td>5000.00Tk</td>
-                                <td class="text-center">
-                                    <span class="badge badge-success">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>01</td>
-                                <td>std000001</td>
-                                <td>Alauddin</td>
-                                <td>03/03/2022</td>
-                                <td>5000.00Tk</td>
-                                <td class="text-center">
-                                    <span class="badge badge-success">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td>
-                            </tr>
+
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $order->order_no ?? 'N/A' }}</td>
+                                    <td>{{ $order->order_date ?? 'N/A' }}</td>
+                                    <td>{{ $order->customer_name  ?? 'N/A' }}</td>
+                                    <td>{{ $order->order_total_price  ?? 'N/A' }}</td>
+                                    <td class="text-center">
+
+                                        @if($order->status == "pending")
+                                        <span class="badge badge-warning">
+                                            {{ ucfirst($order->status) }}
+                                        </span>
+                                        @elseif($order->status == "confirm" || $order->status == "processing")
+                                        <span class="badge badge-warning">
+                                            {{ ucfirst($order->status) }}
+                                        </span>
+                                        @elseif($order->status == "rejected" || $order->status == "cancelled" || $order->status == "returned")
+                                        <span class="badge badge-danger">
+                                            {{ ucfirst($order->status)  }}
+                                        </span>
+                                        @elseif($order->status == "completed")
+                                        <span class="badge badge-success">
+                                            Delivered
+                                        </span>
+                                        @endif 
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.ecom_orders.show', $order->id) }}" class="fa fa-eye text-info text-decoration-none"></a>
+                                        <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+
                         
                             
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </tfoot> --}}
 
                     </table>
                 </div>

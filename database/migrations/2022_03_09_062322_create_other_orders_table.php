@@ -31,7 +31,7 @@ class CreateOtherOrdersTable extends Migration
             $table->float('advance_balance', 10, 3)->default(0);
             $table->text('institute_description')->nullable();
             $table->text('note')->nullable();
-            $table->enum('status', ['pending', 'processing', 'completed', 'rejected', 'cancelled','returned'])->default('pending');
+            $table->enum('status', ['pending', 'confirm', 'processing', 'completed', 'cancelled', 'returned'])->default('pending');
             
             $table->unsignedBigInteger('delivered_qty')->default(0);
             $table->float('delivered_price', 10, 3)->default(0);
