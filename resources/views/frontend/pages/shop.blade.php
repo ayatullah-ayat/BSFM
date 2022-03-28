@@ -60,7 +60,7 @@
                                     <div class="card-product-price card-text text-center fw-bold">
                                         <h5>বর্তমান মূুল্য {{ salesPrice($item) ?? '0.0'}} /= 
                                             @if($item->product_discount)
-                                            <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
+                                            <span class="text-decoration-line-through text-danger"> {{ number_format($unitprice,2) ?? '0.0'}} /=</span>
                                             @endif 
                                         </h5>
                                     </div>

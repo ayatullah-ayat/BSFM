@@ -26,8 +26,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('is_active', 1)->get();
+        $products = Product::where('is_active', 1)->where('is_publish',1)->get();
         return view('backend.pages.product.manageproduct', compact('products'));
+    }
+
+    public function unPublishProducts()
+    {
+        $products = Product::where('is_active', 1)->where('is_publish',0)->get();
+        return view('backend.pages.product.unpublish', compact('products'));
     }
 
     /**
@@ -311,6 +317,31 @@ class ProductController extends Controller
 
             DB::rollBack();
             
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+
+        }
+    }
+
+
+    public function publish(Request $request, Product $product)
+    {
+
+        try {
+
+            $product->update([
+                'is_publish' => $request->is_publish
+            ]);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Product Published Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+
             return response()->json([
                 'success'   => false,
                 'msg'       => $th->getMessage()

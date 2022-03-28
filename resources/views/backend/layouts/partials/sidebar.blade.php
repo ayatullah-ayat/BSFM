@@ -66,7 +66,8 @@
         <div id="products" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.products.create') }}">New Product</a>
-                <a class="collapse-item" href="{{ route('admin.products.index') }}">Manage Product</a>
+                <a class="collapse-item" href="{{ route('admin.products.index') }}">Manage Products</a>
+                <a class="collapse-item" href="{{ route('admin.products.unpublish') }}">Unpublish Products</a>
             </div>
         </div>
     </li>
@@ -95,7 +96,7 @@
         <div id="purchase" class="collapse" aria-labelledby="purchase" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
-                <a class="collapse-item" href="{{ route('admin.manage-purchase') }}">Manage Purchase</a>
+                <a class="collapse-item" href="{{ route('admin.purchase.index') }}">Manage Purchase</a>
             </div>
         </div>
     </li>

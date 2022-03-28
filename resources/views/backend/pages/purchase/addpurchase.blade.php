@@ -21,8 +21,8 @@
 
                 <div class="col-md-3" data-col="col">
                     <div class="form-group">
-                        <label for="booking_date">Purchase Date <span style="color: red;" class="req">*</span></label>
-                        <input type="text" data-required autocomplete="off" class="form-control" id="booking_date" name="booking_date">
+                        <label for="purchase_date">Purchase Date <span style="color: red;" class="req">*</span></label>
+                        <input type="text" data-required autocomplete="off" class="form-control" id="purchase_date" name="purchase_date">
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -30,7 +30,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Invoice No.<span style="color: red;" class="req">*</span></label>
-                        <input type="text" class="form-control" placeholder="">
+                        <input type="text" class="form-control check_invoice" placeholder="" id="invoice_no">
+                        <span class="v-msg-invoice text-danger"></span>
                     </div>
                 </div>
 
@@ -39,7 +40,7 @@
                         <label for="stuff"> Currency<span style="color: red;" class="req">*</span></label>
                         <select name="currency" class="currency" data-required id="currency" data-placeholder="Select currency">
                             @foreach ($currencies as $currency)
-                            <option value="{{ $currency->id }}">{{ $currency->currency_name }}</option>
+                            <option value="{{ $currency->currency_name }}">{{ $currency->currency_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -49,9 +50,9 @@
 
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="">Details</label>
+                        <label for="">Details Or Note</label>
                         {{-- <input type="text" class="form-control" placeholder=""> --}}
-                        <textarea class="form-control" name="" id="" cols="0" rows="1"  placeholder=""></textarea>
+                        <textarea class="form-control" name="" id="purchase_note" cols="0" rows="1"  placeholder=""></textarea>
                     </div>
                 </div>
 
@@ -155,7 +156,33 @@
         $(document).on('click','#add', createModal)
         $(document).on('click','#purchase-btn', submitToDatabase)
         $(document).on('input keyup change','.state_change', calcSubTotal)
+        $(document).on('input change','.check_invoice', checkInvoice)
     });
+
+
+
+    function checkInvoice(){
+        let invoice = $(this).val().trim();
+
+        ajaxFormToken();
+
+        $.ajax({
+            url: `{{ route('admin.purchase.checkInvoice') }}`,
+            method: 'POST',
+            data : { invoice },
+            success(res){
+                // console.log(res,'ss');
+                if(!res.success) {
+                    $('.v-msg-invoice').text(res?.msg);
+                }else{
+                    $('.v-msg-invoice').text('');
+                }
+            },
+            error(err){
+                console.log(err);
+            },
+        })
+    }
 
 
 
@@ -281,19 +308,18 @@
 
         $('#purchase-body').append(html)
 
-        $(`#product_name_${ref}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-            tags  : true,
-        }).val(null).trigger('change')
+        InitProduct(`#product_name_${ref}`);
+
         $(`#color_${ref}`).select2({
             width : '100%',
             theme : 'bootstrap4',
         }).val(null).trigger('change')
+
         $(`#size_${ref}`).select2({
             width : '100%',
             theme : 'bootstrap4',
         }).val(null).trigger('change')
+
         $(`#unit_${ref}`).select2({
             width : '100%',
             theme : 'bootstrap4',
@@ -308,11 +334,6 @@
             {
                 selector        : `#supplier`,
                 type            : 'select',
-            },
-            {
-                selector        : `.product_name`,
-                type            : 'select',
-                tags            : true,
             },
             {
                 selector        : `.color`,
@@ -331,13 +352,53 @@
                 type            : 'select',
             },
             {
-                selector        : `#booking_date`,
+                selector        : `#purchase_date`,
                 type            : 'date',
                 format          : 'yyyy-mm-dd',
             },
         ];
 
         globeInit(arr);
+
+
+        InitProduct();
+
+
+        
+    }
+
+
+    function InitProduct(selector='#product_name'){
+        $(selector).select2({
+            width               : '100%',
+            theme               : 'bootstrap4',
+            minimumInputLength  : 2,
+            tags                : true,
+            // tags: [],
+            ajax: {
+                url         : `{{ route('admin.purchase.searchProduct')}}`,
+                dataType    : 'json',
+                type        : "GET",
+                quietMillis : 50,
+                data        : function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                processResults     : function (data) {
+                    console.log(data);
+                    return {
+                        results: $.map(data, function (item) {
+
+                            return {
+                                text: item.product_name ?? 'N/A',
+                                id: item.product_name
+                            }
+                        })
+                    };
+                }
+            }
+        });
     }
 
 
@@ -348,26 +409,57 @@
     function submitToDatabase(){
         //
 
-
-
-        return false;
-
         ajaxFormToken();
 
         let obj = {
-            url     : ``, 
+            url     : `{{ route('admin.purchase.store') }}`, 
             method  : "POST",
-            data    : {},
+            data    : formatData(),
         };
 
-        ajaxRequest(obj);
+        ajaxRequest(obj, { reload : false, timer: 1000 });
 
-        hideModal('#categoryModal');
     }
 
 
     function formatData(){
         //
+        return {
+            supplier_id     : $('#supplier').val(),
+            purchase_date   : $('#purchase_date').val(),
+            invoice_no      : $('#invoice_no').val(),
+            currency        : $('#currency').val(),
+            purchase_note   : $('#purchase_note').val(),
+            total_qty       : $('#total_qty').text(),
+            total_price     : $('#grandtotal').text(),
+            products        : products()
+        };
+
+    }
+
+
+    function products(){
+        let rows = $('#purchase-body').find('tr');
+        let productArr = [];
+        
+        [...rows].forEach( row => {
+
+            productArr.push({
+                product_name    : $(row).find('.product_name').val(),
+                invoice_no      : $('#invoice_no').val(),
+                product_colors  : $(row).find('.color').val(),
+                product_sizes   : $(row).find('.size').val(),
+                product_qty     : Number($(row).find('.qty').val() ?? 0),
+                product_price   : $(row).find('.purchase-price').val(),
+                subtotal        : Number($(row).find('.subtotal').val() ?? 0),
+                product_unit    : $(row).find('.unit').val(),
+                product_id      : null,
+                purchase_id     : null,
+            });
+        });
+
+
+        return productArr;
     }
 
 </script>

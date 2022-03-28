@@ -20,6 +20,7 @@ class CreatePurchasesTable extends Migration
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->string('supplier_name')->nullable();
             $table->date('purchase_date');
+            $table->string('currency')->nullable();
             $table->string('invoice_no');
             $table->text('sizes')->nullable();
             $table->text('colors')->nullable();
@@ -29,6 +30,7 @@ class CreatePurchasesTable extends Migration
             $table->float('total_payment_due',10,3)->default(0);
             
             $table->text('purchase_note')->nullable();
+            $table->boolean('is_manage_stock')->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

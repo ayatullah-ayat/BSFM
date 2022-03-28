@@ -56,7 +56,7 @@
                         
                         <div class="single-prodect-offer-price d-flex">
                             <h3> নির্ধারিত মূল্য- {{ salesPrice($product)  ?? '0.0' }} টাকা </h3>
-                            <h5> {{ $unitprice ?? '0.0' }} টাকা </h5>
+                            <h5> {{ number_format($unitprice, 2) ?? '0.0' }} টাকা </h5>
                         </div>
     
                         <div class="single-prodect-description">

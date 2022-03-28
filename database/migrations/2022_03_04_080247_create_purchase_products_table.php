@@ -19,6 +19,7 @@ class CreatePurchaseProductsTable extends Migration
             $table->string('invoice_no')->nullable();
             $table->text('product_id')->nullable();
             $table->text('product_name')->nullable();
+            $table->string('product_unit')->nullable();
             $table->text('product_colors')->nullable();
             $table->text('product_sizes')->nullable();
             $table->unsignedBigInteger('product_qty')->default(0);

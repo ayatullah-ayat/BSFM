@@ -8,10 +8,13 @@
     <div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
+            @php
+                $back = request('st') ? request('st') : 'index';
+            @endphp
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary text-dark"><a href="javascript:void(0)" class="text-decoration-none">View Product</a> </h6>
-                <a class="text-white btn btn-sm btn-info" href="{{ route('admin.products.index') }}"><i class="fa fa-arrow-left"> Back</i></a>
+                <a class="text-white btn btn-sm btn-info" href="{{ route("admin.products.{$back}") }}"><i class="fa fa-arrow-left"> Back</i></a>
             </div>
 
             <div class="card-body">

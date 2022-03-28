@@ -123,20 +123,20 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
-                        <input name="unit_price" value="{{ $unitPrice }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
+                        <input name="unit_price" value="{{ number_format($unitPrice, 3) }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
                     </div>
                 </div>
                 
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price (Offline Sale)</label>
-                        <input name="wholesale_price" value="{{ $wholesalesPrice }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
+                        <input name="wholesale_price" value="{{ number_format($wholesalesPrice, 3) }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
-                        <input name="sale_price" value="{{ $salesPrice }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
+                        <input name="sale_price" value="{{ number_format($salesPrice,3) }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
                             placeholder="Sales Price">
                     </div>
                 </div>

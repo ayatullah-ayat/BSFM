@@ -230,30 +230,35 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     //     return view('backend.pages.purchase.addpurchase');
     // })->name('add-purchase');
 
-    Route::get('/manage-purchase', function () {
-        return view('backend.pages.purchase.managepurchase');
-    })->name('manage-purchase');
+    // Route::get('/manage-purchase', function () {
+    //     return view('backend.pages.purchase.managepurchase');
+    // })->name('manage-purchase');
 
 
     Route::group(['prefix' => 'purchase', 'as' => 'purchase.'], function () {
         Route::get('/',             [PurchaseController::class, 'index'])->name('index');
         Route::get('/create',       [PurchaseController::class, 'create'])->name('create');
-        // Route::post('/',            [ProductController::class, 'store'])->name('store');
+        Route::post('/',            [PurchaseController::class, 'store'])->name('store');
         // Route::get('/{product}',    [ProductController::class, 'show'])->name('show');
         // Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
         // Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
-        // Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::delete('/{purchase}', [PurchaseController::class, 'destroy'])->name('destroy');
+        Route::post('/check-invoice',[PurchaseController::class, 'checkInvoice'])->name('checkInvoice');
+        Route::get('/search-product',[PurchaseController::class, 'searchProduct'])->name('searchProduct');
+
     });
 
 
     Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-        Route::get('/',             [ProductController::class, 'index'])->name('index');
-        Route::get('/create',       [ProductController::class, 'create'])->name('create');
-        Route::post('/',            [ProductController::class, 'store'])->name('store');
-        Route::get('/{product}',    [ProductController::class, 'show'])->name('show');
-        Route::get('/{product}/edit',[ProductController::class, 'edit'])->name('edit');
-        Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
-        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::get('/',                     [ProductController::class, 'index'])->name('index');
+        Route::get('/unpublish-products',   [ProductController::class, 'unPublishProducts'])->name('unpublish');
+        Route::get('/create',               [ProductController::class, 'create'])->name('create');
+        Route::post('/',                    [ProductController::class, 'store'])->name('store');
+        Route::get('/{product}',            [ProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit',       [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}',            [ProductController::class, 'update'])->name('update');
+        Route::delete('/{product}',         [ProductController::class, 'destroy'])->name('destroy');
+        Route::post('/{product}',           [ProductController::class, 'publish'])->name('publish');
     });
 
 

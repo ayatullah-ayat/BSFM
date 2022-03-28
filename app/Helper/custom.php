@@ -90,7 +90,7 @@ if (!function_exists('hasProfile')){
 
 if (!function_exists('salesPrice')){
     function salesPrice($product){
-        return ($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100)))/ $product->total_product_qty ?? 0.0;
+        return number_format(($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100))) / $product->total_product_qty ?? 0.0 , 2);
     }
 }
 
@@ -98,7 +98,7 @@ if (!function_exists('salesPrice')){
 if (!function_exists('wholesalesPrice')) {
     function wholesalesPrice($product)
     {
-        return ($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0;
+        return number_format(($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0, 2);
     }
 }
 

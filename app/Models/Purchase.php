@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Purchase extends Model
 {
 
+    protected $guarded = ['id'];
+    
     public function purchaseProducts()
     {
         return $this->hasMany(PurchaseProduct::class);
