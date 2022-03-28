@@ -35,7 +35,8 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $order->order_no ?? 'N/A' }}</td>
                                     <td>{{ $order->order_date ?? 'N/A' }}</td>
-                                    <td>{{ $order->customer_name  ?? 'N/A' }}</td>
+                                    <td>{{ $order->customer->customer_name  ?? 'N/A' }}</td>
+                                    {{-- <td>{{ $order->customer_name  ?? 'N/A' }}</td> --}}
                                     <td>{{ $order->order_total_price  ?? 'N/A' }}</td>
                                     <td class="text-center">
 
@@ -59,14 +60,12 @@
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('admin.ecom_orders.show', $order->id) }}" class="fa fa-eye text-info text-decoration-none"></a>
-                                        <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                        <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
+                                        <a href="{{ route('admin.ecom_orders.edit', $order->id)}}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="{{ route('admin.ecom_orders.destroy', $order->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                     </td>
                                 </tr>
                             @endforeach
 
-                        
-                            
                         </tbody>
 
                     </table>
@@ -91,4 +90,77 @@
     <script src="{{ asset('assets/backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            init();
+            $(document).on('click', '.delete', deleteToDatabase)
+        });
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            resetData();
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
+
+        function init(){
+
+            let arr=[
+                {
+                    dropdownParent  : '#categoryModal',
+                    selector        : `#email_template`,
+                    type            : 'select',
+                },
+                {
+                    selector        : `#order_date`,
+                    type            : 'date',
+                    format          : 'yyyy-mm-dd',
+                },
+            ];
+
+            globeInit(arr);
+
+            // $(`#stuff`).select2({
+            //     width           : '100%',
+            //     dropdownParent  : $('#categoryModal'),
+            //     theme           : 'bootstrap4',
+            // }).val(null).trigger('change')
+
+
+            // $('#booking_date').datepicker({
+            //     autoclose : true,
+            //     clearBtn : false,
+            //     todayBtn : true,
+            //     todayHighlight : true,
+            //     orientation : 'bottom',
+            //     format : 'yyyy-mm-dd',
+            // })
+        }
+
+    </script>
 @endpush

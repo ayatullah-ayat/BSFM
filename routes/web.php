@@ -247,13 +247,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
 
 
     Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-        Route::get('/',             [ProductController::class, 'index'])->name('index');
-        Route::get('/create',       [ProductController::class, 'create'])->name('create');
-        Route::post('/',            [ProductController::class, 'store'])->name('store');
-        Route::get('/{product}',    [ProductController::class, 'show'])->name('show');
-        Route::get('/{product}/edit',[ProductController::class, 'edit'])->name('edit');
-        Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
-        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::get('/',                 [ProductController::class, 'index'])->name('index');
+        Route::get('/create',           [ProductController::class, 'create'])->name('create');
+        Route::post('/',                [ProductController::class, 'store'])->name('store');
+        Route::get('/{product}',        [ProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit',   [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}',        [ProductController::class, 'update'])->name('update');
+        Route::delete('/{product}',     [ProductController::class, 'destroy'])->name('destroy');
     });
 
 
@@ -261,8 +261,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/',                         [OrderController::class, 'index'])->name('order_manage');
         Route::get('/create',                   [OrderController::class, 'create'])->name('order_add');
         Route::post('/',                        [OrderController::class, 'store'])->name('store');
-        Route::get('/{order}/{notification?}',[OrderController::class, 'show'])->name('show');
         Route::get('/{order}/edit',             [OrderController::class, 'edit'])->name('edit');
+        Route::get('/{order}/{notification?}',  [OrderController::class, 'show'])->name('show');
         Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
     });

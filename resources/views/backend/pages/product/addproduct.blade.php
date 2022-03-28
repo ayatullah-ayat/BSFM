@@ -499,7 +499,6 @@
 
     }
 
-
     function calcTotalPriceModal(){
 
         let 
@@ -564,7 +563,6 @@
 
     }
 
-
     function getAllSubcategories(){
         let category_id = $(this).val();
 
@@ -590,7 +588,6 @@
             },
         })
     }
-
     
     function createRow(){
 
@@ -660,12 +657,10 @@
         }).val(null).trigger('change')
     }
 
-
     function deleteRow(){
         $(this).closest('tr').remove();
         $('[name="discount_percentage"]').trigger('keyup')
     }
-
 
     function collectionOfVariantPriceQty(data=null){
 
@@ -679,7 +674,6 @@
 
     }
 
-
     function manageVariantPriceStock(){
         let elem = $(this);
 
@@ -691,7 +685,6 @@
             hideModal('#manageVariantSizePriceModal');
         }
     }
-
 
     function init(){
 
@@ -751,7 +744,6 @@
 
     }
 
-
     function createModal(){
         showModal('#categoryModal');
     }
@@ -807,7 +799,6 @@
         // hideModal('#categoryModal');
     }
 
-
     function formatProductData(){
 
         let
@@ -860,7 +851,6 @@
         };
     }
 
-
     function fileRead(elem, src = '#img-preview') {
         let files = [];
 
@@ -881,7 +871,6 @@
             return files;
         }
     }
-
 
 </script>
 @endpush

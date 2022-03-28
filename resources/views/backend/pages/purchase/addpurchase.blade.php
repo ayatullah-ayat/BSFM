@@ -192,8 +192,6 @@
 
     }
 
-
-
     function summary(){
         let rows        = $('#purchase-body').find('tr');
         let total_qty   = 0;
