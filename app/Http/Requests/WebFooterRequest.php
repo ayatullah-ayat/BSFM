@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VariantRequest extends FormRequest
+class WebFooterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class VariantRequest extends FormRequest
     public function rules()
     {
         return [
-            'variant_name'  => 'required|string',
-            'variant_type'  => 'nullable|string',
+            'footer_about'  => 'required|string',
+            'footer_logo'   => 'nullable|string',
             'is_active'     => 'required',
         ];
     }
@@ -33,11 +33,11 @@ class VariantRequest extends FormRequest
     public function messages()
     {
         return [
-            'variant_name.required'  => 'Variant is Required!',
-            'variant_name.string'    => 'Variant must be String Type!',
-            'is_active.required'     => 'Please select the variant status!',
+            'footer_about.required' => 'Footer About is Required!',
+            'footer_about.string'   => 'Footer About must be string type!',
+            'is_active.required'    => 'Please select the Footer about status!',
         ];
     }
 
-    
+
 }

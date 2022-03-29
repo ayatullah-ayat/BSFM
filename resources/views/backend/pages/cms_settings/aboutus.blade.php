@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Website Footer')
+@section('title','About Us')
 
 @section('content')
     <div>
@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Web Footer Settings</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Add Footer</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">About Us Settings</a> </h6>
+                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> About Us</i></button>
             </div>
 
             <div class="card-body">
@@ -18,31 +18,35 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Footer About</th>
-                                <th>Footer Logo</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Thumbnail</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($footerdatas)
-                                @foreach ($footerdatas as $item)
-                                    <tr footer-data="{{ json_encode($item) }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->footer_about }}</td>
+
+                            @isset($aboutdatas)
+                                @foreach ($aboutdatas as $data)
+                                    <tr about-data="{{ json_encode($data) }}">
+                                        <td>{{ $loop->iteration ?? 'N/A' }}</td>
+                                        <td>{{ $data->about_title ?? 'N/A' }}</td>
+                                        <td>{{ $data->about_description ?? 'N/A' }}</td>
                                         <td>
-                                            @if($item->footer_logo)
-                                                <img src="{{ asset($item->footer_logo) }}" style="width: 80px;" alt="Category Image">
+                                            @if($data->about_thumbnail)
+                                                <img src="{{ asset($data->about_thumbnail) }}" style="width: 80px;" alt="Category Image">
                                             @else 
                                                 <img src="" style="width: 80px;" alt="Category Image">
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            {!! $item->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                            {!! $data->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
                                         </td>
                                         <td class="text-center">
+                                            {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
-                                            <a href="{{ route('admin.footer-about.destroy', $item->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                            <a href="{{ route('admin.about.destroy', $data->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -57,12 +61,12 @@
     
     </div>
 
-    <div class="modal fade" id="WebFooterModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal fade" id="aboutModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"> <span class="heading">Create</span> Footer</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"> <span class="heading">Add</span> About Information</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -71,21 +75,24 @@
                 <div class="modal-body">
                     <div id="service-container">
                         <div class="row">
+
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Footer Information</h5>
-                                <hr>
+                                <div class="form-group">
+                                    <label for="about_title">Title </label>
+                                    <input type="text" name="about_title" class="form-control about_title" id="about_title" placeholder="About Title">
+                                </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="footer_about">Footer About</label>
-                                    <textarea name="footer_about" id="footer_about" class="form-control" placeholder="Footer About"></textarea>
+                                   <label for="about_description">Description</label>
+                                    <textarea class="form-control" name="about_description" id="about_description" cols="0" rows="5" placeholder="About Description"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-12 mb-2">
-                                <label for="">Category Image</label>
-                                {!! renderFileInput(['id' => 'footer_logo', 'imageSrc' => '']) !!}
+                                <label for="">About Thumbnail</label>
+                                {!! renderFileInput(['id' => 'about_thumbnail', 'imageSrc' => '']) !!}
                                 <span class="v-msg"></span>
                             </div>
 
@@ -98,7 +105,8 @@
                                     <label for="isInActive">Inactive</label>
                                 </div>
                             </div>
-
+    
+    
                         </div>
                     </div>
                 </div>
@@ -106,8 +114,8 @@
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="webfooter_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
-                        <button id="webfooter_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
+                        <button id="about_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="about_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -135,21 +143,20 @@
             init();
 
             $(document).on('click','#add', createModal)
-            $(document).on('click','#webfooter_save_btn', submitToDatabase)
-            $(document).on('click','#reset', resetForm)
-
-            $(document).on('click','.update', showUpdateModal)
+            $(document).on('click','#about_save_btn', submitToDatabase)
 
             $(document).on('click','.delete', deleteToDatabase)
-            $(document).on('click' , '#webfooter_update_btn', updateToDatabase)
+            $(document).on('change' , '#about_thumbnail', checkImage)
+            $(document).on('click','#reset', resetForm)
 
-            $(document).on('change' , '#footer_logo', checkImage)
+            $(document).on('click', '.update', showUpdateModal)
+            $(document).on('click' , '#about_update_btn', updateToDatabase)
         });
 
-           // call the func on change file input 
-           function checkImage() {
+         // call the func on change file input 
+         function checkImage() {
             fileRead(this, '#img-preview');
-        }  
+        }       
 
         function deleteToDatabase(e){
             e.preventDefault();
@@ -183,55 +190,12 @@
             }
         }
 
-        function resetForm(){
-            resetData();
-        }
-
-        function showDataToModal(){
-            let 
-            elem        = $(this),
-            tr          = elem.closest('tr'),
-            category    = tr?.attr('data-category') ? JSON.parse(tr.attr('data-category')) : null,
-            modalDetailElem = $('#modalDetail');
-
-            if(category){
-                let html = `
-                <table class="table table-sm table-bordered table-striped">
-                    <tr>
-                        <th>Category Name</th>
-                        <td>${category.category_name ?? 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <th>Category Description</th>
-                        <td>${category.category_description ?? 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <th>Category Image</th>
-                        <td>
-                            ${ category.category_image ? `
-                                <img src="{{ asset('') }}${category.category_image}" style="width:80px" alt="Category Image">
-                            `: ` <img src="" style="width:80px" alt="Category Image">`}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>${category.is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>'}</td>
-                    </tr>
-                </table>
-                `;
-
-                modalDetailElem.html(html);
-            }
-
-            $('#categoryDetailModal').modal('show')
-        }
-
         function init(){
 
             let arr=[
                 {
                     dropdownParent  : '#categoryModal',
-                    selector        : `#stuff`,
+                    selector        : `#email_template`,
                     type            : 'select',
                 },
                 {
@@ -260,11 +224,15 @@
             // })
         }
 
+        function resetForm(){
+            resetData();
+        }
+
         function createModal(){
-            showModal('#WebFooterModal');
-            $('#webfooter_save_btn').removeClass('d-none');
-            $('#webfooter_update_btn').addClass('d-none');
-            $('#WebFooterModal .heading').text('Create')
+            showModal('#aboutModal');
+            $('#about_save_btn').removeClass('d-none');
+            $('#about_update_btn').addClass('d-none');
+            $('#aboutModal .heading').text('Create')
             resetData();
         }
 
@@ -273,54 +241,51 @@
             ajaxFormToken();
 
             let obj = {
-                url     : `{{ route('admin.footer-about.store')}}`, 
+                url     : `{{ route('admin.about.store')}}`, 
                 method  : "POST",
                 data    : formatData(),
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
             resetData();
         }
-
+        
         function showUpdateModal(){
-
             resetData();
 
-            let webfooter = $(this).closest('tr').attr('footer-data');
+            let about = $(this).closest('tr').attr('about-data');
 
-            if(webfooter){
+            if(about){
 
-                $('#webfooter_save_btn').addClass('d-none');
-                $('#webfooter_update_btn').removeClass('d-none');
+                $('#about_save_btn').addClass('d-none');
+                $('#about_update_btn').removeClass('d-none');
 
-                webfooter = JSON.parse(webfooter);
+                about = JSON.parse(about);
 
-                $('#WebFooterModal .heading').text('Edit').attr('data-id', webfooter?.id)
+                $('#aboutModal .heading').text('Edit').attr('data-id', about?.id)
 
-                $('#footer_about').val(webfooter?.footer_about)
+                $('#about_title').val(about?.about_title)
+                $('#about_description').val(about?.about_description)
                 
-                if(webfooter?.is_active){
+                if(about?.is_active){
                     $('#isActive').prop('checked',true)
                 }else{
                     $('#isInActive').prop('checked',true)
                 }
 
                 // show previos image on modal
-                $(document).find('#img-preview').attr('src', `{{ asset('') }}${webfooter.footer_logo}`);
+                $(document).find('#img-preview').attr('src', `{{ asset('') }}${about.about_thumbnail}`);
 
-                showModal('#WebFooterModal');
+                showModal('#aboutModal');
             }
-
-
         }
 
         function updateToDatabase(){
             ajaxFormToken();
 
-            let id  = $('#WebFooterModal .heading').attr('data-id');
+            let id  = $('#aboutModal .heading').attr('data-id');
             let obj = {
-                url     : `{{ route('admin.footer-about.update', '' ) }}/${id}`, 
+                url     : `{{ route('admin.about.update', '' ) }}/${id}`, 
                 method  : "PUT",
                 data    : formatData(),
             };
@@ -329,19 +294,21 @@
 
             resetData();
         }
-
+        
         function formatData(){
             return {
-                footer_about    : $('#footer_about').val().trim(),
-                footer_logo     : fileToUpload('#img-preview'),
-                is_active       : $('#isActive').is(':checked') ? 1 : 0,
+                about_title       : $('#about_title').val().trim(),
+                about_description : $('#about_description').val().trim(),
+                about_thumbnail   : fileToUpload('#img-preview'),
+                is_active         : $('#isActive').is(':checked') ? 1 : 0,
             };
         }
 
         function resetData(){
-            $('#footer_about').val(null)
-            $('#footer_logo').val(null)
-            fileToUpload('#img-preview', '')
+            $('#about_title').val(null)
+            $('#about_description').val(null)
+            $('#about_thumbnail').val(null)
+            fileToUpload('#img-preview', 'put default src')
             $('#isActive').prop('checked', true)
         }
 

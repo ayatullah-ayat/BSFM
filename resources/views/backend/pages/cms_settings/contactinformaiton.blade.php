@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Social Icon')
+@section('title','Contact Information')
 
 @section('content')
     <div>
@@ -8,8 +8,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Social Icon Settings</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Social Icon</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Contact Information</a> </h6>
+                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Information</i></button>
             </div>
 
             <div class="card-body">
@@ -18,43 +18,37 @@
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Facebook</th>
-                                <th>Twitter</th>
-                                <th>Instagram</th>
-                                <th>Linkedin</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                        @isset($sociallists)
-                            @foreach ($sociallists as $sociallist)
-                                <tr sociallist-data="{{ json_encode($sociallist) }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        <a target="_blank" href="{{ $sociallist->facebook ?? '#' }}"> {{ $sociallist->facebook ?? 'N/A' }} </a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" href="{{ $sociallist->twitter ?? '#' }}"> {{ $sociallist->twitter ?? 'N/A' }} </a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" href="{{ $sociallist->instagram ?? '#' }}"> {{ $sociallist->instagram ?? 'N/A' }} </a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" href="{{ $sociallist->linkedin ?? '#' }}"> {{ $sociallist->linkedin ?? 'N/A' }} </a>
-                                    </td>
-                                    <th class="text-center">
-                                        {!! $sociallist->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                    </th>
-                                    <td class="text-center">
-                                        {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
-                                        <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
-                                        <a href="{{ route('admin.socialicon.destroy', $sociallist->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endisset
+                            @isset($infoDatas)
+                                @foreach ($infoDatas as $infoData)
+                                    <tr information-data="{{ json_encode($infoData) }}">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $infoData->title ?? 'N/A' }}</td>
+                                        <td>{{ $infoData->description ?? 'N/A' }} </td>
+                                        <td>{{ $infoData->address ?? 'N/A' }}</td>
+                                        <td>{{ $infoData->email ?? 'N/A' }}</td>
+                                        <td>{{ $infoData->phone ?? 'N/A' }}</td>
+                                        <th class="text-center">
+                                            {!! $infoData->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
+                                        </th>
+                                        <td class="text-center">
+                                            {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
+                                            <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
+                                            <a href="{{ route('admin.contactinfo.destroy', $infoData->id ) }}" class="fa fa-trash text-danger text-decoration-none dalete"></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endisset
 
                         </tbody>
 
@@ -65,12 +59,12 @@
     
     </div>
 
-    <div class="modal fade" id="socialLinkModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal fade" id="ContactInfoModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"> <span class="heading">Create</span> Social Link</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel"> <span class="heading">Create</span> Contact Information</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,40 +73,42 @@
                 <div class="modal-body">
                     <div id="service-container">
                         <div class="row">
+                           
                             <div class="col-md-12">
-                                <h5 class="font-weight-bold bg-custom-booking">Social Link Information</h5>
-                                <hr>
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input name="title" id="title" class="form-control" placeholder="Title" />
+                                </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="facebook">Facebook</label>
-                                    <input name="facebook" id="facebook" class="form-control" placeholder="Facebook Link" />
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" cols="0" rows="3" class="form-control" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="contact_address">Address</label>
+                                    <textarea name="contact_address" id="contact_address" cols="0" rows="3" class="form-control" placeholder="Contact Address"></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="twitter">Twitter</label>
-                                    <input name="twitter" id="twitter" class="form-control" placeholder="Twitter Link" />
+                                    <label for="contact_email">Email</label>
+                                    <input name="contact_email" id="contact_email" class="form-control" placeholder="Contact Email" />
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="instagram">Instagram</label>
-                                    <input name="instagram" id="instagram" class="form-control" placeholder="Instagram Link" />
+                                    <label for="contact_phone">Phone</label>
+                                    <input name="contact_phone" id="contact_phone" class="form-control" placeholder="Contact Phone" />
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="linkedin">Linkedin</label>
-                                    <input name="linkedin" id="linkedin" class="form-control" placeholder="Linkedin Link" />
-                                </div>
-                            </div>
-
-                            
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Is Active</label><br>
@@ -130,8 +126,8 @@
                 <div class="modal-footer">
                     <div class="w-100">
                         <button type="button" id="reset" class="btn btn-sm btn-secondary"><i class="fa fa-sync"></i> Reset</button>
-                        <button id="sociallink_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
-                        <button id="sociallink_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
+                        <button id="contactinfo_save_btn" type="button" class="save_btn btn btn-sm btn-success float-right"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button id="contactinfo_update_btn" type="button" class="save_btn btn btn-sm btn-success float-right d-none"><i class="fa fa-save"></i> <span>Update</span></button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -159,13 +155,15 @@
             init();
 
             $(document).on('click','#add', createModal)
-            $(document).on('click','#sociallink_save_btn', submitToDatabase)
+            $(document).on('click','#contactinfo_save_btn', submitToDatabase)
 
-            $(document).on('click','.delete', deleteToDatabase)
-            $(document).on('click' , '#reset', resetForm)
+            $(document).on('click','.update', showUpdateModal)
+            $(document).on('click','#contactinfo_update_btn', updateToDatabase)
 
-            $(document).on('click','#sociallink_update_btn', updateToDatabase)
-            $(document).on('click' , '.update', showUpdateModal)
+            $(document).on('click' , '.dalete', deleteToDatabase)
+            $(document).on('click', '#reset', resetForm)
+
+
         });
 
         function deleteToDatabase(e){
@@ -204,7 +202,7 @@
 
             let arr=[
                 {
-                    dropdownParent  : '#socialLinkModal',
+                    dropdownParent  : '#categoryModal',
                     selector        : `#email_template`,
                     type            : 'select',
                 },
@@ -235,48 +233,51 @@
         }
 
         function createModal(){
-            showModal('#socialLinkModal');
-            $('#sociallink_save_btn').removeClass('d-none');
-            $('#sociallink_update_btn').addClass('d-none');
-            $('#socialLinkModal .heading').text('Create');
+            showModal('#ContactInfoModal');
+
+            $('#contactinfo_save_btn').removeClass('d-none');
+            $('#contactinfo_update_btn').addClass('d-none');
+            $('#ContactInfoModal .heading').text('Create');
             resetData()
         }
 
         function showUpdateModal(){
             resetData();
 
-            let sociallist = $(this).closest('tr').attr('sociallist-data');
+            let contactInfo = $(this).closest('tr').attr('information-data');
 
-            if(sociallist){
+            if(contactInfo){
 
-                $('#sociallink_save_btn').addClass('d-none');
-                $('#sociallink_update_btn').removeClass('d-none');
+                $('#contactinfo_save_btn').addClass('d-none');
+                $('#contactinfo_update_btn').removeClass('d-none');
 
-                sociallist = JSON.parse(sociallist);
+                contactInfo = JSON.parse(contactInfo);
 
-                $('#socialLinkModal .heading').text('Edit').attr('data-id', sociallist?.id)
+                $('#ContactInfoModal .heading').text('Edit').attr('data-id', contactInfo?.id)
 
-                $('#facebook').val(sociallist?.facebook)
-                $('#twitter').val(sociallist?.twitter)
-                $('#instagram').val(sociallist?.instagram)
-                $('#linkedin').val(sociallist?.linkedin)
+                $('#title').val(contactInfo?.title)
+                $('#description').val(contactInfo?.description)
+                $('#contact_address').val(contactInfo?.address)
+                $('#contact_email').val(contactInfo?.email)
+                $('#contact_phone').val(contactInfo?.phone)
                 
-                if(sociallist?.is_active){
+                if(contactInfo?.is_active){
                     $('#isActive').prop('checked',true)
                 }else{
                     $('#isInActive').prop('checked',true)
                 }
 
-                showModal('#socialLinkModal');
+                showModal('#ContactInfoModal');
             }
         }
+
 
         function updateToDatabase(){
             ajaxFormToken();
 
-            let id  = $('#socialLinkModal .heading').attr('data-id');
+            let id  = $('#ContactInfoModal .heading').attr('data-id');
             let obj = {
-                url     : `{{ route('admin.socialicon.update', '' ) }}/${id}`, 
+                url     : `{{ route('admin.contactinfo.update', '' ) }}/${id}`, 
                 method  : "PUT",
                 data    : formatData(),
             };
@@ -285,19 +286,18 @@
 
             resetData();
 
-            hideModal('#unitModal');
+            // hideModal('#ContactInfoModal');
         }
 
-
         function resetForm(){
-            resetData();
+            resetData()
         }
 
         function submitToDatabase(){
             ajaxFormToken();
 
             let obj = {
-                url     : `{{ route('admin.socialicon.store')}}`, 
+                url     : `{{ route('admin.contactinfo.store')}}`, 
                 method  : "POST",
                 data    : formatData(),
             };
@@ -305,27 +305,26 @@
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
             resetData()
-
-            // hideModal('#unitModal');
         }
-
 
         function formatData(){
             return {
-                facebook        : $('#facebook').val().trim(),
-                twitter         : $('#twitter').val().trim(),
-                instagram       : $('#instagram').val().trim(),
-                linkedin        : $('#linkedin').val(),
-                is_active       : $('#isActive').is(':checked') ? 1 : 0,
+                title       : $('#title').val().trim(),
+                description : $('#description').val().trim(),
+                address     : $('#contact_address').val().trim(),
+                email       : $('#contact_email').val().trim(),
+                phone       : $('#contact_phone').val(),
+                is_active   : $('#isActive').is(':checked') ? 1 : 0,
             }
         }
 
         function resetData(){
-            $('#facebook').val(null),
-            $('#twitter').val(null),
-            $('#instagram').val(null),
-            $('#linkedin').val(null),
-            $('#isActive').prop('checked', true)
+            $('#title').val(null),
+            $('#description').val(null),
+            $('#contact_address').val(null),
+            $('#contact_email').val(null),
+            $('#contact_phone').val(null),
+            $('#isActive').is(':checked') ? 1 : 0
         }
 
     </script>

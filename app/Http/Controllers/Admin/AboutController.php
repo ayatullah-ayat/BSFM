@@ -1,15 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
-use Exception;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\AboutUsRequest;
+use App\Models\About;
+use Exception;
+use Illuminate\Http\Request;
 use App\Http\Services\ImageChecker;
 
-class CategoryController extends Controller
+class AboutController extends Controller
 {
     use ImageChecker;
     /**
@@ -19,8 +18,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderByDesc('id')->get();
-        return view('backend.pages.category.categorylist', compact('categories'));
+        $aboutdatas = About::orderByDesc('id')->get();
+       return view('backend.pages.cms_settings.aboutus', compact('aboutdatas'));
     }
 
     /**
@@ -39,33 +38,31 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(AboutUsRequest $request)
     {
         try {
 
-            $category_image = $request->category_image;
+            $about_thumbnail = $request->about_thumbnail;
             $data           = $request->all();
             $fileLocation   = 'assets/img/blank-img.png';
 
-            if($category_image){
-                //file, dir
-                $fileResponse = $this->uploadFile($category_image, 'categories/');
+            if($about_thumbnail){
+                $fileResponse = $this->uploadFile($about_thumbnail, 'aboutUs/');
                 if (!$fileResponse['success'])
                     throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
 
                 $fileLocation = $fileResponse['fileLocation'];
             }
 
-            $data['category_image'] = $fileLocation;
-            $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
-            $category = Category::create($data);
-            if(!$category)
-                throw new Exception("Unable to create category!", 403);
+            $data['about_thumbnail'] = $fileLocation;
+            $about = About::create($data);
+            if(!$about)
+                throw new Exception("Unable to create About Information!", 403);
 
             return response()->json([
                 'success'   => true,
-                'msg'       => 'Category Created Successfully!',
-                'data'      => $category
+                'msg'       => 'About Information Created Successfully!',
+                'data'      => $about
             ]);
                 
         } catch (\Exception $th) {
@@ -80,10 +77,10 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\About  $about
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(About $about)
     {
         //
     }
@@ -91,10 +88,10 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\About  $about
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(About $about)
     {
         //
     }
@@ -103,42 +100,43 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\About  $about
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(AboutUsRequest $request, About $about)
     {
         try {
 
-            if(!$category)
+            if(!$about)
                 throw new Exception("No record Found!", 404);
+                
             $data           = $request->all();
-            $category_image = $request->category_image;
-            $fileLocation   = $category->category_image;
+            $about_thumbnail = $request->about_thumbnail;
+            $fileLocation   = $about->about_thumbnail;
 
-            if ($category_image) {
+            if ($about_thumbnail) {
                 //file, dir
                 if($fileLocation){
                     $this->deleteImage($fileLocation);
                 }
                 
-                $fileResponse = $this->uploadFile($category_image, 'categories/');
+                $fileResponse = $this->uploadFile($about_thumbnail, 'aboutUs/');
                 if (!$fileResponse['success'])
                     throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
 
                 $fileLocation = $fileResponse['fileLocation'];
             }
 
-            $data['category_image'] = $fileLocation;
-            $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
-            $categoryStatus = $category->update($data);
-            if(!$categoryStatus)
-                throw new Exception("Unable to Update category!", 403);
+            $data['about_thumbnail'] = $fileLocation;
+           
+            $aboutStatus = $about->update($data);
+            if(!$aboutStatus)
+                throw new Exception("Unable to Update About Information!", 403);
 
             return response()->json([
                 'success'   => true,
-                'msg'       => 'Category Updated Successfully!',
-                'data'      => $category->first()
+                'msg'       => 'About Information Updated Successfully!',
+                'data'      => $about->first()
             ]);
                 
         } catch (\Exception $th) {
@@ -153,20 +151,20 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param  \App\Models\About  $about
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(About $about)
     {
         try {
 
-            $isDeleted = $category->delete();
+            $isDeleted = $about->delete();
             if(!$isDeleted)
-                throw new Exception("Unable to delete category!", 403);
+                throw new Exception("Unable to delete about details!", 403);
                 
             return response()->json([
                 'success'   => true,
-                'msg'       => 'Category Deleted Successfully!',
+                'msg'       => 'About Details Deleted Successfully!',
             ]);
 
         } catch (\Throwable $th) {
@@ -177,5 +175,4 @@ class CategoryController extends Controller
         }
     }
 
-    
 }

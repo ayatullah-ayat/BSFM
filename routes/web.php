@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutController as AdminAboutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\User\CartController;
@@ -56,7 +57,9 @@ use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
+use App\Http\Controllers\Admin\ContactInformationController;
 use App\Http\Controllers\Admin\OtherOrderController;
+use App\Models\ContactInformation;
 
 // ------------ Frontend namespace ----------------------
 
@@ -298,8 +301,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/manage-gateway', [ManageGatewayController::class, 'index'])->name('manage_gateway');
 
     Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
-    Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
-    Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
 
     Route::group(['prefix' => 'customservicecategories', 'as' => 'customservicecategory.'], function(){
         Route::get('/',                         [CustomServiceCategoryController::class, 'index'])->name('index');
@@ -339,6 +340,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [ContactController::class, 'store'])->name('store');
         Route::put('/{contact}',    [ContactController::class, 'update'])->name('update');
         Route::delete('/{contact}', [ContactController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'contactsinfo', 'as' => 'contactinfo.'], function(){
+        Route::get('/',                         [ContactInformationController::class, 'index'])->name('index');
+        Route::post('/',                        [ContactInformationController::class, 'store'])->name('store');
+        Route::put('/{contactInformation}',     [ContactInformationController::class, 'update'])->name('update');
+        Route::delete('/{contactInformation}',  [ContactInformationController::class, 'destroy'])->name('destroy');
     });
 
     // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
@@ -387,6 +395,31 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{otherOrder}',        [OtherOrderController::class, 'update'])->name('update');
         Route::delete('/{otherOrder}',     [OtherOrderController::class, 'destroy'])->name('destroy');
     });
+
+    Route::group(['prefix' => 'abouts', 'as' => 'about.'], function(){
+        Route::get('/',                    [AdminAboutController::class, 'index'])->name('index');
+        Route::post('/',                   [AdminAboutController::class, 'store'])->name('store');
+        Route::put('/{about}',             [AdminAboutController::class, 'update'])->name('update');
+        Route::delete('/{about}',          [AdminAboutController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'socialicons', 'as' => 'socialicon.'], function(){
+        Route::get('/',                     [SocialIconController::class, 'index'])->name('index');
+        Route::post('/',                    [SocialIconController::class, 'store'])->name('store');
+        Route::put('/{socialicon}',         [SocialIconController::class, 'update'])->name('update');
+        Route::delete('/{socialicon}',      [SocialIconController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'footer-abouts', 'as' => 'footer-about.'], function(){
+        Route::get('/',                     [WebFooterController::class, 'index'])->name('index');
+        Route::post('/',                    [WebFooterController::class, 'store'])->name('store');
+        Route::put('/{webfooter}',          [WebFooterController::class, 'update'])->name('update');
+        Route::delete('/{webfooter}',       [WebFooterController::class, 'destroy'])->name('destroy');
+    });
+
+    // Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
+    // Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
+
 
 
 });

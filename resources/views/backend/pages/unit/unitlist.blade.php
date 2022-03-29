@@ -243,7 +243,7 @@
         }
 
         function showUpdateModal(){
-        resetData();
+            resetData();
 
             let unit = $(this).closest('tr').attr('unit-data');
 

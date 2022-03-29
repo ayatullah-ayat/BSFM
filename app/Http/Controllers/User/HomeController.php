@@ -8,6 +8,8 @@ use App\Models\Custom\CustomServiceCategory;
 use App\Models\Custom\CustomServiceProduct;
 use App\Models\Custom\OurCustomService;
 use App\Models\Shop;
+use App\Models\SocialIcon;
+use App\Models\WebFooter;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -68,9 +70,11 @@ class HomeController extends Controller
             ->get();
 
         $countClientLogos = ClientLogos::count();
+        $sociallink = SocialIcon::where('is_active', 1)->first();
+        $footerabout = WebFooter::where('is_active', 1)->first();
 
-
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
+        // dd($sociallink);
+        return view('frontend.pages.home', compact('footerabout','sociallink','customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
     }
 
 

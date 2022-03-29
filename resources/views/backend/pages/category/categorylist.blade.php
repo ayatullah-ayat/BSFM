@@ -80,7 +80,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">Category Name<span style="color: red;" class="req">*</span></label>
-                                    <input type="text" class="form-control" id="categoryName">
+                                    <input type="text" class="form-control" id="categoryName" placeholder="Category Name">
                                 </div>
                             </div>
 
@@ -88,7 +88,7 @@
                                 <div class="form-group">
                                    <label for="">Category Description</label>
                                    {{-- <textarea rows="4" type="text" class="form-control"> --}}
-                                    <textarea class="form-control" name="" id="categoryDescription" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" name="" id="categoryDescription" cols="30" rows="5" placeholder="Category Description"></textarea>
                                 </div>
                             </div>
 
