@@ -10,7 +10,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Purchase</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.purchase.create') }}"><i class="fa fa-plus"> Purchase</i></a></button>
+                <div class="inner">
+                    <a class="btn btn-sm btn-outline-info float-right" href="{{ route('admin.purchase.create') }}"><i class="fa fa-plus"> Purchase</i></a>
+                    <a href="{{ route('admin.purchase.manage_stock') }}" class="btn btn-sm btn-outline-success float-right mx-2" id="manga-stock"> <i class="fas fa-shopping-bag"></i> Manage Stock</a>
+                </div>
             </div>
 
             <div class="card-body">
@@ -25,32 +28,41 @@
                                 <th>Total Qty</th>
                                 <th>Total Amount</th>
                                 <th>Total Payment</th>
+                                <th>Total Due</th>
+                                <th>Paymet status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             @foreach($purchases as $item)
-                                <tr>
-                                    <th>{{ $loop->iteration }}</th>
-                                    <th>
-                                        <a href="">{{ $item->invoice_no ?? 'N/A' }}</a>
-                                    </th>
-                                    <th>{{ $item->supplier_name ?? 'N/A' }}</th>
-                                    <th>{{ $item->purchase_date ?? 'N/A' }}</th>
-                                    <th>{{ $item->total_qty ?? '0' }}</th>
-                                    <th>{{ $item->total_price ?? '0.0' }}</th>
-                                    <th>{{ $item->total_payment ?? '0.0' }}</th>
-                                    {{-- 
-                                    <th>{{ $item->total_payment_due ?? '0.0' }}</th> --}}
-                                    <th class="text-center">
-                                        <span class="btn btn-outline-success btn-sm payNow" data-total-bill="{{ $item->total_price - $item->total_payment }}" data-purchaseid="{{ $item->id }}">Pay Now</span>
+                                <tr data-item="{{ $item->id }}">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.purchase.showInvoice', $item->invoice_no) }}">{{ $item->invoice_no ?? 'N/A' }}</a>
+                                    </td>
+                                    <td>{{ $item->supplier_name ?? 'N/A' }}</td>
+                                    <td>{{ $item->purchase_date ?? 'N/A' }}</td>
+                                    <td>{{ $item->total_qty ?? '0' }}</td>
+                                    <td>{{ $item->total_price ?? '0.0' }}</td>
+                                    <td class="payment-amount">{{ $item->total_payment ?? '0.0' }}</td>
+                                    <td class="payment-due">{{ $due = $item->total_price - $item->total_payment }}</td>
+                                    <td class="text-center payment-amount-status">
+                                        @if($due > 0)
+                                        <span class="btn btn-outline-success btn-sm payNow" data-total-bill="{{ $item->total_price - $item->total_payment }}" data-purchaseid="{{ $item->id }}">Pay Now</span>   
+                                        @else 
+                                        <span class="badge badge-success">Paid</span>
+                                        @endif  
+                                    </td>
+                                    <td class="text-center">
                                         @if(!$item->is_manage_stock)
-                                        <span class="btn btn-outline-info btn-sm">Manage Stock</span>
+                                        <a href="{{ route('admin.purchase.edit', $item->id) }}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="{{ route('admin.purchase.destroy', $item->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                        @else 
+                                        <a href="javascript:void(0)" onclick="return alert('You can\'t Edit?')" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <a href="javascript:void(0)" onclick="return alert('You can\'t delete?')" class="fa fa-trash text-danger text-decoration-none"></a>
                                         @endif 
-                                        <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                        <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                    </th>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -98,7 +110,7 @@
 
             <div class="modal-footer">
                 <div class="w-100">
-                    <button type="button" id="save-variant-price-qty" class="btn btn-sm btn-success float-right mx-1"><i class="fa fa-save"></i> Pay</button>
+                    <button type="button" id="pay" class="btn btn-sm btn-success float-right mx-1"><i class="fa fa-save"></i> Pay</button>
                     <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -126,17 +138,54 @@
         $(document).ready(function(){
             $(document).on("click",".payNow", openPaymentModal)
             $(document).on("input change","#total_payment", isPaymentAmountValid)
+            $(document).on("click","#pay", makePayment)
+            $(document).on('click', '.delete', deleteToDatabase)
         })
+
+
+        function makePayment(){
+            let 
+            total_bill  = $('#billAmount').text(),
+            purchase_id = $('#billAmount').attr('data-purchaseid'),
+            total_payment= $('#total_payment').val().trim();
+
+            // console.log(total_payment, purchase_id);
+
+            ajaxFormToken();
+
+            $.ajax({
+                url     : `{{ route('admin.purchase.payment') }}`,
+                method  : 'POST',
+                data    : { purchase_id, total_payment},
+                success(res){
+                    console.log(res);
+
+                    if(res.success){
+                        setTimeout(() => {
+                            location.reload()
+                        }, 2000);
+                    }
+                },
+                error(err){
+                    console.log(err);
+                }
+            })
+
+            // $('#paymentModal').modal('hide')
+        }
 
 
         function openPaymentModal(){
 
             let elem = $(this),
+            id          = elem.attr('data-item'),
             bill        = elem.attr('data-total-bill'),
             purchase_id = elem.attr('data-purchaseid');
             //
-            $('#billAmount').text(bill);
+            $('#billAmount').text(bill).attr('data-purchaseid', purchase_id);
             $('#paymentModal').modal('show')
+
+            //payment-amount-status
         }
 
 
@@ -151,5 +200,39 @@
                 $('.v-error').text('Invalid Payment!');
             }
         }
+
+
+
+        function deleteToDatabase(e){
+            e.preventDefault();
+            let elem = $(this),
+            href = elem.attr('href');
+            if(confirm("Are you sure to delete the record?")){
+                ajaxFormToken();
+
+                $.ajax({
+                    url     : href, 
+                    method  : "DELETE",
+                    data    : {},
+                    success(res){
+
+                        // console.log(res?.data);
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                });
+            }
+        }
+
+
     </script>
 @endpush

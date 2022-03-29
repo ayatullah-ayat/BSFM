@@ -67,10 +67,10 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
-                    <span class="float-right">
+                    {{-- <span class="float-right">
                         <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
                         <input type="checkbox" name="manageVariant" id="manageVariant">
-                    </span>
+                    </span> --}}
                     <select name="currency" required class="currency" data-required id="currency" data-placeholder="Select currency">
                         @if($currencies)
                         @foreach ($currencies as $item)
@@ -499,7 +499,6 @@
 
     }
 
-
     function calcTotalPriceModal(){
 
         let 
@@ -564,7 +563,6 @@
 
     }
 
-
     function getAllSubcategories(){
         let category_id = $(this).val();
 
@@ -590,7 +588,6 @@
             },
         })
     }
-
     
     function createRow(){
 
@@ -660,12 +657,10 @@
         }).val(null).trigger('change')
     }
 
-
     function deleteRow(){
         $(this).closest('tr').remove();
         $('[name="discount_percentage"]').trigger('keyup')
     }
-
 
     function collectionOfVariantPriceQty(data=null){
 
@@ -679,7 +674,6 @@
 
     }
 
-
     function manageVariantPriceStock(){
         let elem = $(this);
 
@@ -691,7 +685,6 @@
             hideModal('#manageVariantSizePriceModal');
         }
     }
-
 
     function init(){
 
@@ -751,7 +744,6 @@
 
     }
 
-
     function createModal(){
         showModal('#categoryModal');
     }
@@ -807,7 +799,6 @@
         // hideModal('#categoryModal');
     }
 
-
     function formatProductData(){
 
         let
@@ -815,19 +806,7 @@
         is_product_variant  = Number($('#manageVariant').prop('checked')) && variantPrices ? 1 : 0;
 
         if(!is_product_variant){
-            variantPrices = [];
-
-            // let sizes = $('#size').val();
-            // if(sizes && sizes.length){
-            //     sizes.forEach(size => {
-            //         variantPrices.push({
-            //             color_name      : $('#color').val(),
-            //             size_name       : size,
-            //         })
-            //     })
-            // }
-
-            
+            variantPrices = [];            
         }
 
         return {
@@ -838,7 +817,8 @@
             total_product_unit_price: $('#total_product_price').val() ?? 0,
             total_stock_price       : $('#total_sales_price').val() ?? 0,
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
-            // sales_price             : $('#sale_price').val(),
+            unit_price              : $('#unit_price').val(),
+            sales_price             : $('#sale_price').val(),
             colors                  : $('#color').val(),
             sizes                   : $('#size').val(),
             product_qty             : $('#product_qty').val(), // total Product qty
@@ -860,7 +840,6 @@
         };
     }
 
-
     function fileRead(elem, src = '#img-preview') {
         let files = [];
 
@@ -881,7 +860,6 @@
             return files;
         }
     }
-
 
 </script>
 @endpush

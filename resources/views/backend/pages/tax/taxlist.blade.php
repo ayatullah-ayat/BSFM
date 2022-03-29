@@ -290,7 +290,7 @@
 
             resetData();
 
-            hideModal('#taxModal');
+            // hideModal('#taxModal');
         }
 
         function formatData(){

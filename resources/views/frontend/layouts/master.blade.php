@@ -40,7 +40,7 @@
     {{-- ------------- content area ---------------------------  --}}
 
     {{-- -------- footer ------------------------------- --}}
-    @includeIf('frontend.layouts.partials.footer', [ 'customservicecategories'=>$customservicecategories ?? null ])
+    @includeIf('frontend.layouts.partials.footer')
     {{-- -------- footer ---------------------------------}}
 
 

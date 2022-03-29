@@ -152,7 +152,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{ ($product->total_product_unit_price / $product->total_product_qty) ?? 0.0 }}</td>
+                                    <td>{{ number_format($product->unit_price, 2) ?? 0.0 }}</td>
                                     <td>{{ salesPrice($product) ?? 0.0 }}</td>
                                     <td>{{ wholesalesPrice($product) ?? 0.0 }}</td>
                                     <td>{{ $product->total_product_qty ?? 'N/A' }}</td>

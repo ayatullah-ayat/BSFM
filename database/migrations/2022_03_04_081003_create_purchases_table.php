@@ -31,6 +31,7 @@ class CreatePurchasesTable extends Migration
             
             $table->text('purchase_note')->nullable();
             $table->boolean('is_manage_stock')->default(0);
+            $table->boolean('is_returned')->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

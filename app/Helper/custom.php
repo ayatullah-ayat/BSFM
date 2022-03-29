@@ -90,8 +90,10 @@ if (!function_exists('hasProfile')){
 
 if (!function_exists('salesPrice')){
     function salesPrice($product){
-        return number_format(($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100))) / $product->total_product_qty ?? 0.0 , 2);
+        return number_format($product->sales_price, 2);
+        // return number_format(($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100))) / $product->total_product_qty ?? 0.0 , 2);
     }
+
 }
 
 

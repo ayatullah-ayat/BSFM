@@ -97,6 +97,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.index') }}">Manage Purchase</a>
+                <a class="collapse-item" href="{{ route('admin.purchase.manage_stock') }}">Manage Stock</a>
             </div>
         </div>
     </li>

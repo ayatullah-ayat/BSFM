@@ -138,10 +138,10 @@
                     </td>
                     <td align="left">
                         @if($item->product_color)
-                        Colors: {{ $item->product_color ?? '' }}
+                        Color: {{ $item->product_color ?? '' }} <br>
                         @endif 
                         @if($item->product_size)
-                        Sizes: {{ $item->product_size ?? '' }}
+                        Size: {{ $item->product_size ?? '' }}
                         @endif 
                     </td>
                     <td align="center">{{ $item->product->product_unit ?? 'N/A' }}</td>

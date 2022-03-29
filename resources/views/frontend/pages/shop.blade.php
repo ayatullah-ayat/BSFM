@@ -45,22 +45,10 @@
                                         <a href="{{ route('product_detail',$item->id ) }}" class="text-decoration-none text-dark"><h5>{{ $item->product_name }}</h5></a>
                                     </div>
 
-                                    @if ( $item->total_product_unit_price && $item->total_product_qty )
-                                        @php
-                                            $totalprice = $item->total_product_unit_price;
-                                            $totalqty   = $item->total_product_qty;
-                                            $unitprice  = $totalprice / $totalqty;
-                                        @endphp
-                                    @endif 
-
-                                    {{-- @dd($item) --}}
-
-                                    {{-- $item->total_stock_qty --}}
-
                                     <div class="card-product-price card-text text-center fw-bold">
                                         <h5>বর্তমান মূুল্য {{ salesPrice($item) ?? '0.0'}} /= 
                                             @if($item->product_discount)
-                                            <span class="text-decoration-line-through text-danger"> {{ number_format($unitprice,2) ?? '0.0'}} /=</span>
+                                            <span class="text-decoration-line-through text-danger"> {{ number_format($item->unit_price,2) ?? '0.0'}} /=</span>
                                             @endif 
                                         </h5>
                                     </div>

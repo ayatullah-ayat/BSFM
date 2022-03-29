@@ -75,10 +75,10 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
-                    <span class="float-right">
+                    {{-- <span class="float-right">
                         <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
                         <input type="checkbox" {{ $product->is_product_variant ? 'checked' : '' }} name="manageVariant" id="manageVariant">
-                    </span>
+                    </span> --}}
                     <select name="currency" required class="currency" data-required id="currency" data-placeholder="Select currency">
                         @if($currencies)
                         @foreach ($currencies as $item)
@@ -901,7 +901,8 @@
             total_product_unit_price: $('#total_product_price').val() ?? 0,
             total_stock_price       : $('#total_sales_price').val() ?? 0,
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
-            // sales_price             : $('#sale_price').val(),
+            unit_price              : $('#unit_price').val(),
+            sales_price             : $('#sale_price').val(),
             colors                  : $('#color').val(),
             sizes                   : $('#size').val(),
             product_qty             : $('#product_qty').val(), // total Product qty

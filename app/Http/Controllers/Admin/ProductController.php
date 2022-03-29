@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
 use App\Http\Services\ProductChecker;
+use App\Models\PurchaseProduct;
 
 class ProductController extends Controller
 {
@@ -102,6 +103,18 @@ class ProductController extends Controller
             if(!$productData['success'])
                 throw new Exception($productData['msg'] ?? "Unable to Create Product!", 403);
 
+            $purchase_product_id= $request->purchase_product_id;
+
+            if($purchase_product_id){
+                $purchase_product = PurchaseProduct::find($purchase_product_id);
+                $purchase_product->increment('stocked_qty', $request->product_qty);
+                $purchase_product->update(['product_id' => $productData['data']['id'] ?? null ]);
+
+                $purchase_product->purchase()->update([
+                    'is_manage_stock' => 1
+                ]); 
+            }
+
             DB::commit();
 
             return response()->json([
@@ -180,7 +193,8 @@ class ProductController extends Controller
 
 
         if (!$product->is_product_variant && $unitPrice == null) {
-            $unitPrice          = $product->total_product_unit_price / $product->total_product_qty;
+            // $unitPrice          = $product->total_product_unit_price / $product->total_product_qty;
+            $unitPrice          = $product->unit_price;
             $salesPrice         = salesPrice($product) ?? 0;
             $wholesalesPrice    = wholesalesPrice($product) ?? 0;
         }
@@ -213,7 +227,6 @@ class ProductController extends Controller
 
 
             $fileLocation               = $product->product_thumbnail_image ?? null;
-
             $data                       = $request->all();
             $product_gallery            = $request->product_gallery;
             $product_thumbnail_image    = $request->product_thumbnail_image;
@@ -264,6 +277,20 @@ class ProductController extends Controller
             // dd($productData);
             if (!$productData['success'])
                 throw new Exception($productData['msg'] ?? "Unable to Update Product!", 403);
+
+
+            $purchase_product_id = $request->purchase_product_id;
+
+            if ($purchase_product_id) {
+                $purchase_product = PurchaseProduct::find($purchase_product_id);
+                $purchase_product->increment('stocked_qty', $request->product_qty);
+                $purchase_product->update(['product_id' => $productData['data']['id'] ?? null]);
+
+                $purchase_product->purchase()->update([
+                    'is_manage_stock' => 1
+                ]);
+            }
+
 
             DB::commit();
 

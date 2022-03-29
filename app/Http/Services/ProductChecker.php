@@ -157,9 +157,6 @@ trait ProductChecker
                 $product->productSizes()->delete();
                 $product->productSizes()->createMany($sizes);
             }
-
-
-
                 
             return [
                 'success'   => true,
@@ -187,7 +184,7 @@ trait ProductChecker
             if (!$category)
                 throw new Exception("Category Not Found!", 403);
 
-            return [
+            $productArr = [
                 'category_id'                   => $data['category_id'] ?? null,
                 'subcategory_id'                => $data['subcategory_id'] ?? null,
                 'category_name'                 => $category->category_name ?? null,
@@ -200,6 +197,8 @@ trait ProductChecker
                 'product_thumbnail_image'       => $data['product_thumbnail_image'] ?? null,
                 'product_discount'              => $data['discount'] ?? 0,
                 'total_product_qty'             => $data['product_qty'] ?? 0,
+                'sales_price'                   => $data['sales_price'] ?? 0,
+                'unit_price'                    => $data['unit_price'] ?? 0,
                 'total_product_unit_price'      => $data['total_product_unit_price'] ?? 0, 
                 'total_stock_qty'               => $data['product_qty'] ?? 0,
                 'total_stock_price'             => $data['total_stock_price'] ?? $data['total_product_unit_price'],
@@ -217,6 +216,12 @@ trait ProductChecker
                 'currency'                      => $data['currency'] ?? null,
                 'is_product_variant'            => $data['is_product_variant'] ?? 0
             ];
+
+            if(isset($data['purchase_price'])){
+                $productArr['purchase_price'] = $data['purchase_price'];
+            }
+
+            return $productArr;
 
         } catch (\Throwable $th) {
             return [

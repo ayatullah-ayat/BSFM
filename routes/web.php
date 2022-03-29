@@ -236,16 +236,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
 
 
     Route::group(['prefix' => 'purchase', 'as' => 'purchase.'], function () {
-        Route::get('/',             [PurchaseController::class, 'index'])->name('index');
-        Route::get('/create',       [PurchaseController::class, 'create'])->name('create');
-        Route::post('/',            [PurchaseController::class, 'store'])->name('store');
-        // Route::get('/{product}',    [ProductController::class, 'show'])->name('show');
-        // Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
-        // Route::put('/{product}',    [ProductController::class, 'update'])->name('update');
-        Route::delete('/{purchase}', [PurchaseController::class, 'destroy'])->name('destroy');
-        Route::post('/check-invoice',[PurchaseController::class, 'checkInvoice'])->name('checkInvoice');
-        Route::get('/search-product',[PurchaseController::class, 'searchProduct'])->name('searchProduct');
-
+        Route::get('/',                     [PurchaseController::class, 'index'])->name('index');
+        Route::get('/create',               [PurchaseController::class, 'create'])->name('create');
+        Route::post('/',                    [PurchaseController::class, 'store'])->name('store');
+        Route::get('/{purchase}/edit',      [PurchaseController::class, 'edit'])->name('edit');
+        Route::put('/{purchase}',           [PurchaseController::class, 'update'])->name('update');
+        Route::delete('/{purchase}',        [PurchaseController::class, 'destroy'])->name('destroy');
+        Route::post('/check-invoice',       [PurchaseController::class, 'checkInvoice'])->name('checkInvoice');
+        Route::get('/search-product',       [PurchaseController::class, 'searchProduct'])->name('searchProduct');
+        Route::get('/search-purchase-product',[PurchaseController::class, 'searchPurchaseProduct'])->name('searchPurchaseProduct');
+        Route::get('/get-product',          [PurchaseController::class, 'getProduct'])->name('getProduct');
+        Route::get('/invoice/{invoice_no}', [PurchaseController::class, 'showInvoice'])->name('showInvoice');
+        Route::post('/payment',             [PurchaseController::class, 'payment'])->name('payment');
+        Route::get('/manage-stock',         [PurchaseController::class, 'manage_stock'])->name('manage_stock');
+        Route::post('/manage-stock',        [PurchaseController::class, 'store_manage_stock'])->name('store_manage_stock');
     });
 
 
@@ -266,8 +270,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/',                         [OrderController::class, 'index'])->name('order_manage');
         Route::get('/create',                   [OrderController::class, 'create'])->name('order_add');
         Route::post('/',                        [OrderController::class, 'store'])->name('store');
-        Route::get('/{order}/{notification?}',[OrderController::class, 'show'])->name('show');
+        Route::post('/{order}',                 [OrderController::class, 'approval'])->name('approval');
         Route::get('/{order}/edit',             [OrderController::class, 'edit'])->name('edit');
+        Route::get('/{order}/{notification?}',  [OrderController::class, 'show'])->name('show');
         Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
     });

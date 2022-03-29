@@ -15,5 +15,15 @@ class Purchase extends Model
     {
         return $this->hasMany(PurchaseProduct::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
     
 }
