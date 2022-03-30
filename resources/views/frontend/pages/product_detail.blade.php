@@ -45,18 +45,10 @@
                         <div class="single-prodect-title">
                             <h2>{{ $product->product_name }}</h2>
                         </div>
-
-                        @if ( $product->total_product_unit_price && $product->total_product_qty )
-                        @php
-                            $totalprice = $product->total_product_unit_price;
-                            $totalqty = $product->total_product_qty;
-                            $unitprice = $totalprice / $totalqty;
-                        @endphp
-                        @endif
                         
                         <div class="single-prodect-offer-price d-flex">
                             <h3> নির্ধারিত মূল্য- {{ salesPrice($product)  ?? '0.0' }} টাকা </h3>
-                            <h5> {{ $unitprice ?? '0.0' }} টাকা </h5>
+                            <h5> {{ number_format($product->unit_price, 2) ?? '0.0' }} টাকা </h5>
                         </div>
     
                         <div class="single-prodect-description">

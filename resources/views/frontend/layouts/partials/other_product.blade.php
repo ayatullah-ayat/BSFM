@@ -12,14 +12,6 @@
 
                             @foreach($products as $product)
 
-                                @if ( $product->total_product_unit_price && $product->total_product_qty )
-                                    @php
-                                    $totalprice = $product->total_product_unit_price;
-                                    $totalqty   = $product->total_product_qty;
-                                    $unitprice  = $totalprice / $totalqty ?? 0.0;
-                                    @endphp
-                                @endif
-
                                 <div class="col-md-3 px-2">
                                     <div class="card __product-card">
                                         <div class="card-wishlist {{ in_array($product->id,$wishLists) ? 'removeFromWish' : 'addToWish' }}" 
@@ -41,7 +33,7 @@
                                             <div class="card-product-price card-text text-center fw-bold">
                                                 <h5>বর্তমান মূুল্য {{ salesPrice($product) ?? '0.0'}} /=
                                                     @if($product->product_discount)
-                                                    <span class="text-decoration-line-through text-danger"> {{ $unitprice ?? '0.0'}} /=</span>
+                                                    <span class="text-decoration-line-through text-danger"> {{ number_format($product->unit_price, 2) ?? '0.0'}} /=</span>
                                                     @endif
                                                 </h5>
                                             </div>

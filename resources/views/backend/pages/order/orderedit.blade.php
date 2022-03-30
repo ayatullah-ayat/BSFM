@@ -4,8 +4,8 @@
 
 @section('content')
     <div>
-        <div class="container card p-3 shadow">
-            <div class="container py-3 d-flex justify-content-between align-items-center">
+        <div class="container-fluid card p-3 shadow">
+            <div class="py-3 d-flex justify-content-between align-items-center">
                 <h4 class="text-dark font-weight-bold text-dark">Edit Order Information</h4>
                 <a class="text-white btn btn-sm btn-info float-right" href="{{ route('admin.ecom_orders.order_manage') }}"><i class="fa fa-arrow-left"> Back</i></a>
             </div>
@@ -14,15 +14,17 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="product"> Order NO</label>
-                        <input readonly type="text" class="form-control" value="{{ $orderdata->order_no }}">
+                        <input readonly type="text" class="form-control" id="order_no" value="{{ $order->order_no }}">
                     </div>
                     <span class="v-msg"></span>
                 </div>
 
+                {{-- @dd($order) --}}
+
                 <div class="col-md-4" data-col="col">
                     <div class="form-group">
                         <label for="order_date">Order Date </label>
-                        <input type="text" data-required autocomplete="off" class="form-control" id="order_date" name="order_date" placeholder="Order Date" value="{{ $orderdata->order_date }}">
+                        <input type="text" data-required autocomplete="off" class="form-control" id="order_date" name="order_date" placeholder="Order Date" value="{{ $order->order_date }}">
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -33,7 +35,7 @@
                         <select name="customer" class="customer" data-required id="customer" data-placeholder="Select Customer">
                             @if ($customers)
                                 @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->customer_name }}</option>
+                                    <option value="{{ $customer->id }}" {{ $order->customer_id == $customer->id ? 'selected':'' }}>{{ $customer->customer_name }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -44,14 +46,14 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="note">Note</label>
-                        <textarea name="note" id="note" cols="0" rows="3" class="form-control note" placeholder="{{ $orderdata->order_note }}" value="{{ $orderdata->order_note }}" ></textarea>
+                        <textarea name="note" id="note" cols="0" rows="3" class="form-control note" placeholder="Note" value="{{ $order->order_note }}" ></textarea>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="shipping_address">Shipment</label>
-                        <textarea name="shipping_address" id="shipping_address" cols="0" rows="3" class="form-control shipment" placeholder="{{ $orderdata->shipping_address }}" value="{{ $orderdata->shipping_address }}" ></textarea>
+                        <textarea name="shipping_address" id="shipping_address" cols="0" rows="3" class="form-control shipment" placeholder="Shipping Address" value="{{ $order->shipping_address }}" ></textarea>
                     </div>
                 </div>
 
@@ -69,19 +71,19 @@
                                     <th width="150" class="text-center">Product Price</th>
                                     <th width="150" class="text-center">Discount Price</th>
                                     <th width="150" class="text-center">Total</th>
-                                    {{-- <th width="100" class="text-center">
-                                        <button class="btn btn-sm btn-info"><i class="fa fa-plus"></i> Add</button>
-                                    </th> --}}
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="edittbody">
+
+                                @foreach ($order->orderDetails as $item)
                                 <tr>
                                     <td>
+                                        <input type="hidden" name="ids[]" class="product_ids" value="{{ $item->product_id }}">
                                         <div class="form-group">
-                                            <select name="product" class="product" data-required id="product" data-placeholder="Select Customer">
+                                            <select name="product" class="product" data-required data-placeholder="Select Customer">
                                                 @if ($products)
                                                     @foreach ($products as $product)
-                                                        <option value="{{ $product->id }}">{{ $product->product_name }}</option>
+                                                        <option value="{{ $product->id }}" {{ $item->product_id == $product->id ? 'selected' :'' }}>{{ $product->product_name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -90,10 +92,10 @@
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="color" class="color" data-required id="color" data-placeholder="Select Color">
+                                            <select name="color" class="color" data-required data-placeholder="Select Color">
                                                 @if($colors)
                                                     @foreach ($colors as $color)
-                                                        <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
+                                                        <option value="{{ $color->variant_name }}" {{ $item->product_color == $color->variant_name ? 'selected' : '' }}>{{ $color->variant_name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -102,10 +104,10 @@
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="size" class="size" data-required id="size" data-placeholder="Select Sizes">
+                                            <select name="size" class="size" data-required data-placeholder="Select Sizes">
                                                 @if($sizes)
                                                     @foreach ($sizes as $size)
-                                                        <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
+                                                        <option value="{{ $size->variant_name }}" {{ $item->product_size == $color->variant_name ? 'selected' : '' }}>{{ $size->variant_name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -113,28 +115,26 @@
                                         <span class="v-msg"></span>
                                     </td>
                                     <td >
-                                        <input type="text" id="order_qty" class="form-control calculatePrice" value="{{ $detaildata->product_qty }}">
+                                        <input type="text" class="form-control calculatePrice order_qty" value="{{ $item->product_qty }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="unit_price" class="form-control calculatePrice" value="{{ $detaildata->product_price }}">
+                                        <input type="text"  class="form-control calculatePrice product_price" value="{{ $item->product_price }}">
                                     </td>
                                     <td>
-                                        <input type="text" readonly id="discount_price" class="form-control" value="{{ $detaildata->discount_price }}">
+                                        <input type="text"  class="form-control discount_price calculatePrice" value="{{ $item->discount_price }}">
                                     </td>
                                     <td>
-                                        <input type="text" id="total_price" class="form-control" value="{{ $detaildata->subtotal }}">
+                                        <input type="text" class="form-control total_price" value="{{ $item->subtotal }}">
                                     </td>
-                                    {{-- <td class="text-center">
-                                        <i class="fa fa-times text-danger fa-lg" type="button"></i>
-                                    </td> --}}
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-end">
-                    <button id="order_update_btn" class="btn btn-success text-right outline-none"> <i class="fa fa-save"></i> Update</button>
+                    <button id="order_update_btn" class="btn btn-success text-right outline-none" data-id="{{ $order->id }}"> <i class="fa fa-save"></i> Update</button>
                 </div>
 
             </div>
@@ -155,20 +155,22 @@
     });
 
     function OrderPriceCalculation(){
-            let price   = Number($('#order_qty').val().trim() ?? 0);
-            let qty     = Number($('#unit_price').val().trim() ?? 0);
+            let rows = $('#edittbody').find('tr');
+            let total_qty = 0;
+            let grandtotal = 0;
+            
+            [...rows].forEach( row => {
+                let qty         = Number($(row).find('.order_qty').val() ?? 0);
+                let price       = Number($(row).find('.product_price').val() ?? 0);
+                let discount    = Number($(row).find('.discount_price').val() ?? 0);
+            
+                let total = (price * qty) - discount;
+                $(row).find('.total_price').val(total);
 
-            if( price < 0 ){
-                price  =0;
-                $('#price').val(price)
-            }
-            if( qty < 0 ){
-                qty  =0;
-                $('#qty').val(qty)
-            }
-
-            let total   = price * qty;
-            $('#total_price').val(total);
+                total_qty += qty;
+                grandtotal += price;
+            
+            });
     }
 
     function init(){
@@ -177,18 +179,7 @@
             {
                 selector        : `#customer`,
                 type            : 'select',
-            },
-            {
-                selector        : `#product`,
-                type            : 'select',
-            },
-            {
-                selector        : `#color`,
-                type            : 'select'
-            },
-            {
-                selector        : `#size`,
-                type            : 'select'
+                selectedVal     : @json($order->customer_id)
             },
             {
                 selector        : `#order_date`,
@@ -199,34 +190,55 @@
 
         globeInit(arr);
 
-        // $(`#stuff`).select2({
-        //     width           : '100%',
-        //     dropdownParent  : $('#categoryModal'),
-        //     theme           : 'bootstrap4',
-        // }).val(null).trigger('change')
+        $(`.product`).select2({
+            width           : '100%',
+            theme           : 'bootstrap4',
+        }).trigger('change');
 
+        $(`.color`).select2({
+            width           : '100%',
+            theme           : 'bootstrap4',
+        }).trigger('change');
 
-        // $('#booking_date').datepicker({
-        //     autoclose : true,
-        //     clearBtn : false,
-        //     todayBtn : true,
-        //     todayHighlight : true,
-        //     orientation : 'bottom',
-        //     format : 'yyyy-mm-dd',
-        // })
+        $(`.size`).select2({
+            width           : '100%',
+            theme           : 'bootstrap4',
+        }).trigger('change');
+
     }
 
     function updateToDatabase(){
         ajaxFormToken();
 
-        let order_id = $('').attr('data-id');
+        let order_id = $(this).attr('data-id');
 
         let obj = {
             url     : `{{ route('admin.ecom_orders.update','')}}/${order_id}`, 
             method  : "PUT",
             data    : formatData(),
         };
-        ajaxRequest(obj, { reload: true, timer: 2000 })
+
+        $.ajax({
+            ...obj,
+            success(res){
+                console.log(res);
+                if(res?.success){
+                    _toastMsg(res?.msg ?? 'Success!', 'success');
+                    setTimeout(() => {
+                        open(`{{ route('admin.ecom_orders.order_manage') }}`,'_self')
+                    }, 2000);
+                }else{
+                    _toastMsg(res?.msg ?? 'Something wents wrong!');
+                }
+
+            },
+            error(err){
+                console.log(err);
+                _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+            },
+        });
+
+
     }
 
     function formatData(){
@@ -242,32 +254,34 @@
 
     function productsInfo(){
 
-        let rows        = $('#addorder-body').find('tr');
+        let rows        = $('#edittbody').find('tr');
         let total_qty   = 0;
         let grandtotal  = 0;
         let productsArr =[];
 
         [...rows].forEach( row => {
-        let  order_no       = $('#order_no').val().trim();
-        let product_id      = $(row).find('.product').val();
-        let product_name    = $(row).find('.product').find('option:selected').text();
-        let product_color   = $(row).find('.color').val();
-        let product_size    = $(row).find('.size').val();
-        let product_qty     = Number($(row).find('.order_qty').val() ?? 0);
-        let product_price   = Number($(row).find('.product_price').val() ?? 0);
-        let subtotal        = Number($(row).find('.total_price').val() ?? 0);
+            let  order_no       = $('#order_no').val().trim();
+            let product_id      = $(row).find('.product').val();
+            let product_name    = $(row).find('.product').find('option:selected').text();
+            let product_color   = $(row).find('.color').val();
+            let product_size    = $(row).find('.size').val();
+            let product_qty     = Number($(row).find('.order_qty').val() ?? 0);
+            let product_price   = Number($(row).find('.product_price').val() ?? 0);
+            let discount_price  = Number($(row).find('.discount_price').val() ?? 0);
+            let subtotal        = Number($(row).find('.total_price').val() ?? 0);
 
-        productsArr.push({
-            order_no,
-            product_id,
-            product_name,
-            product_color,
-            product_size,
-            product_qty,
-            product_price,
-            subtotal
+            productsArr.push({
+                order_no,
+                product_id,
+                product_name,
+                product_color,
+                product_size,
+                product_qty,
+                product_price,
+                discount_price,
+                subtotal
+            });
         });
-       });
 
         return productsArr;
     }

@@ -90,28 +90,28 @@ class OrderController extends Controller
                 
                 $updateproduct = $singleProduct->update([
                     'total_stock_qty'       => $singleProduct->total_stock_qty - (int)$product['product_qty'],
-                    'total_stock_price'     => $singleProduct->total_stock_price - floatval($product['product_price']),
+                    'total_stock_price'     => $singleProduct->total_stock_price - (floatval($product['product_price']) * (int)$product['product_qty']),
                     'total_stock_out_qty'   => $singleProduct->total_stock_out_qty + (int)$product['product_qty'],
-                    'total_stock_out_price' => $singleProduct->total_stock_out_price + floatval($product['product_price']),
+                    'total_stock_out_price' => $singleProduct->total_stock_out_price + (floatval($product['product_price']) * (int)$product['product_qty']),
                 ]);
                 
                 if(!$updateproduct)
                     throw new Exception("Unable to Update Stock Qty!", 403);
                 
-                if($singleProduct->is_product_variant){
-                    $variantStocks = ProductVariantPrice::where('product_id', $product['product_id'])
-                    ->where('color_name', $product['product_color'] ?? null)
-                    ->where('size_name', $product['product_size'] ?? null)
-                    ->get();
+                // if($singleProduct->is_product_variant){
+                //     $variantStocks = ProductVariantPrice::where('product_id', $product['product_id'])
+                //     ->where('color_name', $product['product_color'] ?? null)
+                //     ->where('size_name', $product['product_size'] ?? null)
+                //     ->get();
                 
-                    foreach ($variantStocks as $variantStock) {
-                        ProductVariantPrice::find($variantStock->id)
-                        ->update([
-                            'stock_qty'     => $variantStock->stock_qty - (int)$product['product_qty'],
-                            'stock_out_qty' => $variantStock->stock_out_qty + (int)$product['product_qty'],
-                        ]);
-                    }
-                }
+                //     foreach ($variantStocks as $variantStock) {
+                //         ProductVariantPrice::find($variantStock->id)
+                //         ->update([
+                //             'stock_qty'     => $variantStock->stock_qty - (int)$product['product_qty'],
+                //             'stock_out_qty' => $variantStock->stock_out_qty + (int)$product['product_qty'],
+                //         ]);
+                //     }
+                // }
             }
 
 
@@ -160,8 +160,10 @@ class OrderController extends Controller
         group_concat(product_color) order_colors,
         group_concat(product_size) order_sizes,
         sum(product_qty) order_total_qty,
-        sum(product_price) order_total_price
-        ')->where('order_id',$id)->groupBy('order_id')->first();
+        sum(subtotal) order_total_price
+        ')->where('order_id',$id)
+        ->groupBy('order_id')
+        ->first();
     }
     
 
@@ -227,21 +229,16 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        // $data = Order::first();
-        // $detailsdata = OrderDetails::get();
-        // $product = Product::get();
-        $customers = Customer::where('is_active', 1)->get();
-        $orderdata = Order::first();
-        $detaildata = OrderDetails::first();
 
+        $customers = Customer::where('is_active', 1)->get();
         $products = Product::where('is_active', 1)
-                ->where('is_publish', 1)
-                ->get();
+                    ->where('is_publish', 1)
+                    ->get();
 
         $colors = Variant::where([ ['is_active', 1], ['variant_type', 'color']])->get();
         $sizes  = Variant::where([ ['is_active', 1], ['variant_type', 'size']])->get();
-        // dd($detaildata);
-        return view('backend.pages.order.orderedit', compact('customers','orderdata','detaildata','products','colors','sizes'));
+
+        return view('backend.pages.order.orderedit', compact('customers', 'order','products','colors','sizes'));
     }
 
 
@@ -270,8 +267,48 @@ class OrderController extends Controller
 
             $orderData = $request->except('products');
             $products  = $request->products;
+
+            // dd($products);
                 
             DB::beginTransaction();
+
+
+            foreach ($order->orderDetails as $key => $orderDetail) {
+
+                $singleProduct = $orderDetail->product;
+
+                $updateproduct = $singleProduct->update([
+                    'total_stock_qty'       => $singleProduct->total_stock_qty + (int)$orderDetail['product_qty'],
+                    'total_stock_price'     => $singleProduct->total_stock_price + (floatval($orderDetail['product_price']) * (int)$orderDetail['product_qty']),
+                    'total_stock_out_qty'   => $singleProduct->total_stock_out_qty - (int)$orderDetail['product_qty'],
+                    'total_stock_out_price' => $singleProduct->total_stock_out_price - (floatval($orderDetail['product_price']) * (int)$orderDetail['product_qty']),
+                ]);
+
+                if (!$updateproduct)
+                    throw new Exception("Unable to Update Stock Qty!", 403);
+            }
+
+
+            foreach ($products as $key => $product) {
+
+                $singleProduct = Product::find($product['product_id']);
+
+                if($singleProduct){
+
+                    $updateproduct = $singleProduct->update([
+                        'total_stock_qty'       => $singleProduct->total_stock_qty - (int)$product['product_qty'],
+                        'total_stock_price'     => $singleProduct->total_stock_price - (floatval($product['product_price']) * (int)$product['product_qty']),
+                        'total_stock_out_qty'   => $singleProduct->total_stock_out_qty + (int)$product['product_qty'],
+                        'total_stock_out_price' => $singleProduct->total_stock_out_price + (floatval($product['product_price']) * (int)$product['product_qty']),
+                    ]);
+    
+                    if (!$updateproduct)
+                        throw new Exception("Unable to Update Stock Qty!", 403);
+                }
+
+
+                
+            }
 
             $updateOrder = $order->update($orderData);
             if(!$updateOrder)
@@ -281,7 +318,7 @@ class OrderController extends Controller
             $order->orderDetails()->createMany($products);
 
             $customer = $this->getCustomer($req['customer_id']);
-            $summary = $this->getOrderSummary($order->id);
+            $summary  = $this->getOrderSummary($order->id);
 
             $order->update([
                 'customer_name'     => $customer ? $customer->customer_name : null,
@@ -291,7 +328,6 @@ class OrderController extends Controller
                 'order_total_qty'   => $summary ? $summary->order_total_qty : null,
                 'order_total_price' => $summary ? $summary->order_total_price : null,
             ]);
-            
 
             DB::commit();
 
@@ -309,6 +345,57 @@ class OrderController extends Controller
 
     }
 
+
+    public function approval(Request $request, Order $order){
+
+        try{
+            //
+
+            if(!$request->status) 
+                throw new Exception("Please Select Status!", 403);
+                
+            $order->update([
+                'status' => $request->status
+            ]);
+
+            if($request->status == "cancelled"){
+
+                $products  = $order->orderDetails;
+
+                foreach ($products as $key => $product) {
+
+                    $singleProduct = Product::find($product['product_id']);
+                    
+                    if($singleProduct){
+
+                        $updateproduct = $singleProduct->update([
+                            'total_stock_qty'       => ($singleProduct->total_stock_qty + (int)$product['product_qty']),
+                            'total_stock_price'     => ($singleProduct->total_stock_price) + (floatval($product['product_price']) * (int)$product['product_qty']),
+                            'total_stock_out_qty'   => ($singleProduct->total_stock_out_qty) - (int)$product['product_qty'],
+                            'total_stock_out_price' => ($singleProduct->total_stock_out_price) - (floatval($product['product_price']) * (int)$product['product_qty']),
+                        ]);
+    
+                        if (!$updateproduct)
+                            throw new Exception("Unable to Update Stock Qty!", 403);
+                    }
+
+                }
+            }
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Order status updated Successfully!'
+            ]);
+
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -319,9 +406,34 @@ class OrderController extends Controller
     {
         try {
 
+            $products  = $order->orderDetails;
+
+            foreach ($products as $key => $product) {
+
+                $singleProduct = Product::find($product['product_id']);
+
+                if ($singleProduct) {
+
+                    $updateproduct = $singleProduct->update([
+                        'total_stock_qty'       => ($singleProduct->total_stock_qty + (int)$product['product_qty']),
+                        'total_stock_price'     => ($singleProduct->total_stock_price) + (floatval($product['product_price']) * (int)$product['product_qty']),
+                        'total_stock_out_qty'   => ($singleProduct->total_stock_out_qty) - (int)$product['product_qty'],
+                        'total_stock_out_price' => ($singleProduct->total_stock_out_price) - (floatval($product['product_price']) * (int)$product['product_qty']),
+                    ]);
+
+                    if (!$updateproduct)
+                        throw new Exception("Unable to Update Stock Qty!", 403);
+                }
+            }
+
+
             $isDeleted = $order->delete();
-            if(!$isDeleted)
+            if (!$isDeleted)
                 throw new Exception("Unable to delete Order!", 403);
+
+
+            $order->orderDetails()->delete();
+
                 
             return response()->json([
                 'success'   => true,

@@ -4,9 +4,9 @@
 
 @section('content')
     <div>
-        <div class="container card p-3 shadow">
+        <div class="container-fluid card p-3 shadow">
 
-            <div class="container py-3 d-flex justify-content-between align-items-center">
+            <div class=" py-3 d-flex justify-content-between align-items-center">
                 <h4 class="text-dark font-weight-bold text-dark">Add Order Information</h4>
                 <a class="text-white btn btn-sm btn-info float-right" href="{{ route('admin.ecom_orders.order_manage') }}"><i class="fa fa-arrow-left"> Back</i></a>
             </div>

@@ -32,7 +32,8 @@ trait ProductSearch
                 ->where('products.is_active', 1);
 
             if(preg_match("/max_price|max|max_/im", $filter)){
-                $q->selectRaw('*, max( (total_product_unit_price - (total_product_unit_price * (product_discount / 100) )) / total_product_qty ) max_price')
+                $q->selectRaw('*, max(unit_price) max_price')
+                // selectRaw('*, max( (total_product_unit_price - (total_product_unit_price * (product_discount / 100) )) / total_product_qty ) max_price')
                 ->orderByDesc('max_price');
             }else if(preg_match("/created_at|new|newest/im", $filter)){
                 $filter = "created_at";
@@ -188,15 +189,8 @@ trait ProductSearch
                 $thumbnail      = asset($item->product_thumbnail_image);
                 $route          = route('product_detail', $item->id);
                 $route2         = route('checkout_index', $item->id);
-                $unitprice      = 0.0;
+                $unitprice      = $item->unit_price ?? 0.0;
                 $salesPrice     = salesPrice($item) ?? 0.0;
-
-                if ($item->total_product_unit_price && $item->total_product_qty) :
-                    $totalprice = $item->total_product_unit_price;
-                    $totalqty   = $item->total_product_qty;
-                    $unitprice  = ($totalprice / $totalqty);
-                endif;
-
 
                 $discountContent = "";
                 if ($item->product_discount) {

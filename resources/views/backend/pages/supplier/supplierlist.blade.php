@@ -9,7 +9,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Supplier</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Supplier</i></button>
+                <div class="inner">
+                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Supplier Account</i></button>
+                    <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Supplier</i></button>
+                </div>
             </div>
 
             <div class="card-body">
@@ -30,7 +33,12 @@
 
                             @isset($suppliers)
                                 @foreach ($suppliers as $supplier)
-                                    <tr supplier-data="{{json_encode($supplier)}}">
+ 
+                                    <tr supplier-data="{{json_encode($supplier)}}" data-id="{{ $supplier->id }}" 
+                                        data-total-price="{{ $supplier->purchases()->sum('total_price') }}"
+                                        data-total-payment="{{ $supplier->purchases()->sum('total_payment') }}"
+                                        data-total-qty="{{ $supplier->purchases()->sum('total_qty') }}"
+                                        >
                                         <th>{{ $loop->iteration }}</th>
                                         <th>{{ $supplier->supplier_name ?? 'N/A' }}</th>
                                         <th>{{ $supplier->supplier_email  ?? 'N/A' }}</th>
@@ -130,6 +138,73 @@
             </div>
         </div>
     </div>
+
+
+
+    <div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+        role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Supplier Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select name="supplier" id="supplier" data-placeholder="Select Supplier">
+                                @foreach ($suppliers as $item)
+                                <option value="{{ $item->id }}">{{ $item->supplier_name ?? 'N/A' }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4"></div>
+    
+                    <table class="table table-sm">
+                        <tr>
+                            <th>Total Product</th>
+                            <th>:</th>
+                            <td id="totalProduct">0</td>
+                        </tr>
+                        <tr>
+                            <th>Bill Amount</th>
+                            <th>:</th>
+                            <td id="billAmount">0</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Amount</th>
+                            <th>:</th>
+                            <th id="total_payment">0</th>
+                        </tr>
+                        <tr class="d-none">
+                            <th>Payment Status</th>
+                            <th>:</th>
+                            <th id="payment_status"></th>
+                        </tr>
+                    </table>
+    
+                </div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <button type="button" id="pay" class="btn btn-sm btn-success float-right mx-1"><i
+                                class="fa fa-save"></i> Pay</button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
     
 @endsection
 
@@ -158,7 +233,51 @@
 
             $(document).on('click', '.update', showUpdateModal)
             $(document).on('click','#supplier_update_btn', updateToDatabase)
+
+            $(document).on('click','#account', showAccountModal)
+            $(document).on('change','#supplier', showAccountInfo)
         });
+
+
+
+        function showAccountInfo(){
+            let elem = $(this),
+            supplier_id = elem.val(),
+            row         = $(document).find(`tr[data-id=${supplier_id}]`),
+            total_qty   = 0,
+            total_bill  = 0,
+            total_payment= 0,
+            status      = '',
+            statusText  = '';
+
+            if(row?.length){
+                total_qty   = Number(row?.attr('data-total-qty') ?? 0);
+                total_bill  = row.attr('data-total-price');
+                total_payment= row.attr('data-total-payment');
+
+                statusText = (Number(total_bill) - Number(total_payment)) > 0 ? 'Due' : 'Paid';
+                status = (Number(total_bill) - Number(total_payment)) > 0 ? 'danger' : 'success';
+
+                if(total_qty > 0){
+                    $('#payment_status').closest('tr').removeClass('d-none');
+                }
+
+            }
+
+            $('#totalProduct').text(total_qty);
+            $('#billAmount').text(total_bill);
+            $('#total_payment').text(total_payment);
+                        
+            $('#payment_status').html(`
+                <span class="badge badge-${status}">${statusText}</span>
+            `);
+            
+        }
+
+        function showAccountModal(){
+
+            $('#accountModal').modal('show');
+        }
 
 
         function init(){
@@ -170,6 +289,11 @@
                     type            : 'select',
                 },
                 {
+                    dropdownParent  : '#accountModal',
+                    selector        : `#supplier`,
+                    type            : 'select',
+                },
+                {
                     selector        : `#booking_date`,
                     type            : 'date',
                     format          : 'yyyy-mm-dd',
@@ -178,21 +302,6 @@
 
             globeInit(arr);
 
-            // $(`#stuff`).select2({
-            //     width           : '100%',
-            //     dropdownParent  : $('#categoryModal'),
-            //     theme           : 'bootstrap4',
-            // }).val(null).trigger('change')
-
-
-            // $('#booking_date').datepicker({
-            //     autoclose : true,
-            //     clearBtn : false,
-            //     todayBtn : true,
-            //     todayHighlight : true,
-            //     orientation : 'bottom',
-            //     format : 'yyyy-mm-dd',
-            // })
         }
 
         function deleteToDatabase(e){

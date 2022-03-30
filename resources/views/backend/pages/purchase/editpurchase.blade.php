@@ -10,12 +10,13 @@
                 <a href="{{ route('admin.purchase.index') }}" class="btn btn-info float-right">List</a>
             </div>
             <div class="row">
+                {{-- @dd($purchase) --}}
                 <div class="col-md-3" data-col="col">
                     <div class="form-group">
                         <label for="stuff"> Supplier<span style="color: red;" class="req">*</span></label>
                         <select name="supplier" class="supplier" data-required id="supplier" data-placeholder="Select Supplier">
                             @foreach ($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">{{ $supplier->supplier_name }}</option>
+                                <option value="{{ $supplier->id }}"  {{ $purchase->supplier_id == $supplier->id ? 'selected' : '' }}>{{ $supplier->supplier_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -25,7 +26,7 @@
                 <div class="col-md-3" data-col="col">
                     <div class="form-group">
                         <label for="purchase_date">Purchase Date <span style="color: red;" class="req">*</span></label>
-                        <input type="text" data-required autocomplete="off" class="form-control" id="purchase_date" name="purchase_date">
+                        <input type="text" data-required autocomplete="off" class="form-control" id="purchase_date" name="purchase_date" value="{{ $purchase->purchase_date }}">
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -33,7 +34,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="">Invoice No.<span style="color: red;" class="req">*</span></label>
-                        <input type="text" class="form-control check_invoice" placeholder="" id="invoice_no">
+                        <input type="text" readonly class="form-control check_invoice" placeholder="" id="invoice_no" value="{{ $purchase->invoice_no }}">
                         <span class="v-msg-invoice text-danger"></span>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                         <label for="stuff"> Currency<span style="color: red;" class="req">*</span></label>
                         <select name="currency" class="currency" data-required id="currency" data-placeholder="Select currency">
                             @foreach ($currencies as $currency)
-                            <option value="{{ $currency->currency_name }}">{{ $currency->currency_name }}</option>
+                            <option value="{{ $currency->currency_name }}" {{ $purchase->currency == $currency->currency_name ? 'selected' : '' }}>{{ $currency->currency_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -55,7 +56,7 @@
                     <div class="form-group">
                         <label for="">Details Or Note</label>
                         {{-- <input type="text" class="form-control" placeholder=""> --}}
-                        <textarea class="form-control" name="" id="purchase_note" cols="0" rows="1"  placeholder=""></textarea>
+                        <textarea class="form-control" name="" id="purchase_note" cols="0" rows="1"  placeholder="">{{ $purchase->purchase_note ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -71,65 +72,70 @@
                                     <th width="130" class="text-center">Qty</th>
                                     <th width="150" class="text-center">Purchase Price</th>
                                     <th width="150" class="text-center">Total</th>
-                                    <th width="100" class="text-center align-middle">
-                                        <button class="btn btn-sm btn-info" id="addNewRow"><i class="fa fa-plus"></i></button>
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="purchase-body">
-                                <tr>
-                                    <td>
-                                        <select name="product_name" class="product_name" data-required id="product_name" data-placeholder="Search Or Type Product"></select>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="color" multiple class="color" data-required id="color" data-placeholder="Select Color">
-                                                @foreach ($colors as $color)
-                                                <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
-                                                @endforeach
+
+                                @foreach ($purchase->purchaseProducts as $product)
+
+                                    @php
+                                        $product_colors = $product->product_colors ? explode(",",$product->product_colors) : [];
+                                        $product_sizes = $product->product_sizes ? explode(",",$product->product_sizes) : [];
+                                    @endphp
+
+                                    <tr>
+                                        <td>
+                                            <select name="product_name" class="product_name" data-required data-placeholder="Search Or Type Product">
+                                                <option value="{{ $product->product_name }}">{{ $product->product_name }}</option>
                                             </select>
-                                        </div>
-                                        <span class="v-msg"></span>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="size" class="size" data-required id="size" multiple data-placeholder="Select Sizes">
-                                                @foreach ($sizes as $size)
-                                                <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <span class="v-msg"></span>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="unit" class="unit" data-required id="unit" data-placeholder="Select Unit">
-                                                @foreach ($units as $unit)
-                                                <option value="{{ $unit->unit_name }}">{{ $unit->unit_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <span class="v-msg"></span>
-                                    </td>
-                                    <td >
-                                        <input type="number" class="form-control qty state_change">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control purchase-price state_change">
-                                    </td>
-                                    <td>
-                                        <input type="number" readonly class="form-control subtotal">
-                                    </td>
-                                    <td class="text-center">
-                                        <i class="fa fa-times text-danger fa-lg" type="button"></i>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="color" multiple class="color" data-required data-placeholder="Select Color">
+                                                    @foreach ($colors as $color)
+                                                    <option value="{{ $color->variant_name }}" {{ in_array($color->variant_name, $product_colors) ? 'selected' : '' }}>{{ $color->variant_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <span class="v-msg"></span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="size" class="size" data-required multiple data-placeholder="Select Sizes">
+                                                    @foreach ($sizes as $size)
+                                                    <option value="{{ $size->variant_name }}" {{ in_array($size->variant_name, $product_sizes) ? 'selected' : '' }}>{{ $size->variant_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <span class="v-msg"></span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="unit" class="unit" data-required data-placeholder="Select Unit">
+                                                    @foreach ($units as $unit)
+                                                    <option value="{{ $unit->unit_name }}" {{ $product->product_unit == $unit->unit_name ? 'selected' : '' }}>{{ $unit->unit_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <span class="v-msg"></span>
+                                        </td>
+                                        <td >
+                                            <input type="number" class="form-control qty state_change" value="{{ $product->product_qty ?? 0 }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control purchase-price state_change" value="{{ $product->product_price ?? 0 }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" readonly class="form-control subtotal" value="{{ $product->subtotal ?? 0 }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr class="">
                                     <th colspan="4"></th>
-                                    <th colspan="2" id="total_qty" class="px-4">0</th>
-                                    <th colspan="2" id="grandtotal" class="px-4">0</th>
+                                    <th colspan="2" id="total_qty" class="px-4">{{ $purchase->total_qty }}</th>
+                                    <th colspan="2" id="grandtotal" class="px-4">{{ $purchase->total_price }}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -137,7 +143,7 @@
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-end">
-                    <button class="btn btn-success text-right outline-none" id="purchase-btn"> <i class="fa fa-save"></i> Submit</button>
+                    <button class="btn btn-success text-right outline-none" id="purchase-btn"> <i class="fa fa-save"></i> Update</button>
                 </div>
 
             </div>
@@ -153,9 +159,6 @@
 <script>
     $(document).ready(function(){
         init();
-
-        $(document).on('click','#addNewRow', createNewRow)
-        $(document).on('click','.fa-times', removeRow)
         $(document).on('click','#add', createModal)
         $(document).on('click','#purchase-btn', submitToDatabase)
         $(document).on('input keyup change','.state_change', calcSubTotal)
@@ -237,132 +240,50 @@
         $('#grandtotal').text(grandtotal);
     }
 
-    function removeRow(){
-        let 
-        row = $(this).closest('tr'),
-        rows= $('#purchase-body').find('tr');
-
-        if(rows.length <= 1)
-        {
-            alert("You can't delete This Row ?")
-            return false;
-        }
-
-        row.remove();
-
-        summary()
-    }
-
-
-    function createNewRow(){
-
-        let ref = new Date().getTime();
-
-        let html = `<tr>
-            <td>
-                <select name="product_name" class="product_name" data-required id="product_name_${ref}" data-placeholder="Search Or Type Product"></select>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="color" multiple class="color" data-required id="color_${ref}" data-placeholder="Select Color">
-                        @foreach ($colors as $color)
-                        <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="size" class="size" data-required id="size_${ref}" multiple data-placeholder="Select Sizes">
-                        @foreach ($sizes as $size)
-                        <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="unit" class="unit" data-required id="unit_${ref}" data-placeholder="Select Unit">
-                        @foreach ($units as $unit)
-                        <option value="{{ $unit->unit_name }}">{{ $unit->unit_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <input type="number" class="form-control qty state_change">
-            </td>
-            <td>
-                <input type="number" class="form-control purchase-price state_change">
-            </td>
-            <td>
-                <input type="number" readonly class="form-control subtotal">
-            </td>
-            <td class="text-center">
-                <i class="fa fa-times text-danger fa-lg" type="button"></i>
-            </td>
-        </tr>`;
-
-
-        $('#purchase-body').append(html)
-
-        InitProduct(`#product_name_${ref}`);
-
-        $(`#color_${ref}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-        }).val(null).trigger('change')
-
-        $(`#size_${ref}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-        }).val(null).trigger('change')
-
-        $(`#unit_${ref}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-        }).val(null).trigger('change')
-
-    }
-
-
     function init(){
 
         let arr=[
             {
                 selector        : `#supplier`,
                 type            : 'select',
-            },
-            {
-                selector        : `.color`,
-                type            : 'select',
-            },
-            {
-                selector        : `.size`,
-                type            : 'select',
+                selectedVal     : @json($purchase->supplier_id ?? null)
             },
             {
                 selector        : `.currency`,
                 type            : 'select',
-            },
-            {
-                selector        : `.unit`,
-                type            : 'select',
+                selectedVal     : @json($purchase->currency ?? null)
             },
             {
                 selector        : `#purchase_date`,
                 type            : 'date',
                 format          : 'yyyy-mm-dd',
-            },
-        ];
+            }];
+
+            $('.product_name').select2({
+                width : '100%' ,
+                theme : 'bootstrap4',
+            }).trigger('change')
+
+            $('.unit').select2({
+                width : '100%' ,
+                theme : 'bootstrap4',
+            }).trigger('change')
+
+            $(`.color`).select2({
+                width : '100%' ,
+                theme : 'bootstrap4',
+            }).trigger('change');
+
+            $(`.size`).select2({
+                width : '100%' ,
+                theme : 'bootstrap4',
+            }).trigger('change');
+
 
         globeInit(arr);
 
 
-        InitProduct();
+        // InitProduct();
 
 
         
@@ -412,9 +333,11 @@
 
         ajaxFormToken();
 
+        let id = @json($purchase->id ?? null);
+
         let obj = {
-            url     : `{{ route('admin.purchase.store') }}`, 
-            method  : "POST",
+            url     : `{{ route('admin.purchase.update','') }}/${id}`, 
+            method  : "PUT",
             data    : formatData(),
         };
 

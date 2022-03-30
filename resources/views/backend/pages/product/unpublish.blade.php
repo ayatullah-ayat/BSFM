@@ -9,8 +9,7 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary text-dark"><a href="/" class="text-decoration-none">Manage Product</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.products.create') }}"><i class="fa fa-plus"> Product</i></a></button>
+                <h6 class="m-0 font-weight-bold text-primary text-dark"><a href="#" class="text-decoration-none">Manage Product</a> </h6>
             </div>
 
             <div class="card-body">
@@ -24,14 +23,11 @@
                                 <th>Category</th>
                                 <th>Sub-Category</th>
                                 <th>Unit</th>
-                                {{-- <th>Size</th> --}}
-                                {{-- <th>Brand</th>
-                                <th>Currency</th> --}}
                                 <th>Unit Price</th>
                                 <th>Sales Price</th>
                                 <th>WholeSale Price</th>
                                 <th>Total Qty</th>
-                                <th>Stock Qty</th>
+                                <th>Is Publish</th>
                                 <th width="70" class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -45,9 +41,6 @@
                                     $brands     = [];
                                 @endphp
 
-                                {{-- @dump($product->id) --}}
-
-                                {{-- @dd($product->colors()->first()) --}}
                                 <tr data-productid="{{ $product->id }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
@@ -57,21 +50,11 @@
                                     <td>{{ $product->category_name ?? 'N/A' }}</td>
                                     <td>{{ $product->subcategory_name ?? 'N/A' }}</td>
                                     <td>{{ $product->product_unit ? strtoupper($product->product_unit) : 'N/A' }}</td>
-                                    {{-- <td>{{ $colorSql->colors ?? 'N/A' }}</td>
-                                    <td>{{ $sizeSql->sizes ?? 'N/A' }}</td> --}}
-                                    {{-- <td>
-                                        @foreach ($product->brands as $brand)
-                                            @php
-                                                $brands[]= $brand->brand_name;
-                                            @endphp
-                                        @endforeach
-                                        {{ count($brands) ? implode(',', $brands) : 'N/A' }}</td>
-                                    <td>{{ $product->currency ? strtoupper($product->currency) : 'N/A' }}</td> --}}
                                     <td>
                                         @if($product->is_product_variant)
                                             <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else 
-                                            {{ number_format($product->unit_price, 2) ?? 0.0 }} 
+                                            {{ number_format(($product->unit_price), 3) ?? 0.0 }} 
                                         @endif 
                                     </td>
                                     <td>
@@ -89,10 +72,15 @@
                                         @endif
                                     </td>
                                     <td>{{ $product->total_product_qty ?? 0.0 }}</td>
-                                    <td>{{ $product->total_stock_qty ?? 0.0 }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.products.show', $product->id )}}" class="fa fa-eye text-info text-decoration-none"></a>
-                                        <a href="{{ route('admin.products.edit',$product->id )}}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" data-id="{{$product->id}}" {{ $product->is_publish ? 'checked':''}}
+                                            class="custom-control-input is-publish" id="{{ $product->id }}">
+                                            <label class="custom-control-label" for="{{ $product->id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.products.show', $product->id )}}?st=unpublish" class="fa fa-eye text-info text-decoration-none mx-2"></a>
                                         <a href="{{ route('admin.products.destroy', $product->id) }}" class="fa fa-trash text-danger text-decoration-none delete-product"></a>
                                     </td>
                                 </tr>
@@ -152,98 +140,38 @@
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
     <script>
         $(document).ready(function(){
-            $(document).on('click','.view-variant-product', getVariatProductInfo)
             $(document).on('click','.delete-product', deleteToDatabase)
+            $(document).on('change','.is-publish', changeStatus)
 
         })
 
-        function getVariatProductInfo(){
 
-            $('#variantDetails').modal('show')
-            let product_id = $(this).closest('tr').attr('data-productid');
+        function changeStatus(){
+           let elem     = $(this),
+           is_publish   = elem.prop("checked"),
+           id           = elem.attr('data-id');
 
-            $.ajax({
-                url     : `{{ route('admin.variant.show','') }}/${product_id}`,
-                method  : 'GET',
-                data    : { product_id },
-                success(data){
-                    // console.log(data);
-                    let 
-                    totalPrice          = 0,
-                    totalSalesPrice     = 0,
-                    totalWholesalePrice = 0,
-                    productQty          = 0,
-                    stockQty            = 0,
-                    html                = ``;
+           ajaxFormToken();
 
-                    if(data.length){
+           $.ajax({
+               url      :`{{ route('admin.products.publish', '' ) }}/${id}`, 
+               method   :'POST',
+               data     : {is_publish: Number(is_publish)},
+               success(res){
+                   if(res?.success){
+                       elem.prop("checked", is_publish);
+                        _toastMsg(res?.msg ?? 'Success!', 'success', 500);
 
-                        html += `
-                        <table class="table table-sm table-bordered">
-                            <thead class="bg-dark text-white">
-                                <tr>
-                                    <td>Color</td>
-                                    <td>Size</td>
-                                    <td>Unit Price</td>
-                                    <td>Sales Price</td>
-                                    <td>Wholesale Price</td>
-                                    <td>Product Qty</td>
-                                    <td>Stock Qty</td>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-
-                        data.forEach(d => {
-
-                            totalPrice          += d.unit_price ?? 0;
-                            totalSalesPrice     += d.sales_price ?? 0;
-                            totalWholesalePrice += d.wholesale_price ?? 0;
-                            productQty          += d.product_qty ?? 0;
-                            stockQty            += d.stock_qty ?? 0;
-
-                            html += `
-                                <tr>
-                                    <td>${d.color_name}</td>
-                                    <td>${d.size_name}</td>
-                                    <td>${d.unit_price}</td>
-                                    <td>${d.sales_price}</td>
-                                    <td>${d.wholesale_price}</td>
-                                    <td>${d.product_qty}</td>
-                                    <td>${d.stock_qty}</td>
-                                </tr>
-                            `;
-                        })
-
-                        html += `
-                            </tbody>
-                            <tfoot>
-                                <tr class="bg-dark text-white">
-                                    <td colspan="2"></td>
-                                    <td>${totalPrice}</td>
-                                    <td>${totalSalesPrice}</td>
-                                    <td>${totalWholesalePrice}</td>
-                                    <td>${productQty}</td>
-                                    <td>${stockQty}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        `;
-
-                    }else{
-                        html += `<div class="w-100 alert alert-danger px-5">
-                            <h5>404</h5>
-                            <p>No Data Found!</p>
-                        </div>`;
-                    }
-
-
-                    $('#product-info').html(html);
-                },
-                error(err){
-                    console.log(err);
-                },
-            })
-        }
+                        setTimeout(()=> location.reload(), 1000)
+                   }
+               },
+               error(err){
+                   console.log(err);
+                   elem.prop("checked", !is_publish);
+                   _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!');
+               },
+           })
+       }
 
         function deleteToDatabase(e){
             e.preventDefault();

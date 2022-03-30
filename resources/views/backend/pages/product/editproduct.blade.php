@@ -75,10 +75,10 @@
             <div class="col-md-6" data-col="col">
                 <div class="form-group">
                     <label for="currency">Currency <span style="color: red;" class="req">*</span></label>
-                    <span class="float-right">
+                    {{-- <span class="float-right">
                         <label for="manageVariant" type="button">Manage Variant wise Price & Qty</label>
                         <input type="checkbox" {{ $product->is_product_variant ? 'checked' : '' }} name="manageVariant" id="manageVariant">
-                    </span>
+                    </span> --}}
                     <select name="currency" required class="currency" data-required id="currency" data-placeholder="Select currency">
                         @if($currencies)
                         @foreach ($currencies as $item)
@@ -123,20 +123,20 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
-                        <input name="unit_price" value="{{ $unitPrice }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
+                        <input name="unit_price" value="{{ number_format($unitPrice, 3) }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
                     </div>
                 </div>
                 
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price (Offline Sale)</label>
-                        <input name="wholesale_price" value="{{ $wholesalesPrice }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
+                        <input name="wholesale_price" value="{{ number_format($wholesalesPrice, 3) }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
-                        <input name="sale_price" value="{{ $salesPrice }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
+                        <input name="sale_price" value="{{ number_format($salesPrice,3) }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
                             placeholder="Sales Price">
                     </div>
                 </div>
@@ -901,7 +901,8 @@
             total_product_unit_price: $('#total_product_price').val() ?? 0,
             total_stock_price       : $('#total_sales_price').val() ?? 0,
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
-            // sales_price             : $('#sale_price').val(),
+            unit_price              : $('#unit_price').val(),
+            sales_price             : $('#sale_price').val(),
             colors                  : $('#color').val(),
             sizes                   : $('#size').val(),
             product_qty             : $('#product_qty').val(), // total Product qty
