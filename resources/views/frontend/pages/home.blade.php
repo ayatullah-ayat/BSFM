@@ -1,8 +1,7 @@
-@extends('frontend.layouts.master', ['customservicecategories'=>$customservicecategories ?? null ])
+@extends('frontend.layouts.master',  ['customservicecategories'=>$customservicecategories ?? null, 'sociallink'=>$sociallink ?? null, 'footerabout'=>$footerabout ?? null])
 @section('title','Home')
 
 @section('content')
-    
     <!-- Hero Area-->
     <section class="container-fluid hero-area">
     

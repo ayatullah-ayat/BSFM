@@ -36,7 +36,8 @@
                         <tbody>
 
                             @foreach($purchases as $item)
-                                <tr data-item="{{ $item->id }}">
+
+                                <tr data-item="{{ $item->id }}" data-purchase="{{ json_encode($item->purchaseProducts) }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <a href="{{ route('admin.purchase.showInvoice', $item->invoice_no) }}">{{ $item->invoice_no ?? 'N/A' }}</a>
@@ -56,11 +57,15 @@
                                     </td>
                                     <td class="text-center">
                                         @if(!$item->is_manage_stock)
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-warning warnig-hover return-purchase mx-2 text-decoration-none">
+                                            <i class="fa fa-angle-double-right"></i> Return
+                                        </a>
                                         <a href="{{ route('admin.purchase.edit', $item->id) }}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
                                         <a href="{{ route('admin.purchase.destroy', $item->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                         @else 
-                                        <a href="javascript:void(0)" onclick="return alert('You can\'t Edit?')" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                        <a href="javascript:void(0)" onclick="return alert('You can\'t delete?')" class="fa fa-trash text-danger text-decoration-none"></a>
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-warning warnig-hover return-purchase mx-2 text-decoration-none">
+                                            <i class="fa fa-angle-double-right"></i> Return
+                                        </a>
                                         @endif 
                                     </td>
                                 </tr>
@@ -119,12 +124,62 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+    role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Purchase Return</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-sm">
+                    <thead>
+                        <tr class="bg-danger">
+                            <th class="text-white">Product</th>
+                            <th class="text-white">Available Qty</th>
+                            <th class="text-white">Prev Returned Qty</th>
+                            <th class="text-white">Return Qty</th>
+                            <th class="text-center text-white">Unit Price</th>
+                            <th class="text-center text-white">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="return_tbody"></tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="w-100">
+                    <button type="button" id="return" class="btn btn-sm btn-success float-right mx-1"><i
+                            class="fa fa-save"></i> Return</button>
+                    <button type="button" class="btn btn-sm btn-danger float-right mx-1"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('css')
     <!-- Custom styles for this page -->
     <link href="{{ asset('assets/backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/backend/css/currency/currency.css')}}" rel="stylesheet">
+    <style>
+        .warnig-hover:hover{
+            color: #fff !important;
+            font-weight: bold;
+        }
+    </style>
 @endpush
 
 @push('js')
@@ -135,12 +190,106 @@
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
 
     <script>
+
+        let timeId = null;
         $(document).ready(function(){
             $(document).on("click",".payNow", openPaymentModal)
             $(document).on("input change","#total_payment", isPaymentAmountValid)
             $(document).on("click","#pay", makePayment)
             $(document).on('click', '.delete', deleteToDatabase)
+            $(document).on('click', '.return-purchase', returnModalVisible)
+            $(document).on('click', '#return', returnToDb)
         })
+
+
+        function returnToDb(){
+
+            let rows = $(document).find('#return_tbody').find(`tr[data-purchase-product-id]`),
+            products = [];
+
+            [...rows].forEach(row => {
+                let purchase_product_id = Number($(row).attr('data-purchase-product-id'));
+                let returned_qty = Number($(row).find('.return_qty').val());
+
+                products.push({
+                    purchase_product_id,
+                    returned_qty
+                });
+            });
+
+            // console.log(products);
+
+            clearTimeout(timeId);
+
+            ajaxFormToken();
+
+
+            timeId = setTimeout(function(){
+                //
+                $.ajax({
+                    url     : `{{ route('admin.return_purchase.store') }}`,
+                    method  : 'POST',
+                    data    : { products },
+                    success(res){
+                        console.log(res);
+                        if(res.success){
+                            $('#return_tbody').html('');
+                            $('#returnModal').modal('hide')
+
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+
+                            setTimeout(() => {
+                                location.reload()
+                            }, 2000);
+                        }else{
+                            _toastMsg((res?.msg) ?? 'Something wents wrong!')
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                    },
+                })
+
+            },500)
+
+
+        }
+
+        function returnModalVisible(){
+            //
+            let elem = $(this),
+            row = elem.closest('tr'),
+            data= row?.attr('data-purchase') ? JSON.parse(row.attr('data-purchase')) : null,
+            html= "";
+
+            if(data){
+                //
+
+                if(Array.isArray(data)){
+                    data.forEach(product => {
+                        html += `<tr data-purchase-product-id="${product?.id}">
+                            <th>${product.product_name ?? 'N/A'}</th>
+                            <th>${product.product_qty ?? 0}</th>
+                            <th>${product?.returned_qty ?? 0 }</th>
+                            <th style="width: 100px !important;">
+                                <input type="number" class="text-center return_qty" name="return_qty" id="return_qty_${product.id}" style="max-width: 100px" value="0"><br>
+                                <span class="v-error text-danger"></span>
+                            </th>
+                            <th class="text-center">${product.product_price ?? 0.0}</th>
+                            <th class="text-center">${product.subtotal ?? 0.0}</th>
+                        </tr>`;
+                    })
+                }   
+
+                // console.log(data.purchase_products);
+
+            }
+
+            $('#return_tbody').html(html)
+
+            $('#returnModal').modal('show')
+        }
 
 
         function makePayment(){

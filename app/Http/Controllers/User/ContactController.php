@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\ContactInformation;
+use App\Models\SocialIcon;
 use Exception;
 
 
@@ -18,7 +20,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.contact');
+        $contactInfo = ContactInformation::where('is_active', 1)->first();
+        $sociallink = SocialIcon::where('is_active', 1)->first();
+        return view('frontend.pages.contact', compact('contactInfo' , 'sociallink'));
     }
 
     /**

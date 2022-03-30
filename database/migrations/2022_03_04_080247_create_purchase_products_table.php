@@ -24,6 +24,7 @@ class CreatePurchaseProductsTable extends Migration
             $table->text('product_sizes')->nullable();
             $table->unsignedBigInteger('product_qty')->default(0);
             $table->unsignedBigInteger('stocked_qty')->default(0);
+            $table->unsignedBigInteger('returned_qty')->default(0);
             $table->float('product_price',10,3)->default(0);
             $table->float('subtotal',10,3)->default(0);
             $table->timestamps();

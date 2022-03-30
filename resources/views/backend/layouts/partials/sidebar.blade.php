@@ -36,8 +36,8 @@
         </a>
         <div id="sales" class="collapse" aria-labelledby="sales" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.add_sale') }}">New Sale</a>
-                <a class="collapse-item" href="{{ route('admin.manage_sale') }}">Manage Sale</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_sales.add_sale') }}">New Sale</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_sales.manage_sale') }}">Manage Sale</a>
                 <a class="collapse-item" href="#">Pos Sale</a>
             </div>
         </div>
@@ -312,9 +312,11 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">Web Logo</a>
                 <a class="collapse-item" href="#">Web Header</a>
-                <a class="collapse-item" href="{{ route('admin.web_footer') }}">Web Footer</a>
-                <a class="collapse-item" href="{{ route('admin.social_icon') }}">Social Icon</a>
-                <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Us</a>
+                <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Web Footer</a>
+                <a class="collapse-item" href="{{ route('admin.socialicon.index') }}">Manage Social Links</a>
+                <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Form List</a>
+                <a class="collapse-item" href="{{ route('admin.contactinfo.index') }}">Contact Information</a>
+                <a class="collapse-item" href="{{ route('admin.about.index') }}">About Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Our Gallery</a>

@@ -7,24 +7,43 @@
             <div class="col-md-3">
 
                 <div class="about-footer">
+                    @if($footerabout)
 
-                    <div class="footer-logo my-3">
-                        <a href="{{ url('/') }}"><img class="logo" src="{{asset('assets/frontend/img/logo/footer-logo.png')}}" alt="footer logo"></a>
-                    </div>
+                        @if($footerabout->footer_logo)
+                            <div class="footer-logo my-3">
+                                <a href="{{ url('/') }}"><img class="logo" src="{{asset($footerabout->footer_logo)}}" alt="footer logo"></a>
+                            </div>
+                        @endif
 
-                    <div class="footer-text">
-                        <h2>যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে, দ্রুততম সময়ে, সর্বোচ্চ
-                            গুনগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়।
-                            আপনার চাহিদা অনুযায়ী যে কোনো ধরনে কাস্টমাইজড প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে।
-                        </h2>
-                    </div>
+                        @if($footerabout->footer_about)
+                            <div class="footer-text">
+                                <h2>{{ $footerabout->footer_about }}</h2>
+                            </div>
+                        @endif
 
-                    <div class="footer-social">
-                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    </div>
+                    @endif
+
+                    {{-- @dd($sociallink) --}}
+                    @if($sociallink)
+                        <div class="footer-social">
+                            @if( $sociallink->facebook )
+                                <a href="{{ $sociallink->facebook }}"><i class="fa-brands fa-facebook"></i></a>
+                            @endif
+
+                            @if( $sociallink->twitter )
+                                <a href="{{ $sociallink->twitter }}"><i class="fa-brands fa-twitter"></i></a>
+                            @endif
+
+                            @if( $sociallink->instagram )
+                                <a href="{{ $sociallink->instagram }}"><i class="fa-brands fa-instagram"></i></a> 
+                            @endif
+
+                            @if( $sociallink->linkedin )
+                                <a href="{{ $sociallink->linkedin }}"><i class="fa-brands fa-linkedin"></i></a> 
+                            @endif
+
+                        </div>
+                    @endif
 
                 </div>
             </div>
@@ -72,8 +91,7 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ route('about_index')}}"> আমাদের সম্পর্কে</a></li>
                         <li><a href="{{ route('contact_index')}}"> যোগাযোগ করুন </a></li>
-                        <li class="ordertraking-footer
-                        "><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
+                        <li class="ordertraking-footer"><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
                         <li><a href="{{ route('dashboard.index')}}"> একাউন্ট </a></li>
                     </ul>
                 </div>

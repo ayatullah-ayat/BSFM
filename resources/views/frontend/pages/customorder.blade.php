@@ -64,12 +64,18 @@
                             </div>
                         </div>
     
-    
+                        {{-- @dd($contactInfo) --}}
                         <div class="contact-info row">
                             <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
                             <div class="contact-inner-info col-md-12">
-                                <span><i class="fa fa-phone"></i> <span><a href="tel:0123123213123">0123123213123</a></span></span>
-                                <span><i class="fa fa-envelope"></i> <span><a href="mailto:m@gmail.com">m@gmail.com</a></span></span>
+                               @if ($contactInfo)
+                                    @if($contactInfo->phone)
+                                        <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span>
+                                    @endif
+                                    @if($contactInfo->email)
+                                        <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span>
+                                    @endif
+                               @endif
                             </div>
                         </div>
     

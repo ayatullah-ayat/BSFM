@@ -10,6 +10,7 @@ use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
 use App\Http\Services\CustomerChecker;
 use App\Http\Requests\CustomOrderRequest;
+use App\Models\ContactInformation;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
 
@@ -24,7 +25,7 @@ class CustomOrderController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -132,6 +133,8 @@ class CustomOrderController extends Controller
      */
     public function show(CustomServiceProduct $customServiceProduct)
     {
+        $contactInfo = ContactInformation::where('is_active', 1)->first();
+
         $otherProducts = Product::select('*')
             ->latest()
             ->take(20)
@@ -139,7 +142,7 @@ class CustomOrderController extends Controller
             ->where('is_publish', 1)
             ->get();
             
-        return view('frontend.pages.customorder', compact('customServiceProduct', 'otherProducts'));
+        return view('frontend.pages.customorder', compact('customServiceProduct', 'otherProducts','contactInfo'));
     }
 
     /**

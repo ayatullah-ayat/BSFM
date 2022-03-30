@@ -18,24 +18,25 @@
             <div class="col-md-6 left">
 
                 <div class="content">
-                    <h2 class="mb-4"> ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী </h2>
 
-                    <p> আমরা যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে,
-                        দ্রুততম সময়ে, সর্বোচ্চ গুণগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়। আপনার চাহিদা অনুযায়ী যে
-                        কোনো ধরনে কাস্টমাইজড প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে। .</p>
+                    <h2 class="mb-4"> {{ $aboutData ? $aboutData->about_title :  'ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী'}}</h2>
 
-                    <p> আমরা যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে,
+                    <p> {{ $aboutData ? $aboutData->about_description : 'আমরা যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে,
                         দ্রুততম সময়ে, সর্বোচ্চ গুণগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়। আপনার চাহিদা অনুযায়ী যে
-                        কোনো ধরনে কাস্টমাইজড প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে। </p>
+                        কোনো ধরনে কাস্টমাইজড প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে।'}} 
+                    </p>
 
                 </div>
 
             </div>
 
             <div class="col-md-6 right">
-
                 <div class="image">
-                    <img draggable="false" src="{{ asset('assets/frontend/img/about/about-us.jpg') }}" alt="About Img">
+                    @if (isset($aboutData->about_thumbnail))
+                        <img draggable="false" src="{{ asset( $aboutData->about_thumbnail) }}" alt="About Img">
+                    @else
+                        <img draggable="false" src="{{ asset('assets/frontend/img/about/about-us.jpg') }}" alt="About Img">
+                    @endif
                 </div>
 
             </div>

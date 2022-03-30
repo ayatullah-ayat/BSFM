@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ContactInformation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\User\CartController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Admin\SupplierController;
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
+use App\Http\Controllers\Admin\OtherOrderController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\ClientLogosController;
 use App\Http\Controllers\Admin\SmsSettignsController;
@@ -44,19 +46,21 @@ use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
 use App\Http\Controllers\Admin\OfficeAccountController;
+use App\Http\Controllers\Admin\PurchaseReturnController;
+use App\Http\Controllers\Admin\ContactInformationController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
 use App\Http\Controllers\Admin\Custom\CustomServiceOrderController;
 use App\Http\Controllers\Admin\Custom\CustomServiceProductController;
 use App\Http\Controllers\Admin\ShopController as AdminShopController;
 use App\Http\Controllers\Admin\Custom\CustomServiceCategoryController;
+use App\Http\Controllers\Admin\AboutController as AdminAboutController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\User\OrderController as CustomerOrderController;
 use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
-use App\Http\Controllers\Admin\OtherOrderController;
 
 // ------------ Frontend namespace ----------------------
 
@@ -252,6 +256,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/manage-stock',        [PurchaseController::class, 'store_manage_stock'])->name('store_manage_stock');
     });
 
+    Route::group(['prefix' => 'return-purchase', 'as' => 'return_purchase.'], function () {
+        Route::get('/',                     [PurchaseReturnController::class, 'index'])->name('index');
+        Route::post('/',                    [PurchaseReturnController::class, 'store'])->name('store');
+        Route::get('/{invoice_no}',         [PurchaseReturnController::class, 'showInvoice'])->name('showInvoice');
+    });
+
 
     Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
         Route::get('/',                     [ProductController::class, 'index'])->name('index');
@@ -278,6 +288,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     });
 
 
+    Route::group(['prefix' => 'sales', 'as' => 'ecom_sales.'], function () {
+        Route::get('/',                         [SaleController::class, 'index'])->name('manage_sale');
+        Route::get('/create',                   [SaleController::class, 'create'])->name('add_sale');
+        Route::post('/',                        [SaleController::class, 'store'])->name('store');
+        Route::get('/{product}',                [SaleController::class, 'getVariantsByProduct'])->name('getVariantsByProduct');
+        Route::get('/invoice/{invoice_no}',     [SaleController::class, 'showInvoice'])->name('showInvoice');
+
+        // Route::post('/{order}',                 [OrderController::class, 'approval'])->name('approval');
+        // Route::get('/{order}/edit',             [OrderController::class, 'edit'])->name('edit');
+        // Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
+        // Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
+    });
+
+    // 
 
     // Route::get('/order-add', function () {
     //     return view('backend.pages.order.orderadd');
@@ -287,8 +311,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     //     return view('backend.pages.order.ordermanage');
     // })->name('order_manage');
 
-    Route::get('/manage-sale', [SaleController::class, 'index'])->name('manage_sale');
-    Route::get('/add-sale', [SaleController::class, 'create'])->name('add_sale');
+    // Route::get('/manage-sale', [SaleController::class, 'index'])->name('manage_sale');
+    // Route::get('/add-sale', [SaleController::class, 'create'])->name('add_sale');
     // Route::get('/manage-custom-order', [CustomOrderController::class, 'index'])->name('manage_custom_order');
     // Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
 
@@ -308,8 +332,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/manage-gateway', [ManageGatewayController::class, 'index'])->name('manage_gateway');
 
     Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
-    Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
-    Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
 
     Route::group(['prefix' => 'customservicecategories', 'as' => 'customservicecategory.'], function(){
         Route::get('/',                         [CustomServiceCategoryController::class, 'index'])->name('index');
@@ -349,6 +371,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [ContactController::class, 'store'])->name('store');
         Route::put('/{contact}',    [ContactController::class, 'update'])->name('update');
         Route::delete('/{contact}', [ContactController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'contactsinfo', 'as' => 'contactinfo.'], function(){
+        Route::get('/',                         [ContactInformationController::class, 'index'])->name('index');
+        Route::post('/',                        [ContactInformationController::class, 'store'])->name('store');
+        Route::put('/{contactInformation}',     [ContactInformationController::class, 'update'])->name('update');
+        Route::delete('/{contactInformation}',  [ContactInformationController::class, 'destroy'])->name('destroy');
     });
 
     // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
@@ -397,6 +426,31 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{otherOrder}',        [OtherOrderController::class, 'update'])->name('update');
         Route::delete('/{otherOrder}',     [OtherOrderController::class, 'destroy'])->name('destroy');
     });
+
+    Route::group(['prefix' => 'abouts', 'as' => 'about.'], function(){
+        Route::get('/',                    [AdminAboutController::class, 'index'])->name('index');
+        Route::post('/',                   [AdminAboutController::class, 'store'])->name('store');
+        Route::put('/{about}',             [AdminAboutController::class, 'update'])->name('update');
+        Route::delete('/{about}',          [AdminAboutController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'socialicons', 'as' => 'socialicon.'], function(){
+        Route::get('/',                     [SocialIconController::class, 'index'])->name('index');
+        Route::post('/',                    [SocialIconController::class, 'store'])->name('store');
+        Route::put('/{socialicon}',         [SocialIconController::class, 'update'])->name('update');
+        Route::delete('/{socialicon}',      [SocialIconController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['prefix' => 'footer-abouts', 'as' => 'footer-about.'], function(){
+        Route::get('/',                     [WebFooterController::class, 'index'])->name('index');
+        Route::post('/',                    [WebFooterController::class, 'store'])->name('store');
+        Route::put('/{webfooter}',          [WebFooterController::class, 'update'])->name('update');
+        Route::delete('/{webfooter}',       [WebFooterController::class, 'destroy'])->name('destroy');
+    });
+
+    // Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
+    // Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
+
 
 
 });

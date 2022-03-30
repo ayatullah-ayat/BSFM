@@ -10,52 +10,70 @@
 
             <div class="col-md-6">
                 <div class="contact-details">
-                    <h2> অফিসের ঠিকানা </h2>
+
+                    <h2>{{ isset($contactInfo->title) ? $contactInfo->title : 'অফিসের ঠিকানা'}} </h2>
                     <!-- <img src="images/logo-mic.png" alt="contact logo"> -->
+
                     <p>
-                        যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে,
+                        {{ isset($contactInfo->description) ?  $contactInfo->description : 'যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে,
                         দ্রুততম সময়ে, সর্বোচ্চ গুনগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়।
                         আপনার চাহিদা অনুযায়ী যে কোনো ধরনে কাস্টমাইজড
-                        প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে।
+                        প্রিন্টের কাজের অর্ডার করুন উপরের লিস্ট থেকে।' }}
                     </p>
 
-                    <div class="contact-icons d-flex">
-                        <div class="icon">
-                            <i class="fa-solid fa-location-dot"></i>
-                        </div>
+                    @if (isset($contactInfo->address))
+                        <div class="contact-icons d-flex">
+                            <div class="icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
 
-                        <div class="icon-address">
-                            <p>আমাদের ঠিকানা- <br>৪৮, দিপীকা মসজিদ মার্কেট,
-                                দোকান নং- ১-৩, ৩য় তলা, তেজগাঁও শিল্প একলাকা, ঢাকা- ১২০৮।
-                            </p>
+                            <div class="icon-address">
+                                <p>
+                                    {{ $contactInfo->address ?? null}}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
-                    <div class="contact-icons d-flex">
-                        <div class="icon">
-                            <i class="fa-regular fa-envelope"></i>
+                    @if (isset($contactInfo->email))
+                        <div class="contact-icons d-flex">
+                            <div class="icon">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+
+                            <div class="icon-address">
+                                <p> {{ $contactInfo->email ?? null}} </p>
+                            </div>
                         </div>
+                    @endif
 
-                        <div class="icon-address">
-                            <p> micromedia@gamil.com </p>
+                    @if ( isset($contactInfo->phone) )
+                        <div class="contact-icons d-flex">
+                            <div class="icon">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+
+                            <div class="icon-address">
+                                <p>{{ $contactInfo->phone ?? null}}</p>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
-                    <div class="contact-icons d-flex">
-                        <div class="icon">
-                            <i class="fa-solid fa-phone"></i>
+                    @if (isset($sociallink))
+                        <div class="contact-social-media d-flex">
+                            @if($sociallink->facebook)
+                                <a href="{{$sociallink->facebook}}"><i class="fa-brands fa-facebook"></i></a>
+                            @endif
+
+                            @if($sociallink->twitter)
+                                <a href="{{$sociallink->twitter}}"><i class="fa-brands fa-twitter-square"></i></a>
+                            @endif
+
+                            @if($sociallink->linkedin)
+                                <a href="{{$sociallink->linkedin}}"><i class="fa-brands fa-linkedin"></i></a>
+                            @endif
                         </div>
-
-                        <div class="icon-address">
-                            <p> 01894 812 920-29 </p>
-                        </div>
-                    </div>
-
-                    <div class="contact-social-media d-flex">
-                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                        <a href="#"><i class="fa-brands fa-twitter-square"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    </div>
+                    @endif
 
 
                 </div>

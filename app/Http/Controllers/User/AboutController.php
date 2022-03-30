@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\About;
 use Illuminate\Http\Request;
 
 class AboutController extends Controller
@@ -14,7 +15,8 @@ class AboutController extends Controller
      */
     public function index()
     {
-        return view('frontend.pages.about');
+        $aboutData = About::where('is_active', 1)->first();
+        return view('frontend.pages.about', compact('aboutData'));
         
     }
 
