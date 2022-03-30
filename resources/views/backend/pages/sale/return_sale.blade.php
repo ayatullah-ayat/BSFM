@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Return Purchases')
+@section('title', 'Return Sales')
 
 @section('content')
 <div>
@@ -9,10 +9,9 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Return Purchase</a> </h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Return Sale</a> </h6>
                 <div class="inner">
-                    <a class="btn btn-sm btn-outline-info float-right" href="{{ route('admin.purchase.index') }}">Purchase List</i></a>
-                    <a href="{{ route('admin.purchase.manage_stock') }}" class="btn btn-sm btn-outline-success float-right mx-2" id="manga-stock"> <i class="fas fa-shopping-bag"></i> Manage Stock</a>
+                    <a class="btn btn-sm btn-outline-info float-right" href="{{ route('admin.ecom_sales.manage_sale') }}">Sales List</i></a>
                 </div>
             </div>
 
@@ -23,7 +22,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Invoice No</th>
-                                <th>Supplier Name</th>
+                                <th>Customer Name</th>
                                 <th>Date</th>
                                 <th>Total Qty</th>
                                 <th>Total Amount</th>
@@ -31,13 +30,13 @@
                         </thead>
                         <tbody>
 
-                            @foreach($purchases as $item)
+                            @foreach($sales as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <a href="{{ route('admin.return_purchase.showInvoice', $item->invoice_no) }}">{{ $item->invoice_no ?? 'N/A' }}</a>
+                                        <a href="{{ route('admin.return_sale.showInvoice', $item->invoice_no) }}">{{ $item->invoice_no ?? 'N/A' }}</a>
                                     </td>
-                                    <td>{{ $item->purchase->supplier->supplier_name ?? 'N/A' }}</td>
+                                    <td>{{ $item->sale->customer->customer_name ?? 'N/A' }}</td>
                                     <td>{{ $item->created_at ? date('Y-m-d', strtotime($item->created_at)) : 'N/A' }}</td>
                                     <td>{{ $item->returned_qty ?? '0' }}</td>
                                     <td>{{ $item->subtotal ?? '0.0' }}</td>

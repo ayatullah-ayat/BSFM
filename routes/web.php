@@ -8,6 +8,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\User\AboutController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OrderController;
@@ -21,18 +22,18 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\User\WishListController;
-use App\Http\Controllers\Admin\CategoryController;
 
 
 
 // ------------ Frontend namespace ----------------------
 
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PurchaseController;
-use App\Http\Controllers\Admin\SupplierController;
 
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
 use App\Http\Controllers\Admin\OtherOrderController;
@@ -230,15 +231,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{customer}',[CustomerController::class, 'destroy'])->name('destroy');
     });
 
-    // Route::get('/add-purchase', function () {
-    //     return view('backend.pages.purchase.addpurchase');
-    // })->name('add-purchase');
-
-    // Route::get('/manage-purchase', function () {
-    //     return view('backend.pages.purchase.managepurchase');
-    // })->name('manage-purchase');
-
-
     Route::group(['prefix' => 'purchase', 'as' => 'purchase.'], function () {
         Route::get('/',                     [PurchaseController::class, 'index'])->name('index');
         Route::get('/create',               [PurchaseController::class, 'create'])->name('create');
@@ -292,27 +284,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/',                         [SaleController::class, 'index'])->name('manage_sale');
         Route::get('/create',                   [SaleController::class, 'create'])->name('add_sale');
         Route::post('/',                        [SaleController::class, 'store'])->name('store');
+        Route::post('/payment',                 [SaleController::class, 'payment'])->name('payment');
         Route::get('/{product}',                [SaleController::class, 'getVariantsByProduct'])->name('getVariantsByProduct');
+        Route::get('/{sale}/edit',              [SaleController::class, 'edit'])->name('edit');
+        Route::put('/{sale}',                   [SaleController::class, 'update'])->name('update');
         Route::get('/invoice/{invoice_no}',     [SaleController::class, 'showInvoice'])->name('showInvoice');
 
-        // Route::post('/{order}',                 [OrderController::class, 'approval'])->name('approval');
-        // Route::get('/{order}/edit',             [OrderController::class, 'edit'])->name('edit');
-        // Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
-        // Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
+
     });
 
-    // 
 
-    // Route::get('/order-add', function () {
-    //     return view('backend.pages.order.orderadd');
-    // })->name('order_add');
 
-    // Route::get('/order-manage', function () {
-    //     return view('backend.pages.order.ordermanage');
-    // })->name('order_manage');
+    Route::group(['prefix' => 'return-sale', 'as' => 'return_sale.'], function () {
+        Route::get('/',                     [SaleReturnController::class, 'index'])->name('index');
+        Route::post('/',                    [SaleReturnController::class, 'store'])->name('store');
+        Route::get('/{invoice_no}',         [SaleReturnController::class, 'showInvoice'])->name('showInvoice');
+    });
 
-    // Route::get('/manage-sale', [SaleController::class, 'index'])->name('manage_sale');
-    // Route::get('/add-sale', [SaleController::class, 'create'])->name('add_sale');
+
+
     // Route::get('/manage-custom-order', [CustomOrderController::class, 'index'])->name('manage_custom_order');
     // Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
 

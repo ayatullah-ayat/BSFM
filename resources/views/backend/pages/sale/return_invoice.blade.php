@@ -68,12 +68,14 @@
                     <p>Returned Date :</p>
                 </td>
                 <td style="width: calc(50% - 35%);text-align: right;vertical-align: bottom">
-                    <p>{{ $purchase_return->invoice_no ?? '' }}</p>
-                    <p>{{ $purchase_return->created_at ? date('Y-m-d', strtotime($purchase_return->created_at)) : '' }}</p>
+                    <p>{{ $sale_return->invoice_no ?? '' }}</p>
+                    <p>{{ $sale_return->created_at ? date('Y-m-d', strtotime($sale_return->created_at)) : '' }}</p>
                 </td>
             </tr>
         </table>
     </htmlpageheader>
+
+    {{-- @dd($sale_return, $sale_return->sale->customer) --}}
 
     <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
 
@@ -81,8 +83,8 @@
         <tr>
             <td width="45%" style="padding-left: 0px !important;">
             <span style="font-size: 9pt; color: #555555; font-family: sans;font-weight:bold;">Return To:</span><br /><br />
-            Supplier Name: {{ $purchase_return->purchase->supplier->supplier_name ?? 'N/A' }}<br />Supplier Phone: {{
-                $purchase_return->purchase->supplier->supplier_phone ?? 'N/A' }}<br />Supplier Email: {{ $purchase_return->purchase->supplier->supplier_email ?? 'N/A' }}</td>
+            Customer Name: {{ $sale_return->sale->customer->customer_name ?? 'N/A' }}<br />Customer Phone: {{
+                $sale_return->sale->customer->customer_phone ?? 'N/A' }}<br />Customer Email: {{ $sale_return->sale->customer->customer_email ?? 'N/A' }}</td>
             <td width="10%">&nbsp;</td>
             <td width="45%" style="text-align: right; padding-right: 0px !important;">
                 <div style="text-align: right;visibility:hidden;">x</div>
@@ -110,7 +112,7 @@
             @php
             $subSubtotal = 0;
             @endphp
-            @foreach ($purchase_returns as $item)
+            @foreach ($sale_returns as $item)
             @php
             $subSubtotal += $item->subtotal;
             @endphp
@@ -128,7 +130,7 @@
                     @endif
                 </td>
                 <td align="center">{{ $item->product_unit ?? 'N/A' }}</td>
-                <td align="center">{{ $item->purchase_price ?? '0.0' }}</td>
+                <td align="center">{{ $item->sales_price ?? '0.0' }}</td>
                 <td align="center">{{ $item->returned_qty ?? '0' }}</td>
                 <td align="right">{{ $item->subtotal }}</td>
             </tr>

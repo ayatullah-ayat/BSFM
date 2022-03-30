@@ -9,7 +9,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Customer</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Customer</i></button>
+                <div class="inner">
+                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Customer Account</i></button>
+                    <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Customer</i></button>
+                </div>
             </div>
 
             <div class="card-body">
@@ -30,7 +33,11 @@
 
                             @isset($customers)
                                 @foreach ($customers as $customer)
-                                    <tr customer-data="{{json_encode($customer)}}">
+                                    <tr customer-data="{{json_encode($customer)}}" data-id="{{ $customer->id }}"
+                                        data-total-price="{{ $customer->sales()->sum('order_grand_total') }}"
+                                        data-total-payment="{{ $customer->sales()->sum('total_payment') }}"
+                                        data-total-qty="{{ $customer->sales()->sum('sold_total_qty') }}"
+                                        >
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $customer->customer_name ?? 'N/A' }}</td>
                                         <td>{{ $customer->customer_email ?? 'N/A' }}</td>
@@ -131,6 +138,69 @@
         </div>
     </div>
     
+
+<div class="modal fade" id="accountModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+        role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+    
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Customer Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+    
+                <div class="modal-body">
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select name="customer" id="customer" data-placeholder="Select Customer">
+                                @foreach ($customers as $item)
+                                <option value="{{ $item->id }}">{{ $item->customer_name ?? 'N/A' }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="row mb-4"></div>
+    
+                    <table class="table table-sm">
+                        <tr>
+                            <th>Total Product</th>
+                            <th>:</th>
+                            <td id="totalProduct">0</td>
+                        </tr>
+                        <tr>
+                            <th>Bill Amount</th>
+                            <th>:</th>
+                            <td id="billAmount">0</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Amount</th>
+                            <th>:</th>
+                            <th id="total_payment">0</th>
+                        </tr>
+                        <tr class="d-none">
+                            <th>Payment Status</th>
+                            <th>:</th>
+                            <th id="payment_status"></th>
+                        </tr>
+                    </table>
+    
+                </div>
+    
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <button type="button" id="pay" class="btn btn-sm btn-success float-right mx-1"><i class="fa fa-save"></i> Pay</button>
+                        <button type="button" class="btn btn-sm btn-danger float-right mx-1" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('css')
@@ -159,7 +229,56 @@
             $(document).on('click' , '.update', showUpdateModal)
             $(document).on('click','#customer_update_btn', updateToDatabase)
 
+
+            $(document).on('click','#account', showAccountModal)
+            $(document).on('change','#customer', showAccountInfo)
+
         });
+
+
+        function showAccountInfo(){
+            let elem = $(this),
+            customer_id = elem.val(),
+            row         = $(document).find(`tr[data-id=${customer_id}]`),
+            total_qty   = 0,
+            total_bill  = 0,
+            total_payment= 0,
+            status      = '',
+            statusText  = '';
+
+            if(row?.length){
+                total_qty   = Number(row?.attr('data-total-qty') ?? 0);
+                total_bill  = row.attr('data-total-price');
+                total_payment= row.attr('data-total-payment');
+
+                statusText = (Number(total_bill) - Number(total_payment)) > 0 ? 'Due' : 'Paid';
+                status = (Number(total_bill) - Number(total_payment)) > 0 ? 'danger' : 'success';
+
+                if(Number(total_qty) > 0){
+                    $('#payment_status').closest('tr').removeClass('d-none');
+                }else{
+                    $('#payment_status').closest('tr').addClass('d-none');
+                }
+
+            }
+
+            $('#totalProduct').text(total_qty);
+            $('#billAmount').text(total_bill);
+            $('#total_payment').text(total_payment);
+                        
+            if(Number(total_bill) > 0){
+
+                $('#payment_status').html(`
+                    <span class="badge badge-${status}">${statusText}</span>
+                `);
+            }
+            
+        }
+
+        function showAccountModal(){
+
+            $('#accountModal').modal('show');
+        }
 
 
         function init(){
@@ -171,6 +290,11 @@
                     type            : 'select',
                 },
                 {
+                    dropdownParent  : '#accountModal',
+                    selector        : `#customer`,
+                    type            : 'select',
+                },
+                {
                     selector        : `#booking_date`,
                     type            : 'date',
                     format          : 'yyyy-mm-dd',
@@ -179,21 +303,6 @@
 
             globeInit(arr);
 
-            // $(`#stuff`).select2({
-            //     width           : '100%',
-            //     dropdownParent  : $('#categoryModal'),
-            //     theme           : 'bootstrap4',
-            // }).val(null).trigger('change')
-
-
-            // $('#booking_date').datepicker({
-            //     autoclose : true,
-            //     clearBtn : false,
-            //     todayBtn : true,
-            //     todayHighlight : true,
-            //     orientation : 'bottom',
-            //     format : 'yyyy-mm-dd',
-            // })
         }
 
 

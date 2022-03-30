@@ -73,6 +73,9 @@ class PurchaseReturnController extends Controller
                         
                         $purchase = $purchaseProduct->purchase;
 
+                        if ($purchaseProduct->product_qty < intval($product['returned_qty']))
+                            throw new Exception("Returnable Qty: {$purchaseProduct->product_qty}", 403);
+
                         $currentQty = $purchaseProduct->product_qty - intval($product['returned_qty']);
                         $updatables = [
                             'product_qty' => $currentQty,

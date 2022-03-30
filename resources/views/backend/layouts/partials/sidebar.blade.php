@@ -38,7 +38,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.ecom_sales.add_sale') }}">New Sale</a>
                 <a class="collapse-item" href="{{ route('admin.ecom_sales.manage_sale') }}">Manage Sale</a>
-                <a class="collapse-item" href="#">Pos Sale</a>
+                <a class="collapse-item" href="{{ route('admin.return_sale.index') }}">Return Sales</a>
+                {{-- <a class="collapse-item" href="#">Pos Sale</a> --}}
             </div>
         </div>
     </li>
@@ -98,6 +99,7 @@
                 <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.index') }}">Manage Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.manage_stock') }}">Manage Stock</a>
+                <a class="collapse-item" href="{{ route('admin.return_purchase.index') }}">Return Purchases</a>
             </div>
         </div>
     </li>

@@ -17,6 +17,7 @@ class CreateSaleReturnsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('sale_id')->nullable();
+            $table->unsignedBigInteger('sale_product_id')->nullable();
             $table->string('invoice_no')->nullable();
             $table->text('barcode')->nullable();
             $table->text('product_name')->nullable();

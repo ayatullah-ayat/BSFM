@@ -12,6 +12,11 @@ class Customer extends Model
 {
     protected $guarded = ['id'];
 
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
     public function saleProducts()
     {
         return $this->hasMany(SaleProduct::class);

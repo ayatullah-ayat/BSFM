@@ -22,6 +22,7 @@ class CreateSaleProductsTable extends Migration
             $table->text('product_color')->nullable();
             $table->text('product_size')->nullable();
             $table->unsignedBigInteger('product_qty')->default(0);
+            $table->unsignedBigInteger('returned_qty')->default(0);
             $table->float('unit_price', 10, 3)->default(0);
             $table->float('sales_price', 10, 3)->default(0);
             $table->float('discount_price', 10, 3)->default(0);
