@@ -7,6 +7,7 @@
             <div class="col-md-3">
 
                 <div class="about-footer">
+                    {{-- @dd($footerabout) --}}
                     @if($footerabout)
 
                         @if($footerabout->footer_logo)

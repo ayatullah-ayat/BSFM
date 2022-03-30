@@ -310,7 +310,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="#">Web Logo</a>
                 <a class="collapse-item" href="#">Web Header</a>
-                <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Web Footer</a>
+                <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Footer About</a>
                 <a class="collapse-item" href="{{ route('admin.socialicon.index') }}">Manage Social Links</a>
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Form List</a>
                 <a class="collapse-item" href="{{ route('admin.contactinfo.index') }}">Contact Information</a>
