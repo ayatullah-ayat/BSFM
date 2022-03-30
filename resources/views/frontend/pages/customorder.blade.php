@@ -68,12 +68,15 @@
                         <div class="contact-info row">
                             <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
                             <div class="contact-inner-info col-md-12">
+                                {{-- @dd($contactInfo) --}}
                                @if ($contactInfo)
-                                    @if($contactInfo->phone)
-                                        <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span>
+                                    @if($contactInfo->fb_messenger)
+                                        <span><a target="_blank" href="{{ $contactInfo->fb_messenger }}"><i class="fab fa-whatsapp"></i></a></span>
+                                        {{-- <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span> --}}
                                     @endif
-                                    @if($contactInfo->email)
-                                        <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span>
+                                    @if($contactInfo->whatsapp)
+                                        <span><span><a target="_blank" href="{{$contactInfo->whatsapp}}"><i class="fab fa-facebook-messenger"></i></a></span></span>
+                                        {{-- <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span> --}}
                                     @endif
                                @endif
                             </div>

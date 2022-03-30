@@ -119,10 +119,25 @@
 
 /* ------------------- contact infos ------------------- */
 
-.contact-inner-info{
+.contact-inner-info {
     display: flex;
     flex-direction: column;
 }
+
+/* .contact-inner-information {
+    display: flex;
+    gap: 15px;
+}
+
+.contact-inner-information span i{
+   color: #e20c18 !important;
+}
+
+.contact-inner-information span a{
+    text-decoration: none;
+    color: var(--theme-primary-color);
+    font-size: 18px;
+} */
 
 .contact-inner-info > span{
     display: block;

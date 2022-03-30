@@ -28,6 +28,8 @@ class SocialIconRequest extends FormRequest
             'twitter'       => 'nullable|string',
             'instagram'     => 'nullable|string',
             'linkedin'      => 'nullable|string',
+            'fb_messenger'  => 'nullable|string',
+            'whatsapp'      => 'nullable|string',
             'is_active'     => 'required',
         ];
     }
@@ -36,12 +38,14 @@ class SocialIconRequest extends FormRequest
     public function messages()
     {
         return [
-            'facebook.required'     => 'Facebook must be String!',
-            'facebook.string'       => 'Facebook must be String!',
-            'twitter.string'        => 'Twitter must be String!',
-            'instagram.string'      => 'Instagram must be String!',
-            'linkedin.string'       => 'Linkedin must be String!',
-            'is_active.required'    => 'Please select the tax status!',
+            'facebook.required'     => 'Facebook link is required!',
+            'facebook.string'       => 'Facebook link is must be String!',
+            'twitter.string'        => 'Twitter link is must be String!',
+            'instagram.string'      => 'Instagram link is must be String!',
+            'linkedin.string'       => 'Linkedin link is must be String!',
+            'fb_messenger.string'   => 'Messenger link is must be String!',
+            'whatsapp.string'       => 'WhatsApp link is link must be String!',
+            'is_active.required'    => 'Please link is select the tax status!',
         ];
     }
 
