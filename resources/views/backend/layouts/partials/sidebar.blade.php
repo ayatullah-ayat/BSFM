@@ -319,6 +319,7 @@
                 <a class="collapse-item" href="{{ route('admin.about.index') }}">About Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.partnership-logo.index') }}">Partnership Logos</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Our Gallery</a>
             </div>
         </div>

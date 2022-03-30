@@ -45,15 +45,19 @@
                         $maxCatId = $customservicecategory->id;
                         @endphp
 
-                        <div class="col-md-4 col-sm-12 mb-2">
+                        <div class="col-md-4 col-sm-12 mb-4">
                             <div class="product-content d-flex">
         
-                                <div class="product-img">
-                                    @isset($customservicecategory->category_thumbnail)
-                                     <img src="{{asset( $customservicecategory->category_thumbnail )}}" alt="Product img">
-                                    @else    
-                                    <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
-                                    @endisset
+                                <div class='reveal'>
+                                    <div class="image-wrap">
+                                        <div class="product-img">
+                                            @isset($customservicecategory->category_thumbnail)
+                                                <img src="{{asset( $customservicecategory->category_thumbnail )}}" alt="Product img">
+                                            @else    
+                                                <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
+                                            @endisset
+                                        </div>
+                                    </div>
                                 </div>
             
                                 <div class="product-details text-center">
@@ -300,9 +304,96 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/home.css') }}">
+    <style>
+        /*   img {
+             height: 100%;
+             width: auto;
+             max-width: 75vw;
+             object-fit: contain;
+           }*/
+   
+           .image-wrap {
+             transition: 1s ease-out;
+             transition-delay: 0.1s;
+             position: relative;
+             /*width: auto;
+             height: 80vh;*/
+             overflow: hidden;
+             clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+             visibility: hidden;
+           }
+   
+           .image-wrap img {
+             transform: scale(1.2);
+             transition: 2s ease-out;
+           }
+   
+           .animating .image-wrap {
+             clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+             visibility: visible;
+             transform: skewY(0);
+           }
+   
+           .animating img {
+             transform: scale(1);
+             transition: 2s ease-out;
+           }
+   
+           .fadeup {
+             opacity: 0;
+             transition: 0.2s ease-out;
+             transform: translateY(40px);
+           }
+   
+           .fading-up {
+             opacity: 1;
+             transition: 1s ease-out;
+             transform: translateY(0px);
+             transition-delay: 0.4s;
+           }
+
+        .reveal.animating {
+            margin-top: -62px;
+        }
+          
+       </style>
 @endpush
 
 @push('js')
+<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+        const options = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.4
+        };
+
+        // IMAGE ANIMATION
+
+        let revealCallback = (entries) => {
+        entries.forEach((entry) => {
+            let container = entry.target;
+
+            if (entry.isIntersecting) {
+            console.log(container);
+            container.classList.add("animating");
+            return;
+            }
+
+            if (entry.boundingClientRect.top > 0) {
+            container.classList.remove("animating");
+            }
+        });
+        };
+
+        let revealObserver = new IntersectionObserver(revealCallback, options);
+
+        document.querySelectorAll(".reveal").forEach((reveal) => {
+        revealObserver.observe(reveal);
+        });
+
+    });
+</script>
 
 <script>
     $(document).ready( function(){

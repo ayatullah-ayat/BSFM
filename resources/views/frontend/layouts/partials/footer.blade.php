@@ -113,10 +113,14 @@
                     </ul>
                 </div>
 
-                <div class="footer-address">
-                    <p>আমাদের ঠিকানা-<br>
-                        ২০৭, ডি পি আই মসজিদ মার্কেট, বিতাক মোড়, তেজগাঁও আই/এ, ঢাকা- ১২০৮</p>
-                </div>
+                {{-- @dd($contactInfo) --}}
+                @if($contactInfo)
+                    <div class="footer-address">
+                        @if ( $contactInfo->address )
+                            <p>{{ $contactInfo->address }}</p>
+                        @endif
+                    </div>
+                @endif
 
             </div>
 

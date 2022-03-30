@@ -59,6 +59,7 @@ use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
 use App\Http\Controllers\Admin\ContactInformationController;
 use App\Http\Controllers\Admin\OtherOrderController;
+use App\Http\Controllers\Admin\PartnershipLogoController;
 use App\Models\ContactInformation;
 
 // ------------ Frontend namespace ----------------------
@@ -205,10 +206,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         });
 
         Route::group(['prefix' => 'clientlogos', 'as' => 'clientlogo.'], function(){
-        Route::get('/',                     [ClientLogosController::class, 'index'])->name('index');
+            Route::get('/',                 [ClientLogosController::class, 'index'])->name('index');
             Route::post('/',                [ClientLogosController::class, 'store'])->name('store');
             Route::put('/{clientLogos}',    [ClientLogosController::class, 'update'])->name('update');
             Route::delete('/{clientLogos}', [ClientLogosController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::group(['prefix' => 'partnership-logos', 'as' => 'partnership-logo.'], function(){
+            Route::get('/',                     [PartnershipLogoController::class, 'index'])->name('index');
+            Route::post('/',                    [PartnershipLogoController::class, 'store'])->name('store');
+            Route::put('/{partnershipLogo}',    [PartnershipLogoController::class, 'update'])->name('update');
+            Route::delete('/{partnershipLogo}', [PartnershipLogoController::class, 'destroy'])->name('destroy');
         });
 
 
