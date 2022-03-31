@@ -66,7 +66,7 @@ trait ImageChecker
     }
 
 
-    function gallerImageUploader($fileString, $uploadDir = null)
+    function galleryImageUploader($fileString, $uploadDir = null)
     {
         try {
 

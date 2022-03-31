@@ -36,9 +36,10 @@
         </a>
         <div id="sales" class="collapse" aria-labelledby="sales" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.add_sale') }}">New Sale</a>
-                <a class="collapse-item" href="{{ route('admin.manage_sale') }}">Manage Sale</a>
-                <a class="collapse-item" href="#">Pos Sale</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_sales.add_sale') }}">New Sale</a>
+                <a class="collapse-item" href="{{ route('admin.ecom_sales.manage_sale') }}">Manage Sale</a>
+                <a class="collapse-item" href="{{ route('admin.return_sale.index') }}">Return Sales</a>
+                {{-- <a class="collapse-item" href="#">Pos Sale</a> --}}
             </div>
         </div>
     </li>
@@ -98,6 +99,7 @@
                 <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.index') }}">Manage Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.manage_stock') }}">Manage Stock</a>
+                <a class="collapse-item" href="{{ route('admin.return_purchase.index') }}">Return Purchases</a>
             </div>
         </div>
     </li>
@@ -319,7 +321,7 @@
                 <a class="collapse-item" href="{{ route('admin.about.index') }}">About Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
-                <a class="collapse-item" href="{{ route('admin.cms_settings.partnership-logo.index') }}">Partnership Logos</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.partnership-logo.index') }}">Organization's Logo</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Our Gallery</a>
             </div>
         </div>

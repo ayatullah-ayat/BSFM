@@ -92,8 +92,7 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ route('about_index')}}"> আমাদের সম্পর্কে</a></li>
                         <li><a href="{{ route('contact_index')}}"> যোগাযোগ করুন </a></li>
-                        <li class="ordertraking-footer
-                        "><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
+                        <li class="ordertraking-footer"><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
                         <li><a href="{{ route('dashboard.index')}}"> একাউন্ট </a></li>
                     </ul>
                 </div>
@@ -106,10 +105,14 @@
                     <h3>আমাদের অংগ প্রতিষ্ঠান সমূহ</h3>
                 </div>
 
+
                 <div class="our-organigation">
                     <ul class="list-unstyled d-flex">
-                        <li><a href=""><img class="img-fluid" src="{{asset('assets/frontend/img/footer/footer-1.png')}}" alt=""></a></li>
-                        <li><a href=""><img class="img-fluid" src="{{asset('assets/frontend/img/footer/footer-2.png')}}" alt=""></a></li>
+                        @if(isset($organizationlogo))
+                               @foreach ($organizationlogo as $organizationItem)
+                                    <li><a href="javascript:void(0)"><img class="img-fluid" src="{{asset( $organizationItem->logo )}}" alt=""></a></li>
+                               @endforeach
+                        @endif
                     </ul>
                 </div>
 

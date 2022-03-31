@@ -80,6 +80,7 @@
 </body>
 
 <script src="{{ asset('assets/common_assets/libs/jquery/jquery.min.js') }}"> </script>
+
 <script src="{{ asset('assets/frontend/libs/bootstrap5/boostrap5.bundle.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/fontawesome6/all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>

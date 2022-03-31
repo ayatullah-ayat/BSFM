@@ -69,7 +69,7 @@ class ClientLogosController extends Controller
             }
 
             foreach ($imagesData->images as $key => $logo) {
-                $responseImage = $this->gallerImageUploader($logo, 'clientLogos/');
+                $responseImage = $this->galleryImageUploader($logo, 'clientLogos/');
                 if (!$responseImage['success'])
                     throw new Exception($responseImage['msg'] ?? "Unable to Upload Logo!", $responseImage['code'] ?? 403);
 

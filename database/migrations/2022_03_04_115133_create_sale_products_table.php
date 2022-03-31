@@ -19,11 +19,13 @@ class CreateSaleProductsTable extends Migration
             $table->string('invoice_no')->nullable();
             $table->text('product_id')->nullable();
             $table->text('product_name')->nullable();
-            $table->text('product_colors')->nullable();
-            $table->text('product_sizes')->nullable();
+            $table->text('product_color')->nullable();
+            $table->text('product_size')->nullable();
             $table->unsignedBigInteger('product_qty')->default(0);
-            $table->float('product_price', 10, 3)->default(0);
-            $table->float('sold_price', 10, 3)->default(0);
+            $table->unsignedBigInteger('returned_qty')->default(0);
+            $table->float('unit_price', 10, 3)->default(0);
+            $table->float('sales_price', 10, 3)->default(0);
+            $table->float('discount_price', 10, 3)->default(0);
             $table->float('subtotal', 10, 3)->default(0);
             $table->boolean('is_returned')->default(0);
             $table->timestamps();

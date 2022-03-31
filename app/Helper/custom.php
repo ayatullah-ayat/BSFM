@@ -100,6 +100,8 @@ if (!function_exists('salesPrice')){
 if (!function_exists('wholesalesPrice')) {
     function wholesalesPrice($product)
     {
+        if(!$product->total_product_qty) return 0;
+        
         return number_format(($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0, 2);
     }
 }

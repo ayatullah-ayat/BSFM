@@ -68,7 +68,7 @@ trait CouponChecker
     }
 
 
-    private function wcheckCouponItemsValidation($couponData, $order){
+    private function checkCouponItemsValidation($couponData, $order){
         try {
 
             

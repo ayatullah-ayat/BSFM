@@ -69,7 +69,7 @@ class GalleryController extends Controller
 
 
             foreach ($imagesData->images as $key => $image) {
-                $responseImage = $this->gallerImageUploader($image, 'gallery/');
+                $responseImage = $this->galleryImageUploader($image, 'gallery/');
                 if (!$responseImage['success'])
                     throw new Exception($responseImage['msg'] ?? "Unable to Upload Image!", $responseImage['code'] ?? 403);
 

@@ -1,24 +1,26 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Add Sale')
+@section('title', 'Edit Sale')
 
 @section('content')
     <div>
         <div class="container-fluid card p-3 shadow">
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-between">
-                    <h4 style="color: #000;" class="text-dark font-weight-bold text-dark">Add Sale Information</h4>
+                    <h4 style="color: #000;" class="text-dark font-weight-bold text-dark">Edit Sale Information</h4>
                     <a class="btn btn-sm btn-outline-success" href="{{ route('admin.ecom_sales.manage_sale') }}">Sales List</a>
                 </div>
             </div>
             <div class="row">
+
+                {{-- @dd($sale) --}}
 
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="customer"> Customer<span style="color: red;" class="req">*</span></label>
                         <select name="customer" class="customer" data-required id="customer" data-placeholder="Select Customer">
                             @foreach ($customers as $customer)
-                            <option value="{{ $customer->id }}">{{ $customer->customer_name ?? 'N/A' }}</option>
+                            <option value="{{ $customer->id }}" {{ $sale->customer_id == $customer->id ? 'selected' : '' }}>{{ $customer->customer_name ?? 'N/A' }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -28,7 +30,7 @@
                 <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="sale_date">Sale Date </label>
-                        <input type="text" data-required autocomplete="off" class="form-control" id="sale_date" name="sale_date">
+                        <input type="text" data-required autocomplete="off" class="form-control" id="sale_date" name="sale_date" value="{{ $sale->sales_date ?? '' }}">
                     </div>
                     <span class="v-msg"></span>
                 </div>
@@ -45,68 +47,69 @@
                                     <th width="100" class="text-center">Qty</th>
                                     <th width="150" class="text-center">Sales Price</th>
                                     <th width="150" class="text-center">Total</th>
-                                    <th width="100" class="text-center">
-                                        <button class="btn btn-sm btn-info add_row"><i class="fa fa-plus"></i> Add</button>
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="sale_tbody">
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="product" class="product" data-required id="product_name" data-placeholder="Select Product"></select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
-                                        </div>
-                                        <span class="v-msg"></span>
-                                    </td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
-                                        </div>
-                                        <span class="v-msg"></span>
-                                    </td>
-                                    <td >
-                                        <input type="number" class="form-control qty calculatePrice">
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control sales_price calculatePrice">
-                                    </td>
-                                    <td>
-                                        <input type="number" readonly class="form-control subtotal text-right px-2">
-                                    </td>
-                                    <td class="text-center">
-                                        <i class="fa fa-times text-danger fa-lg deleteRow" type="button"></i>
-                                    </td>
-                                </tr>
+
+                                @foreach ($sale->saleProducts as $item)
+                                    {{-- @dd($item) --}}
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="product" class="product" data-required data-placeholder="Select Product">
+                                                    <option value="{{ $item->product_id }}">{{ $item->product_name ?? 'N/A' }}</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="color" class="color" data-required data-placeholder="Select Color">
+                                                    <option value="{{ $item->product_color }}">{{ $item->product_color ?? 'N/A' }}</option>
+                                                </select>
+                                            </div>
+                                            <span class="v-msg"></span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="size" class="size" data-required data-placeholder="Select Size">
+                                                    <option value="{{ $item->product_size }}">{{ $item->product_size ?? 'N/A' }}</option>
+                                                </select>
+                                            </div>
+                                            <span class="v-msg"></span>
+                                        </td>
+                                        <td >
+                                            <input type="number" class="form-control qty calculatePrice" value="{{ $item->product_qty ?? 0 }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control sales_price calculatePrice" value="{{ $item->sales_price ?? 0 }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" readonly class="form-control subtotal text-right px-2" value="{{ $item->subtotal }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="3"></th>
                                     <th colspan="2">Subtotal</th>
                                     <th>
-                                        <input type="number" readonly id="grand_sub_total" value="0" class="text-right">
+                                        <input type="number" readonly id="grand_sub_total" value="{{ $sale->sold_total_price ?? 0 }}" class="text-right">
                                     </th>
-                                    <th></th>
                                 </tr>
                                 <tr>
                                     <th colspan="3"></th>
                                     <th colspan="2">Discount (Tk)</th>
                                     <th>
-                                        <input type="number" id="discount" value="0" class="text-right">
+                                        <input type="number" id="discount" value="{{ $sale->total_discount_price ?? 0 }}" class="text-right">
                                     </th>
-                                    <th></th>
                                 </tr>
                                 <tr>
                                     <th colspan="3"></th>
                                     <th colspan="2">Grandtotal</th>
                                     <th>
-                                        <input type="number" readonly id="grand_total" value="0" class="text-right">
+                                        <input type="number" readonly id="grand_total" value="{{ $sale->order_grand_total ?? 0 }}" class="text-right">
                                     </th>
-                                    <th></th>
                                 </tr>
 
                             </tfoot>
@@ -115,7 +118,7 @@
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-end">
-                    <button class="btn btn-success text-right outline-none" id="submitToSale"> <i class="fa fa-save"></i> Submit</button>
+                    <button class="btn btn-success text-right outline-none" id="submitToSale"> <i class="fa fa-save"></i> Update</button>
                 </div>
 
             </div>
@@ -134,8 +137,6 @@
     $(document).ready(function(){
         init();
 
-        $(document).on('click','.add_row', createRow)
-        $(document).on('click','.deleteRow', deleteRow)
         $(document).on('change','.product', getColorSizes)
         $(document).on('input keyup change', ".calculatePrice", priceCalculation)
         $(document).on('input keyup change', "#discount", priceCalculation)
@@ -222,70 +223,6 @@
         console.log(product_id);
     }
 
-    function deleteRow(){
-        let 
-        currentRow  = $(this).closest('tr'),
-        rows        = $('#sale_tbody').find('tr');
-
-        if(rows.length <= 1){
-            alert("You can't delete Last Item?")
-            return false;
-        }
-
-        currentRow.remove();
-    }
-
-
-    function createRow(){
-        let id = new Date().getTime();
-        let row = `
-        <tr>
-            <td>
-                <div class="form-group">
-                    <select name="product" class="product" data-required id="product_name_${id}" data-placeholder="Search Product"></select>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="color" class="color" data-required id="color_${id}" data-placeholder="Select Color"></select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="size" class="size" data-required id="size_${id}" data-placeholder="Select Size"></select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-           <td>
-                <input type="number" class="form-control qty calculatePrice">
-            </td>
-            <td>
-                <input type="number" class="form-control sales_price calculatePrice">
-            </td>
-            <td>
-                <input type="number" readonly class="form-control subtotal text-right px-2">
-            </td>
-            <td class="text-center">
-                <i class="fa fa-times text-danger fa-lg deleteRow" type="button"></i>
-            </td>
-        </tr>
-        `;
-
-        $('#sale_tbody').append(row);
-
-        InitProduct(`#product_name_${id}`);
-
-        $(`#color_${id}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-        }).val(null).trigger('change')
-        $(`#size_${id}`).select2({
-            width : '100%',
-            theme : 'bootstrap4',
-        }).val(null).trigger('change')
-    }
-
 
     function init(){
 
@@ -293,14 +230,7 @@
             {
                 selector        : `#customer`,
                 type            : 'select',
-            },
-            {
-                selector        : `#color`,
-                type            : 'select'
-            },
-            {
-                selector        : `#size`,
-                type            : 'select'
+                selectedVal     : @json($sale->customer_id ?? null)
             },
             {
                 selector        : `#sale_date`,
@@ -311,7 +241,22 @@
 
         globeInit(arr);
 
-        InitProduct();
+        // InitProduct();
+
+        $('.product').select2({
+            width : '100%' ,
+            theme : 'bootstrap4',
+        }).trigger('change')
+
+        $(`.color`).select2({
+            width : '100%' ,
+            theme : 'bootstrap4',
+        }).trigger('change');
+
+        $(`.size`).select2({
+            width : '100%' ,
+            theme : 'bootstrap4',
+        }).trigger('change');
     }
 
 
@@ -322,10 +267,12 @@
 
         clearTimeout(timeId)
 
+        let id = @json($sale->id ?? null);
+
         timeId = setTimeout(() => {
             let obj = {
-                url     : `{{ route('admin.ecom_sales.store') }}`, 
-                method  : "POST",
+                url     : `{{ route('admin.ecom_sales.update','') }}/${id}`, 
+                method  : "PUT",
                 data    : formatData(),
             };
 
@@ -335,7 +282,7 @@
                     console.log(res);
                      if(res?.success){
                         _toastMsg(res?.msg ?? 'Success!', 'success');
-                        resetData()
+                        setTimeout(()=> open(`{{ route('admin.ecom_sales.manage_sale') }}`,'_self'), 2000)
                     }else{
                         _toastMsg(res?.msg ?? 'Something wents wrong!');
                     }
@@ -350,7 +297,7 @@
     }
 
 
-    function InitProduct(selector='#product_name'){
+    function InitProduct(selector='.product'){
         $(selector).select2({
             width               : '100%',
             theme               : 'bootstrap4',
@@ -426,52 +373,6 @@
         return productsArr;
     }
 
-
-
-    function resetData(){
-        $('#sale_date').val('')
-        $('#customer').val(null).trigger('change')
-        $('#grand_sub_total').val(0)
-        $('#discount').val(0)
-        $('#grand_total').val(0)
-
-        let rowDefault = `<tr>
-            <td>
-                <div class="form-group">
-                    <select name="product" class="product" data-required id="product_name"
-                        data-placeholder="Select Product"></select>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <div class="form-group">
-                    <select name="size" class="size" data-required id="size" data-placeholder="Select Size"></select>
-                </div>
-                <span class="v-msg"></span>
-            </td>
-            <td>
-                <input type="number" class="form-control qty calculatePrice">
-            </td>
-            <td>
-                <input type="number" class="form-control sales_price calculatePrice">
-            </td>
-            <td>
-                <input type="number" readonly class="form-control subtotal text-right px-2">
-            </td>
-            <td class="text-center">
-                <i class="fa fa-times text-danger fa-lg deleteRow" type="button"></i>
-            </td>
-        </tr>`;
-
-        $('#sale_tbody').html(rowDefault);
-
-        init();
-    }
 
 </script>
 @endpush

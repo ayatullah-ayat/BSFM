@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="col-md-6">
-                @if($contactInfo)
+                @if(isset($contactInfo))
                     <div class="contact-details">
 
                         @if ($contactInfo->title)

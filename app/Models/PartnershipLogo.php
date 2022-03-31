@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PartnershipLogo extends Model
 {
+    // public $table = 'client_logos';
+    // public $timestamps = false;
     protected $guarded = ['id'];
 }

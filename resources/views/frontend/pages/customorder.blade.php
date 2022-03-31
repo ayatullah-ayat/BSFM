@@ -69,15 +69,13 @@
                                 <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
                                 <div class="contact-inner-info col-md-12">
                                     {{-- @dd($socialicon) --}}
-                                   <div class="d-flex gap-1 text-2x">
+                                   <div class="d-flex gap-2 contact-info-customerorder">
                                         @if ($socialicon)
-                                            @if($socialicon->fb_messenger)
-                                                <span><a target="_blank" href="{{ $socialicon->fb_messenger }}"><i class="fab fa-whatsapp"></i></a></span>
-                                                {{-- <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span> --}}
-                                            @endif
                                             @if($socialicon->whatsapp)
-                                                <span><span><a target="_blank" href="{{$socialicon->whatsapp}}"><i class="fab fa-facebook-messenger"></i></a></span></span>
-                                                {{-- <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span> --}}
+                                                <span><a style="font-size: 24px; color: #48C857;" target="_blank" href="{{$socialicon->whatsapp}}"><i class="fab fa-whatsapp"></i></a></span>
+                                            @endif
+                                            @if($socialicon->fb_messenger)
+                                                <span><span><a style="font-size: 24px; color: #00B2FF;" target="_blank" href="{{ $socialicon->fb_messenger }}"><i class="fab fa-facebook-messenger"></i></a></span></span>
                                             @endif
                                         @endif
                                    </div>

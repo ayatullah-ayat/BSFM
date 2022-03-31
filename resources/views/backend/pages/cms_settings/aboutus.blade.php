@@ -34,7 +34,7 @@
                                         <td>{{ $data->about_title ?? 'N/A' }}</td>
                                         <td>{{ $data->about_description ?? 'N/A' }}</td>
                                         <td>
-                                            @if($data->about_thumbnail)
+                                            @if(isset($data->about_thumbnail))
                                                 <img src="{{ asset($data->about_thumbnail) }}" style="width: 80px;" alt="Category Image">
                                             @else 
                                                 <img src="" style="width: 80px;" alt="Category Image">
@@ -206,22 +206,6 @@
             ];
 
             globeInit(arr);
-
-            // $(`#stuff`).select2({
-            //     width           : '100%',
-            //     dropdownParent  : $('#categoryModal'),
-            //     theme           : 'bootstrap4',
-            // }).val(null).trigger('change')
-
-
-            // $('#booking_date').datepicker({
-            //     autoclose : true,
-            //     clearBtn : false,
-            //     todayBtn : true,
-            //     todayHighlight : true,
-            //     orientation : 'bottom',
-            //     format : 'yyyy-mm-dd',
-            // })
         }
 
         function resetForm(){

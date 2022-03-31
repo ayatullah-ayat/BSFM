@@ -262,9 +262,6 @@
                 let qty = Number($(row).find('.order_qty').val() ?? 0);
                 let price = Number($(row).find('.product_price').val() ?? 0);
 
-                total_qty += qty;
-                grandtotal += price;
-
                 let total   = price * qty;
                 $(row).find('.total_price').val(total);
 
@@ -299,21 +296,6 @@
 
         globeInit(arr);
 
-        // $(`#stuff`).select2({
-        //     width           : '100%',
-        //     dropdownParent  : $('#categoryModal'),
-        //     theme           : 'bootstrap4',
-        // }).val(null).trigger('change')
-
-
-        // $('#booking_date').datepicker({
-        //     autoclose : true,
-        //     clearBtn : false,
-        //     todayBtn : true,
-        //     todayHighlight : true,
-        //     orientation : 'bottom',
-        //     format : 'yyyy-mm-dd',
-        // })
     }
 
     function submitToDatabase(){

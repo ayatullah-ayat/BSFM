@@ -70,6 +70,8 @@ class HomeController extends Controller
             ->get();
 
         $countClientLogos = ClientLogos::count();
+        // $sociallink = SocialIcon::where('is_active', 1)->first();
+        // $footerabout = WebFooter::where('is_active', 1)->first();
 
         // dd($sociallink);
         return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));

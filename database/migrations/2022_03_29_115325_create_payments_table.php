@@ -20,6 +20,7 @@ class CreatePaymentsTable extends Migration
 
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('purchase_id')->nullable();
+            $table->unsignedBigInteger('sale_id')->nullable();
 
             $table->string('payment_type')->nullable(); // bkash, cash, etc
             $table->string('transection_id')->nullable();

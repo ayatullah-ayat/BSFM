@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Gallery Settings') }}</div>
+                    <div class="card-header">{{ __('Client Logos') }}</div>
 
                     <div class="card-body">
                         <h2 class="text-left font-weight-bold">Client Logo</h2>
