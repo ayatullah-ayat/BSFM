@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Manage Order')
+@section('title', 'Stock Report')
 
 @section('content')
 <div>
@@ -16,116 +16,55 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr>
+                            <tr style="background-color: #eee !important;">
                                 <th>SL</th>
                                 <th>Product Name</th>
                                 <th>Category</th>
                                 <th>Unit</th>
                                 <th>Sell Price</th>
                                 <th>Supplier Price</th>
-                                <th>in Qty</th>
+                                <th>In Qty</th>
                                 <th>Out Qty</th>
-                                <th>Stock</th>
-                                {{-- <th width="70" class="text-center">Action</th> --}}
+                                <th>Stock Qty</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            <tr>
-                                <td>01</td>
-                                <td>Samsung Galesxy note-10 lite</td>
-                                <td>mobile</td>
-                                <td>pcs</td>
-                                <td>50000.00Tk</td>
-                                <td>45000.00Tk</td>
-                                <td>200</td>
-                                <td>50</td>
-                                <td>150</td>
-                                {{-- <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td> --}}
-                            </tr>
+                            @php
+                                $totalProductQty= 0;
+                                $totalOutQty    = 0;
+                                $totalStockQty  = 0;
+                            @endphp
 
-                            <tr>
-                                <td>02</td>
-                                <td>Samsung Galesxy note-10 lite</td>
-                                <td>mobile</td>
-                                <td>pcs</td>
-                                <td>50000.00Tk</td>
-                                <td>45000.00Tk</td>
-                                <td>200</td>
-                                <td>50</td>
-                                <td>150</td>
-                                {{-- <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td> --}}
-                            </tr>
+                            @foreach ($stocks as $item)
+                                @php
+                                    $totalProductQty += $item->total_product_qty;
+                                    $totalOutQty += $item->total_stock_out_qty;
+                                    $totalStockQty += $item->total_stock_qty;
+                                @endphp
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->product_name ?? 'N/A' }}</td>
+                                    <td>{{ $item->category_name ?? 'N/A' }}</td>
+                                    <td>{{ $item->product_unit ?? 'N/A' }}</td>
+                                    <td>{{ $item->sales_price ?? 'N/A' }}</td>
+                                    <td>{{ $item->purchase_price ?? 'N/A' }}</td>
+                                    <td class="inqty">{{ $item->total_product_qty ?? 'N/A' }}</td>
+                                    <td class="outqty">{{ $item->total_stock_out_qty ?? 'N/A' }}</td>
+                                    <td class="stockqty">{{ $item->total_stock_qty ?? 'N/A' }}</td>
+                                </tr>
+                            @endforeach
 
-                            <tr>
-                                <td>03</td>
-                                <td>Samsung Galesxy note-10 lite</td>
-                                <td>mobile</td>
-                                <td>pcs</td>
-                                <td>50000.00Tk</td>
-                                <td>45000.00Tk</td>
-                                <td>200</td>
-                                <td>50</td>
-                                <td>150</td>
-                                {{-- <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td> --}}
-                            </tr>
-
-                            <tr>
-                                <td>04</td>
-                                <td>Samsung Galesxy note-10 lite</td>
-                                <td>mobile</td>
-                                <td>pcs</td>
-                                <td>50000.00Tk</td>
-                                <td>45000.00Tk</td>
-                                <td>200</td>
-                                <td>50</td>
-                                <td>150</td>
-                                {{-- <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td> --}}
-                            </tr>
-
-                            <tr>
-                                <td>05</td>
-                                <td>Samsung Galesxy note-10 lite</td>
-                                <td>mobile</td>
-                                <td>pcs</td>
-                                <td>50000.00Tk</td>
-                                <td>45000.00Tk</td>
-                                <td>200</td>
-                                <td>50</td>
-                                <td>150</td>
-                                {{-- <td class="text-center">
-                                    <a href="" class="fa fa-eye text-info text-decoration-none"></a>
-                                    <a href="" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>
-                                    <a href="javascript:void(0)" class="fa fa-trash text-danger text-decoration-none"></a>
-                                </td> --}}
-                            </tr>
                             
                         </tbody>
-                        {{-- <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category Name</th>
-                                <th>Category Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
+                        <tfoot>
+                            <tr class="" style="background-color: #eee !important;">
+                                <th colspan="6"></th>
+                                <th id="totalInqty">{{ $totalProductQty }}</th>
+                                <th id="totalOutqty">{{ $totalOutQty }}</th>
+                                <th id="totalStockqty">{{ $totalStockQty }}</th>
                             </tr>
-                        </tfoot> --}}
+                        </tfoot>
 
                     </table>
                 </div>
@@ -149,4 +88,36 @@
     <script src="{{ asset('assets/backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/backend/libs/demo/datatables-demo.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $(document).on('keyup change', '.dataTables_filter input[type="search"]', calcSummary)
+        })
+
+
+        function calcSummary(){
+            let rows = $('#dataTable').find('tbody').find('tr');
+            let 
+            totalProductQty = 0,
+            totalOutQty     = 0,
+            totalStockQty   = 0;
+
+            if(rows.length){
+                
+                [...rows].forEach( row => {
+                    const tr = $(row);
+                    if(tr.find('.inqty').length){
+
+                        totalProductQty += Number(tr.find('.inqty').text() ?? 0);
+                        totalOutQty += Number(tr.find('.outqty').text() ?? 0);
+                        totalStockQty += Number(tr.find('.stockqty').text() ?? 0);
+                    }
+                })
+
+            }
+
+            $('#totalInqty').text(totalProductQty);
+            $('#totalOutqty').text(totalOutQty);
+            $('#totalStockqty').text(totalStockQty);
+        }
+    </script>
 @endpush

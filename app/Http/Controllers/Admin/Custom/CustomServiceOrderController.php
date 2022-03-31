@@ -160,6 +160,33 @@ class CustomServiceOrderController extends Controller
     }
 
 
+
+    public function approval(Request $request, CustomServiceOrder $customServiceOrder)
+    {
+
+        try {
+
+            if (!$request->status)
+                throw new Exception("Please Select Status!", 403);
+
+            $customServiceOrder->update([
+                'status' => $request->status
+            ]);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Order status updated Successfully!'
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+                'data'      => null
+            ]);
+        }
+    }
+
+
     /**
      * Display the specified resource.
      *

@@ -109,6 +109,8 @@ class OrderController extends Controller
 
         try {
 
+            // dd('hi');
+
             $coupon = $request->coupon;      
             $order  = $request->order;
 

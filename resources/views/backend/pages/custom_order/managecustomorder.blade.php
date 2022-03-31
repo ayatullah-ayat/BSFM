@@ -51,12 +51,40 @@
                                         </td>
                                     
                                         <td class="text-center">
-                                            {!! $customserviceorder->status ? '<span class="badge badge-danger">Pending </span>' : '<span class="badge badge-success">Confirmed </span>' !!}
+
+                                            @if($customserviceorder->status == "pending")
+                                            <span class="badge badge-warning status_modal" type="button" data-orderid="{{ $customserviceorder->id }}"
+                                                data-status="{{ $customserviceorder->status }}">
+                                                {{ ucfirst($customserviceorder->status) }}
+                                            </span>
+                                            @elseif($customserviceorder->status == "confirm")
+                                            <span class="badge badge-info status_modal" type="button" data-orderid="{{ $customserviceorder->id }}"
+                                                data-status="{{ $customserviceorder->status }}">
+                                                {{ ucfirst($customserviceorder->status) }}
+                                            </span>
+                                            @elseif($customserviceorder->status == "processing")
+                                            <span class="badge badge-dark status_modal" type="button" data-orderid="{{ $customserviceorder->id }}"
+                                                data-status="{{ $customserviceorder->status }}">
+                                                {{ ucfirst($customserviceorder->status) }}
+                                            </span>
+                                            @elseif($customserviceorder->status == "rejected" || $customserviceorder->status == "cancelled" ||
+                                            $customserviceorder->status == "returned")
+                                            <span class="badge badge-danger">
+                                                {{ ucfirst($customserviceorder->status) }}
+                                            </span>
+                                            @elseif($customserviceorder->status == "completed")
+                                            <span class="badge badge-success">
+                                                Delivered
+                                            </span>
+                                            @endif
+
                                         </td>
                                         <td class="text-center">
                                             <a href="javascript:void(0)" class="fa fa-eye text-info text-decoration-none detail"></a>
+                                            @if($customserviceorder->status !== "cancelled" && $customserviceorder->status !== "returned" && $customserviceorder->status !== "completed")
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.customserviceorder.destroy',$customserviceorder->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                            @endif 
                                         </td>
                                     </tr>
                                 @endforeach
@@ -190,6 +218,47 @@
     </div>
 </div>
 
+
+
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+    role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Order Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-sm">
+                    <tr>
+                        <th style="max-width: max-content;">Select Status</th>
+                        <th>:</th>
+                        <th>
+                            <select name="order_status" id="order_status" data-placeholder="Select a Status"></select>
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="w-100">
+                    <button type="button" id="change_order_status" class="btn btn-sm btn-success float-right mx-1"><i
+                            class="fa fa-save"></i> Save</button>
+                    <button type="button" class="btn btn-sm btn-danger float-right mx-1"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('css')
@@ -218,10 +287,63 @@
             $(document).on('change' ,'#attachment_file', checkImage)
 
             $(document).on('click', '.update', showUpdateModal)
-            $(document).on('click', '.update', showUpdateModal)
             $(document).on('click','#customOrder_update_btn', updateToDatabase)
             $(document).on('click','.detail', showDataToModal)
+
+            $(document).on('click', '.status_modal', openStatusModal)
+            $(document).on('click', '#change_order_status', changeStatus)
         });
+
+
+
+        function changeStatus(){
+            let 
+            order_id    = $('#order_status').attr('data-orderid'),
+            status      = $('#order_status').val();
+
+            ajaxFormToken();
+
+            $.ajax({
+                url     : `{{ route('admin.customserviceorder.approval','') }}/${order_id}`,
+                method  : 'POST',
+                data    : { status},
+                success(res){
+                    if(res.success){
+                        setTimeout(()=> location.reload(), 2000)
+                    }
+                    console.log(res);
+                },
+                error(err){
+                    console.log(err);
+                },
+            })
+        }
+
+
+        function openStatusModal(){
+            //
+
+            let elem    = $(this),
+            status      = elem.attr('data-status'),
+            order_id    = elem.attr('data-orderid'),
+            options     = ``;
+
+            $('#order_status').html(`
+                <option value="pending" ${ status == "pending" ? "selected" : ''}>Pending</option>
+                <option value="confirm" ${ status == "confirm" ? "selected" : ''}>Confirm</option>
+                <option value="processing" ${ status == "processing" ? "selected" : ''}>Processing</option>
+                <option value="completed" ${ status == "completed" ? "selected" : ''}>Completed</option>
+                <option value="cancelled" ${ status == "cancelled" ? "selected" : ''}>Cancelled</option>
+            `).attr('data-orderid', order_id).select2({
+                width: '100%',
+                theme : 'bootstrap4',
+            });
+        
+
+            $('#statusModal').modal('show')
+        }
+
+
 
         function loadProductByCategory(){
             let product_id = $(this).val();
@@ -304,7 +426,7 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>${category.status ? '<span class="badge badge-success">Delivered </span>' : '<span class="badge badge-danger">Pending </span>'}</td>
+                        <td>${renderStatus(customOrder)}</td>
                     </tr>
                 </table>
                 `;
@@ -313,6 +435,41 @@
             }
 
             $('#categoryDetailModal').modal('show')
+        }
+
+
+        function renderStatus(customOrder){
+            let content = "";
+            if(customOrder.status == "pending")
+            {
+                content = `<span class="badge badge-warning status_modal" type="button">
+                    ${ capitalize(customOrder.status) }
+                </span>`;
+            }else if(customOrder.status == "confirm")
+            {
+                content = `<span class="badge badge-info status_modal" type="button">
+                    ${ capitalize(customOrder.status) }
+                </span>`;
+            }
+            else if(customOrder.status == "processing")
+            {
+                content =`<span class="badge badge-dark status_modal" type="button">
+                    ${ capitalize(customOrder.status) }
+                </span>`;
+            }
+            else if(customOrder.status == "rejected" || customOrder.status == "cancelled" || customOrder.status == "returned")
+            {
+                content =`<span class="badge badge-danger">
+                    ${ capitalize(customOrder.status) }
+                </span>`;
+            }
+            else if(customOrder.status == "completed"){
+                content =`<span class="badge badge-success">
+                    Delivered
+                </span>`;
+            }
+
+            return content;
         }
 
         // call the func on change file input 

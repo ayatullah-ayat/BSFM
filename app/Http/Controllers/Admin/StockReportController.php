@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\Purchase;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class StockReportController extends Controller
@@ -11,14 +14,51 @@ class StockReportController extends Controller
      * Stock report
      */
     public function stockreport(){
-        return view('backend.pages.stock.stockreport');
+        $stocks = Product::where('is_active', 1)->where('is_publish', 1)->get();
+        // dd($stocks);
+        return view('backend.pages.stock.stockreport', compact('stocks'));
     }
 
     /**
      * Supplier report
      */
-    public function supplierstock(){
-        return view('backend.pages.stock.supplierstockreport');
+    public function supplierstock(Request $request ){
+        $suppliers  = Supplier::where('is_active', 1)->get();
+        $date       = $request->date;
+        $supplier_id= $request->supplier_id;
+
+        if($request->ajax()){
+
+            $sql = Purchase::selectRaw('
+                    purchases.purchase_date, 
+                    purchases.supplier_id, 
+                    purchases.supplier_name, 
+                    purchases.total_payment, 
+                    purchases.total_payment_due,
+                    purchases.is_manage_stock,
+                    purchase_products.*,
+                    products.sales_price,
+                    products.category_name
+                    ')
+                    ->join('purchase_products', 'purchase_products.purchase_id','=', 'purchases.id')
+                    ->join('products', 'purchase_products.product_id','=', 'products.id')
+                    ->where('purchases.supplier_id', $supplier_id)
+                    ->where('purchases.is_manage_stock', 1)
+                    ->where('purchase_products.stocked_qty', ">", 0);
+    
+            if($date){
+                $sql->Where('purchases.purchase_date', $date);
+            }
+    
+            $stocks = $sql->get();
+
+            return response()->json($stocks);
+        }
+
+
+        // dd($stocks);
+
+        return view('backend.pages.stock.supplierstockreport', compact('suppliers'));
     }
 
     /**

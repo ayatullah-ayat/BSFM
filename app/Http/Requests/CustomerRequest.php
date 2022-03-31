@@ -25,8 +25,8 @@ class CustomerRequest extends FormRequest
     {
         return [
             'customer_name'     => 'required|string',
-            'customer_email'    => 'nullable|string|unique:customers, customer_email',
-            'customer_phone'    => 'nullable|string|unique:customers, customer_phone',
+            'customer_email'    => 'nullable|string|unique:customers',
+            'customer_phone'    => 'nullable|string|unique:customers',
             'customer_address'  => 'nullable|string',
             'is_active'         => 'required',
         ];

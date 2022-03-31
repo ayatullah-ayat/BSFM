@@ -307,7 +307,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     // Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
 
     Route::get('/stock-report', [StockReportController::class, 'stockreport'])->name('stock_report');
-    Route::get('/supplier-stock-report', [StockReportController::class, 'supplierstock'])->name('supplier_stock-report');
+    Route::get('/supplier-stock-report', [StockReportController::class, 'supplierstock'])->name('supplier_stock_report');
     Route::get('/product-stock-report', [StockReportController::class, 'productreport'])->name('product_stock_report');
 
     Route::get('/sales-report', [ReportsController::class, 'salesreport'])->name('sales_report');
@@ -351,6 +351,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{customServiceOrder}',     [CustomServiceOrderController::class, 'update'])->name('update');
         Route::delete('/{customServiceOrder}',  [CustomServiceOrderController::class, 'destroy'])->name('destroy');
         Route::get('/{category_id}',            [CustomServiceOrderController::class, 'getProduct'])->name('getProduct');
+        Route::post('/{customServiceOrder}',    [CustomServiceOrderController::class, 'approval'])->name('approval');
     });
 
     // Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');

@@ -248,7 +248,7 @@
         <div id="Stock" class="collapse" aria-labelledby="Stock" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ route('admin.stock_report') }}">Stock Report</a>
-                <a class="collapse-item" href="{{ route('admin.supplier_stock-report') }}">Stock Report (Supplier Wise)</a>
+                <a class="collapse-item" href="{{ route('admin.supplier_stock_report') }}">Stock Report (Supplier Wise)</a>
                 <a class="collapse-item" href="{{ route('admin.product_stock_report') }}">Stock Report (Product Wise)</a>
             </div>
         </div>

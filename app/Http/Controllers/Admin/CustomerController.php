@@ -42,8 +42,9 @@ class CustomerController extends Controller
         try {
             $data               = $request->all();
             $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
-
+            
             $customer   = Customer::create($data);
+
             if(!$customer)
                 throw new Exception("Unable to create Customer!", 403);
 
