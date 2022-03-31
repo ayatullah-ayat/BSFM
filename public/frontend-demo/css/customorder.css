@@ -124,19 +124,11 @@
     flex-direction: column;
 }
 
-/* .contact-inner-information {
+/* .contact-inner-info {
     display: flex;
-    gap: 15px;
-}
-
-.contact-inner-information span i{
-   color: #e20c18 !important;
-}
-
-.contact-inner-information span a{
-    text-decoration: none;
-    color: var(--theme-primary-color);
-    font-size: 18px;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 20px;
 } */
 
 .contact-inner-info > span{

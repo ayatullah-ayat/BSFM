@@ -355,6 +355,10 @@
         .reveal.animating {
             margin-top: -62px;
         }
+        .animating:hover img {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
           
        </style>
 @endpush

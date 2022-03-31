@@ -64,23 +64,26 @@
                             </div>
                         </div>
     
-                        {{-- @dd($contactInfo) --}}
-                        <div class="contact-info row">
-                            <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
-                            <div class="contact-inner-info col-md-12">
-                                {{-- @dd($contactInfo) --}}
-                               @if ($contactInfo)
-                                    @if($contactInfo->fb_messenger)
-                                        <span><a target="_blank" href="{{ $contactInfo->fb_messenger }}"><i class="fab fa-whatsapp"></i></a></span>
-                                        {{-- <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span> --}}
-                                    @endif
-                                    @if($contactInfo->whatsapp)
-                                        <span><span><a target="_blank" href="{{$contactInfo->whatsapp}}"><i class="fab fa-facebook-messenger"></i></a></span></span>
-                                        {{-- <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span> --}}
-                                    @endif
-                               @endif
+                       @if($socialicon->fb_messenger && $socialicon->whatsapp)
+                            <div class="contact-info row">
+                                <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
+                                <div class="contact-inner-info col-md-12">
+                                    {{-- @dd($socialicon) --}}
+                                   <div class="d-flex gap-1 text-2x">
+                                        @if ($socialicon)
+                                            @if($socialicon->fb_messenger)
+                                                <span><a target="_blank" href="{{ $socialicon->fb_messenger }}"><i class="fab fa-whatsapp"></i></a></span>
+                                                {{-- <span><i class="fa fa-phone"></i> <span><a href="tel:{{$contactInfo->phone}}">{{$contactInfo->phone}}</a></span></span> --}}
+                                            @endif
+                                            @if($socialicon->whatsapp)
+                                                <span><span><a target="_blank" href="{{$socialicon->whatsapp}}"><i class="fab fa-facebook-messenger"></i></a></span></span>
+                                                {{-- <span><i class="fa fa-envelope"></i> <span><a href="mailto:{{$contactInfo->email}}">{{$contactInfo->email}}</a></span></span> --}}
+                                            @endif
+                                        @endif
+                                   </div>
+                                </div>
                             </div>
-                        </div>
+                       @endif
     
     
     
