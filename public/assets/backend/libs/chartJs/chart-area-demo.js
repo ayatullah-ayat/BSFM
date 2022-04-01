@@ -29,6 +29,16 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
+
+let chartData = [];
+const chartDataObj = ctx?.getAttribute('data-earnings') ? JSON.parse(ctx.getAttribute('data-earnings')) : null;
+if (chartDataObj){
+    chartData = Object.values(chartDataObj);
+}
+
+const currencySymbol = ctx?.getAttribute('data-currency') ? ctx.getAttribute('data-currency') : '$';
+
+
 var myLineChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -46,7 +56,7 @@ var myLineChart = new Chart(ctx, {
             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
             pointHitRadius: 10,
             pointBorderWidth: 2,
-            data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+            data: chartData,
         }],
     },
     options: {
@@ -65,8 +75,8 @@ var myLineChart = new Chart(ctx, {
                     unit: 'date'
                 },
                 gridLines: {
-                    display: false,
-                    drawBorder: false
+                    display: true,
+                    drawBorder: true
                 },
                 ticks: {
                     maxTicksLimit: 7
@@ -78,13 +88,13 @@ var myLineChart = new Chart(ctx, {
                     padding: 10,
                     // Include a dollar sign in the ticks
                     callback: function (value, index, values) {
-                        return '$' + number_format(value);
+                        return currencySymbol + number_format(value);
                     }
                 },
                 gridLines: {
                     color: "rgb(234, 236, 244)",
                     zeroLineColor: "rgb(234, 236, 244)",
-                    drawBorder: false,
+                    drawBorder: true,
                     borderDash: [2],
                     zeroLineBorderDash: [2]
                 }
@@ -94,11 +104,15 @@ var myLineChart = new Chart(ctx, {
             display: false
         },
         tooltips: {
+            // backgroundColor: "rgb(255,0,0)",
             backgroundColor: "rgb(255,255,255)",
+            // bodyFontColor: "#fff",
             bodyFontColor: "#858796",
             titleMarginBottom: 10,
+            // titleFontColor: '#fff',
             titleFontColor: '#6e707e',
             titleFontSize: 14,
+            // borderColor: '#fff',
             borderColor: '#dddfeb',
             borderWidth: 1,
             xPadding: 15,
@@ -110,7 +124,7 @@ var myLineChart = new Chart(ctx, {
             callbacks: {
                 label: function (tooltipItem, chart) {
                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                    return datasetLabel + `: ${currencySymbol} ` + number_format(tooltipItem.yLabel);
                 }
             }
         }

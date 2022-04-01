@@ -22,7 +22,6 @@ class SaleProduct extends Model
 
 
     public function scopeTotalSaleProductPurchase($query){
-        return $query->selectRaw('round(sum(products.purchase_price * sale_products.product_qty),2) as result')
-            ->join('products', 'sale_products.product_id', '=', 'products.id');
+        return $query->selectRaw('round(sum(sale_products.purchase_price * sale_products.product_qty),2) as result');
     }
 }

@@ -74,6 +74,7 @@
                                     </td>
                                     <td>
                                         <input type="number" class="form-control sales_price calculatePrice">
+                                        <input type="hidden" class="form-control purchase_price">
                                     </td>
                                     <td>
                                         <input type="number" readonly class="form-control subtotal text-right px-2">
@@ -186,7 +187,8 @@
         row         = elem.closest('tr'),
         colorSelect = row.find('.color'),
         sizeSelect  = row.find('.size'),
-        salesElem   = row.find('.sales_price');
+        salesElem   = row.find('.sales_price'),
+        purchaseElem= row.find('.purchase_price');
 
         $.ajax({
             url : `{{ route('admin.ecom_sales.getVariantsByProduct','') }}/${product_id}`,
@@ -215,6 +217,7 @@
 
                 if(res?.product){
                     salesElem.val(res.product.sales_price).prop("readonly",true);
+                    purchaseElem.val(res.product.purchase_price).prop("readonly",true);
                 }
 
                 priceCalculation();
@@ -270,6 +273,7 @@
             </td>
             <td>
                 <input type="number" class="form-control sales_price calculatePrice">
+                <input type="hidden" class="form-control purchase_price">
             </td>
             <td>
                 <input type="number" readonly class="form-control subtotal text-right px-2">
@@ -415,7 +419,8 @@
             let product_color   = $(row).find('.color').val();
             let product_size    = $(row).find('.size').val();
             let product_qty     = Number($(row).find('.qty').val() ?? 0);
-            let sales_price   = Number($(row).find('.sales_price').val() ?? 0);
+            let sales_price     = Number($(row).find('.sales_price').val() ?? 0);
+            let purchase_price  = Number($(row).find('.purchase_price').val() ?? 0);
             let subtotal        = Number($(row).find('.subtotal').val() ?? 0);
 
             if(product_id){
@@ -426,6 +431,7 @@
                     product_size,
                     product_qty,
                     sales_price,
+                    purchase_price,
                     subtotal
                 });
             }
@@ -468,6 +474,7 @@
             </td>
             <td>
                 <input type="number" class="form-control sales_price calculatePrice">
+                <input type="hidden" class="form-control purchase_price">
             </td>
             <td>
                 <input type="number" readonly class="form-control subtotal text-right px-2">

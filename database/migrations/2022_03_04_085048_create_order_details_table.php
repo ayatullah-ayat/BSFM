@@ -22,6 +22,7 @@ class CreateOrderDetailsTable extends Migration
             $table->string('product_color')->nullable();
             $table->string('product_size')->nullable();
             $table->unsignedBigInteger('product_qty')->default(0);
+            $table->float('purchase_price', 10, 3)->default(0);
             $table->float('product_price', 10, 3)->default(0);
             $table->float('discount_price', 10, 3)->default(0);
             $table->float('wholesale_price', 10, 3)->default(0);

@@ -66,7 +66,7 @@
                                     <th>Color</th>
                                     <th width="200">Size</th>
                                     <th width="100" class="text-center">Qty</th>
-                                    <th width="150" class="text-center">Product Price</th>
+                                    <th width="150" class="text-center">Sales Price</th>
                                     <th width="150" class="text-center">Discount Price</th>
                                     <th width="150" class="text-center">Total</th>
                                 </tr>
@@ -116,7 +116,8 @@
                                         <input type="text" class="form-control calculatePrice order_qty" value="{{ $item->product_qty }}">
                                     </td>
                                     <td>
-                                        <input type="text"  class="form-control calculatePrice product_price" value="{{ $item->product_price }}">
+                                        <input type="text"  class="form-control calculatePrice product_price" readonly value="{{ $item->product_price }}">
+                                        <input type="hidden" class="form-control purchase_price" value="{{ $item->purchase_price }}">
                                     </td>
                                     <td>
                                         <input type="text"  class="form-control discount_price calculatePrice" value="{{ $item->discount_price }}">
@@ -150,7 +151,58 @@
         init();
         $(document).on('click','#order_update_btn', updateToDatabase)
         $(document).on('input keyup change', ".calculatePrice", OrderPriceCalculation)
+        $(document).on('change', ".product", getProductInfo)
     });
+
+
+
+      function getProductInfo(){
+        let 
+        elem        = $(this),
+        product_id  = elem.val(),
+        row         = elem.closest('tr'),
+        colorSelect = row.find('.color'),
+        sizeSelect  = row.find('.size'),
+        salesElem   = row.find('.product_price');
+
+        $.ajax({
+            url     : `{{ route('admin.ecom_sales.getVariantsByProduct','') }}/${product_id}`,
+            method  : 'GET',
+            success(res){
+
+                let option1 = ``;
+                let option2 = ``;
+
+                if(res.colors){
+                    res.colors.forEach(colr => {
+                        option1 += `<option value="${colr.color_name}">${colr.color_name}</option>`;
+                    })
+                }
+
+                
+                if(res.sizes){
+                    res.sizes.forEach(size => {
+                        option2 += `<option value="${size.size_name}">${size.size_name}</option>`;
+                    })
+                }
+
+                colorSelect.html(option1);
+                sizeSelect.html(option2);
+
+                if(res?.product){
+                    salesElem.val(res.product.sales_price).prop("readonly",true);
+                }
+
+                OrderPriceCalculation();
+            },
+            error(err){
+                console.log(err);
+            }
+
+        })
+    }
+
+
 
     function OrderPriceCalculation(){
             let rows = $('#edittbody').find('tr');
@@ -267,6 +319,7 @@
             let product_price   = Number($(row).find('.product_price').val() ?? 0);
             let discount_price  = Number($(row).find('.discount_price').val() ?? 0);
             let subtotal        = Number($(row).find('.total_price').val() ?? 0);
+            let purchase_price  = Number($(row).find('.purchase_price').val() ?? 0);
 
             productsArr.push({
                 order_no,
@@ -277,6 +330,7 @@
                 product_qty,
                 product_price,
                 discount_price,
+                purchase_price,
                 subtotal
             });
         });

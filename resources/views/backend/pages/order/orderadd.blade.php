@@ -66,7 +66,7 @@
                                     <th>Color</th>
                                     <th width="200">Size</th>
                                     <th width="100" class="text-center">Qty</th>
-                                    <th width="150" class="text-center">Product Price</th>
+                                    <th width="150" class="text-center">Sales Price</th>
                                     {{-- <th width="150" class="text-center">Discount Price</th> --}}
                                     <th width="100" class="text-center">Total</th>
                                     <th width="100" class="text-center">
@@ -90,25 +90,13 @@
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="color" class="color" data-required id="color" data-placeholder="Select Color">
-                                                @if($colors)
-                                                    @foreach ($colors as $color)
-                                                        <option value="{{ $color->variant_name }}">{{ $color->variant_name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <select name="color" class="color" data-required id="color" data-placeholder="Select Color"></select>
                                         </div>
                                         <span class="v-msg"></span>
                                     </td>
                                     <td>
                                         <div class="form-group">
-                                            <select name="size" class="size" data-required id="size" data-placeholder="Select Sizes">
-                                                @if($sizes)
-                                                    @foreach ($sizes as $size)
-                                                        <option value="{{ $size->variant_name }}">{{ $size->variant_name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <select name="size" class="size" data-required id="size" data-placeholder="Select Sizes"></select>
                                         </div>
                                         <span class="v-msg"></span>
                                     </td>
@@ -118,6 +106,7 @@
                                     </td>
                                     <td>
                                         <input type="text" id="product_price" class="form-control calculatePrice product_price">
+                                        <input type="hidden" class="form-control purchase_price">
                                     </td>
                                     {{-- <td>
                                         <input readonly value="00.00" type="text" id="discount_price" class="form-control discount_price">
@@ -156,11 +145,63 @@
         init();
         $(document).on('click','#save_order_btn', submitToDatabase)
         $(document).on('input keyup change', ".calculatePrice", OrderPriceCalculation)
+        $(document).on('change', ".product", getProductInfo)
 
         $(document).on('click','#addNewRow', createNewRow)
         $(document).on('click','.fa-times', removeRow)
 
     });
+
+
+    function getProductInfo(){
+        let 
+        elem        = $(this),
+        product_id  = elem.val(),
+        row         = elem.closest('tr'),
+        colorSelect = row.find('.color'),
+        sizeSelect  = row.find('.size'),
+        salesElem   = row.find('.product_price'),
+        purchaseElem= row.find('.purchase_price');
+
+        $.ajax({
+            url     : `{{ route('admin.ecom_sales.getVariantsByProduct','') }}/${product_id}`,
+            method  : 'GET',
+            success(res){
+
+                let option1 = ``;
+                let option2 = ``;
+
+                if(res.colors){
+                    res.colors.forEach(colr => {
+                        option1 += `<option value="${colr.color_name}">${colr.color_name}</option>`;
+                    })
+                }
+
+                
+                if(res.sizes){
+                    res.sizes.forEach(size => {
+                        option2 += `<option value="${size.size_name}">${size.size_name}</option>`;
+                    })
+                }
+
+                colorSelect.html(option1);
+                sizeSelect.html(option2);
+
+                if(res?.product){
+                    salesElem.val(res.product.sales_price).prop("readonly",true);
+                    purchaseElem.val(res.product.purchase_price).prop("readonly",true);
+                }
+
+                OrderPriceCalculation();
+            },
+            error(err){
+                console.log(err);
+            }
+
+        })
+    }
+
+
 
     
     function removeRow(){
@@ -195,26 +236,14 @@
 
                         <td>
                             <div class="form-group">
-                                <select name="color" class="color" data-required id="color_${ref}" data-placeholder="Select Color">
-                                    @if($colors)
-                                        @foreach ($colors as $color)
-                                            <option value="{{ $color->id }}">{{ $color->variant_name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+                                <select name="color" class="color" data-required id="color_${ref}" data-placeholder="Select Color"></select>
                             </div>
                             <span class="v-msg"></span>
                         </td>
 
                         <td>
                             <div class="form-group">
-                                <select name="size" class="size" data-required id="size_${ref}" data-placeholder="Select Sizes">
-                                    @if($sizes)
-                                        @foreach ($sizes as $size)
-                                            <option value="{{ $size->id }}">{{ $size->variant_name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+                                <select name="size" class="size" data-required id="size_${ref}" data-placeholder="Select Sizes"></select>
                             </div>
                             <span class="v-msg"></span>
                         </td>
@@ -224,6 +253,7 @@
                         </td>
                         <td>
                             <input type="text" id="product_price" class="form-control calculatePrice product_price">
+                            <input type="hidden" class="form-control purchase_price">
                         </td>
                         <td>
                             <input type="text" id="total_price" class="form-control total_price">
@@ -334,6 +364,7 @@
             let product_size    = $(row).find('.size').val();
             let product_qty     = Number($(row).find('.order_qty').val() ?? 0);
             let product_price   = Number($(row).find('.product_price').val() ?? 0);
+            let purchase_price  = Number($(row).find('.purchase_price').val() ?? 0);
             let subtotal        = Number($(row).find('.total_price').val() ?? 0);
 
             productsArr.push({
@@ -344,6 +375,7 @@
                 product_size,
                 product_qty,
                 product_price,
+                purchase_price,
                 subtotal
             });
         });

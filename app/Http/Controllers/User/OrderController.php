@@ -252,6 +252,7 @@ class OrderController extends Controller
                     'product_size'      => $product['size'] ?? null,
                     'product_qty'       => (int)$product['qty'] ?? 0,
                     'product_price'     => floatval($product['sales_price']),
+                    'purchase_price'    => $this->productPurchasePrice($product['product_id']),
                     'discount_price'    => $couponDiscountSingleProduct,
                     'subtotal'          => (floatval($product['subtotal']) - floatval($couponDiscountSingleProduct)) ?? 0,
                 ];
@@ -386,6 +387,14 @@ class OrderController extends Controller
         if(!$product) return null;
 
         return $product->product_name;
+    }
+
+
+    private function productPurchasePrice($id){
+        $product = Product::find($id);
+        if(!$product) return 0;
+
+        return $product->purchase_price;
     }
 
 

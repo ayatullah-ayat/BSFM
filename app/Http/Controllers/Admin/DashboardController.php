@@ -81,7 +81,7 @@ class DashboardController extends Controller
         $orderdata              = Order::latest()->take(20)->get();
         $popularProducts        = OrderDetails::popularProduct(20)->get();
 
-        $totaldeliveredprice    =  Order::where('status','completed')->sum('order_total_price');
+        $totaldeliveredprice    = Order::where('status','completed')->sum('order_total_price');
         $totalrevenue           = $totalsalesprice +  $totaldeliveredprice;
 
         $total_order_purchase   = Order::totalPurchase('completed')->first();
@@ -92,9 +92,10 @@ class DashboardController extends Controller
 
         $totalpurcahsecost      = floatval($totalOrderPurchase) + floatval($totalSalePurchase);
         $totalprofit            = round($totalrevenue - $totalpurcahsecost);
-        
-        // dd(totalEarningsMonthwise());
 
+        $monthWiseYearlyEarnings= totalEarningsMonthwise();
+        $revenueSources         = totalEarningsMonthwise(true);
+        
         return view('backend.dashboard' , compact(
             'totalsalesprice',
             'totalsalesqty',
@@ -130,7 +131,9 @@ class DashboardController extends Controller
             'customordercomplete',
             'customordercancel',
             'totalprofit',
-            'popularProducts'
+            'popularProducts',
+            'monthWiseYearlyEarnings',
+            'revenueSources'
         ));
 
     }
