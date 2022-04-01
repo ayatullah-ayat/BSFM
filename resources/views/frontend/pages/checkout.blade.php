@@ -667,15 +667,20 @@
 
                         if(res?.success){
 
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+
                             resetShipmentInfo();
     
                             setTimeout(()=>{
                                 window.location.reload();
-                            },2000)
+                            },3000)
+                        }else{
+                            _toastMsg(res?.msg ?? 'Something wents wrong!');
                         }
                     },
                     error: function (error) {
                         console.log(error);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
                     }
                 });
             }, 500);

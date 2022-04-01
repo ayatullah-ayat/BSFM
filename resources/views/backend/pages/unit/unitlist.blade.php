@@ -29,17 +29,17 @@
                             @isset($units)
                                 @foreach ($units as $unit)
                                     <tr unit-data="{{json_encode($unit)}}">
-                                        <th>{{$loop->iteration}}</th>
-                                        <th>{{$unit->unit_name ?? 'N/A' }}</th>
-                                        <th>{{$unit->unit_short_name ?? 'N/A' }}</th>
-                                        <th class="text-center">
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$unit->unit_name ?? 'N/A' }}</td>
+                                        <td>{{$unit->unit_short_name ?? 'N/A' }}</td>
+                                        <td class="text-center">
                                             {!! $unit->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javacript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.unit.destroy', $unit->id) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset

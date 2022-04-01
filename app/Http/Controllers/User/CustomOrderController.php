@@ -13,6 +13,7 @@ use App\Http\Requests\CustomOrderRequest;
 use App\Models\ContactInformation;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
+use App\Models\SocialIcon;
 
 class CustomOrderController extends Controller
 {
@@ -133,7 +134,7 @@ class CustomOrderController extends Controller
      */
     public function show(CustomServiceProduct $customServiceProduct)
     {
-        $contactInfo = ContactInformation::where('is_active', 1)->first();
+        $socialicon = SocialIcon::where('is_active', 1)->first();
 
         $otherProducts = Product::select('*')
             ->latest()
@@ -142,7 +143,7 @@ class CustomOrderController extends Controller
             ->where('is_publish', 1)
             ->get();
             
-        return view('frontend.pages.customorder', compact('customServiceProduct', 'otherProducts','contactInfo'));
+        return view('frontend.pages.customorder', compact('customServiceProduct', 'otherProducts','socialicon'));
     }
 
     /**

@@ -10,7 +10,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Supplier</a> </h6>
                 <div class="inner">
-                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Supplier Account</i></button>
+                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Supplier Ledger</i></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Supplier</i></button>
                 </div>
             </div>
@@ -39,19 +39,19 @@
                                         data-total-payment="{{ $supplier->purchases()->sum('total_payment') }}"
                                         data-total-qty="{{ $supplier->purchases()->sum('total_qty') }}"
                                         >
-                                        <th>{{ $loop->iteration }}</th>
-                                        <th>{{ $supplier->supplier_name ?? 'N/A' }}</th>
-                                        <th>{{ $supplier->supplier_email  ?? 'N/A' }}</th>
-                                        <th>{{ $supplier->supplier_phone  ?? 'N/A' }}</th>
-                                        <th>{{ $supplier->supplier_address ?? 'N/A' }}</th>
-                                        <th class="text-center">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $supplier->supplier_name ?? 'N/A' }}</td>
+                                        <td>{{ $supplier->supplier_email  ?? 'N/A' }}</td>
+                                        <td>{{ $supplier->supplier_phone  ?? 'N/A' }}</td>
+                                        <td>{{ $supplier->supplier_address ?? 'N/A' }}</td>
+                                        <td class="text-center">
                                             {!! $supplier->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javasript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{route('admin.supplier.destroy',$supplier->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset
@@ -147,7 +147,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Supplier Account</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Supplier Ledger</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -182,6 +182,11 @@
                             <th>Payment Amount</th>
                             <th>:</th>
                             <th id="total_payment">0</th>
+                        </tr>
+                        <tr>
+                            <th>Payment Due</th>
+                            <th>:</th>
+                            <th id="total_due">0</th>
                         </tr>
                         <tr class="d-none">
                             <th>Payment Status</th>
@@ -267,6 +272,7 @@
             $('#totalProduct').text(total_qty);
             $('#billAmount').text(total_bill);
             $('#total_payment').text(total_payment);
+            $('#total_due').text(Number(total_bill) - Number(total_payment));
                         
             $('#payment_status').html(`
                 <span class="badge badge-${status}">${statusText}</span>

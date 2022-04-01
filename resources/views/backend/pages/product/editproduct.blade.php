@@ -92,7 +92,7 @@
 
         {{-- ----------------------------------------------------------------------------------------- --}}
             <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="{{ $product->is_product_variant ? json_encode($product->sizes) : null  }}"  style="display: {{ $product->is_product_variant ? 'none':'' }}">
-                <div class="col-md-2" data-col="col">
+                <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color <span style="color: red;" class="req">*</span></label>
                         <select name="color_ids" class="color" multiple data-required id="color" data-placeholder="Select Color">
@@ -106,7 +106,7 @@
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-4" data-col="col">
+                <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="size">Size <span style="color: red;" class="req">*</span></label>
                         <select name="size_ids" class="size" multiple data-required id="size" data-placeholder="Select Size">
@@ -119,24 +119,32 @@
                     </div>
                     <span class="v-msg"></span>
                 </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="purchase_price">Purchase Price <span style="color: red;" class="req">*</span></label>
+                        <input name="purchase_price" id="purchase_price" required type="number" class="form-control calcPriceQty"
+                            placeholder="Purchase Price">
+                    </div>
+                </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
-                        <input name="unit_price" value="{{ number_format($unitPrice, 3) }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
+                        <input name="unit_price" value="{{ round($unitPrice, 0) }}" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
                     </div>
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price (Offline Sale)</label>
-                        <input name="wholesale_price" value="{{ number_format($wholesalesPrice, 3) }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
+                        <input name="wholesale_price" value="{{ round($wholesalesPrice, 0) }}" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
-                        <input name="sale_price" value="{{ number_format($salesPrice,3) }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
+                        <input name="sale_price" value="{{ round($salesPrice,0) }}" readonly id="sale_price" type="number" class="form-control calcPriceQty"
                             placeholder="Sales Price">
                     </div>
                 </div>
@@ -196,8 +204,16 @@
         
             <div class="col-md-12">
                 <div class="form-group">
+                    <label for="short_description">Short Description</label>
+                    <textarea name="short_description" id="short_description" cols="" rows="5" class="form-control"
+                        placeholder="Product Short Description"></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
                     <label for="description">Product Description <span style="color: red;" class="req">*</span></label>
-                    <textarea name="description" id="description" cols="" rows="5" class="form-control" placeholder="Product Description">
+                    <textarea name="description" id="description" required cols="" rows="5" class="form-control" placeholder="Product Description">
                         {!! $product->product_description !!}
                     </textarea>
                 </div>
@@ -530,10 +546,15 @@
             totalWholesalePrice = totalWholesalePrice - (totalWholesalePrice * discount);
         }
 
-        $('#total_product_price').val(totalUnitPrice.toFixed(3));
-        $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
-        $('#total_sales_price').val(totalSalesPrice.toFixed(3));
-        $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
+        // $('#total_product_price').val(totalUnitPrice.toFixed(3));
+        // $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
+        // $('#total_sales_price').val(totalSalesPrice.toFixed(3));
+        // $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
+
+        $('#total_product_price').val(Math.round(totalUnitPrice))
+        $('#total_wholesale_price').val(Math.round(totalWholesalePrice));
+        $('#total_sales_price').val(Math.round(totalSalesPrice));
+        $('#sale_price').val( Math.round(totalSalesPrice / Number(qty)) );
 
     }
 
@@ -789,6 +810,7 @@
 
         globeInit(arr);
 
+        $('#short_description').summernote()
         $('#description').summernote()
         $('#specification').summernote({
             callbacks: {
@@ -903,6 +925,7 @@
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
             unit_price              : $('#unit_price').val(),
             sales_price             : $('#sale_price').val(),
+            purchase_price          : $('#purchase_price').val(),
             colors                  : $('#color').val(),
             sizes                   : $('#size').val(),
             product_qty             : $('#product_qty').val(), // total Product qty
@@ -911,6 +934,7 @@
             product_unit            : $('.unit').val(),
             discount                : $('#discount').val(),
             description             : $('#description').val(),
+            short_description       : $('#short_description').val(),
             specification           : $('#specification').val(),
             is_best_sale            : Number($('#is_best_sale').prop('checked')),
             allow_review            : Number($('#allow_review').prop('checked')),

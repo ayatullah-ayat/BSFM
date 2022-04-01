@@ -8,8 +8,10 @@ use Illuminate\View\View;
 use App\Models\SocialIcon;
 use Illuminate\Support\Str;
 use App\Http\Services\ProductSearch;
+use App\Models\ContactInformation;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Custom\CustomServiceCategory;
+use App\Models\PartnershipLogo;
 
 class FrontendComposer
 {
@@ -29,11 +31,13 @@ class FrontendComposer
                                 ->take(14)
                                 ->get();
 
-
-        $sociallink = SocialIcon::where('is_active', 1)->first();
         $footerabout = WebFooter::where('is_active', 1)->first();
+        $sociallink  = SocialIcon::where('is_active', 1)->first();
+        $contactInfo = ContactInformation::where('is_active', 1)->first();
 
-        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategories', 'sociallink', 'footerabout'));
+        $organizationlogo = PartnershipLogo::latest()->take(2)->get();
+        
+        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategories','footerabout','sociallink','contactInfo','organizationlogo'));
     }
 
 }

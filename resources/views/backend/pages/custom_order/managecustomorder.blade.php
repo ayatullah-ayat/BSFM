@@ -33,10 +33,10 @@
 
                             @isset($customserviceorders)
                                 @foreach ($customserviceorders as $customserviceorder)
-                                    <tr customorder-data="{{ json_encode($customserviceorder) }}" data-category="{{ $customserviceorder->product ? $customserviceorder->product->category_id : ''}}">
+                                    <tr customorder-data="{{ json_encode($customserviceorder) }}" data-category="{{ $customserviceorder->product ? $customserviceorder->product->category_id : ''}}" data-phone="{{ $customserviceorder->customer->customer_phone ?? '' }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $customserviceorder->order_no }}</td>
-                                        <td>{{ $customserviceorder->created_at }}</td>
+                                        <td>{{ $customserviceorder->created_at ? date('Y-m-d', strtotime($customserviceorder->created_at)) : 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer_name ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer->customer_phone ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->custom_service_product_name ?? 'N/A' }}</td>
@@ -374,10 +374,11 @@
 
         function showDataToModal(){
             let 
-            elem        = $(this),
-            tr          = elem.closest('tr'),
-            customOrder    = tr?.attr('customorder-data') ? JSON.parse(tr.attr('customorder-data')) : null,
-            modalDetailElem = $('#modalDetail');
+            elem            = $(this),
+            tr              = elem.closest('tr'),
+            customOrder     = tr?.attr('customorder-data') ? JSON.parse(tr.attr('customorder-data')) : null,
+            modalDetailElem = $('#modalDetail'),
+            defaultPhone    = tr.attr('data-phone');
 
             if(customOrder){
                 let html = `
@@ -392,11 +393,11 @@
                     </tr>
                     <tr>
                         <th>Order Date</th>
-                        <td>${customOrder.created_at ?? 'N/A'}</td>
+                        <td>${customOrder.created_at ? customOrder.created_at.split('T')[0] : 'N/A'}</td>
                     </tr>
                     <tr>
                         <th>Phone</th>
-                        <td>${customOrder.customer_phone ?? 'N/A'}</td>
+                        <td>${(customOrder.customer_phone ?? defaultPhone) ?? 'N/A'}</td>
                     </tr>
                     <tr>
                         <th>Product</th>
@@ -406,16 +407,6 @@
                         <th>Address</th>
                         <td>${customOrder.customer_address ?? 'N/A'}</td>
                     </tr>
-            
-                    <tr>
-                        <th>Payment</th>
-                        <td>${customOrder.advance_balance ?? 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <th>Delivered Qty</th>
-                        <td>${customOrder.delivered_qty ?? 'N/A'}</td>
-                    </tr>
-            
                     <tr>
                         <th>Attachment</th>
                         <td>
@@ -430,6 +421,17 @@
                     </tr>
                 </table>
                 `;
+
+
+                // <tr>
+                //     <th>Payment</th>
+                //     <td>${customOrder.advance_balance ?? 'N/A'}</td>
+                // </tr>
+                // <tr>
+                //     <th>Delivered Qty</th>
+                //     <td>${customOrder.delivered_qty ?? 'N/A'}</td>
+                // </tr>
+        
 
                 modalDetailElem.html(html);
             }

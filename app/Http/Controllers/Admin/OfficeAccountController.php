@@ -21,6 +21,30 @@ class OfficeAccountController extends Controller
         return view('backend.pages.account.accountmanage', compact('officeaccounts'));
     }
 
+
+    public function datewise_account_report(Request $request)
+    {
+
+        $from   = $request->from_date;
+        $to     = $request->to_date;
+
+        if ($request->ajax()) {
+
+            $q = OfficeAccount::where('date', '>=', $from);
+
+            if ($to) {
+                $q->where('date', '<=', $to);
+            }
+
+            $sales = $q->get();
+
+            return response()->json($sales);
+        }
+
+
+        return view('backend.pages.account.datewise_account_report');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

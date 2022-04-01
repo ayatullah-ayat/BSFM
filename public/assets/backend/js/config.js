@@ -137,24 +137,6 @@ function globeInit(arr=[]){
 }
 
 
-// let arr=[
-//     {
-//         dropdownParent  : '#categoryModal',
-//         selector        : `#stuff`,
-//         type            : 'select',
-//         // selectedVal     : null,
-//         // width           : '100%',
-//     },
-//     {
-//         selector        : `#booking_date`,
-//         type            : 'date',
-//         format          : 'yyyy-mm-dd',
-//     },
-
-// ];
-
-
-
 
 function fileRead(elem, src = '#img-preview') {
     if (elem.files && elem.files[0]) {
@@ -415,10 +397,52 @@ function trackStatusRender(data){
 }
 
 
+$(document).ready(function(){
+    $("body").tooltip({ selector: '[data-bs-toggle=tooltip]' });
+});
 
 
 
+function activeNavMenuDashboard() {
+
+    let isActive = false;
+    const navBarParent = $(document).find('#accordionSidebar');
+    const navItems = navBarParent.find('.collapse-item');
+    navItems.removeClass('active-nav-item');
+
+    [...navItems].forEach(item => {
+
+        if ($(item).attr('href') == (window.location.href)) {
+            $(item).parent().parent().addClass('show');
+            $(item).parent().parent().parent().find('.collapsed').addClass('active-nav-item').removeClass('collapsed');
+            $(item).addClass('active-nav-item-child');
+            isActive = true;
+        }
+    })
+
+
+    const navItems2 = navBarParent.find('.nav-item');
+    navItems2.removeClass('active-nav-item');
+
+    if (!isActive){
+        [...navItems2].forEach(item => {
+    
+            $(item).removeClass('active');
+
+            if ($(item).find('.nav-link').attr('href') == (window.location.href)) {
+                $(item).addClass('active-nav-item');
+                $(item).addClass('active');
+                isActive = true;
+            }
+        })
+    }
 
 
 
-//loadMoreBtn
+    if (!isActive) {
+        navBarParent.find('#accordionSidebar .active').addClass('active');
+    }
+}
+
+
+activeNavMenuDashboard();

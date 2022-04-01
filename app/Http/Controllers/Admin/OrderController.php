@@ -230,6 +230,8 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
 
+        // dd($order);
+
         $customers = Customer::where('is_active', 1)->get();
         $products = Product::where('is_active', 1)
                     ->where('is_publish', 1)

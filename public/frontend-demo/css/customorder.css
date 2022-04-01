@@ -119,10 +119,18 @@
 
 /* ------------------- contact infos ------------------- */
 
-.contact-inner-info{
+.contact-inner-info {
     display: flex;
     flex-direction: column;
 }
+
+/* .contact-inner-info {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 20px;
+} */
+
 
 .contact-inner-info > span{
     display: block;

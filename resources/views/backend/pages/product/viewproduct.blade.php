@@ -62,6 +62,12 @@
                                 <td>{{ implode(',', $brands) ?? 'N/A' }}</td>
                             </tr>
                             @endif 
+                            @if(isset($product->short_description))
+                            <tr>
+                                <th>Short Description</th>
+                                <td>{!! $product->short_description ?? 'N/A' !!}</td>
+                            </tr>
+                            @endif 
                             <tr>
                                 <th>Description</th>
                                 <td>{!! $product->product_description ?? 'N/A' !!}</td>
@@ -136,27 +142,31 @@
                         <table class="table table-bordered"  width="100%" cellspacing="0">
                             <thead>
                                 <tr class="borderd bg-danger text-white">
-                                    <th colspan="6" class="text-white">
+                                    <th colspan="7" class="text-white">
                                         <h4>
                                             Product Pricing
                                         </h4>
                                     </th>
                                 </tr>
                                 <tr>
+                                    <th>Purchase Price</th>
                                     <th>Unit Price</th>
                                     <th>Sales Price</th>
                                     <th>Wholesale Price</th>
                                     <th>Total Qty</th>
                                     <th>Stock Qty</th>
+                                    <th>Stock Out Qty</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{ number_format($product->unit_price, 2) ?? 0.0 }}</td>
-                                    <td>{{ salesPrice($product) ?? 0.0 }}</td>
-                                    <td>{{ wholesalesPrice($product) ?? 0.0 }}</td>
-                                    <td>{{ $product->total_product_qty ?? 'N/A' }}</td>
-                                    <td>{{ $product->total_stock_qty ?? 'N/A' }}</td>
+                                    <td>{{ round($product->purchase_price, 0) ?? 0 }}</td>
+                                    <td>{{ round($product->unit_price, 0) ?? 0 }}</td>
+                                    <td>{{ salesPrice($product) ?? 0 }}</td>
+                                    <td>{{ round(wholesalesPrice($product), 0) ?? 0 }}</td>
+                                    <td>{{ $product->total_product_qty ?? '0' }}</td>
+                                    <td>{{ $product->total_stock_qty ?? '0' }}</td>
+                                    <td>{{ $product->total_stock_out_qty ?? '0' }}</td>
                                 </tr>
                             </tbody>
                         </table>

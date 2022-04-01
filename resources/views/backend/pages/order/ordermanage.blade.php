@@ -22,6 +22,8 @@
                                 <th>Order NO</th>
                                 <th>Order Date</th>
                                 <th>Customer Name</th>
+                                <th>Customer Phone</th>
+                                <th>Shipping Address</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>
                                 <th width="70" class="text-center">Action</th>
@@ -35,8 +37,9 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $order->order_no ?? 'N/A' }}</td>
                                     <td>{{ $order->order_date ?? 'N/A' }}</td>
-                                    <td>{{ $order->customer->customer_name  ?? 'N/A' }}</td>
-                                    {{-- <td>{{ $order->customer_name  ?? 'N/A' }}</td> --}}
+                                    <td>{{ ($order->customer_name ?? $order->customer->customer_name ) ?? 'N/A' }}</td>
+                                    <td>{{ ($order->customer_phone  ?? $order->customer->customer_phone) ?? 'N/A' }}</td>
+                                    <td>{{ $order->shipping_address  ?? 'N/A' }}</td>
                                     <td>{{ $order->order_total_price  ?? 'N/A' }}</td>
                                     <td class="text-center">
 

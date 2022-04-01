@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://127.0.0.1:8000/admin/dashboard">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
             {{-- <i class="fas fa-laugh-wink"></i> --}}
             <i class="ti-home"></i>
@@ -14,7 +14,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="http://127.0.0.1:8000/admin/dashboard">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             {{-- <i class="fa fa-home" aria-hidden="true"></i> --}}
             <span>Dashboard</span></a>
@@ -35,7 +35,7 @@
             <span>Sales</span>
         </a>
         <div id="sales" class="collapse" aria-labelledby="sales" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.ecom_sales.add_sale') }}">New Sale</a>
                 <a class="collapse-item" href="{{ route('admin.ecom_sales.manage_sale') }}">Manage Sale</a>
                 <a class="collapse-item" href="{{ route('admin.return_sale.index') }}">Return Sales</a>
@@ -51,7 +51,7 @@
             <span>Orders</span>
         </a>
         <div id="orders" class="collapse" aria-labelledby="orders" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.ecom_orders.order_add') }}">New Order</a>
                 <a class="collapse-item" href="{{ route('admin.ecom_orders.order_manage') }}">Manage Order</a>
             </div>
@@ -65,7 +65,7 @@
             <span>Products</span>
         </a>
         <div id="products" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.products.create') }}">New Product</a>
                 <a class="collapse-item" href="{{ route('admin.products.index') }}">Manage Products</a>
                 <a class="collapse-item" href="{{ route('admin.products.unpublish') }}">Unpublish Products</a>
@@ -95,7 +95,7 @@
             <span>Purchase</span>
         </a>
         <div id="purchase" class="collapse" aria-labelledby="purchase" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.purchase.create') }}">New Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.index') }}">Manage Purchase</a>
                 <a class="collapse-item" href="{{ route('admin.purchase.manage_stock') }}">Manage Stock</a>
@@ -111,7 +111,7 @@
             <span>Category</span>
         </a>
         <div id="category" class="collapse" aria-labelledby="category" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.category.index')}}">Category</a>
                 <a class="collapse-item" href="{{ route('admin.subcategory.index')}}">Sub Category</a>
             </div>
@@ -146,7 +146,7 @@
             <span>Tax</span>
         </a>
         <div id="tax" class="collapse" aria-labelledby="tax" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{route('admin.tax.index')}}">Manage Tax</a>
             </div>
         </div>
@@ -167,7 +167,7 @@
             <span>Coupon</span>
         </a>
         <div id="coupon" class="collapse" aria-labelledby="products" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.coupon.index') }}">Manage Coupon</a>
                 <a class="collapse-item" href="{{ route('admin.applycoupon.index') }}">Apply Coupon</a>
             </div>
@@ -191,7 +191,7 @@
             <span>Customize Services</span>
         </a>
         <div id="custom_service" class="collapse" aria-labelledby="custom_orders" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.customservice.index') }}">Service</a>
                 <a class="collapse-item" href="{{ route('admin.customservicecategory.index') }}">Service Category</a>
                 <a class="collapse-item" href="{{ route('admin.customserviceproduct.index') }}">Customize Product</a>
@@ -220,7 +220,7 @@
             <span>Account</span>
         </a>
         <div id="account" class="collapse" aria-labelledby="account" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="#">New Entry</a>
                 <a class="collapse-item" href="#">Report</a>
             </div>
@@ -243,32 +243,35 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Stock" aria-expanded="true"
             aria-controls="Stock">
             <i class="fa fa-poll-h"></i>
-            <span>Stock</span>
+            <span>Report</span>
         </a>
         <div id="Stock" class="collapse" aria-labelledby="Stock" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.stock_report') }}">Stock Report</a>
-                <a class="collapse-item" href="{{ route('admin.supplier_stock_report') }}">Stock Report (Supplier Wise)</a>
-                <a class="collapse-item" href="{{ route('admin.product_stock_report') }}">Stock Report (Product Wise)</a>
+                <a class="collapse-item" href="{{ route('admin.supplier_stock_report') }}">Stock Report (Supplier)</a>
+                <a class="collapse-item" href="{{ route('admin.product_stock_report') }}">Stock Report (Product)</a>
+                <a class="collapse-item" href="{{route('admin.purchase_report')}}">Purchase Report (Date Wise)</a>
+                <a class="collapse-item" href="{{route('admin.sales_report')}}">Sales Report (Date Wise)</a>
+
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Report" aria-expanded="true"
             aria-controls="Report">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Report</span>
         </a>
         <div id="Report" class="collapse" aria-labelledby="Report" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{route('admin.sales_report')}}">Sales Report</a>
                 <a class="collapse-item" href="{{ route('admin.purchase_report')}}">Purchase Report</a>
                 <a class="collapse-item" href="{{ route('admin.product_tax_report')}}">Tax Report (Product Wise)</a>
                 <a class="collapse-item" href="{{ route('admin.invoice_tax_report')}}">Tax Report (Invoice Wise)</a>
             </div>
         </div>
-    </li>
+    </li> --}}
 
     <div class="sidebar-heading">Settings</div>
     <li class="nav-item">
@@ -278,7 +281,7 @@
             <span>Settings</span>
         </a>
         <div id="sms" class="collapse" aria-labelledby="sms" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.sms_configuration') }}">SMS Configuration</a>
                 <a class="collapse-item" href="{{ route('admin.sms_template') }}">SMS Template</a>
                 <a class="collapse-item" href="{{ route('admin.manage_company') }}">Manage Company</a>
@@ -295,7 +298,7 @@
             <span>Web Settings</span>
         </a>
         <div id="web" class="collapse" aria-labelledby="web" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="#">Sales Report</a>
                 <a class="collapse-item" href="#">Purchase Report</a>
                 <a class="collapse-item" href="#">Tax Report (Product Wise)</a>
@@ -311,16 +314,17 @@
             <span>CMS Settings</span>
         </a>
         <div id="Software" class="collapse" aria-labelledby="Software" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="#">Web Logo</a>
                 <a class="collapse-item" href="#">Web Header</a>
-                <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Web Footer</a>
+                <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Footer About</a>
                 <a class="collapse-item" href="{{ route('admin.socialicon.index') }}">Manage Social Links</a>
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Form List</a>
                 <a class="collapse-item" href="{{ route('admin.contactinfo.index') }}">Contact Information</a>
                 <a class="collapse-item" href="{{ route('admin.about.index') }}">About Us</a>
                 <a class="collapse-item" href="{{ route('admin.shopbanner.index') }}">Shop Banner</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.clientlogo.index') }}">Client Logo</a>
+                <a class="collapse-item" href="{{ route('admin.cms_settings.partnership-logo.index') }}">Organization's Logo</a>
                 <a class="collapse-item" href="{{ route('admin.cms_settings.gallery.index')}}">Our Gallery</a>
             </div>
         </div>
@@ -331,7 +335,7 @@
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        <button class=" -circle border-0" id="sidebarToggle"></button>
     </div>
 
 </ul>

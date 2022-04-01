@@ -22,6 +22,8 @@
                                 <th>Twitter</th>
                                 <th>Instagram</th>
                                 <th>Linkedin</th>
+                                <th>FB Messenger</th>
+                                <th>WhatsApp</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -43,6 +45,12 @@
                                     </td>
                                     <td>
                                         <a target="_blank" href="{{ $sociallist->linkedin ?? '#' }}"> {{ $sociallist->linkedin ?? 'N/A' }} </a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" href="{{ $sociallist->fb_messenger ?? '#' }}"> {{ $sociallist->fb_messenger ?? 'N/A' }} </a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" href="{{ $sociallist->whatsapp ?? '#' }}"> {{ $sociallist->whatsapp ?? 'N/A' }} </a>
                                     </td>
                                     <th class="text-center">
                                         {!! $sociallist->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
@@ -109,6 +117,20 @@
                                 <div class="form-group">
                                     <label for="linkedin">Linkedin</label>
                                     <input name="linkedin" id="linkedin" class="form-control" placeholder="Linkedin Link" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fb_messenger">FB Messenger</label>
+                                    <input name="fb_messenger" id="fb_messenger" class="form-control" placeholder="FB Messenger Link" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="whatsapp">WhatsApp</label>
+                                    <input name="whatsapp" id="whatsapp" class="form-control" placeholder="WhatsApp Link" />
                                 </div>
                             </div>
 
@@ -260,6 +282,8 @@
                 $('#twitter').val(sociallist?.twitter)
                 $('#instagram').val(sociallist?.instagram)
                 $('#linkedin').val(sociallist?.linkedin)
+                $('#fb_messenger').val(sociallist?.fb_messenger)
+                $('#whatsapp').val(sociallist?.whatsapp)
                 
                 if(sociallist?.is_active){
                     $('#isActive').prop('checked',true)
@@ -315,7 +339,9 @@
                 facebook        : $('#facebook').val().trim(),
                 twitter         : $('#twitter').val().trim(),
                 instagram       : $('#instagram').val().trim(),
-                linkedin        : $('#linkedin').val(),
+                linkedin        : $('#linkedin').val().trim(),
+                fb_messenger    : $('#fb_messenger').val().trim(),
+                whatsapp        : $('#whatsapp').val().trim(),
                 is_active       : $('#isActive').is(':checked') ? 1 : 0,
             }
         }
@@ -325,6 +351,8 @@
             $('#twitter').val(null),
             $('#instagram').val(null),
             $('#linkedin').val(null),
+            $('#fb_messenger').val(null),
+            $('#whatsapp').val(null),
             $('#isActive').prop('checked', true)
         }
 

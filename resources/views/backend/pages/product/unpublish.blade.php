@@ -25,7 +25,6 @@
                                 <th>Unit</th>
                                 <th>Unit Price</th>
                                 <th>Sales Price</th>
-                                <th>WholeSale Price</th>
                                 <th>Total Qty</th>
                                 <th>Is Publish</th>
                                 <th width="70" class="text-center">Action</th>
@@ -34,13 +33,6 @@
                         <tbody>
 
                             @foreach ($products as $product)
-                                @php
-                                    $colorSql   = $product->colors('group_concat(color_name) as colors')->first();
-                                    $sizeSql    = $product->sizes('group_concat(size_name) as sizes')->first();
-                                    $singleProduct =$product->colors()->first();
-                                    $brands     = [];
-                                @endphp
-
                                 <tr data-productid="{{ $product->id }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
@@ -54,24 +46,17 @@
                                         @if($product->is_product_variant)
                                             <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else 
-                                            {{ number_format(($product->unit_price), 3) ?? 0.0 }} 
+                                            {{ round(($product->unit_price), 0) ?? 0 }} 
                                         @endif 
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
                                         <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                        {{  salesPrice($product) ?? 0.0 }}
+                                        {{  salesPrice($product) ?? 0 }}
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($product->is_product_variant)
-                                            <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
-                                        @else
-                                            {{ number_format(wholesalesPrice($product) , 2) ?? 0.0 }}
-                                        @endif
-                                    </td>
-                                    <td>{{ $product->total_product_qty ?? 0.0 }}</td>
+                                    <td>{{ $product->total_product_qty ?? 0 }}</td>
                                     <td class="text-center">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" data-id="{{$product->id}}" {{ $product->is_publish ? 'checked':''}}

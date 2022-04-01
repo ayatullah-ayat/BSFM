@@ -60,6 +60,26 @@ body {
     background-color: #fff
 }
 
+
+.active-nav-item-child{
+    color: #ff2b1c !important;
+    background-color: #fdfd !important;
+}
+
+.active-nav-item
+{
+    color: #fff !important;
+    background-color: #ff2b1c !important;
+}
+
+#accordionSidebar .active.active-nav-item,
+#accordionSidebar .active.active-nav-item .nav-link,
+#accordionSidebar .active.active-nav-item .nav-link i
+
+{
+    background-color: #ff2b1c !important;
+}
+
 [tabindex="-1"]:focus:not(:focus-visible) {
     outline: 0 !important
 }
@@ -10526,11 +10546,11 @@ a:focus {
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item, .sidebar .nav-item .collapsing .collapse-inner .collapse-item {
     padding: .5rem 1rem;
-    margin: 0 .5rem;
+    margin: 0 0rem;
     display: block;
     color: #3a3b45;
     text-decoration: none;
-    border-radius: .35rem;
+    border-radius: 0rem;
     white-space: nowrap
 }
 
@@ -10669,7 +10689,7 @@ a:focus {
     }
 
     .sidebar .nav-item .collapse, .sidebar .nav-item .collapsing {
-        margin: 0 1rem
+        margin: 0 0rem
     }
 
     .sidebar .nav-item .nav-link {
@@ -11515,3 +11535,5 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
     width: 100%
 }
+
+

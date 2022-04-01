@@ -391,6 +391,7 @@ footer {
 .footer-text-header {
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     transform: matrix(1, 0, 0, 1, 0, 0);
+    margin-top: 20px !important;
 }
 
 .footer-text-header h3 {
@@ -659,6 +660,10 @@ footer {
         display: grid !important;
         grid-template-columns: repeat(1, 1fr);
     }
+
+     .spinnerOrdertrack{
+        font-size: 10px !important;
+    }
 }
 
 
@@ -666,6 +671,10 @@ footer {
     .client-details .row {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .spinnerOrdertrack{
+        font-size: 10px !important;
     }
 }
 
@@ -693,7 +702,15 @@ footer {
 
 
 
+@media screen and (min-width: 768px) {
+    .media-768{
+        min-width: 120px !important;
+    }
 
+    .spinnerOrdertrack{
+        font-size: 14px;
+    }
+}
 
 
 

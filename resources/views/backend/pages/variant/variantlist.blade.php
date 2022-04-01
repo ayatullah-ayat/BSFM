@@ -29,16 +29,16 @@
                             @isset($variants)
                                 @foreach ($variants as $variant)
                                     <tr variant-data="{{json_encode($variant)}}">
-                                        <th>{{$loop->iteration}}</th>
-                                        <th>{{$variant->variant_name ?? 'N/A'}}</th>
-                                        <th>{{$variant->variant_type ?? 'N/A'}}</th>
-                                        <th class="text-center">
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$variant->variant_name ?? 'N/A'}}</td>
+                                        <td>{{$variant->variant_type ?? 'N/A'}}</td>
+                                        <td class="text-center">
                                             {!! $variant->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.variant.destroy', $variant->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset

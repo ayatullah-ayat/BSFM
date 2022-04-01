@@ -19,6 +19,8 @@ class CreateSocialIconsTable extends Migration
             $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();
             $table->string('linkedin')->nullable();
+            $table->string('fb_messenger')->nullable();
+            $table->string('whatsapp')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
         });

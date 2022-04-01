@@ -90,7 +90,7 @@ if (!function_exists('hasProfile')){
 
 if (!function_exists('salesPrice')){
     function salesPrice($product){
-        return number_format($product->sales_price, 2);
+        return round($product->sales_price, 0);
         // return number_format(($product->total_product_unit_price - ($product->total_product_unit_price *  ($product->product_discount / 100))) / $product->total_product_qty ?? 0.0 , 2);
     }
 
@@ -102,7 +102,7 @@ if (!function_exists('wholesalesPrice')) {
     {
         if(!$product->total_product_qty) return 0;
         
-        return number_format(($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0, 2);
+        return round(($product->total_product_wholesale_price / $product->total_product_qty) ?? 0.0, 0);
     }
 }
 
@@ -131,3 +131,20 @@ if (!function_exists('getUnreadNotification')) {
         return Notification::whereNull('read_at')->get();
     }
 }
+
+
+
+if (!function_exists('totalEarningsMonthwise')) {
+    function totalEarningsMonthwise()
+    {
+        // sales and completed order month wise 
+        // sales and completed order purchase month wise 
+    }
+}
+
+
+// $totaldeliveredprice    =  Order::where('status', 'completed')->sum('order_total_price');
+// $totalrevenue           = $totalsalesprice +  $totaldeliveredprice;
+
+// $total_order_purchase   = Order::totalPurchase('completed')->first();
+// $total_sale_purchase    = SaleProduct::totalSaleProductPurchase()->first();

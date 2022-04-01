@@ -19,4 +19,10 @@ class SaleProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+
+    public function scopeTotalSaleProductPurchase($query){
+        return $query->selectRaw('round(sum(products.purchase_price * sale_products.product_qty),2) as result')
+            ->join('products', 'sale_products.product_id', '=', 'products.id');
+    }
 }

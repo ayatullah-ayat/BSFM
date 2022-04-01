@@ -19,4 +19,12 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
+
+
+    public function scopeTotalPurchase($query, $status= "completed"){
+        return $query->selectRaw('round(sum(products.purchase_price * order_details.product_qty),2) as result')
+        ->where('status', $status)
+        ->join('order_details', 'order_details.order_id', '=', 'orders.id')
+        ->join('products', 'order_details.product_id', '=', 'products.id');
+    }
 }

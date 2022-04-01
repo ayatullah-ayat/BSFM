@@ -9,7 +9,7 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary text-dark"><a href="/" class="text-decoration-none">Manage Product</a> </h6>
+                <h6 class="m-0 font-weight-bold text-primary text-dark"><a class="text-decoration-none">Manage Product</a> </h6>
                 <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.products.create') }}"><i class="fa fa-plus"> Product</i></a></button>
             </div>
 
@@ -24,12 +24,8 @@
                                 <th>Category</th>
                                 <th>Sub-Category</th>
                                 <th>Unit</th>
-                                {{-- <th>Size</th> --}}
-                                {{-- <th>Brand</th>
-                                <th>Currency</th> --}}
                                 <th>Unit Price</th>
                                 <th>Sales Price</th>
-                                <th>WholeSale Price</th>
                                 <th>Total Qty</th>
                                 <th>Stock Qty</th>
                                 <th width="70" class="text-center">Action</th>
@@ -38,16 +34,7 @@
                         <tbody>
 
                             @foreach ($products as $product)
-                                @php
-                                    $colorSql   = $product->colors('group_concat(color_name) as colors')->first();
-                                    $sizeSql    = $product->sizes('group_concat(size_name) as sizes')->first();
-                                    $singleProduct =$product->colors()->first();
-                                    $brands     = [];
-                                @endphp
 
-                                {{-- @dump($product->id) --}}
-
-                                {{-- @dd($product->colors()->first()) --}}
                                 <tr data-productid="{{ $product->id }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
@@ -57,39 +44,22 @@
                                     <td>{{ $product->category_name ?? 'N/A' }}</td>
                                     <td>{{ $product->subcategory_name ?? 'N/A' }}</td>
                                     <td>{{ $product->product_unit ? strtoupper($product->product_unit) : 'N/A' }}</td>
-                                    {{-- <td>{{ $colorSql->colors ?? 'N/A' }}</td>
-                                    <td>{{ $sizeSql->sizes ?? 'N/A' }}</td> --}}
-                                    {{-- <td>
-                                        @foreach ($product->brands as $brand)
-                                            @php
-                                                $brands[]= $brand->brand_name;
-                                            @endphp
-                                        @endforeach
-                                        {{ count($brands) ? implode(',', $brands) : 'N/A' }}</td>
-                                    <td>{{ $product->currency ? strtoupper($product->currency) : 'N/A' }}</td> --}}
                                     <td>
                                         @if($product->is_product_variant)
                                             <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else 
-                                            {{ number_format($product->unit_price, 2) ?? 0.0 }} 
+                                            {{ round($product->unit_price, 0) ?? 0 }} 
                                         @endif 
                                     </td>
                                     <td>
                                         @if($product->is_product_variant)
                                         <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
                                         @else
-                                        {{  salesPrice($product) ?? 0.0 }}
+                                        {{  salesPrice($product) ?? 0 }}
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($product->is_product_variant)
-                                            <span class="view-variant-product badge badge-info" type="button">Variant Product</span>
-                                        @else
-                                            {{ number_format(wholesalesPrice($product) , 2) ?? 0.0 }}
-                                        @endif
-                                    </td>
-                                    <td>{{ $product->total_product_qty ?? 0.0 }}</td>
-                                    <td>{{ $product->total_stock_qty ?? 0.0 }}</td>
+                                    <td>{{ $product->total_product_qty ?? 0 }}</td>
+                                    <td>{{ $product->total_stock_qty ?? 0 }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('admin.products.show', $product->id )}}" class="fa fa-eye text-info text-decoration-none"></a>
                                         <a href="{{ route('admin.products.edit',$product->id )}}" class="fa fa-edit mx-2 text-warning text-decoration-none"></a>

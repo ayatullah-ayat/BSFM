@@ -30,18 +30,18 @@
                             @isset($taxes)
                                 @foreach ($taxes as $tax)
                                     <tr tax-data="{{ json_encode($tax) }}">
-                                        <th>{{$loop->iteration}}</th>
-                                        <th>{{$tax->product_id ?? 'N/A' }}</th>
-                                        <th>{{$tax->tax_name ?? 'N/A' }}</th>
-                                        <th>{{$tax->tax_percentage ?? 'N/A' }}</th>
-                                        <th class="text-center">
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$tax->product_id ?? 'N/A' }}</td>
+                                        <td>{{$tax->tax_name ?? 'N/A' }}</td>
+                                        <td>{{$tax->tax_percentage ?? 'N/A' }}</td>
+                                        <td class="text-center">
                                             {!! $tax->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.tax.destroy' , $tax->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endisset

@@ -84,7 +84,7 @@
 
         {{-- ----------------------------------------------------------------------------------------- --}}
             <div class="row p-0 mx-0 w-100" id="defaultPrice" data-product-variant="">
-                <div class="col-md-2" data-col="col">
+                <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="color"> Color <span style="color: red;" class="req">*</span></label>
                         <select name="color_ids" multiple class="color" data-required id="color" data-placeholder="Select Color">
@@ -98,7 +98,7 @@
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-4" data-col="col">
+                <div class="col-md-6" data-col="col">
                     <div class="form-group">
                         <label for="size">Size <span style="color: red;" class="req">*</span></label>
                         <select name="size_ids" class="size" multiple data-required id="size" data-placeholder="Select Size">
@@ -112,20 +112,27 @@
                     <span class="v-msg"></span>
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="purchase_price">Purchase Price <span style="color: red;" class="req">*</span></label>
+                        <input name="purchase_price" id="purchase_price" required type="number" class="form-control calcPriceQty" placeholder="Purchase Price">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="unit_price">Unit Price <span style="color: red;" class="req">*</span></label>
                         <input name="unit_price" id="unit_price" type="number" class="form-control calcPriceQty" placeholder="Product Price">
                     </div>
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="wholesale_price">Wholesale Price (Offline Sale)</label>
                         <input name="wholesale_price" id="wholesale_price" type="number" class="form-control calcPriceQty" placeholder="Product Wholesale Price">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="sale_price">Sales Price <span style="color: red;" class="req">*</span></label>
                         <input name="sale_price" readonly id="sale_price" type="number" class="form-control calcPriceQty"
@@ -188,16 +195,22 @@
         
             <div class="col-md-12">
                 <div class="form-group">
+                    <label for="short_description">Short Description</label>
+                    <textarea name="short_description" id="short_description" cols="" rows="5" class="form-control" placeholder="Product Short Description"></textarea>
+                </div>
+            </div>
+        
+            <div class="col-md-12">
+                <div class="form-group">
                     <label for="description">Product Description <span style="color: red;" class="req">*</span></label>
-                    <textarea name="description" id="description" cols="" rows="5" class="form-control" placeholder="Product Description"></textarea>
+                    <textarea name="description" id="description" required cols="" rows="5" class="form-control" placeholder="Product Description"></textarea>
                 </div>
             </div>
         
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="specification">Product Specification</label>
-                    <textarea name="specification" id="specification" cols="" rows="5" class="form-control"
-                        placeholder="Product Specification"></textarea>
+                    <textarea name="specification" id="specification" cols="" rows="5" class="form-control" placeholder="Product Specification"></textarea>
                 </div>
             </div>
         
@@ -492,10 +505,10 @@
             totalWholesalePrice = totalWholesalePrice - (totalWholesalePrice * discount);
         }
 
-        $('#total_product_price').val(totalUnitPrice.toFixed(3));
-        $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
-        $('#total_sales_price').val(totalSalesPrice.toFixed(3));
-        $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
+        $('#total_product_price').val(Math.round(totalUnitPrice))
+        $('#total_wholesale_price').val(Math.round(totalWholesalePrice));
+        $('#total_sales_price').val(Math.round(totalSalesPrice));
+        $('#sale_price').val( Math.round(totalSalesPrice / Number(qty)) );
 
     }
 
@@ -726,7 +739,9 @@
 
         globeInit(arr);
 
+        $('#short_description').summernote()
         $('#description').summernote()
+
         $('#specification').summernote({
             callbacks: {
                 onChange: function(contents, $editable) {
@@ -817,6 +832,7 @@
             total_product_unit_price: $('#total_product_price').val() ?? 0,
             total_stock_price       : $('#total_sales_price').val() ?? 0,
             total_product_wholesale_price: $('#total_wholesale_price').val() ?? 0,
+            purchase_price          : $('#purchase_price').val(),
             unit_price              : $('#unit_price').val(),
             sales_price             : $('#sale_price').val(),
             colors                  : $('#color').val(),
@@ -828,6 +844,7 @@
             discount                : $('#discount').val(),
             description             : $('#description').val(),
             specification           : $('#specification').val(),
+            short_description       : $('#short_description').val(),
             is_best_sale            : Number($('#is_best_sale').prop('checked')),
             allow_review            : Number($('#allow_review').prop('checked')),
             is_active               : Number($('#is_active').prop('checked')),

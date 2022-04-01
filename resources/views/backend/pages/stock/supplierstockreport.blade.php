@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Stock Report')
+@section('title', 'Supplier Stock Report')
 
 @section('content')
 <div>

@@ -8,8 +8,11 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Account Settings</a> </h6>
-                <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Account</i></button>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Daily Account Manament</a> </h6>
+                <div class="inner">
+                    <a class="btn btn-sm btn-outline-success" href="{{ route('admin.officeacount.datewise_account_report') }}"><i class="fa fa-landmark"> Account Report</i></a>
+                    <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Account</i></button>
+                </div>
             </div>
 
             <div class="card-body">

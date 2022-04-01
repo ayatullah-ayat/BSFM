@@ -95,8 +95,8 @@
         <tr>
             <td width="45%" style="padding-left: 0px !important;"><span
                     style="font-size: 7pt; color: #555555; font-family: sans;font-weight:bold;">ORDER
-                    TO:</span><br /><br />Name: {{ $order->customer_name ?? 'N/A' }}<br />Phone: {{
-                $order->customer_phone ?? 'N/A' }}<br />Email: {{ $order->customer->customer_email ?? 'N/A' }}</td>
+                    TO:</span><br /><br />Name: {{ ($order->customer_name ?? $order->customer->customer_name ) ?? 'N/A' }}<br />Phone: {{
+                ($order->customer_phone ?? $order->customer->customer_phone) ?? 'N/A' }}<br />Email: {{ ($order->customer_email ?? $order->customer->customer_email) ?? 'N/A' }}</td>
             <td width="10%">&nbsp;</td>
             <td width="45%" style="text-align: right; padding-right: 0px !important;">
                 <div style="text-align: right;visibility:hidden;">x</div>

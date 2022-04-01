@@ -19,8 +19,6 @@
                     <span class="v-msg"></span>
                 </div>
 
-                {{-- @dd($order) --}}
-
                 <div class="col-md-4" data-col="col">
                     <div class="form-group">
                         <label for="order_date">Order Date </label>
@@ -46,14 +44,14 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="note">Note</label>
-                        <textarea name="note" id="note" cols="0" rows="3" class="form-control note" placeholder="Note" value="{{ $order->order_note }}" ></textarea>
+                        <textarea name="note" id="note" cols="0" rows="3" class="form-control note" placeholder="Note" value="" >{{ $order->order_note }}</textarea>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="shipping_address">Shipment</label>
-                        <textarea name="shipping_address" id="shipping_address" cols="0" rows="3" class="form-control shipment" placeholder="Shipping Address" value="{{ $order->shipping_address }}" ></textarea>
+                        <textarea name="shipping_address" id="shipping_address" cols="0" rows="3" class="form-control shipment" placeholder="Shipping Address" value="" >{{ $order->shipping_address }}</textarea>
                     </div>
                 </div>
 

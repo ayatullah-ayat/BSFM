@@ -57,9 +57,11 @@
                 <div class="modal-body">
     
                     <div class="row track-order-group mb-5">
-                        <div class="form-group">
+                        <div class="form-group d-flex">
                             <input type="text" placeholder="Enter Order No" class="form-control order-track-input border">
+                            <button class="btn btn-success btn-sm media-768 ordertrackBtn"><i class="fa-solid fa-paper-plane"></i> Check</button>
                         </div>
+                        
                     </div>
 
                     <div class="row order-track-row" style="display: none;" id="trackOrderRow"></div>
@@ -80,6 +82,7 @@
 </body>
 
 <script src="{{ asset('assets/common_assets/libs/jquery/jquery.min.js') }}"> </script>
+
 <script src="{{ asset('assets/frontend/libs/bootstrap5/boostrap5.bundle.min.js') }}"></script>
 <script src="{{ asset('frontend/libs/fontawesome6/all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>
@@ -93,6 +96,7 @@
         $(document).on('click','.ordertraking > a', openTrackModal)
         $(document).on('click','.ordertraking-footer > a', openTrackModal)
         $(document).on('change','.order-track-input', callToTrack)
+        $(document).on('click','.ordertrackBtn', callToTrack)
         $(document).on('click','.loadMoreBtn', loadMoreItems)
 
         activeNavMenu()
@@ -100,7 +104,7 @@
 
 
     function callToTrack(){
-        let orderNo = $(this).val();
+        let orderNo = $('.order-track-input').val();
 
         ajaxFormToken()
 
@@ -108,21 +112,32 @@
             url     : `{{ route('trackOrder') }}`,
             method  : 'POST',
             data: { order_no: orderNo},
+            beforeSend(){
+                $('.ordertrackBtn').html(`<i class="fa-solid fa-spinner fa-spin"></i> <span class="spinnerOrdertrack">Checking ...</span>`);
+            },
             success(res){
-                console.log(res);
-                if(res.success && res.data){
-                    $('.order-track-row').show();
-                    $('.order-not-found').hide();
-                    renderOrderStatus(res)
-                }else{
-                    $('.order-not-found').show();
-                    $('.order-track-row').hide();
-                }
+
+                setTimeout(() => {
+                    if(res.success && res.data){
+                        $('.order-track-row').show();
+                        $('.order-not-found').hide();
+                        renderOrderStatus(res)
+
+                        $('.order-track-input').val('')
+                    }else{
+                        $('.order-not-found').show();
+                        $('.order-track-row').hide();
+                    }
+                    
+                    $('.ordertrackBtn').html(`<i class="fa-solid fa-paper-plane"></i> Check`);
+
+                }, 2000);
             },
             error(err){
                 console.log(err);
                 $('.order-not-found').show();
                 $('.order-track-row').hide();
+                $('.ordertrackBtn').html(`<i class="fa-solid fa-paper-plane"></i> Check`);
             },
         })
 

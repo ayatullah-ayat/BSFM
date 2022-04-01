@@ -1,18 +1,17 @@
 <?php
 
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientLogos;
-use Illuminate\Http\Request;
 use App\Http\Services\ImageChecker;
-use DB;
+use App\Models\PartnershipLogo;
 use Exception;
+use Illuminate\Http\Request;
 
-class ClientLogosController extends Controller
+class PartnershipLogoController extends Controller
 {
     use ImageChecker;
-
     /**
      * Display a listing of the resource.
      *
@@ -20,8 +19,8 @@ class ClientLogosController extends Controller
      */
     public function index()
     {
-        $logos = ClientLogos::orderByDesc('id')->get();
-        return view('backend.pages.cms_settings.clientLogo', compact('logos'));
+        $partnerlogos = PartnershipLogo::orderByDesc('id')->get();
+        return view('backend.pages.cms_settings.ourpartnerlogo', compact('partnerlogos'));
     }
 
     /**
@@ -48,7 +47,7 @@ class ClientLogosController extends Controller
             $req_data       = $request->all();
             $imagesData     = json_decode($req_data['data']);
             $uploadedFiles  = [];
-            $oldLogos       = ClientLogos::all();
+            $oldLogos       = PartnershipLogo::all();
             $deleteImage    = false;
             $imagesDb       = [];
 
@@ -69,7 +68,7 @@ class ClientLogosController extends Controller
             }
 
             foreach ($imagesData->images as $key => $logo) {
-                $responseImage = $this->galleryImageUploader($logo, 'clientLogos/');
+                $responseImage = $this->galleryImageUploader($logo, 'partnershiplogo/');
                 if (!$responseImage['success'])
                     throw new Exception($responseImage['msg'] ?? "Unable to Upload Logo!", $responseImage['code'] ?? 403);
 
@@ -77,7 +76,7 @@ class ClientLogosController extends Controller
                     'logo' => $responseImage['fileLocation'],
                 ];
             
-                $resDB = ClientLogos::create(array_merge($uploadedFiles, $imagesDb));
+                $resDB = PartnershipLogo::create(array_merge($uploadedFiles, $imagesDb));
     
                 if (!$resDB)
                     throw new Exception("Unable to Update Logo!", 403);
@@ -100,14 +99,13 @@ class ClientLogosController extends Controller
 
     }
 
-
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ClientLogos  $clientLogos
+     * @param  \App\Models\PartnershipLogo  $partnershipLogo
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientLogos $clientLogos)
+    public function show(PartnershipLogo $partnershipLogo)
     {
         //
     }
@@ -115,10 +113,10 @@ class ClientLogosController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ClientLogos  $clientLogos
+     * @param  \App\Models\PartnershipLogo  $partnershipLogo
      * @return \Illuminate\Http\Response
      */
-    public function edit(ClientLogos $clientLogos)
+    public function edit(PartnershipLogo $partnershipLogo)
     {
         //
     }
@@ -127,10 +125,10 @@ class ClientLogosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ClientLogos  $clientLogos
+     * @param  \App\Models\PartnershipLogo  $partnershipLogo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientLogos $clientLogos)
+    public function update(Request $request, PartnershipLogo $partnershipLogo)
     {
         //
     }
@@ -138,19 +136,19 @@ class ClientLogosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ClientLogos  $clientLogos
+     * @param  \App\Models\PartnershipLogo  $partnershipLogo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientLogos $clientLogos)
+    public function destroy(PartnershipLogo $partnershipLogo)
     {
         try {
 
-            if ($clientLogos && $clientLogos->logo) {
-                $delIamge = $this->deleteImage($clientLogos->logo ?? null);
+            if ($partnershipLogo && $partnershipLogo->logo) {
+                $delIamge = $this->deleteImage($partnershipLogo->logo ?? null);
                 if (!$delIamge)
                     throw new Exception("Something wents wrong!", 403);
 
-                $del = $clientLogos->delete();
+                $del = $partnershipLogo->delete();
                 if (!$del)
                     throw new Exception("Unable to Remove Image!", 403);
             }

@@ -31,9 +31,9 @@
                                             </div>
 
                                             <div class="card-product-price card-text text-center fw-bold">
-                                                <h5>বর্তমান মূুল্য {{ salesPrice($product) ?? '0.0'}} /=
+                                                <h5>বর্তমান মূুল্য {{ salesPrice($product) ?? '0'}} /=
                                                     @if($product->product_discount)
-                                                    <span class="text-decoration-line-through text-danger"> {{ number_format($product->unit_price, 2) ?? '0.0'}} /=</span>
+                                                    <span class="text-decoration-line-through text-danger"> {{ round($product->unit_price, 0) ?? '0'}} /=</span>
                                                     @endif
                                                 </h5>
                                             </div>

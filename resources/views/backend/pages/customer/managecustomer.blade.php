@@ -10,7 +10,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Customer</a> </h6>
                 <div class="inner">
-                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Customer Account</i></button>
+                    <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Customer Ledger</i></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Customer</i></button>
                 </div>
             </div>
@@ -145,7 +145,7 @@
             <div class="modal-content">
     
                 <div class="modal-header">
-                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Customer Account</h5>
+                    <h5 class="modal-title font-weight-bold modal-heading" id="exampleModalLabel1">Customer Ledger</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -157,7 +157,7 @@
                         <div class="col-md-12">
                             <select name="customer" id="customer" data-placeholder="Select Customer">
                                 @foreach ($customers as $item)
-                                <option value="{{ $item->id }}">{{ $item->customer_name ?? 'N/A' }}</option>
+                                <option value="{{ $item->id }}">{{ $item->customer_name ?? 'N/A' }} ({{ $item->customer_phone }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -180,6 +180,11 @@
                             <th>Payment Amount</th>
                             <th>:</th>
                             <th id="total_payment">0</th>
+                        </tr>
+                        <tr>
+                            <th>Payment Due</th>
+                            <th>:</th>
+                            <th id="total_due">0</th>
                         </tr>
                         <tr class="d-none">
                             <th>Payment Status</th>
@@ -265,6 +270,7 @@
             $('#totalProduct').text(total_qty);
             $('#billAmount').text(total_bill);
             $('#total_payment').text(total_payment);
+            $('#total_due').text(Number(total_bill) - Number(total_payment));
                         
             if(Number(total_bill) > 0){
 

@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'Client Logo')
+@section('title', 'Partnership Logo')
 
 @section('content')
 
@@ -9,12 +9,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Client Logos') }}</div>
+                    <div class="card-header">{{ __('Other Organization') }}</div>
 
                     <div class="card-body">
-                        <h2 class="text-left font-weight-bold">Client Logo</h2>
+                        <h2 class="text-left font-weight-bold">Other Organization's Logo</h2>
 
-                        <form id="frm" method="post" class="needs-validation" novalidate="" action="{{ route('admin.cms_settings.clientlogo.store') }}">
+                        <form id="frm" method="post" class="needs-validation" novalidate="" action="{{ route('admin.cms_settings.partnership-logo.store') }}">
                             {{-- @csrf --}}
 
                             <!--Image Upload-->
@@ -164,8 +164,8 @@
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="gallery-tab">
                                     <div class="row">
 
-                                        @if(isset($logos))
-                                            @foreach ($logos as $idx => $item)
+                                        @if(isset($partnerlogos))
+                                            @foreach ($partnerlogos as $idx => $item)
                                                 <div data-type="image" data-imageid="{{ $item->id ?? null }}" class="col-md-4 col-6 pl-2 pr-2 pt-2 img-container" style="max-width: 200px;" data-id="{{ $item->logo ?? '' }}">
 
                                                     <div class="ratio-box text-center" data-type="image-ratio-box" data-toggle="tooltip" data-placement="top" title=""
@@ -299,7 +299,7 @@
                 });
 
                 $.ajax({
-                    url     : `{{ route('admin.cms_settings.clientlogo.destroy','') }}/${gallery_id}`,
+                    url     : `{{ route('admin.cms_settings.partnership-logo.destroy','') }}/${gallery_id}`,
                     data    : { gallery_id, image_id},
                     method  :'DELETE',
                     dataType: "json",

@@ -62,6 +62,7 @@ use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
+use App\Http\Controllers\Admin\PartnershipLogoController;
 
 // ------------ Frontend namespace ----------------------
 
@@ -207,10 +208,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         });
 
         Route::group(['prefix' => 'clientlogos', 'as' => 'clientlogo.'], function(){
-        Route::get('/',                     [ClientLogosController::class, 'index'])->name('index');
+            Route::get('/',                 [ClientLogosController::class, 'index'])->name('index');
             Route::post('/',                [ClientLogosController::class, 'store'])->name('store');
             Route::put('/{clientLogos}',    [ClientLogosController::class, 'update'])->name('update');
             Route::delete('/{clientLogos}', [ClientLogosController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::group(['prefix' => 'partnership-logos', 'as' => 'partnership-logo.'], function(){
+            Route::get('/',                     [PartnershipLogoController::class, 'index'])->name('index');
+            Route::post('/',                    [PartnershipLogoController::class, 'store'])->name('store');
+            Route::put('/{partnershipLogo}',    [PartnershipLogoController::class, 'update'])->name('update');
+            Route::delete('/{partnershipLogo}', [PartnershipLogoController::class, 'destroy'])->name('destroy');
         });
 
 
@@ -306,22 +314,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     // Route::get('/manage-custom-order', [CustomOrderController::class, 'index'])->name('manage_custom_order');
     // Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
 
-    Route::get('/stock-report', [StockReportController::class, 'stockreport'])->name('stock_report');
-    Route::get('/supplier-stock-report', [StockReportController::class, 'supplierstock'])->name('supplier_stock_report');
+    Route::get('/stock-report',         [StockReportController::class, 'stockreport'])->name('stock_report');
+    Route::get('/supplier-stock-report',[StockReportController::class, 'supplierstock'])->name('supplier_stock_report');
     Route::get('/product-stock-report', [StockReportController::class, 'productreport'])->name('product_stock_report');
+    Route::get('/products-by-supplier', [StockReportController::class, 'getProductBySupplier'])->name('getProductBySupplier');
 
-    Route::get('/sales-report', [ReportsController::class, 'salesreport'])->name('sales_report');
-    Route::get('/purchase-report', [ReportsController::class, 'purchasereport'])->name('purchase_report');
-    Route::get('/product-tax-report', [ReportsController::class, 'producttaxreport'])->name('product_tax_report');
-    Route::get('/invoice-tax-report', [ReportsController::class, 'invoicetaxreport'])->name('invoice_tax_report');
+    Route::get('/sales-report',         [ReportsController::class, 'salesreport'])->name('sales_report');
+    Route::get('/purchase-report',      [ReportsController::class, 'purchasereport'])->name('purchase_report');
 
-    Route::get('/sms-configuration', [SmsSettignsController::class, 'smsconfiguration'])->name('sms_configuration');
-    Route::get('/sms-template', [SmsSettignsController::class, 'smstemplate'])->name('sms_template');
-    Route::get('/email-configuration', [EmailConfigurationController::class, 'index'])->name('email_configuration');
-    Route::get('/manage-compnay', [ManageCompanyController::class, 'index'])->name('manage_company');
-    Route::get('/manage-gateway', [ManageGatewayController::class, 'index'])->name('manage_gateway');
+    Route::get('/product-tax-report',   [ReportsController::class, 'producttaxreport'])->name('product_tax_report');
+    Route::get('/invoice-tax-report',   [ReportsController::class, 'invoicetaxreport'])->name('invoice_tax_report');
 
-    Route::get('/contact-us', [ContactController::class, 'index'])->name('contact_us');
+    Route::get('/sms-configuration',    [SmsSettignsController::class, 'smsconfiguration'])->name('sms_configuration');
+    Route::get('/sms-template',         [SmsSettignsController::class, 'smstemplate'])->name('sms_template');
+    Route::get('/email-configuration',  [EmailConfigurationController::class, 'index'])->name('email_configuration');
+    Route::get('/manage-compnay',       [ManageCompanyController::class, 'index'])->name('manage_company');
+    Route::get('/manage-gateway',       [ManageGatewayController::class, 'index'])->name('manage_gateway');
+
+    Route::get('/contact-us',           [ContactController::class, 'index'])->name('contact_us');
 
     Route::group(['prefix' => 'customservicecategories', 'as' => 'customservicecategory.'], function(){
         Route::get('/',                         [CustomServiceCategoryController::class, 'index'])->name('index');
@@ -409,6 +419,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',                   [OfficeAccountController::class, 'store'])->name('store');
         Route::put('/{officeAccount}',     [OfficeAccountController::class, 'update'])->name('update');
         Route::delete('/{officeAccount}',  [OfficeAccountController::class, 'destroy'])->name('destroy');
+        Route::get('/account-report',      [OfficeAccountController::class, 'datewise_account_report'])->name('datewise_account_report');
     });
 
     Route::group(['prefix' => 'otherOrders', 'as' => 'otherOrder.'], function(){

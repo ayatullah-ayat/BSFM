@@ -108,6 +108,14 @@
                                     </th>
                                     <th></th>
                                 </tr>
+                                <tr>
+                                    <th colspan="3"></th>
+                                    <th colspan="2">Payment Amount</th>
+                                    <th>
+                                        <input type="number" readonly id="total_payment" value="0" class="text-right">
+                                    </th>
+                                    <th></th>
+                                </tr>
 
                             </tfoot>
                         </table>
@@ -389,6 +397,7 @@
             order_subtotal      : $('#grand_sub_total').val().trim() ?? 0,
             discount_price      : $('#discount').val().trim() ?? 0,
             order_grand_total   : $('#grand_total').val().trim() ?? 0,
+            total_payment       : $('#total_payment').val().trim() ?? 0,
             products            : productsInfo()
         }
     }

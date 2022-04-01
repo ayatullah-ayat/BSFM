@@ -7,6 +7,7 @@
             <div class="col-md-3">
 
                 <div class="about-footer">
+                    {{-- @dd($footerabout) --}}
                     @if($footerabout)
 
                         @if($footerabout->footer_logo)
@@ -104,17 +105,25 @@
                     <h3>আমাদের অংগ প্রতিষ্ঠান সমূহ</h3>
                 </div>
 
+
                 <div class="our-organigation">
                     <ul class="list-unstyled d-flex">
-                        <li><a href=""><img class="img-fluid" src="{{asset('assets/frontend/img/footer/footer-1.png')}}" alt=""></a></li>
-                        <li><a href=""><img class="img-fluid" src="{{asset('assets/frontend/img/footer/footer-2.png')}}" alt=""></a></li>
+                        @if(isset($organizationlogo))
+                               @foreach ($organizationlogo as $organizationItem)
+                                    <li><a href="javascript:void(0)"><img class="img-fluid" src="{{asset( $organizationItem->logo )}}" alt=""></a></li>
+                               @endforeach
+                        @endif
                     </ul>
                 </div>
 
-                <div class="footer-address">
-                    <p>আমাদের ঠিকানা-<br>
-                        ২০৭, ডি পি আই মসজিদ মার্কেট, বিতাক মোড়, তেজগাঁও আই/এ, ঢাকা- ১২০৮</p>
-                </div>
+                {{-- @dd($contactInfo) --}}
+                @if($contactInfo)
+                    <div class="footer-address">
+                        @if ( $contactInfo->address )
+                            <p>{{ $contactInfo->address }}</p>
+                        @endif
+                    </div>
+                @endif
 
             </div>
 

@@ -253,6 +253,14 @@
                 
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label for="short_description">Short Description</label>
+                            <textarea name="short_description" id="short_description" cols="" rows="5" class="form-control"
+                                placeholder="Product Short Description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label for="description">Product Description <span style="color: red;" class="req">*</span></label>
                             <textarea name="description" id="description" cols="" rows="5" class="form-control" placeholder="Product Description"></textarea>
                         </div>
@@ -403,10 +411,16 @@
                 totalWholesalePrice = totalWholesalePrice - (totalWholesalePrice * discount);
             }
 
-            $('#total_product_price').val(totalUnitPrice.toFixed(3));
-            $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
-            $('#total_sales_price').val(totalSalesPrice.toFixed(3));
-            $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
+            // $('#total_product_price').val(totalUnitPrice.toFixed(3));
+            // $('#total_wholesale_price').val(totalWholesalePrice.toFixed(3));
+            // $('#total_sales_price').val(totalSalesPrice.toFixed(3));
+            // $('#sale_price').val( (totalSalesPrice / Number(qty)).toFixed(3) );
+
+
+            $('#total_product_price').val(Math.round(totalUnitPrice))
+            $('#total_wholesale_price').val(Math.round(totalWholesalePrice));
+            $('#total_sales_price').val(Math.round(totalSalesPrice));
+            $('#sale_price').val( Math.round(totalSalesPrice / Number(qty)) );
 
         }
 
@@ -691,6 +705,7 @@
             globeInit(arr);
 
             $('#description').summernote()
+            $('#short_description').summernote()
             $('#specification').summernote({
                 callbacks: {
                     onChange: function(contents, $editable) {
@@ -796,6 +811,7 @@
             product_unit            : $('.unit').val(),
             discount                : $('#discount').val(),
             description             : $('#description').val(),
+            short_description       : $('#short_description').val(),
             specification           : $('#specification').val(),
             is_best_sale            : Number($('#is_best_sale').prop('checked')),
             allow_review            : Number($('#allow_review').prop('checked')),
@@ -853,6 +869,7 @@
         $('#discount').val('')
         $('#description').val('')
         $('#specification').val('')
+        $('#short_description').val('')
         $('#is_best_sale').prop('checked')
         $('#allow_review').prop('checked')
         $('#is_active').prop('checked')

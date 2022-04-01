@@ -86,6 +86,8 @@ class SaleController extends Controller
                 'sold_sizes'            => null,
                 'sold_colors'           => null,
                 'sold_total_qty'        => 0,
+                'total_payment'         => $data['total_payment'] ?? 0,
+                'total_payment_due'     => floatval($data['order_grand_total'] ?? 0) - floatval($data['total_payment'] ?? 0),
                 'sold_total_price'      => $data['order_subtotal'] ?? 0,
                 'total_discount_price'  => $data['discount_price'] ?? 0,
                 'order_grand_total'     => $data['order_grand_total'] ?? 0,
@@ -96,6 +98,25 @@ class SaleController extends Controller
 
             if(!$sale)
                 throw new Exception("Unable to create Sale!", 403);
+
+
+            if(floatval($data['total_payment'] ?? 0)){
+
+                $payment = Payment::create([
+                    'customer_id'       => $sale->customer_id ?? null,
+                    'sale_id'           => $sale->id,
+                    'payment_type'      => 'cash',
+                    'transection_id'    => 'manual_' . uniqid(),
+                    // 'currency'          => null,
+                    'payment_amount'    => $data['total_payment'],
+                    'payment_due'       => $due = (floatval($data['order_grand_total'] ?? 0) - floatval($data['total_payment'] ?? 0)),
+                    'payment_status'    => $due > 0 ? 'Due' : 'Paid',
+                    'payment_by'        => auth()->guard('admin')->user()->id ?? null,
+                ]);
+    
+                if (!$payment)
+                    throw new Exception("Unable to make Payment!", 403);
+            }
 
             $isFirstCheck = false;
 

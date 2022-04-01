@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('product_unit')->nullable();
             $table->text('product_name')->nullable();
             $table->text('product_description')->nullable();
+            $table->text('short_description')->nullable();
             $table->text('product_specification')->nullable();
             $table->text('product_thumbnail_image')->nullable();
   

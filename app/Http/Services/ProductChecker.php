@@ -91,6 +91,7 @@ trait ProductChecker
     private function updateProduct(array $fields=[], $product){
         try {
 
+
             $productFields = $this->productFields($fields);
 
             $productUpdate = $product->update($productFields);
@@ -193,12 +194,14 @@ trait ProductChecker
                 'product_sku'                   => $data['product_sku'] ?? uniqid(),
                 'product_unit'                  => $data['product_unit'] ?? null,
                 'product_description'           => $data['description'] ?? null,
+                'short_description'             => $data['short_description'] ?? null,
                 'product_specification'         => $data['specification'] ?? null,
                 'product_thumbnail_image'       => $data['product_thumbnail_image'] ?? null,
                 'product_discount'              => $data['discount'] ?? 0,
                 'total_product_qty'             => $data['product_qty'] ?? 0,
                 'sales_price'                   => $data['sales_price'] ?? 0,
                 'unit_price'                    => $data['unit_price'] ?? 0,
+                'purchase_price'                => $data['purchase_price'] ?? 0,
                 'total_product_unit_price'      => $data['total_product_unit_price'] ?? 0, 
                 'total_stock_qty'               => $data['product_qty'] ?? 0,
                 'total_stock_price'             => $data['total_stock_price'] ?? $data['total_product_unit_price'],

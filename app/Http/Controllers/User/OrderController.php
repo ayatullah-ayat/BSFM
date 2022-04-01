@@ -320,11 +320,14 @@ class OrderController extends Controller
                 ]);
             }
                 
+            // dd($req['shipment']); //
+
             $orderData = [
                 'user_id'           => $userId,
                 'customer_id'       => $customer->id ?? null,
                 'customer_name'     => $req['shipment']['name'] ?? null,
                 'customer_phone'    => $req['shipment']['mobile_no'] ?? null,
+                'customer_email'    => $req['shipment']['email'] ?? null,
                 'order_date'        => date('Y-m-d'),
                 'order_no'          => $order_no,
                 'coupon_code'       => session('coupon') ? session('coupon')['coupon_code'] : null,

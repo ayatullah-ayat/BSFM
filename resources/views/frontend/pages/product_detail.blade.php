@@ -47,14 +47,20 @@
                         </div>
                         
                         <div class="single-prodect-offer-price d-flex">
-                            <h3> নির্ধারিত মূল্য- {{ salesPrice($product)  ?? '0.0' }} টাকা </h3>
-                            <h5> {{ number_format($product->unit_price, 2) ?? '0.0' }} টাকা </h5>
+                            <h3> নির্ধারিত মূল্য- {{ salesPrice($product)  ?? '0' }} টাকা </h3>
+                            @if($product->product_discount)
+                            <h5> {{ round($product->unit_price, 0) ?? '0' }} টাকা </h5>
+                            @endif 
                         </div>
     
                         <div class="single-prodect-description">
+                            @if(isset($product->short_description))
+                            {!! Str::words($product->short_description,200,'.......') !!}
+                            @else 
                             <p>
-                                {!! $product->product_description !!}
+                                {!! Str::words($product->product_description,150,'.......') !!}
                             </p>
+                            @endif 
                         </div>
 
                         @if (count($product->brands))
