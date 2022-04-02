@@ -328,7 +328,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/sms-configuration',    [SmsSettignsController::class, 'smsconfiguration'])->name('sms_configuration');
     Route::get('/sms-template',         [SmsSettignsController::class, 'smstemplate'])->name('sms_template');
     Route::get('/email-configuration',  [EmailConfigurationController::class, 'index'])->name('email_configuration');
-    Route::get('/manage-compnay',       [ManageCompanyController::class, 'index'])->name('manage_company');
+    
     Route::get('/manage-gateway',       [ManageGatewayController::class, 'index'])->name('manage_gateway');
 
     Route::get('/contact-us',           [ContactController::class, 'index'])->name('contact_us');
@@ -450,9 +450,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{webfooter}',       [WebFooterController::class, 'destroy'])->name('destroy');
     });
 
-    // Route::get('/web-footer', [WebFooterController::class, 'index'])->name('web_footer');
-    // Route::get('/social-icon', [SocialIconController::class, 'index'])->name('social_icon');
-
+    Route::group(['prefix' => 'manage-companies', 'as' => 'manage-company.'], function(){
+        Route::get('/',                     [ManageCompanyController::class, 'index'])->name('index');
+        Route::post('/',                    [ManageCompanyController::class, 'store'])->name('store');
+        Route::put('/{managecompnay}',      [ManageCompanyController::class, 'update'])->name('update');
+        Route::delete('/{managecompnay}',   [ManageCompanyController::class, 'destroy'])->name('destroy');
+    });
 
 
 });

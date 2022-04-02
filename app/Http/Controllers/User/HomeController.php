@@ -28,7 +28,7 @@ class HomeController extends Controller
     {
         $maxId    = request()->max_id ?? $this->maxId;
         $limit    = request()->limit ?? $this->limit;
-        $operator = request()->operator ?? '<';
+        $operator = request()->operator ?? '>';
 
 
         $customservices = OurCustomService::where('is_active',1)
@@ -43,9 +43,11 @@ class HomeController extends Controller
             $sql->where('id', $operator, $maxId);
         }
 
-        $customservicecategories = $sql->latest()
+        $customservicecategories = $sql
+                                // ->latest()
                                 ->take($limit)
                                 ->get();
+                                
 
         if (request()->ajax()) {
 
@@ -73,7 +75,7 @@ class HomeController extends Controller
         // $sociallink = SocialIcon::where('is_active', 1)->first();
         // $footerabout = WebFooter::where('is_active', 1)->first();
 
-        // dd($sociallink);
+        // dd($customservicecategories);
         return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
     }
 

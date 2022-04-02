@@ -27,7 +27,7 @@ class FrontendComposer
         $cartQtys   = $data['cartQtys'] ?? [];
 
 
-        $customservicecategories = CustomServiceCategory::where('is_active', 1)->latest()
+        $customservicecategoriesFooter = CustomServiceCategory::where('is_active', 1)->latest()
                                 ->take(14)
                                 ->get();
 
@@ -37,7 +37,7 @@ class FrontendComposer
 
         $organizationlogo = PartnershipLogo::latest()->take(2)->get();
         
-        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategories','footerabout','sociallink','contactInfo','organizationlogo'));
+        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategoriesFooter','footerabout','sociallink','contactInfo','organizationlogo'));
     }
 
 }
