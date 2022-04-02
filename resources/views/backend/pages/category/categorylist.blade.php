@@ -9,6 +9,7 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Categories</a> </h6>
+                <button class="btn btn-sm btn-info"><a class="text-decoration-none text-white" href="{{ route('export_excel') }}"> <i class="fa fa-plus"> Download xlxs</a></i></button>
                 <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Category</i></button>
             </div>
 

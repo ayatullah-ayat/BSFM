@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\OrderEvent;
+use App\Exports\OrdersExport;
+use App\Exports\UsersExport;
 use PDF;
 use App\Models\Order;
 use App\Models\Notification;
@@ -19,6 +21,7 @@ use Exception;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Stmt\TryCatch;
 
 class OrderController extends Controller
@@ -36,6 +39,37 @@ class OrderController extends Controller
         $orders = Order::orderByDesc('id')->get();
         return view('backend.pages.order.ordermanage', compact('orders'));
     }
+
+
+    public function orderexport() 
+    {
+        $oders = [
+            [
+                'ID' => 1,
+                'Name' => 'Raju',
+                'Email' => 'admin@gmail.com',
+                'Phone' => '016542202',
+                'Address' => 'Nikunjo-2',
+                'Company' => 'ThemeShaper'
+            ]
+        ];
+          
+        return Excel::download(new UsersExport($oders), 'oders.xlsx');
+}
+
+public function order_info_export(){
+    $export = new OrdersExport([
+        'id' => 1,
+        'Name' => 'Raju',
+        'Phone' => 1323232323,
+        'Email' => 'admin@gmail.com'
+        // [1, 2, 3],
+        // [4, 5, 6]
+    ]);
+
+    return Excel::download($export, 'invoices.xlsx');
+}
+
 
     /**
      * Show the form for creating a new resource.

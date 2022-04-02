@@ -203,10 +203,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            hideModal('#bannerModal');
         }
 
 
@@ -291,10 +287,6 @@
                 };
 
                 ajaxRequest(obj, { reload: true, timer: 2000 })
-
-                resetData();
-
-                hideModal('#bannerModal');
         }
 
         function formatData(){

@@ -126,17 +126,12 @@ Route::group(['prefix' => ''],function(){
 
 // --------------------------- Admin Dashboard ---------------------------------
 
+Route::get('/order-export', [OrderController::class, 'orderexport'])->name('order_export');
+Route::get('/order-list-export', [OrderController::class, 'order_info_export'])->name('order_list_export');
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
     
-    Route::get('/dashboard',                [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::get('/tables', function () {
-        return view('backend.demo.table');
-    });
-
-    Route::get('/charts', function () {
-        return view('backend.demo.chart');
-    });
+    Route::get('/dashboard',        [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'category', 'as' => 'category.'],function () {
         Route::get('/',             [CategoryController::class, 'index'])->name('index');

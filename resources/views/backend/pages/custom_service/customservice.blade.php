@@ -243,8 +243,6 @@
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
             resetData()
-
-            hideModal('#serviceModal');
         }
 
         function deleteToDatabase(e){
@@ -330,10 +328,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            hideModal('#serviceModal');
         }
 
         function formatData(){

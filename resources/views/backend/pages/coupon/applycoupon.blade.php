@@ -490,8 +490,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            // hideModal('#CouponUpdateModal');
         }
 
         function showDataToModal(){
@@ -634,8 +632,6 @@
             };
 
             ajaxRequest(obj,{ reload: true, timer: 2000 });
-
-            // hideModal('#applyCouponModal');
         }
 
     </script>

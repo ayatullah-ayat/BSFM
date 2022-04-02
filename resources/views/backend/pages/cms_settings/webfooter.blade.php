@@ -279,8 +279,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
         }
 
         function showUpdateModal(){
@@ -326,8 +324,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
         }
 
         function formatData(){

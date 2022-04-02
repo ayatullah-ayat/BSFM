@@ -10,7 +10,12 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Order</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_orders.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
+           
+                <div class="inner">
+                    <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('order_list_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
+                    <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_orders.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
+                </div>
+              
             </div>
 
             <div class="card-body">
@@ -131,6 +136,14 @@
     <link href="{{ asset('assets/backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
     <link href="{{ asset('assets/backend/css/currency/currency.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/product/product.css') }}">
+    <style>
+        /* .custom-btn-import {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 5px;
+        } */
+    </style>
 @endpush
 
 @push('js')

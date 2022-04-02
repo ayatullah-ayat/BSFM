@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Services\ImageChecker;
 
+
+
 class CategoryController extends Controller
 {
     use ImageChecker;

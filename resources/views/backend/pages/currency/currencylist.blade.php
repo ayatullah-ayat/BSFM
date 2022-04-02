@@ -250,11 +250,10 @@
 
         function submitToDatabase(){
             //
-
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{ route('admin.currency.store') }}`, 
                 method  : "POST",
                 data    : formatData(),
             };
@@ -262,8 +261,6 @@
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
             resetData();
-
-            hideModal('#currencyModal');
         }
 
         function showUpdateModal(){

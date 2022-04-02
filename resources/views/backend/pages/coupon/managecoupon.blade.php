@@ -370,10 +370,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            hideModal('#couponModal');
         }
 
         function deleteToDatabase(e){
@@ -430,8 +426,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-            resetData();
-            hideModal('#couponModal');
         }
 
         function formatData(){
