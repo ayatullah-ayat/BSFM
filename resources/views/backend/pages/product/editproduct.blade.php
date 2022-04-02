@@ -123,8 +123,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="purchase_price">Purchase Price <span style="color: red;" class="req">*</span></label>
-                        <input name="purchase_price" id="purchase_price" required type="number" class="form-control calcPriceQty"
-                            placeholder="Purchase Price">
+                        <input name="purchase_price" id="purchase_price" required type="number" class="form-control calcPriceQty" placeholder="Purchase Price" value="{{ $product->purchase_price ?? 0 }}">
                     </div>
                 </div>
                 

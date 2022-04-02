@@ -111,7 +111,7 @@ if (!function_exists('wholesalesPrice')) {
 if (!function_exists('matchColor')) {
     function matchColor($color_name=null)
     {
-        return preg_match('/white|#f{1,5}/im', $color_name);
+        return preg_match('/white|#f{1,5}|সাদা/im', $color_name);
     }
 }
 

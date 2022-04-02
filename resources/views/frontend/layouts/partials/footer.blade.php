@@ -58,8 +58,8 @@
                 {{-- @dd($customservicecategories) category_name --}}
                 <div class="category-menu">
                     <ul class="list-unstyled">
-                        @isset($customservicecategories)
-                            @foreach ( $customservicecategories as $customservicecategory )
+                        @isset($customservicecategoriesFooter)
+                            @foreach ( $customservicecategoriesFooter as $customservicecategory )
                                 <li><a href="javascript:void(0)" class="customize-btn" data-categoryid="{{ $customservicecategory->id }}">{{ $customservicecategory->category_name }}</a></li>
                             @endforeach
                         @endisset

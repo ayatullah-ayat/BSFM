@@ -70,7 +70,7 @@
                         </div>
                     @endforeach
                 @endisset
-    
+
                 <div data-totalcount="{{ $countCustomservicecategories ?? 0 }}" class="product-ses-more text-center loadMoreContainer {{ $countCustomservicecategories <= $limit ? 'd-none' : '' }}">
                     <a href="javascript:void(0)" data-uri="{{ route('home_index') }}" class="loadMoreBtn" data-maxid="{{ $maxCatId }}" data-limit="{{ $limit }}"> আরও কাস্টমাইজ প্রোডাক্ট দেখুন </a>
                 </div>

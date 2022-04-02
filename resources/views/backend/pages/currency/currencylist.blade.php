@@ -32,19 +32,19 @@
                             @isset($currencies)
                                 @foreach ($currencies as $currency)
                                     <tr currency-data="{{json_encode($currency)}}">
-                                        <th>{{ $loop->iteration ?? 'N/A'}}</th>
-                                        <th>{{ $currency->currency_name  ?? 'N/A' }}</th>
-                                        <th>{{ $currency->currency_icon ?? 'N/A' }}</th>
-                                        <th>{{ $currency->currency_position  ?? 'N/A' }}</th>
-                                        <th>{{ $currency->currency_conversion_rate  ?? 'N/A' }}</th>
-                                        <th class="text-center">
+                                        <td>{{ $loop->iteration ?? 'N/A'}}</td>
+                                        <td>{{ $currency->currency_name  ?? 'N/A' }}</td>
+                                        <td>{{ $currency->currency_icon ?? 'N/A' }}</td>
+                                        <td>{{ $currency->currency_position  ?? 'N/A' }}</td>
+                                        <td>{{ $currency->currency_conversion_rate  ?? 'N/A' }}</td>
+                                        <td class="text-center">
                                             {!! $currency->is_active ? '<span class="badge badge-success">Active </span>' : '<span class="badge badge-danger">In-Active </span>' !!}
-                                        </th>
-                                        <th class="text-center">
+                                        </td>
+                                        <td class="text-center">
                                             {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                             <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
                                             <a href="{{ route('admin.currency.destroy', $currency->id )}}" class="fa fa-trash text-danger text-decoration-none delete"></a>
-                                        </th>
+                                        </td>
                                     </tr> 
                                 @endforeach
                             @endisset
@@ -105,7 +105,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="">Conversion Rate</label>
-                                    <input type="number" class="form-control" id="conversation_rate">
+                                    <input type="number" class="form-control" id="conversation_rate" value="0">
                                 </div>
                             </div>
 
@@ -254,7 +254,7 @@
             ajaxFormToken();
 
             let obj = {
-                url     : ``, 
+                url     : `{{ route('admin.currency.store') }}`, 
                 method  : "POST",
                 data    : formatData(),
             };
@@ -263,7 +263,7 @@
 
             resetData();
 
-            hideModal('#currencyModal');
+            // hideModal('#currencyModal');
         }
 
         function showUpdateModal(){
@@ -312,7 +312,7 @@
 
             resetData();
 
-            hideModal('#currencyModal');
+            // hideModal('#currencyModal');
         }
 
 

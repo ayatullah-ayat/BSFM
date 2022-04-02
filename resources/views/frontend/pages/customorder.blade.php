@@ -64,7 +64,7 @@
                             </div>
                         </div>
     
-                       @if($socialicon->fb_messenger && $socialicon->whatsapp)
+                       @if($socialicon->fb_messenger || $socialicon->whatsapp)
                             <div class="contact-info row">
                                 <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
                                 <div class="contact-inner-info col-md-12">

@@ -1,59 +1,98 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@extends('frontend.layouts.master')
+<!-- Account Area Starts-->
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+@section('content')
+<section class="container-fluid account-area">
 
-            <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
+    <div class="container">
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-            </div>
+        <div class="row">
 
-            <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
+            <div class="col-md-5 mx-auto">
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
+                <div class="account-form card">
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+                    <h3 class="text-center"> রেজিস্টেশন করুন </h3>
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
+                    @if ($errors->any())
+                    <div>
+                        <div class="text-danger pl-2">
+                            {{ __('Whoops! Something went wrong.') }}
+                        </div>
+                    
+                        <ul class="text-danger">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+
+                        <div class="form-group">
+                            <input 
+                                class="micro-form-control form-control border mt-3"
+                                id="name" 
+                                type="text" 
+                                name="name" 
+                                required autofocus
+                                placeholder="তোমার নাম" value="{{ old('name') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="email"
+                                class="micro-form-control form-control border mt-3"
+                                value="{{ old('email') }}"
+                                id="email" 
+                                placeholder=" ইমেইল অ্যাড্রেস "
+                                required
+                                name="email"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" 
+                                class="micro-form-control form-control border mt-3"
+                                id="password"
                                 name="password"
-                                required autocomplete="new-password" />
-            </div>
+                                required 
+                                autocomplete="new-password"
+                                placeholder=" পাসওয়ার্ড ">
+                        </div>
 
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
+                        <div class="form-group">
+                            <input class="micro-form-control form-control border mt-3"
+                                id="password_confirmation"
                                 type="password"
-                                name="password_confirmation" required />
+                                name="password_confirmation" required
+                                placeholder=" কনফর্ম পাসওয়ার্ড "
+                            >
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-sm mt-3 btn-danger w-100 p-2"> পাঠিয়ে দিন </button>
+                        </div>
+
+                        <div class="form-group account-text">
+                            <span> আপনার এক্যাউন্ট থাকলে <a href="{{ route('login') }}" class="mt-5"> লগ ইন </a> করুন </span>
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
+        </div>
 
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+    </div>
+
+</section>
+@endsection
+
+@push('css')
+<link rel="stylesheet" href="{{ asset('assets/frontend/css/login.css') }}">
+@endpush

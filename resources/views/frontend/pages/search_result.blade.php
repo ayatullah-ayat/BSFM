@@ -39,7 +39,7 @@
 
         </div>
 
-        <h1 class="search-heading"> ই-কমার্স সপ </h1>
+        <h1 class="search-heading"> ই-কমার্স শপ </h1>
 
         <div class="parent-container" >
             @if(isset($products) && count($products))
