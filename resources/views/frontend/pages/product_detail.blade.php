@@ -55,10 +55,10 @@
     
                         <div class="single-prodect-description">
                             @if(isset($product->short_description))
-                            {!! Str::words($product->short_description,200,'.......') !!}
+                            {!! Str::words($product->short_description, 200,'.......') !!}
                             @else 
                             <p>
-                                {!! Str::words($product->product_description,150,'.......') !!}
+                                {!! Str::words($product->product_description, 150,'.......') !!}
                             </p>
                             @endif 
                         </div>

@@ -576,6 +576,7 @@
                     form.attr('data-productid', product?.id);
 
                     $('#product_sku').val(product.product_sku).prop('readonly',true);
+                    $('#short_description').val(product.short_description);
                     $('#description').val(product.product_description);
                     $('#specification').val(product.product_specification);
 

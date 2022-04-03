@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Custom;
 
+use App\Exports\CustomServiceOrdertExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomOrderRequest;
@@ -12,6 +13,7 @@ use App\Models\Custom\CustomServiceProduct;
 use Exception;
 use DB;
 use App\Http\Services\ImageChecker;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomServiceOrderController extends Controller
 {
@@ -27,6 +29,11 @@ class CustomServiceOrderController extends Controller
         $customservicecategories = CustomServiceCategory::get();
         $customserviceproducts = CustomServiceProduct::get();
         return view('backend.pages.custom_order.managecustomorder', compact('customserviceorders','customservicecategories','customserviceproducts'));
+    }
+
+
+    public function exportCustomServiceOrder(){
+        return Excel::download(new CustomServiceOrdertExport, 'customserviceorder.csv');
     }
 
     /**

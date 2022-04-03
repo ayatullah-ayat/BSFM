@@ -126,8 +126,13 @@ Route::group(['prefix' => ''],function(){
 
 // --------------------------- Admin Dashboard ---------------------------------
 
-Route::get('/order-export', [OrderController::class, 'orderexport'])->name('order_export');
-Route::get('/orderDataCsv', [OrderController::class, 'orderDataCsv'])->name('orderDataCsv');
+Route::get('/order-export',         [OrderController::class, 'orderexport'])->name('order_export');
+Route::get('/orderDataCsv',         [OrderController::class, 'orderDataCsv'])->name('orderDataCsv');
+Route::get('/office-account-csv',   [OfficeAccountController::class, 'officeDataCsv'])->name('office_account_csv');
+Route::get('/stock-report-export',  [StockReportController::class, 'exportStockReport'])->name('stock_report_export');
+Route::get('/other-order-export',   [OtherOrderController::class, 'OtherOrderExport'])->name('other_order_data_export');
+Route::get('/custom-service-order-export', [CustomServiceOrderController::class, 'exportCustomServiceOrder'])->name('custom_service_order_export');
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
     

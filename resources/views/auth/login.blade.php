@@ -1,56 +1,99 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('frontend.layouts.master')
+<!-- Account Area Starts-->
 
-        <!-- Validation Errors --> 
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section('content')
+    <section class="container-fluid account-area d-flex align-items-center" style="min-height: 50vh;">
+    
+        <div class="container">
+    
+            <div class="row">
+    
+                <div class="col-md-5 mx-auto">
+    
+                    <div class="account-form card">
+    
+                        <h3 class="text-center"> লগ ইন করুন </h3>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+                        @if(session('status'))
+                            <div class="alert alert-success">
+                                {{ session('status') }}
+                            </div>
+                        @endif 
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
+                        @if ($errors->any())
+                        <div>
+                            <div class="text-danger pl-2">
+                                {{ __('Whoops! Something went wrong.') }}
+                            </div>
+                        
+                            <ul class="text-danger">
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+    
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+    
+                            <div class="form-group">
+                                <input class="micro-form-control form-control border mt-3" id="email" type="email" name="email" value="{{ old('email') }}" required autofocus placeholder=" ইমেইল অ্যাড্রেস ">
+                            </div>
+    
+                            <div class="form-group">
+                                <input type="password" class="micro-form-control form-control border mt-3"
+                                id="password"
                                 name="password"
-                                required autocomplete="current-password" />
+                                required 
+                                autocomplete="current-password"
+                                placeholder=" পাসওয়ার্ড ">
+                            </div>
+    
+                            <div class="login-remember-content my-3">
+    
+                                <div class="checkbox">
+                                    <input id="remember_me" class="magic-checkbox" type="checkbox" name="remember">
+                                    <label for="remember_me" class="text-sm checkmark">
+                                        Remember Me
+                                    </label>
+                                </div>
+    
+                                <div class="account-text">
+                                    @if (Route::has('password.request'))
+                                    <a class="mt-5 me-3 text-end text-decoration-none" href="{{ route('password.request') }}">
+                                        {{ __('পাসওয়ার্ড ভুলে গেছেন?') }}
+                                    </a>
+                                    @endif
+                                </div>
+    
+                            </div>
+    
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-sm btn-danger w-100 p-1"> পাঠিয়ে দিন </button>
+                            </div>
+    
+                            <div class="form-group account-text">
+                                <span> নতুন এক্যাউন্ট খুলতে <a href="{{ route('register') }}" class="mt-5"> রেজিস্টার </a> করুন
+                                </span>
+                            </div>
+    
+                        </form>
+    
+                    </div>
+    
+                </div>
+    
             </div>
+    
+        </div>
+    
+    </section>
+@endsection
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+@push('css')
+    <link rel="stylesheet" href="{{ asset('assets/frontend/css/login.css') }}">
+@endpush
+ 

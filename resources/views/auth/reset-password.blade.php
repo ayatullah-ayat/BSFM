@@ -1,48 +1,91 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('frontend.layouts.master')
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section('content')
+<!-- Account Area Starts-->
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+<section class="container-fluid account-area d-flex align-items-center" style="min-height: 50vh;">
 
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+    <div class="container">
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+        <div class="row">
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus />
+            <div class="col-md-5 mx-auto">
+
+                <div class="account-form">
+
+                    <h3 class="text-center"> রিসেট পাসওয়ার্ড </h3>
+
+                    @if ($errors->any())
+                    <div>
+                        <div class="text-danger pl-2">
+                            {{ __('Whoops! Something went wrong.') }}
+                        </div>
+
+                        <ul class="text-danger">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('password.update') }}">
+                        @csrf
+                    
+                        <!-- Password Reset Token -->
+                        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                        <div class="form-group">
+                            <input class="micro-form-control form-control border mt-3" id="email" type="email"
+                                name="email" 
+                                value="{{ old('email', $request->email) }}" 
+                                required 
+                                autofocus
+                                placeholder="ইমেইল অ্যাড্রেস">
+                        </div>
+
+                        <div class="form-group">
+                            <input 
+                                type="password" 
+                                class="micro-form-control form-control border mt-3" 
+                                placeholder=" নতুন পাসওয়ার্ড "
+                                id="password"
+                                name="password" 
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <input 
+                            type="password" 
+                            class="micro-form-control form-control border mt-3" 
+                            placeholder=" কনফর্ম পাসওয়ার্ড "
+                            id="password_confirmation"
+                            name="password_confirmation" 
+                            required
+                            >
+                        </div>
+
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-sm mt-3 btn-danger w-100 p-2"> রিসেট পাসওয়ার্ড </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+        </div>
 
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            </div>
+    </div>
 
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+</section>
 
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
-            </div>
+<!-- Account Area Starts-->
+@endsection
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+@push('css')
+<link rel="stylesheet" href="{{ asset('assets/frontend/css/login.css') }}">
+@endpush

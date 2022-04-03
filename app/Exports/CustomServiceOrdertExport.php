@@ -2,32 +2,31 @@
 
 namespace App\Exports;
 
-use App\Models\Order;
+use App\Models\Custom\CustomServiceOrder;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class OrderDataExport implements FromCollection, WithHeadings
+class CustomServiceOrdertExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-
     public function headings():array {
         return [
             'ID',
-            'Order NO',
             'Order Date',
+            'Order NO',
             'Customer Name',
             'Customer Phone',
-            'Customer Email',
-            'Total Order Qty',
-            'Shipping Address',
-            'Total Price'
+            'Product Name',
+            'Order Attachment'
         ];
     }
 
     public function collection()
     {
-        return collect(Order::getOrderData());
+        return collect(CustomServiceOrder::getCustomServiceOrder());
     }
+
+
 }

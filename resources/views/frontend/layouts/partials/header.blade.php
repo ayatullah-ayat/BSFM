@@ -4,9 +4,15 @@
     <nav class="navbar navbar-expand-lg navbar-light">
 
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <img class="logo" src="{{asset('assets/frontend/img/logo-mic.png')}}" alt="">
-            </a>
+               @if (isset($companylogo))
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <img class="logo" src="{{asset( $companylogo->dark_logo )}}" alt="">
+                    </a>
+               @else
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <img class="logo" src="{{asset('assets/frontend/img/logo-mic.png')}}" alt="">
+                    </a> 
+               @endif
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

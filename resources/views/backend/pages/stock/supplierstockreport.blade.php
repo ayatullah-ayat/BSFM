@@ -9,7 +9,8 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Supplier Stock Report</a> </h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Supplier Stock Report</a> </h6>
+                {{-- <button class="btn btn-sm btn-success"><a class="text-white" href="javascript:void(0)"><i class="fa fa-download"> Export excel</i></a></button> --}}
             </div>
 
             <div class="card-body">

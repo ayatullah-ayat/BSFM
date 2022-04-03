@@ -21,7 +21,7 @@ class HomeController extends Controller
      */
 
     protected $maxId = 0;
-    protected $limit = 12;
+    protected $limit = 9;
     protected $clientLogosLimit = 12;
 
     public function index()

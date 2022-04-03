@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\StockReportExport;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockReportController extends Controller
 {
@@ -18,6 +20,11 @@ class StockReportController extends Controller
         $stocks = Product::where('is_active', 1)->where('is_publish', 1)->get();
         // dd($stocks);
         return view('backend.pages.stock.stockreport', compact('stocks'));
+    }
+
+
+    public function exportStockReport(){
+        return Excel::download(new StockReportExport, 'stockreport.csv');
     }
 
     /**

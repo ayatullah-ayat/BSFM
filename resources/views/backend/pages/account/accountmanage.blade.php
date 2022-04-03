@@ -11,6 +11,7 @@
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Daily Account Manament</a> </h6>
                 <div class="inner">
                     <a class="btn btn-sm btn-outline-success" href="{{ route('admin.officeacount.datewise_account_report') }}"><i class="fa fa-landmark"> Account Report</i></a>
+                    <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('office_account_csv')}}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Account</i></button>
                 </div>
             </div>
