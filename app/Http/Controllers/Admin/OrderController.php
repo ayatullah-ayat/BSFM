@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\OrderEvent;
+use App\Exports\OrderDataExport;
 use App\Exports\OrdersExport;
 use App\Exports\UsersExport;
 use PDF;
@@ -43,32 +44,12 @@ class OrderController extends Controller
 
     public function orderexport() 
     {
-        $oders = [
-            [
-                'ID' => 1,
-                'Name' => 'Raju',
-                'Email' => 'admin@gmail.com',
-                'Phone' => '016542202',
-                'Address' => 'Nikunjo-2',
-                'Company' => 'ThemeShaper'
-            ]
-        ];
-          
-        return Excel::download(new UsersExport($oders), 'oders.xlsx');
-}
+        return Excel::download(new OrderDataExport, 'odersdata.xlsx');
+    }
 
-public function order_info_export(){
-    $export = new OrdersExport([
-        'id' => 1,
-        'Name' => 'Raju',
-        'Phone' => 1323232323,
-        'Email' => 'admin@gmail.com'
-        // [1, 2, 3],
-        // [4, 5, 6]
-    ]);
-
-    return Excel::download($export, 'invoices.xlsx');
-}
+    public function orderDataCsv(){
+        return Excel::download(new OrderDataExport, 'orderdata.csv');
+    }
 
 
     /**

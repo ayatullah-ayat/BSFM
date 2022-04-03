@@ -127,7 +127,7 @@ Route::group(['prefix' => ''],function(){
 // --------------------------- Admin Dashboard ---------------------------------
 
 Route::get('/order-export', [OrderController::class, 'orderexport'])->name('order_export');
-Route::get('/order-list-export', [OrderController::class, 'order_info_export'])->name('order_list_export');
+Route::get('/orderDataCsv', [OrderController::class, 'orderDataCsv'])->name('orderDataCsv');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
     
