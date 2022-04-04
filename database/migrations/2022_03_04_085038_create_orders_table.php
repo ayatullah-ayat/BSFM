@@ -42,6 +42,7 @@ class CreateOrdersTable extends Migration
 
             $table->text('order_note')->nullable();
 
+            $table->boolean('is_send_mail')->default(0);
             $table->unsignedBigInteger('delivered_qty')->default(0);
             $table->float('delivered_price', 10, 3)->default(0);
             $table->timestamp('delivered_at')->nullable();

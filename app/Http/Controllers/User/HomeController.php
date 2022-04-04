@@ -47,6 +47,7 @@ class HomeController extends Controller
                                 // ->latest()
                                 ->take($limit)
                                 ->get();
+                                
 
         if (request()->ajax()) {
 
@@ -74,7 +75,7 @@ class HomeController extends Controller
         // $sociallink = SocialIcon::where('is_active', 1)->first();
         // $footerabout = WebFooter::where('is_active', 1)->first();
 
-        // dd($sociallink);
+        // dd($customservicecategories);
         return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
     }
 

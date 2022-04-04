@@ -147,8 +147,7 @@ function fileRead(elem, src = '#img-preview') {
 
         FR.readAsDataURL(elem.files[0]);
     }
-}       
-
+}      
 
 
 function fileToUpload(selector = '#img-preview', defaultSrc=false) {
@@ -161,6 +160,7 @@ function fileToUpload(selector = '#img-preview', defaultSrc=false) {
     const file    = $(document).find(selector).attr('src');
     return pattern.test(file) ? file : null;
 }
+
 
 
 

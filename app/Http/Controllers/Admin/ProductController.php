@@ -11,11 +11,13 @@ use App\Models\Category;
 use App\Models\Currency;
 use App\Models\ProductTag;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
+use App\Exports\ProductDataExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Services\ProductChecker;
-use App\Models\PurchaseProduct;
 
 class ProductController extends Controller
 {
@@ -376,5 +378,12 @@ class ProductController extends Controller
 
         }
     }
+
+
+    public function productexport(){
+        return Excel::download(new ProductDataExport, 'product_list.xlsx');
+    }
+
+
 
 }

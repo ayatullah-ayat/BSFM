@@ -5,15 +5,17 @@ namespace App\Http\Controllers\User;
 use DB;
 use Exception;
 use App\Models\Product;
+use App\Models\SocialIcon;
 use Illuminate\Http\Request;
+use App\Models\ContactInformation;
+use App\Events\CustomizeOrderEvent;
 use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Event;
 use App\Http\Services\CustomerChecker;
 use App\Http\Requests\CustomOrderRequest;
-use App\Models\ContactInformation;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
-use App\Models\SocialIcon;
 
 class CustomOrderController extends Controller
 {
@@ -106,6 +108,10 @@ class CustomOrderController extends Controller
 
             if(!$customserviceorder)
                 throw new Exception('Unable to create Order', 403);
+
+
+
+            Event::dispatch(new CustomizeOrderEvent($customserviceorder));
 
             DB::commit();
 

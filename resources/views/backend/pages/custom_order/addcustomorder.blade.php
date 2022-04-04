@@ -108,8 +108,6 @@
         };
 
         ajaxRequest(obj);
-
-        hideModal('#categoryModal');
     }
 
 </script>

@@ -605,10 +605,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            hideModal('#customProductModal');
         }
 
         function submitToDatabase(){
@@ -625,8 +621,6 @@
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
             resetData()
-
-            hideModal('#customServiceOrderModal');
         }
 
         function formatData(){

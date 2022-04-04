@@ -369,8 +369,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-            // resetData()
-            // hideModal('#customerModal');
         }
 
         function showUpdateModal(){
@@ -413,10 +411,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            hideModal('#customerModal');
         }
 
         function formatData(){

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
+use App\Http\Services\ImageChecker;
+use App\Models\Company;
 
 class ManageCompanyController extends Controller
 {
+    use ImageChecker;
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,9 @@ class ManageCompanyController extends Controller
      */
     public function index()
     {
-        return view('backend.pages.settings.managecompany');
+        $companydata = Company::first();
+        // dd($companydata);
+        return view('backend.pages.settings.managecompany', compact('companydata'));
     }
 
     /**
@@ -35,7 +41,47 @@ class ManageCompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $dark_logo      = $request->dark_logo;
+            $white_logo     = $request->white_logo;
+            $data           = $request->all();
+            $fileLocation   = 'assets/img/blank-img.png';
+
+            if($dark_logo){
+                $fileResponse = $this->uploadFile($dark_logo, 'companylogo/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $fileLocation = $fileResponse['fileLocation'];
+                $data['dark_logo']  = $fileLocation;
+
+            }
+
+            if($white_logo){
+                $fileResponse = $this->uploadFile($white_logo, 'companylogo/');
+                if (!$fileResponse['success'])
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+
+                $whitefileLocation = $fileResponse['fileLocation'];
+                $data['white_logo'] = $whitefileLocation;
+            }
+
+            $company = Company::create($data);
+            if(!$company)
+                throw new Exception("Unable to Add Company Information!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Company Informaiton Added Successfully!'
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -67,9 +113,52 @@ class ManageCompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
-        //
+        try {
+
+            if(!$company)
+                throw new Exception("No record Found!", 404);
+                $dark_logo      = $request->dark_logo;
+                $white_logo     = $request->white_logo;
+                $data           = $request->all();
+                $fileLocation   = 'assets/img/blank-img.png';
+    
+                if($dark_logo){
+                    $fileResponse = $this->uploadFile($dark_logo, 'companylogo/');
+                    if (!$fileResponse['success'])
+                        throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                    $fileLocation = $fileResponse['fileLocation'];
+                    $data['dark_logo']  = $fileLocation;
+
+                }
+    
+                if($white_logo){
+                    $fileResponse = $this->uploadFile($white_logo, 'companylogo/');
+                    if (!$fileResponse['success'])
+                        throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+    
+                    $whitefileLocation = $fileResponse['fileLocation'];
+                    $data['white_logo'] = $whitefileLocation;
+                }
+    
+
+            $companyStatus = $company->update($data);
+            if(!$companyStatus)
+                throw new Exception("Unable to Update Company Information!", 403);
+
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Company Information Updated Successfully!'
+            ]);
+                
+        } catch (\Exception $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -78,8 +167,26 @@ class ManageCompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        //
+        try {
+
+            $isDeleted = $company->delete();
+            if(!$isDeleted)
+                throw new Exception("Unable to delete company information!", 403);
+                
+            return response()->json([
+                'success'   => true,
+                'msg'       => 'Company Information Deleted Successfully!',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success'   => false,
+                'msg'       => $th->getMessage()
+            ]);
+        }
     }
+
+
 }

@@ -283,10 +283,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-            resetData();
-
-            // hideModal('#ContactInfoModal');
         }
 
         function resetForm(){

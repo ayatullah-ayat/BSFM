@@ -77,7 +77,7 @@
                             $body       = $data ? json_decode($data->body) : null;
                         @endphp
 
-                    <a class="dropdown-item d-flex align-items-center {{ $cls }}" href="{{ route('admin.ecom_orders.show', [$data->order_id, $notification->id]) }}">
+                    {{-- <a class="dropdown-item d-flex align-items-center {{ $cls }}" href="{{ route('admin.ecom_orders.show', [$data->order_id, $notification->id]) }}">
                         <div class="mr-3">
                             <div class="icon-circle bg-success">
                                 <i class="fas fa-donate text-white"></i>
@@ -88,7 +88,36 @@
                             New order from {{ $body->customer_name ?? 'N/A' }}. Order No : {{ $body->order_no ?? 'N/A' }}
 
                         </div>
-                    </a>
+                    </a> --}}
+
+                    @if(!preg_match("/CustomizeOrderNotification/im", $notification->type))
+                        <a class="dropdown-item d-flex align-items-center {{ $cls }}"
+                            href="{{ route('admin.ecom_orders.show', [$data->order_id, $notification->id]) }}">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-success">
+                                    <i class="fas fa-donate text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
+                                New order from {{ $body->customer_name ?? 'N/A' }}. Order No : {{ $body->order_no ?? 'N/A' }}
+                        
+                            </div>
+                        </a>
+                    @else
+                        <a class="dropdown-item d-flex align-items-center {{ $cls }}" href="{{ route('admin.customserviceorder.show', [$data->order_id, $notification->id]) }}">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-danger">
+                                    <i class="fab fa-servicestack text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
+                                New Customize order from <b>{{ $body->customer_name ?? 'N/A' }}</b>. Order No : {{ $body->order_no ?? 'N/A' }}
+                        
+                            </div>
+                        </a>
+                    @endif
 
                     {{-- <div class="dropdown-divider"></div> --}}
                     @endforeach 

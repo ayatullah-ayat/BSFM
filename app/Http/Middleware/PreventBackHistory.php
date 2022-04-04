@@ -22,4 +22,5 @@ class PreventBackHistory
                 ->header('Pragma','no-cache')
                 ->header('Expires','Sun, 02 Jan 1990 00:00:00 GMT');
     }
+    
 }

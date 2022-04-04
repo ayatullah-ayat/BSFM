@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use PDF;
 use Exception;
@@ -8,6 +8,7 @@ use App\Models\SaleReturn;
 use App\Models\SaleProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class SaleReturnController extends Controller
 {

@@ -245,9 +245,6 @@
             };
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
-
-
-            hideModal('#contactModal');
         }
 
         function formatData(){

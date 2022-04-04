@@ -284,7 +284,7 @@
             <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.sms_configuration') }}">SMS Configuration</a>
                 <a class="collapse-item" href="{{ route('admin.sms_template') }}">SMS Template</a>
-                <a class="collapse-item" href="{{ route('admin.manage_company') }}">Manage Company</a>
+                <a class="collapse-item" href="{{ route('admin.manage_company.index') }}">Manage Company</a>
                 <a class="collapse-item" href="{{ route('admin.manage_gateway')}}">Gateway</a>
                 <a class="collapse-item" href="{{ route('admin.email_configuration')}}">Email Configuration</a>
             </div>
@@ -315,8 +315,8 @@
         </a>
         <div id="Software" class="collapse" aria-labelledby="Software" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner  ">
-                <a class="collapse-item" href="#">Web Logo</a>
-                <a class="collapse-item" href="#">Web Header</a>
+                {{-- <a class="collapse-item" href="#">Web Logo</a> --}}
+                {{-- <a class="collapse-item" href="#">Web Header</a> --}}
                 <a class="collapse-item" href="{{ route('admin.footer-about.index') }}">Footer About</a>
                 <a class="collapse-item" href="{{ route('admin.socialicon.index') }}">Manage Social Links</a>
                 <a class="collapse-item" href="{{ route('admin.contact.index') }}">Contact Form List</a>
