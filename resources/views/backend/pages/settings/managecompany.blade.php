@@ -56,7 +56,7 @@
                                 <td class="text-center">
                                     {{-- <a href="" class="fa fa-eye text-info text-decoration-none"></a> --}}
                                     <a href="javascript:void(0)" class="fa fa-edit mx-2 text-warning text-decoration-none update"></a>
-                                    <a href="{{ route('admin.manage-company.destroy',$companydata->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
+                                    <a href="{{ route('admin.manage_company.destroy',$companydata->id ) }}" class="fa fa-trash text-danger text-decoration-none delete"></a>
                                 </td>
                             </tr>
                             @endisset
@@ -301,7 +301,7 @@
 
             let id  = $('#manageCompanyModal .heading').attr('data-id');
             let obj = {
-                url     : `{{ route('admin.manage-company.update', '' ) }}/${id}`, 
+                url     : `{{ route('admin.manage_company.update', '' ) }}/${id}`, 
                 method  : "PUT",
                 data    : formatData(),
             };
@@ -313,7 +313,7 @@
             ajaxFormToken();
 
             let obj = {
-                url     : `{{ route('admin.manage-company.store')}}`, 
+                url     : `{{ route('admin.manage_company.store')}}`, 
                 method  : "POST",
                 data    : formatData(),
             };

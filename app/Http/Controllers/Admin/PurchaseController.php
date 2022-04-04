@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PurchaseDataExport;
 use PDF;
 use Exception;
 use App\Models\Unit;
@@ -19,6 +20,7 @@ use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantPrice;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PurchaseController extends Controller
 {
@@ -32,6 +34,10 @@ class PurchaseController extends Controller
         $purchases = Purchase::all();
         
         return view('backend.pages.purchase.managepurchase', compact('purchases'));
+    }
+
+    public function purchasedataexport(){
+        return Excel::download(new PurchaseDataExport, 'purchase.xlsx');
     }
 
     /**
@@ -166,7 +172,7 @@ class PurchaseController extends Controller
 
             foreach ($products as $product){
 
-                $productResponse = $this->productByName($product['product_name']);
+                $productResponse = $this->productByName(trim($product['product_name']));
 
                 $productData[]= [
                     'product_colors'=> count($product['product_colors']) ? implode(",", $product['product_colors']) : null,
@@ -417,6 +423,8 @@ class PurchaseController extends Controller
                     'purchase_id'   => $purchase->id,
                     'product_id'    => null,
                 ] + $product;
+
+                // dd($productData);
             }
 
 

@@ -10,7 +10,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Sale</a> </h6>
-                <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_sales.add_sale') }}"><i class="fa fa-plus"> Sale</i></a></button>
+                <div class="inner">
+                    <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('sale_data_export') }}"><i class="fa fa-download"> Export excel</i></a></button>
+                    <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_sales.add_sale') }}"><i class="fa fa-plus"> Sale</i></a></button>
+                </div>
             </div>
 
             <div class="card-body">

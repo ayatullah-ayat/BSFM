@@ -54,9 +54,11 @@
                         </div>
     
                         <div class="single-prodect-description">
-                            @if(isset($product->short_description))
-                            {!! Str::words($product->short_description, 200,'.......') !!}
-                            @else 
+                            <p>
+                                @if(isset($product->short_description))
+                                {!! Str::words($product->short_description, 200,'.......') !!}
+                                @else
+                            </p>
                             <p>
                                 {!! Str::words($product->product_description, 150,'.......') !!}
                             </p>
@@ -99,9 +101,10 @@
                             <h3> কালার </h3>
 
                             @isset( $product->productColors )
-                                <div class=" ms-2 row color_container" style="margin-left: -0.5rem!important;">
+                            {{-- @dd($product->productColors) --}}
+                                <div class="ms-2 row color_container" style="margin-left: -0.5rem!important;">
                                     @foreach ($product->productColors as $indx => $item)
-                                        <div type="button" data-color="{{ $item->color_name  ?? ''}}" class=" col-md-2 col-1 color {{ $selectedColor && preg_match("/($item->color_name)/im", $selectedColor) ? 'selected' : ( !$selectedColor && $indx == 0 ? 'selected' : '')}} {{ matchColor($item->color_name) ? ' black' : '' }} " style="background-color: {{ $item->color_name }}; {{matchColor($item->color_name) ? 'box-shadow: 0px 0px 2px #000;' : '' }}"> <i class="fa-solid fa-check"></i></div>
+                                    <div type="button" data-color="{{ $item->color_name  ?? ''}}" class="col-md-2 col-1 color {{ $selectedColor && preg_match(" /($item->color_name)/im", $selectedColor) ? 'selected' : ( !$selectedColor && $indx == 0 ? 'selected' : '')}} {{ matchColor($item->color_name) ? ' black' : '' }} " style="background-color: {{ $item->color_name }}; {{matchColor($item->color_name) ? 'box-shadow: 0px 0px 2px #000;': '' }}"> <i class="fa-solid fa-check"></i></div>
                                     @endforeach
                                 </div>
                             @endisset

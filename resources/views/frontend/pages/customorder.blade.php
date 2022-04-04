@@ -64,7 +64,7 @@
                             </div>
                         </div>
     
-                       @if($socialicon->fb_messenger || $socialicon->whatsapp)
+                       @if($socialicon && ($socialicon->fb_messenger || $socialicon->whatsapp))
                             <div class="contact-info row">
                                 <h6 class="mt-4 mb-2">আমাদের সাথে সরাসরি যুক্ত হোন</h6>
                                 <div class="contact-inner-info col-md-12">
@@ -168,6 +168,8 @@
 
         function submitToDatabase(){
 
+            let elem = $(this);
+
             ajaxFormToken()
 
             clearTimeout(timeId)
@@ -179,9 +181,34 @@
                     data    : { ...formatData(), order_attachment: JSON.stringify(uplodedFile) },
                 };
 
-                ajaxRequest(obj, { reload: true, timer: 1000 })
+                $.ajax({
+                    ...obj,
+                    beforeSend(){
+                        elem.html(`<i class="fa fa-spinner fa-spin"></i> রিকুয়েস্ট পাঠানো হচ্ছে ...`);
+                    },
+                    success(res){
+                        if(res?.success){
+                            _toastMsg(res?.msg ?? 'Success!', 'success');
+                            elem.html(`রিকুয়েস্ট পাঠানো হয়েছে`);
+                            resetForm();
 
-                resetForm();
+                            setTimeout(() => {
+                                location.reload()
+                                elem.html(`কনফার্ম করুন`);
+                            }, 2000);
+                        }else{
+                            _toastMsg(res?.msg ?? 'Something wents wrong!');
+                            elem.html(`কনফার্ম করুন`);
+                        }
+                    },
+                    error(err){
+                        console.log(err);
+                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                        elem.html(`কনফার্ম করুন`);
+                    },
+                })
+
+                // 
             }, 500);
             
         }

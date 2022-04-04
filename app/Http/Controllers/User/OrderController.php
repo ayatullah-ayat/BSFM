@@ -6,23 +6,24 @@ use Exception;
 use App\Models\Order;
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Models\Customer;
 use App\Events\OrderEvent;
 use App\Models\ApplyCoupon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomOrderRequest;
-use App\Http\Services\CouponChecker;
-use App\Models\Custom\CustomServiceOrder;
-use App\Models\Customer;
 use App\Models\CustomerType;
+use Illuminate\Http\Request;
+use App\Http\Services\MailService;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProductVariantPrice;
+use App\Http\Controllers\Controller;
+use App\Http\Services\CouponChecker;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cookie;
+use App\Http\Requests\CustomOrderRequest;
+use App\Models\Custom\CustomServiceOrder;
 
 class OrderController extends Controller
 {
-    use CouponChecker;
+    use CouponChecker, MailService;
     /**
      * Display a listing of the resource.
      *
@@ -343,6 +344,7 @@ class OrderController extends Controller
                 'order_total_qty'   => $totalQty,
                 'order_total_price' => $data['grand_total'],
                 'order_note'        => null,
+                'status'            => 'pending',
             ];
 
             $order = Order::create($orderData);
@@ -350,18 +352,22 @@ class OrderController extends Controller
                 throw new Exception("Unable to place order!", 403);
 
             $order->orderDetails()->createMany($orderDetail);
-            
+
+
             Event::dispatch(new OrderEvent($order));
 
-            DB::commit();
+            $response = $this->sendEmail($order);
+            if (!$response['success'])
+                throw new Exception($response['msg'], 403);
 
-            // Mail::to($booking->client)->send(new BookingConfirmationMail($booking));
+            
+            DB::commit();
 
             session()->forget('coupon');
 
             Cookie::queue(Cookie::forget('productIds'));
             Cookie::queue(Cookie::forget('cartQtys'));
-            
+                
 
             return response()->json([
                 'success'   => true,

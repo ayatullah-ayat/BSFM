@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 
+//https://www.youtube.com/watch?v=mNFYGOfuTLU
 class OrderListener
 {
     /**
@@ -32,14 +33,14 @@ class OrderListener
             // client instance 
             $customer     = $event->order->customer;
             // admin instance
-            $userAdmin  = Admin::first();
+            $userAdmins  = Admin::all();
 
-            $body = null;
+            $body       = null;
 
-            // send to admin 
-            Notification::send($userAdmin, new OrderNotification($event->order, $customer, $body));
+            foreach ($userAdmins as $userAdmin) {
+                Notification::send($userAdmin, new OrderNotification($event->order, $customer, $body));
+            }
 
-            //send to client 
         }
     }
 }

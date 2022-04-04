@@ -260,12 +260,8 @@
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
-            resetData();
-<<<<<<< HEAD
-=======
+            // resetData();
 
-            // hideModal('#currencyModal');
->>>>>>> 12c69f0e9dc2b73c9240e9870ebfdfb625b0a335
         }
 
         function showUpdateModal(){
@@ -312,7 +308,7 @@
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
-            resetData();
+            // resetData();
 
             // hideModal('#currencyModal');
         }

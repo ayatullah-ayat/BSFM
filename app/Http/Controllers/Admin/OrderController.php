@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\OrderEvent;
-use App\Exports\OrderDataExport;
-use App\Exports\OrdersExport;
-use App\Exports\UsersExport;
 use PDF;
-use App\Models\Order;
-use App\Models\Notification;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\CustomerType;
-use App\Models\OrderDetails;
-use App\Models\Product;
-use App\Models\ProductVariantPrice;
-use App\Models\Variant;
 use Exception;
-use Illuminate\Console\Scheduling\Event;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Variant;
+use App\Models\Customer;
+use App\Events\OrderEvent;
+use App\Exports\UsersExport;
+use App\Models\CustomerType;
+use App\Models\Notification;
+use App\Models\OrderDetails;
+use Illuminate\Http\Request;
+use App\Exports\OrdersExport;
+use Illuminate\Support\Carbon;
+use App\Exports\OrderDataExport;
 use PhpParser\Node\Stmt\TryCatch;
+use App\Http\Services\MailService;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProductVariantPrice;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Console\Scheduling\Event;
 
 class OrderController extends Controller
 {
+    use MailService;
     /**
      * Display a listing of the resource.
      *
@@ -397,7 +399,31 @@ class OrderController extends Controller
                     }
 
                 }
+
+                $orderNew = Order::find($order->id);
+               $res = $this->sendEmail($orderNew);
+               if($res['success']){
+                    $order->update([
+                        'is_send_mail' => 1
+                    ]);
+               }
             }
+
+            if ($request->status == "confirm" || $request->status == "processing"){
+                if(!$order->is_send_mail){
+                    $orderNew = Order::find($order->id);
+                    
+                    $res = $this->sendEmail($orderNew);
+
+                    if ($res['success']) {
+                        $order->update([
+                            'is_send_mail' => 1
+                        ]);
+                    }
+                }
+            }
+
+            //
 
             return response()->json([
                 'success'   => true,

@@ -554,6 +554,7 @@
                             $('.remove-coupon').html('<i class="fa fa-trash"></i>')
                             $('.remove-coupon').attr('data-coupon', couponCode);
                             $('#coupon_msg').text(res?.msg).addClass('alert-success').removeClass('alert-danger')
+                            
                         }else{
                             $('#coupon_msg').text(res?.msg).addClass('alert-danger').removeClass('alert-success')
                             form.find('#coupon').val('');
@@ -637,6 +638,8 @@
 
         function submitToMakeOrder(){
             //
+
+            let orderBtn    = $(this);
             let orderData   = getOrupdateProductInfo();
             let shipmentData= shipmentInfo();
 
@@ -660,6 +663,9 @@
                     type    : "POST",
                     data    : { order: orderData, shipment: shipmentData},
                     cache   : false,
+                    beforeSend(){
+                        orderBtn.html(`<span class="fa fa-spinner fa-spin mx-1" style="color: #fff !important;"></span>Processing ...`);
+                    },
                     success : function (res) {
                         console.log(res);
 
@@ -677,10 +683,13 @@
                         }else{
                             _toastMsg(res?.msg ?? 'Something wents wrong!');
                         }
+
+                        orderBtn.html(`<span class="fa fa-paper-plane mx-1" style="color: #fff !important;"></span>Place Order`);
                     },
                     error: function (error) {
                         console.log(error);
-                        _toastMsg((err.responseJSON?.msg) ?? 'Something wents wrong!')
+                        _toastMsg((error.responseJSON?.msg) ?? 'Something wents wrong!')
+                        orderBtn.html(`<span class="fa fa-paper-plane mx-1" style="color: #fff !important;"></span>Place Order`);
                     }
                 });
             }, 500);

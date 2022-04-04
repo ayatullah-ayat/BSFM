@@ -284,7 +284,7 @@
             <div class="bg-white py-2 collapse-inner  ">
                 <a class="collapse-item" href="{{ route('admin.sms_configuration') }}">SMS Configuration</a>
                 <a class="collapse-item" href="{{ route('admin.sms_template') }}">SMS Template</a>
-                <a class="collapse-item" href="{{ route('admin.manage-company.index') }}">Manage Company</a>
+                <a class="collapse-item" href="{{ route('admin.manage_company.index') }}">Manage Company</a>
                 <a class="collapse-item" href="{{ route('admin.manage_gateway')}}">Gateway</a>
                 <a class="collapse-item" href="{{ route('admin.email_configuration')}}">Email Configuration</a>
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Admin;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
@@ -129,7 +130,9 @@ if (!function_exists('loadMoreButton')) {
 if (!function_exists('getUnreadNotification')) {
     function getUnreadNotification()
     {
-        return Notification::whereNull('read_at')->get();
+        return Notification::whereNull('read_at')
+        ->where('notifiable_id', auth()->guard('admin')->user()->id ?? null)
+        ->get();
     }
 }
 

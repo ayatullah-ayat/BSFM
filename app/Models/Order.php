@@ -12,7 +12,26 @@ class Order extends Model
     protected $table = 'orders';
  
     public static function getOrderData(){
-        $orderData = DB::table('orders')->select('id','order_no','order_date','customer_name','customer_phone','customer_email','order_total_qty','shipping_address','order_total_price')->get()->toArray();
+        
+        $orderData = DB::table('orders')
+                    ->select(
+                    'order_date',
+                    'order_no',
+                    'order_sizes',
+                    'order_colors',
+                    'order_total_qty',
+                    'discount_price',
+                    'order_total_price',
+                    'customer_name',
+                    'customer_phone',
+                    'payment_type',
+                    'payment_total_price',
+                    'order_note',
+                    'status',
+                    )
+                    ->get()
+                    ->toArray(); 
+
         return $orderData;
     }
 

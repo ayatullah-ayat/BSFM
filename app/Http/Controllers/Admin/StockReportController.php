@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PurcahseProductStockReportExport;
 use App\Exports\StockReportExport;
+use App\Exports\SupplierStockReportExport;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Purchase;
@@ -69,6 +71,27 @@ class StockReportController extends Controller
         return view('backend.pages.stock.supplierstockreport', compact('suppliers'));
     }
 
+
+    public function supplierstockreportExport(Request $request){
+
+        $date       = $request->date;
+        $supplier_id= $request->supplier_id;
+
+        $sql = Purchase::selectRaw('
+        purchase_products.*,
+        products.sales_price,
+        products.category_name
+        ')
+        ->join('purchase_products', 'purchase_products.purchase_id','=', 'purchases.id')
+        ->join('products', 'purchase_products.product_id','=', 'products.id')
+        ->where('purchase_products.stocked_qty', ">", 0);
+
+        $stocks = $sql->get();
+
+        return Excel::download(new SupplierStockReportExport($stocks), 'supplier_stock_report.csv');
+
+    }
+
     /**
      * product report
      */
@@ -114,6 +137,45 @@ class StockReportController extends Controller
         }
 
         return view('backend.pages.stock.productstockreport', compact('suppliers'));
+    }
+
+
+    public function purchaseProductStockReportExport( Request $request){
+
+        $from_date  = $request->from_date;
+        $to_date    = $request->to_date;
+        $supplier_id= $request->supplier_id;
+        $product_id = $request->product_id;
+
+        $sql = Purchase::selectRaw('
+                purchases.purchase_date, 
+                purchases.supplier_id, 
+                purchases.supplier_name, 
+                purchases.total_payment, 
+                purchases.total_payment_due,
+                purchases.is_manage_stock,
+                purchase_products.*,
+                products.sales_price,
+                products.category_name
+            ')
+            ->join('purchase_products', 'purchase_products.purchase_id', '=', 'purchases.id')
+            ->join('products', 'purchase_products.product_id', '=', 'products.id')
+            ->where('purchases.supplier_id', $supplier_id)
+            ->where('purchase_products.product_id', $product_id);
+            // ->where('purchases.is_manage_stock', 1)
+            // ->where('purchase_products.stocked_qty', ">", 0);
+
+            if ($from_date) {
+                $sql->whereDate('purchases.purchase_date', '>=', $from_date);
+            }
+
+            if ($to_date) {
+                $sql->whereDate('purchases.purchase_date', '<=', $from_date);
+            }
+
+            $stocks = $sql->get();
+
+            return Excel::download(new PurcahseProductStockReportExport($stocks), 'purchase_product_stock_eport.csv');
     }
 
 

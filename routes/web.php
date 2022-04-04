@@ -8,7 +8,6 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\ShopController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\User\AboutController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OrderController;
@@ -22,21 +21,22 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\VariantController;
 use App\Http\Controllers\User\WishListController;
+use App\Http\Controllers\Admin\CategoryController;
 
 
 
 // ------------ Frontend namespace ----------------------
 
 
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\PurchaseController;
-
 use App\Http\Controllers\Admin\SupplierController;
+
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebFooterController;
 use App\Http\Controllers\Admin\OtherOrderController;
+use App\Http\Controllers\Admin\SaleReturnController;
 use App\Http\Controllers\Admin\SocialIconController;
 use App\Http\Controllers\Admin\ClientLogosController;
 use App\Http\Controllers\Admin\SmsSettignsController;
@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\ManageCompanyController;
 use App\Http\Controllers\Admin\ManageGatewayController;
 use App\Http\Controllers\Admin\OfficeAccountController;
 use App\Http\Controllers\Admin\PurchaseReturnController;
+use App\Http\Controllers\Admin\PartnershipLogoController;
 use App\Http\Controllers\Admin\ContactInformationController;
 use App\Http\Controllers\Admin\EmailConfigurationController;
 use App\Http\Controllers\Admin\Custom\OurCustomServiceController;
@@ -62,7 +63,6 @@ use App\Http\Controllers\User\ContactController as CustomerContactController;
 use App\Http\Controllers\User\GalleryController as CustomerGalleryController;
 use App\Http\Controllers\User\CustomOrderController as UserCustomOrderController;
 use App\Http\Controllers\Admin\ApplyCouponController as AdminApplyCouponController;
-use App\Http\Controllers\Admin\PartnershipLogoController;
 
 // ------------ Frontend namespace ----------------------
 
@@ -125,13 +125,6 @@ Route::group(['prefix' => ''],function(){
 
 
 // --------------------------- Admin Dashboard ---------------------------------
-
-Route::get('/order-export',         [OrderController::class, 'orderexport'])->name('order_export');
-Route::get('/orderDataCsv',         [OrderController::class, 'orderDataCsv'])->name('orderDataCsv');
-Route::get('/office-account-csv',   [OfficeAccountController::class, 'officeDataCsv'])->name('office_account_csv');
-Route::get('/stock-report-export',  [StockReportController::class, 'exportStockReport'])->name('stock_report_export');
-Route::get('/other-order-export',   [OtherOrderController::class, 'OtherOrderExport'])->name('other_order_data_export');
-Route::get('/custom-service-order-export', [CustomServiceOrderController::class, 'exportCustomServiceOrder'])->name('custom_service_order_export');
 
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin', 'PreventBackHistory']], function () {
@@ -358,6 +351,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::group(['prefix' => 'customserviceorders', 'as' => 'customserviceorder.'], function(){
         Route::get('/',                         [CustomServiceOrderController::class, 'index'])->name('index');
         Route::post('/',                        [CustomServiceOrderController::class, 'store'])->name('store');
+        Route::get('/{customServiceOrder}/{notification?}', [CustomServiceOrderController::class, 'show'])->name('show');
         Route::put('/{customServiceOrder}',     [CustomServiceOrderController::class, 'update'])->name('update');
         Route::delete('/{customServiceOrder}',  [CustomServiceOrderController::class, 'destroy'])->name('destroy');
         Route::get('/{category_id}',            [CustomServiceOrderController::class, 'getProduct'])->name('getProduct');
@@ -450,15 +444,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{webfooter}',       [WebFooterController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'manage-companies', 'as' => 'manage-company.'], function(){
+    Route::group(['prefix' => 'manage-company', 'as' => 'manage_company.'], function(){
         Route::get('/',                     [ManageCompanyController::class, 'index'])->name('index');
         Route::post('/',                    [ManageCompanyController::class, 'store'])->name('store');
-        Route::put('/{managecompnay}',      [ManageCompanyController::class, 'update'])->name('update');
-        Route::delete('/{managecompnay}',   [ManageCompanyController::class, 'destroy'])->name('destroy');
+        Route::put('/{company}',            [ManageCompanyController::class, 'update'])->name('update');
+        Route::delete('/{company}',         [ManageCompanyController::class, 'destroy'])->name('destroy');
     });
 
 
 });
 
-
+ 
 require __DIR__.'/auth.php';

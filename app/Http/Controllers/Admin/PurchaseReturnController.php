@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\PurchaseReturnExport;
 use PDF;
 use Exception;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Models\PurchaseReturn;
 use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PurchaseReturnController extends Controller
 {
@@ -24,6 +26,11 @@ class PurchaseReturnController extends Controller
         
         return view('backend.pages.purchase.return_purchase', compact('purchases'));
 
+    }
+
+
+    public function purchasereturnexport(){
+        return Excel::download(new PurchaseReturnExport, 'purchase_return.xlsx');
     }
 
     /**

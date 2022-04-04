@@ -40,7 +40,7 @@ class OrderNotification extends Notification
     public function via($notifiable)
     {
         return [
-            // 'mail',
+            'mail',
             'database'
         ];
     }
@@ -58,14 +58,8 @@ class OrderNotification extends Notification
         //             ->action('Notification Action', url('/'))
         //             ->line('Thank you for using our application!');
 
-        $data = [
-            'order'     => $this->order,
-            'customer'  => $this->customer,
-            'body'      => $this->body,
-        ];
-
         return (new MailMessage)
-            ->markdown('frontend.templates.order_confirmation', compact('data', 'notifiable'))
+            ->markdown('templates.order_confirmation', ['data'=> $this->order, 'customer'  => $this->customer, 'admin' => $notifiable])
             ->subject('Order Approval Request!');
     }
 

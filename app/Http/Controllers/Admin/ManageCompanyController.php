@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ManageCompnay;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Services\ImageChecker;
+use App\Models\Company;
 
 class ManageCompanyController extends Controller
 {
@@ -18,7 +18,7 @@ class ManageCompanyController extends Controller
      */
     public function index()
     {
-        $companydata = ManageCompnay::first();
+        $companydata = Company::first();
         // dd($companydata);
         return view('backend.pages.settings.managecompany', compact('companydata'));
     }
@@ -54,6 +54,8 @@ class ManageCompanyController extends Controller
                     throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
 
                 $fileLocation = $fileResponse['fileLocation'];
+                $data['dark_logo']  = $fileLocation;
+
             }
 
             if($white_logo){
@@ -62,12 +64,10 @@ class ManageCompanyController extends Controller
                     throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
 
                 $whitefileLocation = $fileResponse['fileLocation'];
+                $data['white_logo'] = $whitefileLocation;
             }
 
-            $data['dark_logo']  = $fileLocation;
-            $data['white_logo'] = $whitefileLocation;
-
-            $company = ManageCompnay::create($data);
+            $company = Company::create($data);
             if(!$company)
                 throw new Exception("Unable to Add Company Information!", 403);
 
@@ -113,11 +113,11 @@ class ManageCompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ManageCompnay $managecompnay)
+    public function update(Request $request, Company $company)
     {
         try {
 
-            if(!$managecompnay)
+            if(!$company)
                 throw new Exception("No record Found!", 404);
                 $dark_logo      = $request->dark_logo;
                 $white_logo     = $request->white_logo;
@@ -130,6 +130,8 @@ class ManageCompanyController extends Controller
                         throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
     
                     $fileLocation = $fileResponse['fileLocation'];
+                    $data['dark_logo']  = $fileLocation;
+
                 }
     
                 if($white_logo){
@@ -138,12 +140,11 @@ class ManageCompanyController extends Controller
                         throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
     
                     $whitefileLocation = $fileResponse['fileLocation'];
+                    $data['white_logo'] = $whitefileLocation;
                 }
     
-                $data['dark_logo']  = $fileLocation;
-                $data['white_logo'] = $whitefileLocation;
 
-            $companyStatus = $managecompnay->update($data);
+            $companyStatus = $company->update($data);
             if(!$companyStatus)
                 throw new Exception("Unable to Update Company Information!", 403);
 
@@ -166,11 +167,11 @@ class ManageCompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ManageCompnay $managecompnay)
+    public function destroy(Company $company)
     {
         try {
 
-            $isDeleted = $managecompnay->delete();
+            $isDeleted = $company->delete();
             if(!$isDeleted)
                 throw new Exception("Unable to delete company information!", 403);
                 

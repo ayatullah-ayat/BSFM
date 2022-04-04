@@ -142,7 +142,7 @@
 }
 
 .exzoom .exzoom_preview .exzoom_preview_img {
-    width: 700px !important;
+    /* width: 700px !important; */
     height: auto !important;
     left: 0;
     top: 0;

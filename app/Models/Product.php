@@ -119,5 +119,22 @@ class Product extends Model
         return $this->belongsTo(Admin::class, 'updated_by');
     }
 
+
+    public function scopeGetExcelData($query){
+        return $query->select(
+            'product_thumbnail_image',
+            'product_name',
+            'category_name',
+            'product_unit',
+            'purchase_price',
+            'sales_price',
+            'total_product_qty',
+            'total_stock_qty',
+            'total_stock_out_qty'
+        )
+        ->get()
+        ->toArray(); 
+    }
+
     
 }

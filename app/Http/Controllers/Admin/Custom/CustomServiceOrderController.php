@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Admin\Custom;
 
 use App\Exports\CustomServiceOrdertExport;
+use PDF;
+use DB;
+use Exception;
+use Carbon\Carbon;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomOrderRequest;
 use App\Http\Services\CustomerChecker;
-use App\Models\Custom\CustomServiceCategory;
+use App\Http\Requests\CustomOrderRequest;
 use App\Models\Custom\CustomServiceOrder;
 use App\Models\Custom\CustomServiceProduct;
-use Exception;
-use DB;
-use App\Http\Services\ImageChecker;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Custom\CustomServiceCategory;
 
 class CustomServiceOrderController extends Controller
 {
@@ -200,9 +203,52 @@ class CustomServiceOrderController extends Controller
      * @param  \App\Models\CustomServiceOrder  $customServiceOrder
      * @return \Illuminate\Http\Response
      */
-    public function show(CustomServiceOrder $customServiceOrder)
+
+
+    public function show(CustomServiceOrder $customServiceOrder, Notification $notification)
     {
-        //
+        try {
+
+            $this->markAsRead($notification);
+
+            // dd($order);
+
+            $pdf = PDF::loadView('backend.pages.custom_order.show_order', compact('customServiceOrder'), [], [
+                'margin_left'   => 20,
+                'margin_right'  => 15,
+                'margin_top'    => 48,
+                'margin_bottom' => 25,
+                'margin_header' => 10,
+                'margin_footer' => 10,
+                'watermark'     => $this->setWaterMark($customServiceOrder),
+            ]);
+
+
+            // dd($pdf);
+
+            return $pdf->stream('customize_order_invoice_' . preg_replace("/\s/", '_', ($customServiceOrder->customer_name ?? '')) . '_' . ($customServiceOrder->created_at ?? '') . '_.pdf');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+
+
+        // return view('backend.pages.order.show_order', compact('order'));
+
+    }
+
+
+
+    private function setWaterMark($order)
+    {
+        return $order && $order->status ? ucfirst($order->status) : '';
+    }
+
+
+    private function markAsRead($notification)
+    {
+        if (!is_null($notification) && isset($notification->id)) {
+            $notification->update(['read_at' => Carbon::now()]);
+        }
     }
 
     /**

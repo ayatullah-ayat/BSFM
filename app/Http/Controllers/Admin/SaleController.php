@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SaleDataExport;
 use PDF;
 use Exception;
 use App\Models\Sale;
@@ -12,6 +13,7 @@ use App\Models\SaleProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
@@ -24,6 +26,10 @@ class SaleController extends Controller
     {
         $sales = Sale::all();
         return view("backend.pages.sale.managesale", compact('sales'));
+    }
+
+    public function saledataexport(){
+        return Excel::download(new SaleDataExport, 'saleexport.xlsx');
     }
 
     /**

@@ -1,6 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('content')
+
     <div> 
     
         <!-- Content Row -->

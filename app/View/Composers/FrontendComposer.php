@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use App\Models\SocialIcon;
 use Illuminate\Support\Str;
 use App\Http\Services\ProductSearch;
+use App\Models\Company;
 use App\Models\ContactInformation;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Custom\CustomServiceCategory;
@@ -38,7 +39,7 @@ class FrontendComposer
 
         $organizationlogo = PartnershipLogo::latest()->take(2)->get();
 
-        $companylogo = ManageCompnay::where('is_active', 1)->first();
+        $companylogo = Company::where('is_active', 1)->first();
         // dd($companylogo);
         
         $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategoriesFooter','footerabout','sociallink','contactInfo','organizationlogo','companylogo'));
