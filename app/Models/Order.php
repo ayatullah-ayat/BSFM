@@ -24,6 +24,7 @@ class Order extends Model
                     'order_total_price',
                     'customer_name',
                     'customer_phone',
+                    'shipping_address',
                     'payment_type',
                     'payment_total_price',
                     'order_note',

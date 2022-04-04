@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Admin;
+use App\Models\Company;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
@@ -304,3 +305,7 @@ function totalOrderRevenue(){
         GROUP BY DATE_FORMAT(order_date, '%m-%Y')) as sub");
 }
 
+
+function getCompanyProfile(){
+    return Company::first();
+}

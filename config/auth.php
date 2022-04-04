@@ -99,6 +99,7 @@ return [
     |
     */
 
+    // https://laracasts.com/discuss/channels/laravel/reset-password-using-multi-auth
     'passwords' => [
         'users' => [
             'provider' => 'users',
@@ -107,8 +108,13 @@ return [
             'throttle' => 60,
         ],
         'admins' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'driver'    => 'eloquent',
+            'model'     => App\Models\Admin::class,
+            'provider'  => 'admins',
+            'table'     => 'password_resets',
+            'expire'    => 60,
+            'throttle'  => 60,
+            'email'     => 'admin.emails.password',
         ],
     ],
 

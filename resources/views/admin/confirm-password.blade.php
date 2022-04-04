@@ -1,8 +1,29 @@
 <x-guest-layout>
+    <style>
+        .topbar_logo {
+            width: 200px;
+        }
+    
+        .custom-btn {
+            text-align: center !important;
+            display: block !important;
+            background: linear-gradient(45deg, red, #f9a146cc) !important;
+        }
+    </style>
+
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                {{--
+                <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
+                @php
+                $company = getCompanyProfile();
+                @endphp
+                @if($company && $company->dark_logo)
+                <img src="{{ asset($company->dark_logo) }}" alt="" class="topbar_logo">
+                @else
+                <i class="fas fa-laugh-wink"></i>
+                @endif
             </a>
         </x-slot>
 
@@ -18,8 +39,6 @@
 
             <!-- Password -->
             <div>
-                <span>Admin </span>
-
                 <x-label for="password" :value="__('Password')" />
 
                 <x-input id="password" class="block mt-1 w-full"
@@ -29,7 +48,7 @@
             </div>
 
             <div class="flex justify-end mt-4">
-                <x-button>
+                <x-button class="custom-btn w-full">
                     {{ __('Confirm') }}
                 </x-button>
             </div>

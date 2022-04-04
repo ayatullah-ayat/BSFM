@@ -1,8 +1,29 @@
 <x-guest-layout>
+    <style>
+        .topbar_logo {
+            width: 200px;
+        }
+    
+        .custom-btn {
+            text-align: center !important;
+            display: block !important;
+            background: linear-gradient(45deg, red, #f9a146cc) !important;
+        }
+    </style>
+
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                {{--
+                <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
+                @php
+                $company = getCompanyProfile();
+                @endphp
+                @if($company && $company->dark_logo)
+                <img src="{{ asset($company->dark_logo) }}" alt="" class="topbar_logo">
+                @else
+                <i class="fas fa-laugh-wink"></i>
+                @endif
             </a>
         </x-slot>
 
@@ -11,7 +32,6 @@
 
         <form method="POST" action="{{ route('admin.register') }}">
             @csrf
-            <span>Admin Register</span>
             <!-- Name -->
             <div>
                 <x-label for="name" :value="__('Name')" />
@@ -45,12 +65,12 @@
                                 name="password_confirmation" required />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-between mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('admin.login') }}">
                     {{ __('Already registered?') }}
                 </a>
 
-                <x-button class="ml-4">
+                <x-button class="ml-4 custom-btn ">
                     {{ __('Register') }}
                 </x-button>
             </div>

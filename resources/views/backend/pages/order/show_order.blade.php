@@ -52,6 +52,10 @@
 </head>
 
 <body>
+
+    @php
+        $company = getCompanyProfile();
+    @endphp
     {{-- @dd($booking->invoice_no) --}}
 
     <htmlpageheader name="myheader">
@@ -60,11 +64,16 @@
                 {{-- <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;"> --}}
                     {{-- <img width="180" height="80" style="padding:0px !important;" src="{{ asset('assets/img/nadeem-hair01.png') }}" alt=""> --}}
                 {{-- </span><br /><br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 07595 183489</td> --}}
-                <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;"><img
-                            width="180" height="80" style="padding:0px !important;"
-                            src="https://themeshaper.net/img/logo.png" alt=""></span><br />House-07,Kobi faruk
-                    soroni<br />Nikunja 2 ,Dhaka 1229<br /><span style="font-family:dejavusanscondensed;">&#9742;</span>
-                    +880 1868-367706</td>
+                <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">
+                    @if($company->dark_logo)
+                    <img width="180" height="auto" style="padding:0px !important; margin-bottom: 5px;" src="{{ asset($company->dark_logo) }}" alt="">
+                    @else 
+                    <img width="180" height="80" style="padding:0px !important;" src="https://themeshaper.net/img/logo.png" alt="">
+                    @endif 
+                </span><br />
+                {{ $company->company_address ?? 'House-07,Kobi faruk soroni<br />Nikunja 2 ,Dhaka 1229' }}
+                <br /><span style="font-family:dejavusanscondensed;">&#9742;</span>
+                    {{ $company->company_phone ?? '' }}</td>
                 <td style="text-align: right; width: 25%; min-width: 100px;vertical-align: bottom">
                     <p>Order No :</p>
                     <p>Order Date :</p>
@@ -120,7 +129,7 @@
                 <td width="15%" align="right">Amount</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody> 
 
             @php
                 $subSubtotal    = 0;

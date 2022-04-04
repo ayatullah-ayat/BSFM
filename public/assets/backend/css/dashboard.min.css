@@ -60,6 +60,16 @@ body {
     background-color: #fff
 }
 
+.topbar_logo{
+    max-width: 185px !important;
+}
+
+@media screen and (max-width: 768px) {
+    
+    .topbar_logo{
+        width: 80px !important;
+    }
+}
 
 .active-nav-item-child{
     color: #ff2b1c !important;

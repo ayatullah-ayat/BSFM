@@ -102,7 +102,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="company_phone">Mobile</label>
-                                    <input id="company_phone" name="company_phone" type="number" class="form-control">
+                                    <input id="company_phone" name="company_phone" type="text" class="form-control">
                                 </div>
                             </div>
 

@@ -45,6 +45,13 @@
             margin: 0 auto;
         }
 
+
+        @media screen and (max-width: 768px){
+            .order-body{
+                width: 100% !important;
+            }
+        }
+
         .header-content {
             text-align: center;
         }
@@ -159,18 +166,18 @@
                         <div class="header-content" style="text-align: center !important;">
                             @if(preg_match("/pending/im",$data->status))
                             <h2 style="text-align: center !important;">Thanks For Your Order!</h2>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">Hi {{ ($data->customer_name ?? $data->customer->customer_name)?? '' }}, We have received
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">Hi {{ ($data->customer_name ?? $data->customer->customer_name)?? '' }}, We have received
                                 order #<a href="{{ url('/') }}" class="order-no">{{ $data->order_no ?? '' }}</a> and We're working on it now.</p>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">We'll Email you an update when we have confirmed/shipped it.</p>
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">We'll Email you an update when we have confirmed/shipped it.</p>
                             @elseif(preg_match("/confirm/im",$data->status))
                             <h2 style="text-align: center !important;">Hi {{ ($data->customer_name ?? $data->customer->customer_name)?? ''  }}!</h2>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">Your Order is Confirmed. Let us Know if have any issues.</p>
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">Your Order is Confirmed. Let us Know if have any issues.</p>
                             @elseif(preg_match("/processing/im",$data->status))
                             <h2 style="text-align: center !important;">Hi {{ ($data->customer_name ?? $data->customer->customer_name)?? ''  }}!</h2>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">Your Order is Confirmed and Now We are working on it.</p>
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">Your Order is Confirmed and Now We are working on it.</p>
                             @elseif(preg_match("/cancelled/im",$data->status))
                             <h2 style="text-align: center !important;">Hi {{ ($data->customer_name ?? $data->customer->customer_name)?? ''  }}!</h2>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">Your Order has been <span style="color: red">Cancelled</span>. Let us Know if have any issues.</p>
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">Your Order has been <span style="color: red">Cancelled</span>. Let us Know if have any issues.</p>
                             @endif
                             @if(!preg_match("/cancelled/im",$data->status)) 
                             <button class="btn btn-danger"><a href="{{ url('/') }}">Visit Our site & Track Your order</a></button>
