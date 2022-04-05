@@ -200,8 +200,6 @@
     
                 <div class="modal-footer">
                     <div class="w-100">
-                        <button type="button" id="pay" class="btn btn-sm btn-success float-right mx-1"><i
-                                class="fa fa-save"></i> Pay</button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1"
                             data-dismiss="modal">Close</button>
                     </div>
