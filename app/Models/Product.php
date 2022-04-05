@@ -23,7 +23,7 @@ class Product extends Model
     protected $table = 'products';
 
     public static function getProductReport(){
-        $productReport = DB::table('products')->select('id','product_name','category_name','product_unit','sales_price','purchase_price','total_product_qty','total_stock_out_qty','total_stock_qty')->get()->toArray();
+        $productReport = DB::table('products')->select('product_name','category_name','product_unit','sales_price','purchase_price','total_product_qty','total_stock_out_qty','total_stock_qty')->get()->toArray();
         return $productReport;
     }
 

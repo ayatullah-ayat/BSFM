@@ -26,7 +26,7 @@ class StockReportController extends Controller
 
 
     public function exportStockReport(){
-        return Excel::download(new StockReportExport, 'stockreport.csv');
+        return Excel::download(new StockReportExport, 'stockreport.xlsx');
     }
 
     /**

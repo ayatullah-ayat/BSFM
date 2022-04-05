@@ -50,7 +50,7 @@ class OrderController extends Controller
     }
 
     public function orderDataCsv(){
-        return Excel::download(new OrderDataExport, 'orderdata.csv');
+        return Excel::download(new OrderDataExport, 'orderdata.xlsx');
     }
 
 
