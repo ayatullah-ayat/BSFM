@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\OtherOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\PurchaseReturnController;
+use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SaleReturnController;
 use App\Http\Controllers\Admin\StockReportController;
@@ -32,3 +33,6 @@ Route::get('/purchase-return-export', [PurchaseReturnController::class, 'purchas
 
 Route::get('/supplier-stock-report-export',         [StockReportController::class, 'supplierstockreportExport'])->name('supplier_stock_report_export');
 Route::get('/purchase-product-stock-report-export', [StockReportController::class, 'purchaseProductStockReportExport'])->name('purchase_product_stock_report_export');
+
+Route::get('/date-purchase-report-export', [ReportsController::class, 'purchasereportexport'])->name('date_purchase_report_export');
+Route::get('/date-sales-report-export', [ReportsController::class, 'datesalesreportexport'])->name('date_sales_report_export');

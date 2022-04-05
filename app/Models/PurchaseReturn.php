@@ -17,6 +17,8 @@ class PurchaseReturn extends Model
                         ->select('invoice_no','product_name','created_at','returned_qty','subtotal')
                         ->get()
                         ->toArray();
+
+        return $purchasereturn;
     }
 
     public function purchase()

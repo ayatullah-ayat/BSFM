@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
@@ -12,24 +13,19 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SupplierStockReportExport implements FromCollection, WithHeadings, WithMapping,WithStyles,WithEvents
+class DateSalesReportExport implements FromCollection, WithHeadings, WithMapping,WithStyles,WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-
     protected $data = null;
 
     protected $summaryRow = [
         'Total Summary=',
         '',
         '',
-        '',
         0,
-        0,
-        0,
-        0,
-        0,
+        0
     ];
 
     public function __construct($data)
@@ -45,11 +41,8 @@ class SupplierStockReportExport implements FromCollection, WithHeadings, WithMap
     public function prepareRows($rows)
     {
         foreach($rows as $row){
-            $this->summaryRow[4]+= $row->sales_price;
-            $this->summaryRow[5]+= $row->product_price;
-            $this->summaryRow[6]+= $row->product_qty;
-            $this->summaryRow[7]+= $row->stocked_qty;
-            $this->summaryRow[8]+= $row->returned_qty;
+            $this->summaryRow[3]+= $row->sold_total_qty;
+            $this->summaryRow[4]+= $row->order_grand_total;
         }
 
         $rows[]=$this->summaryRow;
@@ -65,29 +58,22 @@ class SupplierStockReportExport implements FromCollection, WithHeadings, WithMap
         }
 
         return [
-            $data->supplier_name,
-            $data->product_name,
-            $data->category_name,
-            $data->product_unit,
-            $data->sales_price,
-            $data->product_price,
-            $data->product_qty,
-            $data->stocked_qty,
-            $data->returned_qty,
+            $data->invoice_no,
+            $data->customer_name,
+            $data->sales_date,
+            $data->sold_total_qty,
+            $data->order_grand_total
         ];
     }
 
+
     public function headings(): array {
         return [
-            'Supplier Name', 
-            'Product Name', 
-            'Category Name',
-            'Unit',
-            'Sales Price',
-            'Purchase Price',
-            'In Qty',
-            'Stock Qty',
-            'Return Qty'
+            'Invoice NO', 
+            'Customer Name', 
+            'Date', 
+            'Total Qty', 
+            'Total Amount'
         ];
     }
 
@@ -95,7 +81,6 @@ class SupplierStockReportExport implements FromCollection, WithHeadings, WithMap
     {
         $footerCount = count($this->data) ? count($this->data) + 2 : 2;
         return [
-            // Style the first row as bold text.
             1 => [
                 'font' => [
                     'bold' => true,
@@ -116,17 +101,12 @@ class SupplierStockReportExport implements FromCollection, WithHeadings, WithMap
 
     public function registerEvents(): array
     {
-
-        // dd(count($this->data));
         return [
-
             AfterSheet::class => function (AfterSheet $event) {
-
-                // dd('fsdfd');
                 $footerCount = count($this->data) ? count($this->data) + 2 : 2;
-                $header = $event->sheet->getDelegate()->getStyle('A1:I1');
+                $header = $event->sheet->getDelegate()->getStyle('A1:E1');
                 $header->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('DD4B39');
-                $footer = $event->sheet->getDelegate()->getStyle("A{$footerCount}:I{$footerCount}");
+                $footer = $event->sheet->getDelegate()->getStyle("A{$footerCount}:E{$footerCount}");
                 $footer->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('DD4B39');
             },
 
@@ -134,5 +114,4 @@ class SupplierStockReportExport implements FromCollection, WithHeadings, WithMap
     }
 
 
-    
 }

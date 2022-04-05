@@ -72,7 +72,6 @@ class ProductDataExport implements FromCollection, WithHeadings, WithEvents, Wit
                 'font' => [
                     'bold' => true,
                     'size' => 11,
-                    'bold' => true,
                     'color' => ['argb' => 'FFFFFF'],
                 ]
             ],

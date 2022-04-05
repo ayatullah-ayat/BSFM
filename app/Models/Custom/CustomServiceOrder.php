@@ -14,7 +14,7 @@ class CustomServiceOrder extends Model
     protected $table = 'custom_service_orders';
 
     public static function getCustomServiceOrder(){
-        $serviceorderdata =  DB::table('custom_service_orders')->select('id','created_at','order_no','customer_name','customer_phone','custom_service_product_name','order_attachment')->get()->toArray();
+        $serviceorderdata =  DB::table('custom_service_orders')->select('created_at','order_no','customer_name','customer_phone','custom_service_product_name','order_attachment')->get()->toArray();
 
         return $serviceorderdata;
     }

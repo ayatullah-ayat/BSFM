@@ -306,8 +306,6 @@ class PurchaseController extends Controller
 
     public function manage_stock()
     {
-        //
-
         $categories = Category::select('category_name', 'id')->where('is_active', 1)->get();
         $brands     = Brand::select('brand_name', 'id')->where('is_active', 1)->get();
         $units      = Unit::select('unit_name', 'id')->where('is_active', 1)->get();
@@ -316,7 +314,6 @@ class PurchaseController extends Controller
         $sizes      = Variant::select('variant_name', 'id')->where([['is_active', 1], ['variant_type', 'size']])->get();
         
         return view('backend.pages.purchase.manage_stock', compact('categories', 'brands', 'units', 'currencies', 'colors', 'sizes'));
-
     }
 
 

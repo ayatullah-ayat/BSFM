@@ -13,7 +13,6 @@ class officeAccountDataExport implements FromCollection, WithHeadings
     */
     public function headings():array {
         return [
-            'ID',
             'Date',
             'Account Type',
             'Description',

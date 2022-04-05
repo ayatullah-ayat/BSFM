@@ -13,7 +13,6 @@ class OtherOrdertExport implements FromCollection, WithHeadings
     */
     public function headings():array {
         return [
-            'ID',
             'Order Date',
             'Order NO',
             'Category Name',
