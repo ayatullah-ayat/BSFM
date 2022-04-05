@@ -38,7 +38,11 @@
                                 @foreach ($customserviceorders as $customserviceorder)
                                     <tr customorder-data="{{ json_encode($customserviceorder) }}" data-category="{{ $customserviceorder->product ? $customserviceorder->product->category_id : ''}}" data-phone="{{ $customserviceorder->customer->customer_phone ?? '' }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $customserviceorder->order_no }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.customserviceorder.show', $customserviceorder->id) }}">
+                                                {{ $customserviceorder->order_no }}
+                                            </a>
+                                        </td>
                                         <td>{{ $customserviceorder->created_at ? date('Y-m-d', strtotime($customserviceorder->created_at)) : 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer_name ?? 'N/A' }}</td>
                                         <td>{{ $customserviceorder->customer->customer_phone ?? 'N/A' }}</td>

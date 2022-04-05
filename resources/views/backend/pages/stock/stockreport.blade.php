@@ -10,7 +10,11 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Stock Report</a> </h6>
+<<<<<<< HEAD
                 <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('stock_report_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
+=======
+                <button class="btn btn-sm btn-success"><a class="text-white" download="" href="{{ route('stock_report_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
+>>>>>>> 01a2f028a8f7e967ddc5afc86331b86e3ce1cb7b
             </div>
 
             <div class="card-body">

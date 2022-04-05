@@ -214,11 +214,15 @@ class HomeController extends Controller
                     $imageSRC = $customservicecategory->category_thumbnail ? asset($customservicecategory->category_thumbnail) : asset('assets/frontend/img/product/1234.png');
                     $html .= "<div class=\"col-md-4 col-sm-12 mb-2\">
                             <div class=\"product-content d-flex\">
-        
-                                <div class=\"product-img\">
-                                     <img src=\"{$imageSRC}\" alt=\"Product img\">
+
+                                <div class=\"animating reveal\">
+                                    <div class=\"animating image-wrap\">
+                                        <div class=\"animating product-img\">
+                                            <img src=\"{$imageSRC}\" alt=\"Product img\">
+                                        </div>
+                                    </div>
                                 </div>
-            
+
                                 <div class=\"product-details text-center\">
                                     <h3 class=\"product-title\"> {$customservicecategory->category_name} </h3>
                                     <p class=\"product-text\">  {$customservicecategory->category_description} </p>

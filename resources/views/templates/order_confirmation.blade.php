@@ -45,6 +45,13 @@
             margin: 0 auto;
         }
 
+
+        @media screen and (max-width: 768px){
+            .order-body{
+                width: 100% !important;
+            }
+        }
+
         .header-content {
             text-align: center;
         }
@@ -164,7 +171,7 @@
                         <div class="header-content" style="text-align: center !important;">
                             @if(preg_match("/pending/im",$data->status))
                             <h2 style="text-align: center !important;">Order Approval</h2>
-                            <p style="padding: 0; line-height: 0.5em; font-weight: normal;text-align: center !important;">
+                            <p style="padding: 0; line-height: 1em; font-weight: normal;text-align: center !important;">
                                 Hi {{ $admin->name ?? '' }},
                                 Mr/Mrs {{ ($data->customer_name ?? $customer->customer_name)?? '' }} has been placed order and Currently It's waiting for approval.
                             </p>

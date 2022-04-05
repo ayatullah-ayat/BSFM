@@ -28,6 +28,7 @@ class OrderDataExport implements FromCollection, WithHeadings, WithEvents, WithS
             'Total Price',
             'Customer Name',
             'Customer Phone',
+            'Shipping Address',
             'Payment Type',
             'Total Payment',
             'Order Note',

@@ -2,11 +2,16 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            {{-- <i class="fas fa-laugh-wink"></i> --}}
-            <i class="ti-home"></i>
+        <div class="sidebar-brand-icon rotate-n-15x">
+            @php
+            $company = getCompanyProfile();
+            @endphp
+            @if($company && $company->white_logo)
+            <img src="{{ asset($company->white_logo) }}" alt="" class="topbar_logo" >
+            @else 
+            <i class="fas fa-laugh-wink"></i>
+            @endif 
         </div>
-        <div class="sidebar-brand-text mx-3">Admin</div>
     </a>
 
     <!-- Divider -->
@@ -17,7 +22,7 @@
         <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             {{-- <i class="fa fa-home" aria-hidden="true"></i> --}}
-            <span>Dashboard</span></a>
+            <span>Admin Dashboard</span></a>
     </li>
 
     <!-- Divider -->

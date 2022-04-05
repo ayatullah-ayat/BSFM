@@ -60,11 +60,22 @@
     <htmlpageheader name="myheader">
         <table width="100%">
             <tr>
-                <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;"><img
-                            width="180" height="80" style="padding:0px !important;"
-                            src="https://themeshaper.net/img/logo.png" alt=""></span><br />House-07,Kobi faruk
-                    soroni<br />Nikunja 2 ,Dhaka 1229<br /><span style="font-family:dejavusanscondensed;">&#9742;</span>
-                    +880 1868-367706</td>
+                @php
+                $company = getCompanyProfile();
+                @endphp
+                
+                <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">
+                        @if($company->dark_logo)
+                        <img width="180" height="auto" style="padding:0px !important; margin-bottom: 5px;"
+                            src="{{ asset($company->dark_logo) }}" alt="">
+                        @else
+                        <img width="180" height="80" style="padding:0px !important;" src="https://themeshaper.net/img/logo.png" alt="">
+                        @endif
+                    </span><br />
+                    {{ $company->company_address ?? 'House-07,Kobi faruk soroni<br />Nikunja 2 ,Dhaka 1229' }}
+                    <br /><span style="font-family:dejavusanscondensed;">&#9742;</span>
+                    {{ $company->company_phone ?? '' }}
+                </td>
                 <td style="text-align: right; width: 35%; min-width: 100px;vertical-align: bottom">
                     <p>Invocie No :</p>
                     <p>Purchase Date :</p>

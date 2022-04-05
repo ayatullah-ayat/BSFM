@@ -4,12 +4,16 @@
 @section('content')
   <!-- gallery section starts  -->
 
-  <section class="gallery my-2"  id="gallery">
+  <section class="gallery my-5"  id="gallery" style="min-height: 60vh">
 
-    <div class="heading-title text-center">
+    {{-- <div class="heading-title text-center">
         <h2> গ্যালারী  </h2>
-    </div>
+    </div> --}}
 
+    <div class="heading-title text-center text-danger">
+            <h2 class="fw-bold"> গ্যালারী </h2>
+        </div>
+ 
     <div class="container">
 
         <div class="row pt-5">
@@ -30,45 +34,12 @@
                                 <img src="{{ asset($item->image)}}" alt="">
                             </a>  
                          @endif
-                        @endforeach                        
+                        @endforeach 
+                    @else 
+                    <div class="alert alert-danger w-100 fw-bold">
+                        No Content Found
+                    </div>                       
                     @endif
-
-                    
-        
-                    {{-- <a href="images/621caa5c15c041646045788.jpg" class="lightbox-cats">
-                        <img src="images//service/service-2.png" alt="">
-                    </a>
-            
-            
-                    <a href="images//service/service-3.png" class="lightbox-cats">
-                        <img src="images//service/service-3.png" alt="">
-                    </a>
-            
-
-            
-                    <a href="images//service/service-4.png" class="lightbox-cats">
-                        <img src="images//service/service-4.png" alt="">
-                    </a>
-
-            
-                    <a href="images//service/service-5.png" class="lightbox-cats">
-                        <img src="images//service/service-5.png" alt="">
-                    </a>
-                
-            
-                    <a href="images//service/service-6.png" class="lightbox-cats">
-                        <img src="images//service/service-6.png" alt="">
-                    </a>
-                
-            
-                    <a href="images//service/service-7.png" class="lightbox-cats">
-                        <img src="images//service/service-7.png" alt="">
-                    </a>
-                
-            
-                    <a href="images//service/service-8.png" class="lightbox-cats">
-                        <img src="images//service/service-8.png" alt="">
-                    </a> --}}
 
 
                 </div>
