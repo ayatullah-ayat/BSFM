@@ -11,6 +11,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Purchase</a> </h6>
                 <div class="inner">
+                    <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('purchase_data_export') }}"><i class="fa fa-download"> Export excel</i></a></button>
                     <a class="btn btn-sm btn-outline-info float-right" href="{{ route('admin.purchase.create') }}"><i class="fa fa-plus"> Purchase</i></a>
                     <a href="{{ route('admin.purchase.manage_stock') }}" class="btn btn-sm btn-outline-success float-right mx-2" id="manga-stock"> <i class="fas fa-shopping-bag"></i> Manage Stock</a>
                 </div>

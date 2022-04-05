@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SuppliertExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\SupplierRequest;
 use App\Models\Supplier;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SupplierController extends Controller
 {
@@ -23,6 +25,11 @@ class SupplierController extends Controller
         // $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
         // dd(auth()->user()->name);
         return view('backend.pages.supplier.supplierlist', compact('suppliers'));
+    }
+
+
+    public function ExportSuppliers(){
+        return Excel::download(new SuppliertExport, 'supplierlist.xlsx');
     }
 
     /**

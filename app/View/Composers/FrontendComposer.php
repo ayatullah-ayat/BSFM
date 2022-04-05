@@ -8,9 +8,11 @@ use Illuminate\View\View;
 use App\Models\SocialIcon;
 use Illuminate\Support\Str;
 use App\Http\Services\ProductSearch;
+use App\Models\Company;
 use App\Models\ContactInformation;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Custom\CustomServiceCategory;
+use App\Models\ManageCompnay;
 use App\Models\PartnershipLogo;
 
 class FrontendComposer
@@ -36,8 +38,11 @@ class FrontendComposer
         $contactInfo = ContactInformation::where('is_active', 1)->first();
 
         $organizationlogo = PartnershipLogo::latest()->take(2)->get();
+
+        $companylogo = Company::where('is_active', 1)->first();
+        // dd($companylogo);
         
-        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategoriesFooter','footerabout','sociallink','contactInfo','organizationlogo'));
+        $view->with(compact('productIds', 'cartQtys', 'wishLists', 'customservicecategoriesFooter','footerabout','sociallink','contactInfo','organizationlogo','companylogo'));
     }
 
 }

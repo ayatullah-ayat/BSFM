@@ -152,6 +152,18 @@
             <div class="heading-title text-center">
                 <h2> আমাদের ক্লাইন্টসমূহ </h2>
             </div>
+
+            {{-- <div class='reveal'>
+                <div class="image-wrap">
+                    <div class="product-img">
+                        @isset($customservicecategory->category_thumbnail)
+                            <img src="{{asset( $customservicecategory->category_thumbnail )}}" alt="Product img">
+                        @else    
+                            <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
+                        @endisset
+                    </div>
+                </div>
+            </div> --}}
     
             <div class="client-details">
                 <div class="row d-flex align-items-center justify-content-center loadMoreContainerlogosparent">
@@ -167,11 +179,13 @@
                             @endphp
 
                             @if($clientlogo->logo)
-                            <div class="col-md-2">
-                                <div class="single-client text-center m-1">
-                                    <img src="{{asset( $clientlogo->logo ?? null)}}" alt="">
+                                <div class="col-md-2">
+                                    
+                                            <div class="single-client text-center m-1 our-clients-logo">
+                                                <img src="{{asset( $clientlogo->logo ?? null)}}" alt="">
+                                            </div>
+                                        
                                 </div>
-                            </div>
                             @endif 
 
                         @endforeach
@@ -354,9 +368,18 @@
 
         .reveal.animating {
             margin-top: -62px;
-        }
+        } 
         .animating:hover img {
             transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .our-clients-logo img {
+            transform: scale(1);
+            transition: 2s all;
+        }
+        .our-clients-logo:hover img {
+            transform: scale(1.2);
             cursor: pointer;
         }
           

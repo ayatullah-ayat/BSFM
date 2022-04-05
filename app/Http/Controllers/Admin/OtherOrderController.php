@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OtherOrdertExport;
 use App\Http\Controllers\Controller;
 use App\Models\OtherOrder;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OtherOrderController extends Controller
 {
@@ -19,6 +21,11 @@ class OtherOrderController extends Controller
         $otherOrders = OtherOrder::orderByDesc('id')->get();
         // dd($otherOrders);
         return view('backend.pages.otherorder.otherorder', compact('otherOrders'));
+    }
+
+
+    public function OtherOrderExport(){
+        return Excel::download(new OtherOrdertExport, 'otherdata.csv');
     }
 
     /**

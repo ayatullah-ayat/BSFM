@@ -77,7 +77,6 @@ class OrderDataExport implements FromCollection, WithHeadings, WithEvents, WithS
                 'font' => [
                     'bold' => true,
                     'size' => 11,
-                    'bold' => true,
                     'color' => ['argb' => 'FFFFFF'],
                 ]],
 
@@ -88,4 +87,6 @@ class OrderDataExport implements FromCollection, WithHeadings, WithEvents, WithS
             // 'C'  => ['font' => ['size' => 16]],
         ];
     }
+
+    
 }

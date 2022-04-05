@@ -10,6 +10,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Supplier</a> </h6>
                 <div class="inner">
+                    <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('supplier_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Supplier Ledger</i></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Supplier</i></button>
                 </div>
@@ -199,8 +200,6 @@
     
                 <div class="modal-footer">
                     <div class="w-100">
-                        <button type="button" id="pay" class="btn btn-sm btn-success float-right mx-1"><i
-                                class="fa fa-save"></i> Pay</button>
                         <button type="button" class="btn btn-sm btn-danger float-right mx-1"
                             data-dismiss="modal">Close</button>
                     </div>

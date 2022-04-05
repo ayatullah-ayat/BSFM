@@ -7,10 +7,20 @@ use App\Models\Product;
 use App\Models\SaleProduct;
 use App\Models\CustomerType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
     protected $guarded = ['id'];
+    protected $table = 'customers';
+
+    public static function getCustomers(){
+        $customerdata = DB::table('customers')
+                        ->select('customer_name','customer_email','customer_phone','customer_address','current_balance')
+                        ->get()
+                        ->toArray();
+        return $customerdata;
+    }
 
     public function sales()
     {

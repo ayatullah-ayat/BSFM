@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\officeAccountDataExport;
 use Illuminate\Http\Request;
 use App\Models\OfficeAccount;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OfficeAccountRequest;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OfficeAccountController extends Controller
 {
@@ -43,6 +45,11 @@ class OfficeAccountController extends Controller
 
 
         return view('backend.pages.account.datewise_account_report');
+    }
+
+
+    public function officeDataCsv(){
+        return Excel::download(new officeAccountDataExport, 'officeaccount.csv');
     }
 
     /**

@@ -4,9 +4,16 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-md-6">
-                <h2 class="hotline"> হট লাইন- <a href="tel:01971819813" type="button">০১৯৭-১৮১৯-৮১৩</a></h2>
-            </div>
+            @if (isset($companylogo))
+                <div class="col-md-6">
+                    <h2 class="hotline"> হট লাইন- <a href="tel:{{ $companylogo->company_phone }}" type="button">{{ $companylogo->company_phone }}</a></h2>
+                </div>
+            @else
+                <div class="col-md-6">
+                    <h2 class="hotline"> হট লাইন- <a href="tel:01971819813" type="button">০১৯৭-১৮১৯-৮১৩</a></h2>
+                </div>
+            @endif
+            
 
             <div class="col-md-6 d-flex align-items-center justify-content-lg-end justify-content-center">
                 @guest

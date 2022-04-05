@@ -93,6 +93,7 @@ trait ProductChecker
 
 
             $productFields = $this->productFields($fields);
+            $productId= $product->id ?? null;
 
             $productUpdate = $product->update($productFields);
             if(!$productUpdate)
@@ -161,7 +162,8 @@ trait ProductChecker
                 
             return [
                 'success'   => true,
-                'msg'       => 'Product Updated Successfully!'
+                'msg'       => 'Product Updated Successfully!',
+                'data'      => Product::find($productId)
             ];
 
         }  catch (\Throwable $th) {

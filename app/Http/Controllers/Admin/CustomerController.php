@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CustomerExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -19,6 +21,11 @@ class CustomerController extends Controller
     {
         $customers = Customer::orderByDesc('id')->get();
         return view('backend.pages.customer.managecustomer', compact('customers'));
+    }
+
+
+    public function customerExportData(){
+        return Excel::download(new  CustomerExport, 'customerlist.xlsx');
     }
 
     /**

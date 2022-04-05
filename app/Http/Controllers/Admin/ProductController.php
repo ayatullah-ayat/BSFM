@@ -101,7 +101,7 @@ class ProductController extends Controller
             // create product 
             $productData = $this->createProduct($data);
 
-            // dd($productData);
+            dd($productData);
             if(!$productData['success'])
                 throw new Exception($productData['msg'] ?? "Unable to Create Product!", 403);
 
@@ -286,7 +286,10 @@ class ProductController extends Controller
             if ($purchase_product_id) {
                 $purchase_product = PurchaseProduct::find($purchase_product_id);
                 $purchase_product->increment('stocked_qty', $request->product_qty);
-                $purchase_product->update(['product_id' => $productData['data']['id'] ?? null]);
+
+                if(isset($productData['data']['id'])){
+                    $purchase_product->update(['product_id' => $productData['data']['id'] ?? null]);
+                }
 
                 $purchase_product->purchase()->update([
                     'is_manage_stock' => 1

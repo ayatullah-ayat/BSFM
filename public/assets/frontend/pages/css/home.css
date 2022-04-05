@@ -193,8 +193,12 @@ a.product-button:hover {
     margin: 70px 0px;
 }
 
-.client-details {
+/* .client-details {
     margin: 50px 0px;
+} */
+
+.client-details {
+    margin: 50px 100px;
 }
 
 /* Our Service Area */

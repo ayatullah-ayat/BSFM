@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SaleReturnExport;
 use PDF;
 use Exception;
 use App\Models\SaleReturn;
@@ -9,6 +10,7 @@ use App\Models\SaleProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleReturnController extends Controller
 {
@@ -24,6 +26,10 @@ class SaleReturnController extends Controller
         return view('backend.pages.sale.return_sale', compact('sales'));
     }
 
+
+    public function salereturnexport(){
+        return Excel::download(new SaleReturnExport,'sale_return.xlsx');
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -10,6 +10,7 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Purchase Product Stock Report</a> </h6>
+                <button class="btn btn-sm btn-success"><a class="text-white" id="excelExport" href="javascript:void(0) {{ route('purchase_product_stock_report_export')}}?supplier_id=&product_id=&from_date=&to_date="><i class="fa fa-download"> Export excel</i></a></button>
             </div>
 
             <div class="card-body">
@@ -95,6 +96,7 @@
                     </table>
                 </div>
             </div>
+            
         </div>
 
     </div>
@@ -224,6 +226,7 @@
                     },
                     success(data){
                         loadAjaxData(data);
+                        $('#excelExport').attr('href',`{{ route('purchase_product_stock_report_export')}}?supplier_id=${supplier_id}&product_id=${product_id}&from_date=${from_date}&to_date=${to_date}`)
                     },
                     error(err){
                         console.log(err);
