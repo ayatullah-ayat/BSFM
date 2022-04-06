@@ -7,7 +7,6 @@
             <div class="col-md-3">
 
                 <div class="about-footer">
-                    {{-- @dd($footerabout) --}}
                     @if($footerabout)
 
                         @if($footerabout->footer_logo)
@@ -52,10 +51,9 @@
             <div class="col-md-3">
 
                 <div class="footer-text-header">
-                    <h3> কাস্টমাইজ </h3>
+                    <h3 class="fw-bold"> কাস্টমাইজ </h3>
                 </div>
 
-                {{-- @dd($customservicecategories) category_name --}}
                 <div class="category-menu">
                     <ul class="list-unstyled">
                         @isset($customservicecategoriesFooter)
@@ -63,19 +61,6 @@
                                 <li><a href="javascript:void(0)" class="customize-btn" data-categoryid="{{ $customservicecategory->id }}">{{ $customservicecategory->category_name }}</a></li>
                             @endforeach
                         @endisset
-                        {{-- <li><a href=""> টি-সার্ট </a></li>
-                        <li><a href=""> পোলো টি-সার্ট </a></li>
-                        <li><a href=""> চাবির রিং </a></li>
-                        <li><a href=""> ক্যাপ </a></li>
-                        <li><a href=""> মাস্ক </a></li>
-                        <li><a href=""> ছাতা </a></li>
-                        <li><a href=""> মগ </a></li>
-                        <li><a href=""> এ্যাক্রিলিক প্রিংট </a> </li>
-                        <li><a href=""> এসোসিরিজ </a></li>
-                        <li><a href=""> শপিং ব্যাগ </a></li>
-                        <li><a href=""> জ্যারসি</a></li>
-                        <li><a href=""> ছাতা </a></li>
-                        <li><a href=""> ক্রিস্ট </a></li> --}}
 
                     </ul>
                 </div>
@@ -85,11 +70,13 @@
             <div class="col-md-3">
 
                 <div class="footer-text-header">
-                    <h3> মেনু </h3>
+                    <h3 class="fw-bold"> মেনু </h3>
                 </div>
 
                 <div class="footer-menu">
                     <ul class="list-unstyled">
+                        <li><a href="{{ route('home_index')}}"> কাস্টমাইজ</a></li>
+                        <li><a href="{{ route('shop_index')}}"> শপ</a></li>
                         <li><a href="{{ route('about_index')}}"> আমাদের সম্পর্কে</a></li>
                         <li><a href="{{ route('contact_index')}}"> যোগাযোগ করুন </a></li>
                         <li class="ordertraking-footer"><a href="javascript:void(0)"> অর্ডার ট্র্যাক করুন </a></li>
@@ -102,7 +89,7 @@
             <div class="col-md-3">
 
                 <div class="footer-text-header">
-                    <h3>আমাদের অংগ প্রতিষ্ঠান সমূহ</h3>
+                    <h3 class="fw-bold">আমাদের অংগ প্রতিষ্ঠান সমূহ</h3>
                 </div>
 
 
@@ -116,7 +103,6 @@
                     </ul>
                 </div>
 
-                {{-- @dd($contactInfo) --}}
                 @if($contactInfo)
                     <div class="footer-address">
                         @if ( $contactInfo->address )
@@ -149,4 +135,8 @@
         </div>
     </div>
 </footer>
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">
+    <i class="fa-solid fa-angles-up"></i> Top
+</button>
 

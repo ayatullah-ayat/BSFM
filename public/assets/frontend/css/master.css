@@ -916,3 +916,106 @@ footer {
 footer a:hover{
     color: #DC0029 !important;
 }
+
+
+
+
+/* --------------------------- modal area -----------------  */
+
+.grid-product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.grid-product-container .modal-card.active{
+    border: 1px solid #DC0029;
+}
+
+
+.modal-header h5 {
+    margin: 0 auto;
+    font-family: var(--google-secondary-font-family);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 163.15%;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-card {
+    Width: 100%;
+    background: rgba(237, 237, 237, 0.7);
+    border-radius: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.modal-card:hover {
+    border-color: #DC0029;
+}
+
+.modal-card img {
+    width: 131.97px;
+    margin: 0 auto;
+}
+
+.modal-card p {
+    font-family: var(--google-secondary-font-family);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    /* line-height: 40px; */
+    letter-spacing: -0.02em;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* --------------------------- modal area -----------------  */
+
+
+  #myBtn {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        background-color: red;
+        color: white;
+        cursor: pointer;
+        padding: 10px 10px;
+        border-radius: 4px;
+    }
+
+    #myBtn:hover {
+        background-color: #555;
+    }
+
+
+    .sticky{
+        width: 100%;
+        position: fixed;
+        background: white;
+        box-shadow: 0 10px 10px -10px rgba(0,0,0,0.3);
+        animation-name: animationFade;
+        animation-duration: 1s;
+        animation-fill-mode: both;
+        top: 2px;
+    }
+
+    @keyframes animationFade{
+        from{
+            opacity: 0;
+            -webkit-transform: translate3d(0, -100%,0);
+            transform: translate3d(0, -100%,0);
+        }
+        to{
+            opacity: 1;
+            -webkit-transform: none;
+            -o-transform: none;
+
+        }
+    }
