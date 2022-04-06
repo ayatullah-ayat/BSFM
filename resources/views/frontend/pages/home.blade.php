@@ -18,9 +18,11 @@
                             <h2>আপনি কি তৈরী করতে চান ?</h2>
                         </div>
                         <div class="hero-text">
-                            <p>যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে, দ্রুততম সময়ে, সর্বোচ্চ
+                            <p>
+                                যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে, দ্রুততম সময়ে, সর্বোচ্চ
                                 গুণগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়। আপনার চাহিদা অনুযায়ী যে কোনো ধরনে কাস্টমাইজড
-                                প্রিন্টের কাজের অর্ডার করুন নিচের লিস্ট থেকে </p>
+                                প্রিন্টের কাজের অর্ডার করুন নিচের লিস্ট থেকে
+                            </p>
                         </div>
                     </div>
     
@@ -152,18 +154,6 @@
             <div class="heading-title text-center">
                 <h2> আমাদের ক্লাইন্টসমূহ </h2>
             </div>
-
-            {{-- <div class='reveal'>
-                <div class="image-wrap">
-                    <div class="product-img">
-                        @isset($customservicecategory->category_thumbnail)
-                            <img src="{{asset( $customservicecategory->category_thumbnail )}}" alt="Product img">
-                        @else    
-                            <img src="{{asset('assets/frontend/img/product/1234.png')}}" alt="Product img">
-                        @endisset
-                    </div>
-                </div>
-            </div> --}}
     
             <div class="client-details">
                 <div class="row d-flex align-items-center justify-content-center loadMoreContainerlogosparent">
@@ -217,9 +207,10 @@
     
                     <div class="col-md-7 mt-3">
                         <div class="google-map">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3649.696488940541!2d90.41667951445731!3d23.829389491672313!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c759240dcc93%3A0x87a7975c20b12087!2sThemeShaper!5e0!3m2!1sen!2sbd!4v1646046001517!5m2!1sen!2sbd"
-                                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d383.8414241729757!2d90.40134244963308!3d23.756805423079125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b89c9df193bb%3A0xa1b4580bb580a46f!2sBegun%20Bari%20Jame%20Masjid!5e0!3m2!1sen!2sbd!4v1649218491900!5m2!1sen!2sbd" 
+                                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
                         </div>
                     </div>
     

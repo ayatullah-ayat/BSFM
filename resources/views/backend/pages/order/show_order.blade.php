@@ -65,7 +65,7 @@
                     {{-- <img width="180" height="80" style="padding:0px !important;" src="{{ asset('assets/img/nadeem-hair01.png') }}" alt=""> --}}
                 {{-- </span><br /><br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 07595 183489</td> --}}
                 <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">
-                    @if($company->dark_logo)
+                    @if(isset($company->dark_logo))
                     <img width="180" height="auto" style="padding:0px !important; margin-bottom: 5px;" src="{{ asset($company->dark_logo) }}" alt="">
                     @else 
                     <img width="180" height="80" style="padding:0px !important;" src="https://themeshaper.net/img/logo.png" alt="">
