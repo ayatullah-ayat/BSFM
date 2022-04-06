@@ -87,6 +87,8 @@ class AdminProfileController extends Controller
                 $reqData = json_decode($reqData);
             }
 
+            $hasProfile = false;
+
             DB::beginTransaction();
 
             $admin->update([
@@ -94,33 +96,44 @@ class AdminProfileController extends Controller
                 'email'     => $reqData->email,
             ]);
 
-            
+
             $updatable = [
                 'mobile_no' => $reqData->phone,
-                // 'gender'    => $reqData->gender ?? null,
+                'gender'    => $reqData->gender ?? '',
             ];
 
             $encoded_string = isset($reqData->photo) ? $reqData->photo : null;
             if ($encoded_string) {
-                if ($admin->profile &&  count(explode(',', $encoded_string)) > 1) {
+                // dd($admin->profile);
+                if (count(explode(',', $encoded_string)) > 1) {
 
-                    if ($admin->profile->photo) {
+                    if ($admin->profile && $admin->profile->photo) {
                         $imageRes = $this->deleteImage($admin->profile->photo);
                         if (!$imageRes)
                             throw new Exception("Unable to delete Image!", 403);
+                        $hasProfile = true;
                     }
+
 
                     $fileResponse = $this->uploadFile($encoded_string, 'users/');
                     if (!$fileResponse['success'])
-                        throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
+                    throw new Exception($fileResponse['msg'], $fileResponse['code'] ?? 403);
 
                     $updatable['photo'] = $fileResponse['fileLocation'] ?? null;
                 }
             }
 
-            $update = $admin->profile()->update($updatable);
-            if (!$update)
-                throw new Exception("Unable to Update!", 403);
+            // dd($updatable);
+            if (!$hasProfile) {
+                // dd( $admin, $updatable, 'gender');
+                $createProfile = $admin->profile()->create($updatable);
+                if (!$createProfile)
+                    throw new Exception("Unable to Create Profile!", 403);
+            } else {
+                $update = $admin->profile()->update($updatable);
+                if (!$update)
+                    throw new Exception("Unable to Update!", 403);
+            }
 
             DB::commit();
 
@@ -129,7 +142,6 @@ class AdminProfileController extends Controller
                 'data'      => $admin->find($admin->id),
                 'msg'       => 'Profile updated Successfully!',
             ], 200);
-
         } catch (Exception $e) {
 
             DB::rollback();

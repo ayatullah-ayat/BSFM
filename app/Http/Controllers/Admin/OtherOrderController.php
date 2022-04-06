@@ -25,7 +25,7 @@ class OtherOrderController extends Controller
 
 
     public function OtherOrderExport(){
-        return Excel::download(new OtherOrdertExport, 'otherdata.csv');
+        return Excel::download(new OtherOrdertExport, 'otherdata.xlsx');
     }
 
     /**

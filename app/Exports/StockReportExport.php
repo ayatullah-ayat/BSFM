@@ -13,7 +13,6 @@ class StockReportExport implements FromCollection, WithHeadings
     */
     public function headings():array {
         return [
-            'ID',
             'Product Name',
             'Category Name',
             'Product Unit',
