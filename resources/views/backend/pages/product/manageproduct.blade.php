@@ -9,8 +9,9 @@
         <div class="card shadow mb-4">
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary text-dark"><a class="text-decoration-none">Manage Product</a> </h6>
+                <h6 class="m-0 font-weight-bold text-primary text-dark"><a class="text-decoration-none">Manage Product</a> </h6> 
                 <div class="inner">
+                    <button class="btn btn-sm btn-danger"><a class="text-white" href="{{ route('admin.products.product_pdf')}}"><i class="fa fa-file-pdf"> Export Pdf</i></a></button>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('product_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.products.create') }}"><i class="fa fa-plus"> Product</i></a></button>
                 </div>

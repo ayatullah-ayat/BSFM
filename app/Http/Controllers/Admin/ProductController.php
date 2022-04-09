@@ -18,6 +18,7 @@ use App\Http\Services\ImageChecker;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Services\ProductChecker;
+use PDF;
 
 class ProductController extends Controller
 {
@@ -385,6 +386,23 @@ class ProductController extends Controller
 
     public function productexport(){
         return Excel::download(new ProductDataExport, 'product_list.xlsx');
+    }
+
+    public function getproductpdf(){
+
+        $getproducts = Product::get();
+        // dd($getproducts);
+        $pdf = PDF::loadView('backend.pages.product.product_pdf', compact('getproducts'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('product_data.pdf');
+        // return view('backend.pages.product.product_pdf');
     }
 
 

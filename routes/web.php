@@ -223,6 +223,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [SupplierController::class, 'store'])->name('store');
         Route::put('/{supplier}',   [SupplierController::class, 'update'])->name('update');
         Route::delete('/{supplier}',[SupplierController::class, 'destroy'])->name('destroy');
+
+        Route::get('/export/pdf/supplier',[SupplierController::class, 'getsupplierpdf'])->name('supplier_list_pdf');
     });
 
     Route::group(['prefix' => 'customers', 'as' => 'customer.'], function(){
@@ -230,6 +232,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',            [CustomerController::class, 'store'])->name('store');
         Route::put('/{customer}',   [CustomerController::class, 'update'])->name('update');
         Route::delete('/{customer}',[CustomerController::class, 'destroy'])->name('destroy');
+
+        Route::get('/export/pdf/customer', [CustomerController::class, 'getcustomerpdf'])->name('customer_list_pdf');
     });
 
     Route::group(['prefix' => 'purchase', 'as' => 'purchase.'], function () {
@@ -266,6 +270,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::put('/{product}',            [ProductController::class, 'update'])->name('update');
         Route::delete('/{product}',         [ProductController::class, 'destroy'])->name('destroy');
         Route::post('/{product}',           [ProductController::class, 'publish'])->name('publish');
+
+
+        Route::get('/export/pdf/product',           [ProductController::class, 'getproductpdf'])->name('product_pdf');
     });
 
 
@@ -278,7 +285,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/{order}/{notification?}',  [OrderController::class, 'show'])->name('show');
         Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
-        
+
         Route::get('/export/pdf/order',         [OrderController::class, 'getorderpdf'])->name('export_pdf');
     });
     
