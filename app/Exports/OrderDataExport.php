@@ -24,13 +24,13 @@ class OrderDataExport implements FromCollection, WithHeadings, WithEvents, WithS
             'Sizes',
             'Colors',
             'Total Qty',
-            'Discount Price',
             'Total Price',
+            'Discount Price',
+            'Total Payment',
+            'Payment Type',
             'Customer Name',
             'Customer Phone',
             'Shipping Address',
-            'Payment Type',
-            'Total Payment',
             'Order Note',
             'Status',
         ];
@@ -49,7 +49,7 @@ class OrderDataExport implements FromCollection, WithHeadings, WithEvents, WithS
 
             AfterSheet::class => function (AfterSheet $event) {
 
-                $event->sheet->getDelegate()->getStyle('A1:M1')
+                $event->sheet->getDelegate()->getStyle('A1:N1')
 
                 ->getFill()
                 // ->applyFromArray(['fillType' => 'solid', 'rotation' => 0,'font' => [

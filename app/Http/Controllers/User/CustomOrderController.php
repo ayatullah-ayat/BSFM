@@ -142,6 +142,10 @@ class CustomOrderController extends Controller
     {
         $socialicon = SocialIcon::where('is_active', 1)->first();
 
+        $customProuductInfo = CustomServiceProduct::where('is_active', 1)->get();
+
+      
+
         $otherProducts = Product::select('*')
             ->latest()
             ->take(20)
