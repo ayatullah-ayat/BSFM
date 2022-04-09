@@ -236,7 +236,7 @@
         from_date = $('#from_date').val(),
         to_date = $('#to_date').val();
 
-        open(`{{ route('admin.otherOrder.datewise_pdf') }}?from_date=${from_date}=&to_date=${to_date}`,'_self')
+        open(`{{ route('admin.otherOrder.datewise_pdf') }}?from_date=${from_date}&to_date=${to_date}`,'_self')
     }
 </script>
 

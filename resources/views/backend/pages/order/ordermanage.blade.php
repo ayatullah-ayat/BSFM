@@ -12,8 +12,9 @@
                 <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Manage Order</a> </h6>
            
                 <div class="inner">
+                    <button class="btn btn-sm btn-danger"><a class="text-white" href="{{ route('admin.ecom_orders.export_pdf')}}"><i class="fa fa-file-pdf"> Export Pdf</i></a></button>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('order_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
-                    <button class="btn btn-sm btn-info"><a class="text-white" href="{{ route('admin.ecom_orders.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
+                    <button class="btn btn-sm btn-info"><a class="text-white"    href="{{ route('admin.ecom_orders.order_add') }}"><i class="fa fa-plus"> Order</i></a></button>
                 </div>
               
             </div>

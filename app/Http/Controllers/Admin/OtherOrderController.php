@@ -222,7 +222,7 @@ class OtherOrderController extends Controller
         $from   = $request->from_date;
         $to     = $request->to_date;
 
-        if(!$from ){
+        if(!$from){
             return back();
         }
             
@@ -235,9 +235,17 @@ class OtherOrderController extends Controller
 
         $orders = $q->get();
 
-        dd($orders);
+        $pdf = PDF::loadView('backend.pages.otherorder.pdf_view', compact('orders'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME', 'Micro Media')
+        ]);
 
-        return view('backend.pages.otherorder.datewise_other_report');
+        return $pdf->stream('getorderdata.pdf');
     }
 
 

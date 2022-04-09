@@ -18,14 +18,20 @@
                     <div class="custom-prodect-info">
     
                         <div class="single-prodect-title">
-                            <h2> টি সার্ট </h2>
+                            @if(isset( $customServiceProduct->product_name))
+                                <h2>{{ $customServiceProduct->product_name }}</h2>
+                            @endif
+                            {{-- <h2> টি সার্ট </h2> --}}
                         </div>
     
                         <div class="single-prodect-description">
-                            <p>
+                            @if(isset( $customServiceProduct->product_description))
+                                <p>{{ $customServiceProduct->product_description }}</p>
+                            @endif
+                            {{-- <p>
                                 যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে, দ্রুততম সময়ে, সর্বোচ্চ
                                 গুণগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়।
-                            </p>
+                            </p> --}}
                         </div>
     
                         <div class="custom-prodect-form">

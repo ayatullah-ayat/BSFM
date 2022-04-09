@@ -222,6 +222,25 @@ class OrderController extends Controller
     }
 
 
+    public function getorderpdf(){
+        $ordersdata = Order::get();
+        // dd($orderdata);
+        $pdf = PDF::loadView('backend.pages.order.pdf_order', compact('ordersdata'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('getorderdata.pdf');
+
+        // return view('backend.pages.order.pdf_order', compact('ordersdata'));
+    }
+
+    
+    // <div class="spacer"></div>
 
     private function setWaterMark($order)
     {

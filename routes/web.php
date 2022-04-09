@@ -278,7 +278,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/{order}/{notification?}',  [OrderController::class, 'show'])->name('show');
         Route::put('/{order}',                  [OrderController::class, 'update'])->name('update');
         Route::delete('/{order}',               [OrderController::class, 'destroy'])->name('destroy');
+        
+        Route::get('/export/pdf/order',         [OrderController::class, 'getorderpdf'])->name('export_pdf');
     });
+    
 
 
     Route::group(['prefix' => 'sales', 'as' => 'ecom_sales.'], function () {
@@ -290,8 +293,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/{sale}/edit',              [SaleController::class, 'edit'])->name('edit');
         Route::put('/{sale}',                   [SaleController::class, 'update'])->name('update');
         Route::get('/invoice/{invoice_no}',     [SaleController::class, 'showInvoice'])->name('showInvoice');
-
-
     });
 
 
@@ -327,9 +328,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     Route::get('/contact-us',           [ContactController::class, 'index'])->name('contact_us');
 
     Route::group(['prefix' => 'customservicecategories', 'as' => 'customservicecategory.'], function(){
-        Route::get('/',                         [CustomServiceCategoryController::class, 'index'])->name('index');
-        Route::post('/',                        [CustomServiceCategoryController::class, 'store'])->name('store');
-        Route::put('/{customServiceCategory}',  [CustomServiceCategoryController::class, 'update'])->name('update');
+        Route::get('/',                          [CustomServiceCategoryController::class, 'index'])->name('index');
+        Route::post('/',                         [CustomServiceCategoryController::class, 'store'])->name('store');
+        Route::put('/{customServiceCategory}',   [CustomServiceCategoryController::class, 'update'])->name('update');
         Route::delete('/{customServiceCategory}',[CustomServiceCategoryController::class, 'destroy'])->name('destroy');
     });
 
