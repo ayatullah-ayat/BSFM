@@ -101,7 +101,7 @@ class ProductController extends Controller
             // create product 
             $productData = $this->createProduct($data);
 
-            dd($productData);
+            // dd($productData);
             if(!$productData['success'])
                 throw new Exception($productData['msg'] ?? "Unable to Create Product!", 403);
 

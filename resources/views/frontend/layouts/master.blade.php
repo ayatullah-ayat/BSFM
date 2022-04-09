@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) ?? 'en' }}">
+<html lang="en">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Micro Media Ecommerce & Customization">
+    <meta name="keywords" content="Micro Media, Ecommerce, Customize">
 
     <title>@yield('title','Micro Media')</title>
 
@@ -141,7 +144,7 @@
 <script src="{{ asset('assets/common_assets/libs/jquery/jquery.min.js') }}"> </script>
 
 <script src="{{ asset('assets/frontend/libs/bootstrap5/boostrap5.bundle.min.js') }}"></script>
-<script src="{{ asset('frontend/libs/fontawesome6/all.min.js') }}"></script>
+<script src="{{ asset('assets/frontend/libs/fontawesome6/all.min.js') }}"></script>
 <script src="{{ asset('assets/backend/libs/notifications/sweetalert.min.js') }}"></script>
 <script src="{{ asset('assets/backend/js/config.js') }}"></script>
 <script src="{{ asset('assets/common_assets/js/cart.js') }}"></script>
