@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use App\Exports\OtherOrdertExport;
 use App\Http\Controllers\Controller;
 use App\Models\OtherOrder;
@@ -80,10 +81,43 @@ class OtherOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( OtherOrder $otherOrder)
+
+    public function show(OtherOrder $otherOrder)
     {
-        //
+        try {
+
+            // dd($order);
+
+            $pdf = PDF::loadView('backend.pages.otherorder.show_order', compact('otherOrder'), [], [
+                'margin_left'   => 20,
+                'margin_right'  => 15,
+                'margin_top'    => 48,
+                'margin_bottom' => 25,
+                'margin_header' => 10,
+                'margin_footer' => 10,
+                'watermark'     => $this->setWaterMark($otherOrder),
+            ]);
+
+
+            // dd($pdf);
+
+            return $pdf->stream('other_order_invoice_' . preg_replace("/\s/", '_', ($otherOrder->order_no ?? '')) . '_' . ($otherOrder->order_date ?? '') . '_.pdf');
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+
+
+        // return view('backend.pages.order.show_order', compact('order'));
+
     }
+
+
+    private function setWaterMark($otherOrder)
+    {
+        return $otherOrder && ($otherOrder->total_order_price + $otherOrder->service_charge) - $otherOrder->advance_balance  <= 0 ? 'Paid': 'Due';
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -155,6 +189,55 @@ class OtherOrderController extends Controller
                 'msg'       => $th->getMessage()
             ]);
         }
+    }
+
+
+
+    public function datewise_report(Request $request)
+    {
+
+        $from   = $request->from_date;
+        $to     = $request->to_date;
+
+        if ($request->ajax()) {
+
+            $q = OtherOrder::where('order_date', '>=', $from);
+
+            if ($to) {
+                $q->where('order_date', '<=', $to);
+            }
+
+            $orders = $q->get();
+
+            return response()->json($orders);
+        }
+
+
+        return view('backend.pages.otherorder.datewise_other_report');
+    }
+
+    public function datewise_pdf(Request $request)
+    {
+
+        $from   = $request->from_date;
+        $to     = $request->to_date;
+
+        if(!$from ){
+            return back();
+        }
+            
+
+        $q = OtherOrder::where('order_date', '>=', $from);
+
+        if ($to) {
+            $q->where('order_date', '<=', $to);
+        }
+
+        $orders = $q->get();
+
+        dd($orders);
+
+        return view('backend.pages.otherorder.datewise_other_report');
     }
 
 

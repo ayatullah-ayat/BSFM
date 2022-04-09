@@ -309,3 +309,30 @@ function totalOrderRevenue(){
 function getCompanyProfile(){
     return Company::first();
 }
+
+
+function pdfFooter($organizationlogo=null){
+
+    $url = url('/');
+    $html = "";
+
+    if(isset($organizationlogo) && count($organizationlogo)):
+        foreach ($organizationlogo as $organizationItem):
+            $logoPath = asset($organizationItem->logo) ?? '';
+            $html .= "<span><img class=\"img-fluid\" width=\"60px\" src=\"{$logoPath}\" alt=\"\"></span>";
+        endforeach;
+    endif;
+
+    return "<table width=\"100%\">
+        <tr>
+            <td align=\"left\" width=\"50%\">
+                <p><b>ওয়েবসাইট</b>: {$url}</p>
+                <p><b>ফেইসবুক পেইজ</b>: https://www.facebook.com/micromediabd</p>
+            </td>
+            <th align=\"right\" width=\"50%\">
+                <p><b>আমাদের অংগ প্রতিষ্ঠান সমূহ:</b></p>
+                <p>{$html}</p>
+            </th>
+        </tr>
+    </table>";
+}

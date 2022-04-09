@@ -56,7 +56,6 @@
     @php
         $company = getCompanyProfile();
     @endphp
-    {{-- @dd($booking->invoice_no) --}}
 
     <htmlpageheader name="myheader">
         <table width="100%">
@@ -77,12 +76,10 @@
                 <td style="text-align: right; width: 25%; min-width: 100px;vertical-align: bottom">
                     <p>Order No :</p>
                     <p>Order Date :</p>
-                    <p>Payment Method :</p>
                 </td>
                 <td style="width: calc(50%% - 25%);text-align: right;vertical-align: bottom">
-                    <p>{{ $order->order_no ?? '' }}</p>
-                    <p>{{ $order->order_date ?? '' }}</p>
-                    <p>{{ $order->payment_method ?? 'Cash on Delivery' }}</p>
+                    <p>{{ $otherOrder->order_no ?? '' }}</p>
+                    <p>{{ $otherOrder->order_date ?? '' }}</p>
                 </td>
             </tr>
         </table>
@@ -104,8 +101,7 @@
         <tr>
             <td width="45%" style="padding-left: 0px !important;"><span
                     style="font-size: 7pt; color: #555555; font-family: sans;font-weight:bold;">ORDER
-                    TO:</span><br /><br />Name: {{ ($order->customer_name ?? $order->customer->customer_name ) ?? 'N/A' }}<br />Phone: {{
-                ($order->customer_phone ?? $order->customer->customer_phone) ?? 'N/A' }}<br />Email: {{ ($order->customer_email ?? $order->customer->customer_email) ?? 'N/A' }}</td>
+                    TO:</span><br /><br />Institute Name&nbsp;: {{ $otherOrder->institute_description ?? 'N/A' }}<br />Phone &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $otherOrder->moible_no ?? 'N/A' }}</td>
             <td width="10%">&nbsp;</td>
             <td width="45%" style="text-align: right; padding-right: 0px !important;">
                 <div style="text-align: right;visibility:hidden;">x</div>
@@ -120,76 +116,55 @@
         <thead>
             <tr>
                 <td width="5%">#SL</td>
-                <td width="25%" align="left">Item Name</td>
-                <td width="25%" align="left">Variant</td>
-                <td width="15%">Unit</td>
+                <td width="50%" align="left">Category Name</td>
                 <td width="15%">Price</td>
-                <td width="15%">Discount</td>
                 <td width="10%">Qty</td>
-                <td width="15%" align="right">Amount</td>
+                <td width="20%" align="right">Amount</td>
             </tr>
         </thead>
         <tbody> 
 
             @php
-                $subSubtotal    = 0;
+                $subSubtotal    = $otherOrder->total_order_price ?? 0;
                 $totalDiscount  = 0;
             @endphp
-            @foreach ($order->orderDetails as $item)
-                @php
-                    $subSubtotal    += $item->subtotal;
-                    $totalDiscount  += $item->discount_price;
-                @endphp
-                <tr>
-                    <td align="center">{{ $loop->iteration }}</td>
-                    <td align="left">
-                        {{ $item->product_name ?? '' }}
-                    </td>
-                    <td align="left">
-                        @if($item->product_color)
-                        Color: {{ $item->product_color ?? '' }} <br>
-                        @endif 
-                        @if($item->product_size)
-                        Size: {{ $item->product_size ?? '' }}
-                        @endif 
-                    </td>
-                    <td align="center">{{ $item->product->product_unit ?? 'N/A' }}</td>
-
-                    <td align="center">{{ $item->product_price ?? '0.0' }}</td>
-                    <td align="center">{{ $item->discount_price ?? '0.0' }}</td>
-                    <td align="center">{{ $item->product_qty ?? '0' }}</td>
-                    <td align="right">{{ $item->subtotal }}</td>
-                </tr>
-            @endforeach
+            <tr>
+                <td align="center">1</td>
+                <td align="left">
+                    {{ $otherOrder->category_name ?? '' }}
+                </td>
+                <td align="center">{{ $otherOrder->price ?? '0.0' }}</td>
+                <td align="center">{{ $otherOrder->order_qty ?? '0' }}</td>
+                <td align="right">{{ $otherOrder->total_order_price }}</td>
+            </tr>
 
             <!-- END ITEMS HERE -->
             <tr>
-                <td class="blanktotal" colspan="5" rowspan="6"></td>
+                <td class="blanktotal" colspan="2" rowspan="5"></td>
                 <td class="totals" colspan="2">Subtotal:</td>
                 <td class="totals cost">{{ $subSubtotal ?? 0 }}</td>
             </tr>
             <tr>
-                <td class="totals" colspan="2">Total Discount:</td>
-                <td class="totals cost">{{ $totalDiscount ?? 0 }}</td>
-            </tr>
-            <tr>
                 <td class="totals" colspan="2">Service Charge:</td>
-                <td class="totals cost">{{ 0 }}</td>
+                <td class="totals cost">{{ $otherOrder->service_charge ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="totals" colspan="2"><b>Total:</b></td>
-                <td class="totals cost"><b>{{ $subSubtotal - $totalDiscount  }}</b></td>
+                <td class="totals cost"><b>{{ $subSubtotal + $otherOrder->service_charge  }}</b></td>
             </tr>
             <tr>
                 <td class="totals" colspan="2">Paid:</td>
-                <td class="totals cost">{{ 0 }}</td>
+                <td class="totals cost">{{ $otherOrder->advance_balance }}</td>
             </tr>
             <tr>
                 <td class="totals" colspan="2"><b>Due:</b></td>
-                <td class="totals cost"><b>{{ 0 }}</b></td>
+                <td class="totals cost"><b>{{ ($subSubtotal + $otherOrder->service_charge) - $otherOrder->advance_balance }}</b></td>
             </tr>
         </tbody>
     </table>
+    @if(isset($otherOrder->note))
+    <p style="margin-top: 10px"><b>Note:</b> {{ $otherOrder->note ?? '' }}</p>
+    @endif 
     <br />
 
     {!! pdfFooter($organizationlogo) !!}

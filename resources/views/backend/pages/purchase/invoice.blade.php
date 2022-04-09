@@ -177,6 +177,8 @@
     </table>
     <br />
 
+    {!! pdfFooter($organizationlogo) !!}
+
 </body>
 
 </html>
