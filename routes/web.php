@@ -429,6 +429,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/',                   [OtherOrderController::class, 'store'])->name('store');
         Route::put('/{otherOrder}',        [OtherOrderController::class, 'update'])->name('update');
         Route::delete('/{otherOrder}',     [OtherOrderController::class, 'destroy'])->name('destroy');
+        Route::get('/{otherOrder}',        [OtherOrderController::class, 'show'])->name('showInvoice');
+        Route::get('/datewise/report',     [OtherOrderController::class, 'datewise_report'])->name('datewise_report');
+        Route::get('/datewise/pdf',        [OtherOrderController::class, 'datewise_pdf'])->name('datewise_pdf');
+
     });
 
     Route::group(['prefix' => 'abouts', 'as' => 'about.'], function(){

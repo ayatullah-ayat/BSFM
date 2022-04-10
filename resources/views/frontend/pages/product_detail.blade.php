@@ -184,14 +184,14 @@
                     <div class="product-tab-area">
 
                         <ul class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <li class=" nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#des"> ডিসক্রিপশন </a></li>
+                            <li class=" nav-item bg-light"> <a class="nav-link active" data-bs-toggle="tab" href="#des"> ডিসক্রিপশন </a></li>
                             <li class="nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#specification"> স্পেসিফিকেশন </a></li>
-                            <li class="nav-item bg-light"> <a class="nav-link active" data-bs-toggle="tab" href="#reviews"> রিভিও </a></li>
+                            <li class="nav-item bg-light"> <a class="nav-link " data-bs-toggle="tab" href="#reviews"> রিভিও </a></li>
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane" id="des">
-                                <div class="row border g-0 shadow-sm">
+                            <div class="tab-pane active" id="des">
+                                <div class="row border g-0 shadow-sm " style="overflow-x: auto !important">
                                     <div class="col-md-12 p-5 tabs-product-comments">
     
                                         <p>
@@ -202,7 +202,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="specification">
-                                <div class="row border g-0 shadow-sm">
+                                <div class="row border g-0 shadow-sm" style="overflow-x: auto !important">
                                     <div class="col p-5 tabs-product-comments">
                                         <p>
                                             {!! $product->product_specification !!}
@@ -210,7 +210,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane active" id="reviews">
+                            <div class="tab-pane" id="reviews">
                                 <div class="border g-0 shadow-sm">
     
                                     {{-- @dd($product->comments()->paginate(5)) --}}

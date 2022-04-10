@@ -10,6 +10,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Other Orders</a> </h6>
                 <div class="inner">
+                    <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.otherOrder.datewise_report') }}"><i class="fa fa-chart-line"> Other Orders Report</i></a>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('other_order_data_export') }}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Order</i></button>
                 </div>
@@ -27,6 +28,7 @@
                                 <th>Qty</th>
                                 <th>Price</th>
                                 <th>Total Price</th>
+                                <th>Service Charge</th>
                                 <th>Advance Amount</th>
                                 <th>Due Amount</th>
                                 <th>Mobile</th>
@@ -42,11 +44,12 @@
                                     <tr otherorder-data="{{ json_encode($otherOrder) }}">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $otherOrder->order_date ?? 'N/A' }}</td>
-                                        <td>{{ $otherOrder->order_no  ?? 'N/A' }}</td>
+                                        <td><a href="{{ route('admin.otherOrder.showInvoice', $otherOrder->id) }}">{{ $otherOrder->order_no ?? 'N/A' }}</a></td>
                                         <td>{{ $otherOrder->category_name  ?? 'N/A' }}</td>
                                         <td>{{ $otherOrder->order_qty  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->price  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->total_order_price  ?? '0.0' }}</td>
+                                        <td>{{ $otherOrder->service_charge  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->advance_balance  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->due_price  ?? '0.0' }}</td>
                                         <td>{{ $otherOrder->moible_no  ?? 'N/A' }}</td>
@@ -109,28 +112,35 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="qty">Qty</label>
-                                    <input type="text" name="qty" id="qty" class="form-control calprice" placeholder="Quantity" />
+                                    <input type="number" name="qty" id="qty" class="form-control calprice" placeholder="Quantity" />
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="price">Price</label>
-                                    <input type="text" name="price" id="price" class="form-control calprice" placeholder="Price" />
+                                    <input type="number" name="price" id="price" class="form-control calprice" placeholder="Price" />
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="total_price">Total Price</label>
-                                    <input type="text" name="total_price" id="total_price" class="form-control totalCalprice" placeholder="Total Price" />
+                                    <input type="number" name="total_price" id="total_price" class="form-control totalCalprice" placeholder="Total Price" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="service_charge">Service Charge</label>
+                                    <input type="number" name="service_charge" id="service_charge" class="form-control totalCalprice" placeholder="Service Charge" />
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="advance_price">Advance Price</label>
-                                    <input type="text" name="advance_price" id="advance_price" class="form-control totalCalprice" placeholder="Advance Price" />
+                                    <input type="number" name="advance_price" id="advance_price" class="form-control totalCalprice" placeholder="Advance Price" />
                                 </div>
                             </div>
 
@@ -141,14 +151,22 @@
                                 </div>
                             </div>
 
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="mobile">Mobile</label>
                                     <input type="text" name="mobile" id="mobile" class="form-control" placeholder="Mobile" />
                                 </div>
                             </div>
+{{-- 
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="customer_name">Customer Name</label>
+                                    <input type="text" name="customer_name" id="customer_name" class="form-control" placeholder="Customer" />
+                                </div>
+                            </div> --}}
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="institute_description">Institute Description</label>
                                     <textarea name="institute_description" id="institute_description" cols="" rows="1" class="form-control" placeholder="Institute Description"></textarea>
@@ -243,6 +261,8 @@
                 $('#mobile').val(orderData?.moible_no)
                 $('#institute_description').val(orderData?.institute_description)
                 $('#note').val(orderData?.note)
+                $('#service_charge').val(orderData?.service_charge)
+                // $('#customer_name').val(orderData?.customer_name)
 
                 showModal('#categoryModal');
             }
@@ -260,7 +280,7 @@
 
             ajaxRequest(obj, { reload: true, timer: 2000 })
 
-            resetData();
+            // resetData();
         }
 
         function deleteToDatabase(e){
@@ -313,8 +333,9 @@
         }
 
         function totalPriceCalculation(){
-            let total_price   = Number($('#total_price').val().trim() ?? 0);
-            let advance_price     = Number($('#advance_price').val().trim() ?? 0);
+            let total_price     = Number($('#total_price').val().trim() ?? 0);
+            let advance_price   = Number($('#advance_price').val().trim() ?? 0);
+            let service_charge  = Number($('#service_charge').val().trim() ?? 0);
 
             if( total_price < 0 ){
                 total_price  =0;
@@ -326,7 +347,7 @@
                 $('#advance_price').val(advance_price)
             }
 
-            let total   = total_price - advance_price;
+            let total   = (total_price + service_charge) - advance_price;
             $('#due_price').val(total).prop('readonly', true);
         }
 
@@ -395,6 +416,8 @@
                 moible_no           : $('#mobile').val().trim(),
                 institute_description : $('#institute_description').val().trim(),
                 note                : $('#note').val().trim(),
+                service_charge      : $('#service_charge').val().trim(),
+                // customer_name       : $('#customer_name').val().trim(),
             }
         }
 
@@ -410,6 +433,7 @@
             $('#mobile').val(null)
             $('#institute_description').val(null)
             $('#note').val(null)
+            $('#service_charge').val(null)
         }
 
     </script>

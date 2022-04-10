@@ -209,7 +209,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: block !important;
-    color: #fff;
+    color: #fff !important;
 }
 
 .color.selected.black svg, .color.selected.black i {

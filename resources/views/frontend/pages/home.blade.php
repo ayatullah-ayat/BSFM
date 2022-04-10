@@ -15,7 +15,7 @@
     
                     <div class="hero-content">
                         <div class="hero-heading">
-                            <h2>আপনি কি তৈরী করতে চান ?</h2>
+                            <h2>কাস্টমাইজড করুন <br>আপনার কর্পোরেট গিফট আইটেম</h2>
                         </div>
                         <div class="hero-text">
                             <p>
