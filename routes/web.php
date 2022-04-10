@@ -251,12 +251,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::post('/payment',             [PurchaseController::class, 'payment'])->name('payment');
         Route::get('/manage-stock',         [PurchaseController::class, 'manage_stock'])->name('manage_stock');
         Route::post('/manage-stock',        [PurchaseController::class, 'store_manage_stock'])->name('store_manage_stock');
+
+        Route::get('/export/pdf/purchase',  [PurchaseController::class, 'getpurchasepdf'])->name('get_purchase_pdf');
     });
 
     Route::group(['prefix' => 'return-purchase', 'as' => 'return_purchase.'], function () {
         Route::get('/',                     [PurchaseReturnController::class, 'index'])->name('index');
         Route::post('/',                    [PurchaseReturnController::class, 'store'])->name('store');
         Route::get('/{invoice_no}',         [PurchaseReturnController::class, 'showInvoice'])->name('showInvoice');
+
+
+        Route::get('/epxort/pdf/return-purchase-pdf',         [PurchaseReturnController::class, 'getreturnpurchasepdf'])->name('return_purchase_pdf');
     });
 
 
@@ -275,7 +280,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/export/pdf/product',           [ProductController::class, 'getproductpdf'])->name('product_pdf');
     });
 
-
     Route::group(['prefix' => 'orders', 'as' => 'ecom_orders.'], function () {
         Route::get('/',                         [OrderController::class, 'index'])->name('order_manage');
         Route::get('/create',                   [OrderController::class, 'create'])->name('order_add');
@@ -288,8 +292,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
 
         Route::get('/export/pdf/order',         [OrderController::class, 'getorderpdf'])->name('export_pdf');
     });
-    
-
 
     Route::group(['prefix' => 'sales', 'as' => 'ecom_sales.'], function () {
         Route::get('/',                         [SaleController::class, 'index'])->name('manage_sale');
@@ -300,28 +302,31 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::get('/{sale}/edit',              [SaleController::class, 'edit'])->name('edit');
         Route::put('/{sale}',                   [SaleController::class, 'update'])->name('update');
         Route::get('/invoice/{invoice_no}',     [SaleController::class, 'showInvoice'])->name('showInvoice');
+        Route::get('export/pdf/manage-sale-pdf',[SaleController::class, 'managesales_pdf'])->name('manage_sale_pdf');
     });
-
-
 
     Route::group(['prefix' => 'return-sale', 'as' => 'return_sale.'], function () {
-        Route::get('/',                     [SaleReturnController::class, 'index'])->name('index');
-        Route::post('/',                    [SaleReturnController::class, 'store'])->name('store');
-        Route::get('/{invoice_no}',         [SaleReturnController::class, 'showInvoice'])->name('showInvoice');
+        Route::get('/',                             [SaleReturnController::class, 'index'])->name('index');
+        Route::post('/',                            [SaleReturnController::class, 'store'])->name('store');
+        Route::get('/{invoice_no}',                 [SaleReturnController::class, 'showInvoice'])->name('showInvoice');
+        Route::get('/export/pdf/sale-return-pdf',   [SaleReturnController::class, 'salereturn_pdf'])->name('sale_return_pdf');
     });
-
-
 
     // Route::get('/manage-custom-order', [CustomOrderController::class, 'index'])->name('manage_custom_order');
     // Route::get('/add-custom-order', [CustomOrderController::class, 'create'])->name('add_custom_order');
 
-    Route::get('/stock-report',         [StockReportController::class, 'stockreport'])->name('stock_report');
-    Route::get('/supplier-stock-report',[StockReportController::class, 'supplierstock'])->name('supplier_stock_report');
-    Route::get('/product-stock-report', [StockReportController::class, 'productreport'])->name('product_stock_report');
-    Route::get('/products-by-supplier', [StockReportController::class, 'getProductBySupplier'])->name('getProductBySupplier');
+    Route::get('/stock-report',                 [StockReportController::class, 'stockreport'])->name('stock_report');
+    Route::get('/export/pdf/stock-pdf',         [StockReportController::class, 'getstockreportpdf'])->name('stock_pdf');
+    Route::get('/supplier-stock-report',        [StockReportController::class, 'supplierstock'])->name('supplier_stock_report');
+    Route::get('/export/pdf/supplier-stock-pdf',[StockReportController::class, 'supplier_stock_pdf'])->name('supplier_stock_pdf');
+    Route::get('/product-stock-report',         [StockReportController::class, 'productreport'])->name('product_stock_report');
+    Route::get('/export/pdf/product-stock-pdf', [StockReportController::class, 'product_stock_pdf'])->name('product_stock_pdf');
+    Route::get('/products-by-supplier',         [StockReportController::class, 'getProductBySupplier'])->name('getProductBySupplier');
 
-    Route::get('/sales-report',         [ReportsController::class, 'salesreport'])->name('sales_report');
-    Route::get('/purchase-report',      [ReportsController::class, 'purchasereport'])->name('purchase_report');
+    Route::get('/sales-report',                     [ReportsController::class, 'salesreport'])->name('sales_report');
+    Route::get('/export/pdf/sales-report-pdf',      [ReportsController::class, 'getsalesreportpdf'])->name('sales_report_pdf');
+    Route::get('/purchase-report',                  [ReportsController::class, 'purchasereport'])->name('purchase_report');
+    Route::get('/export/pdf/purchase-report-pdf',   [ReportsController::class, 'getpurchasereportpdf'])->name('purchase_report_pdf');
 
     Route::get('/product-tax-report',   [ReportsController::class, 'producttaxreport'])->name('product_tax_report');
     Route::get('/invoice-tax-report',   [ReportsController::class, 'invoicetaxreport'])->name('invoice_tax_report');
@@ -364,6 +369,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
         Route::delete('/{customServiceOrder}',  [CustomServiceOrderController::class, 'destroy'])->name('destroy');
         Route::get('/{category_id}',            [CustomServiceOrderController::class, 'getProduct'])->name('getProduct');
         Route::post('/{customServiceOrder}',    [CustomServiceOrderController::class, 'approval'])->name('approval');
+        
+        Route::get('/export/pdf/customservice-order-pdf',    [CustomServiceOrderController::class, 'getcustomorderpdf'])->name('custom_service_order_pdf');
     });
 
     // Route::get('/custom-product', [CustomProductController::class, 'index'])->name('custom_product');
@@ -417,11 +424,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware'=>['auth:admin'
     });
 
     Route::group(['prefix' => 'officeacounts', 'as' => 'officeacount.'], function(){
-        Route::get('/',                    [OfficeAccountController::class, 'index'])->name('index');
-        Route::post('/',                   [OfficeAccountController::class, 'store'])->name('store');
-        Route::put('/{officeAccount}',     [OfficeAccountController::class, 'update'])->name('update');
-        Route::delete('/{officeAccount}',  [OfficeAccountController::class, 'destroy'])->name('destroy');
-        Route::get('/account-report',      [OfficeAccountController::class, 'datewise_account_report'])->name('datewise_account_report');
+        Route::get('/',                         [OfficeAccountController::class, 'index'])->name('index');
+        Route::post('/',                        [OfficeAccountController::class, 'store'])->name('store');
+        Route::put('/{officeAccount}',          [OfficeAccountController::class, 'update'])->name('update');
+        Route::delete('/{officeAccount}',       [OfficeAccountController::class, 'destroy'])->name('destroy');
+        Route::get('/account-report',           [OfficeAccountController::class, 'datewise_account_report'])->name('datewise_account_report');
+        Route::get('/export/pdf/account-pdf',   [OfficeAccountController::class, 'account_datewise_pdf'])->name('datewise_account_pdf');
     });
 
     Route::group(['prefix' => 'otherOrders', 'as' => 'otherOrder.'], function(){

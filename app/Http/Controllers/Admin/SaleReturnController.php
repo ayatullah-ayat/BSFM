@@ -238,4 +238,20 @@ class SaleReturnController extends Controller
     {
         //
     }
+
+    public function salereturn_pdf(){
+        $getsale_return = SaleReturn::selectRaw('sum(returned_qty) returned_qty, sum(purchase_price) purchase_price, sum(subtotal) subtotal, max(created_at) created_at, invoice_no, sale_id')->groupBy('invoice_no')->get();
+        $pdf = PDF::loadView('backend.pages.sale.return_sale_pdf', compact('getsale_return'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('sales_return.pdf');
+    }
+
+
 }

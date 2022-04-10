@@ -11,6 +11,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Custom Order</a> </h6>
                 <div class="inner">
+                    <button class="btn btn-sm btn-danger"><a class="text-white" href="{{ route('admin.customserviceorder.custom_service_order_pdf')}}"><i class="fa fa-file-pdf"> Export Pdf</i></a></button>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('custom_service_order_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-info"><a class="text-white" id="add"><i class="fa fa-plus"> Custom Order</i></a></button>
                 </div>

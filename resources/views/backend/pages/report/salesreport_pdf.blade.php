@@ -6,25 +6,31 @@
             font-family: nikosh, sans-serif;
             font-size: 10pt;
         }
+
         p {
             margin: 0pt;
         }
+
         table.items {
             border: 0.1mm solid #000000;
         }
+
         td {
             vertical-align: top;
         }
+
         .items td {
             border-left: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
+
         table thead td {
             background-color: #EEEEEE;
             text-align: center;
             border: 0.1mm solid #000000;
             font-variant: small-caps;
         }
+
         .items td.blanktotal {
             background-color: #EEEEEE !important;
             border: 0.1mm solid #000000;
@@ -33,13 +39,16 @@
             border-top: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
+
         .items td.totals {
             text-align: right;
             border: 0.1mm solid #000000;
         }
+
         .items td.cost {
             text-align: "."center;
         }
+
         .spacer{
             height: 110px !important;
         }
@@ -52,6 +61,7 @@
         $company = getCompanyProfile();
     @endphp
 
+{{-- @dd($company) --}}
         
 <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
     <htmlpageheader name="myheader">
@@ -77,67 +87,42 @@
     <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
         <thead>
             <tr>
-                <td width="5%">#SL</td>
-                <td width="10%">Order NO</td>
-                <td width="8%">Order Date</td>
-                <td width="8%">Sizes</td>
-                <td width="8%">Colors</td>
-                <td width="6%">Total Qty</td>
-                <td width="6%">Total Price</td>
-                <td width="6%">Discount Price</td>
-                <td width="6%">Total Payment</td>
-                <td width="8%">Payment Type</td>
-                <td width="8%">Customer Name</td>
-                <td width="8%">Mobile NO</td>
-                <td width="12%">Shipping Address</td>
-                <td width="8%">Order Note</td>
-                <td width="6%">Status</td>
+                <td align="left" width="10%">#SL</td>
+                <td align="left" width="15%">Invoice NO</td>
+                <td align="left" width="10%">Customer Name</td>
+                <td align="left" width="20%">Date</td>
+                <td align="right" width="15%">Total Qty</td>
+                <td align="right" width="10%">Total Amount</td>
             </tr>
         </thead>
         <tbody>
-            @isset($ordersdata)
-            {{-- @dd($ordersdata) --}}
+            @isset($sales_pdf)
+            {{-- @dd($sales_pdf) --}}
             @php
-                $all_total_qty    = 0;
-                $all_total_price  = 0;
-                $total_discount_price  = 0;
-                $total_payments  = 0;
+                $total_qty      = 0;
+                $total_amount   = 0;
             @endphp
 
-                @foreach ($ordersdata as $item)
+                @foreach ($sales_pdf as $item)
                 @php
-                    $all_total_qty    += $item->order_total_qty;
-                    $all_total_price  += $item->order_total_price;
-                    $total_discount_price  += $item->discount_price;
-                    $total_payments  += $item->payment_total_price;
+                    $total_qty       += $item->sold_total_qty;
+                    $total_amount    += $item->order_grand_total;
                 @endphp
                     <tr style="border-bottom: 1px solid #000;">
-                        <td align="center">{{  $loop->iteration }}</td>
-                        <td align="center">{{  $item->order_no ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->order_date ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->order_sizes ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->order_colors ?? 'N/A' }}</td>
-                        <td align="right ">{{  $item->order_total_qty ?? 'N/A' }}</td>
-                        <td align="right ">{{  $item->order_total_price ?? 'N/A' }}</td>
-                        <td align="right ">{{  $item->discount_price ?? 'N/A' }}</td>
-                        <td align="right ">{{  $item->payment_total_price ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->payment_type ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->customer_name ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->customer_phone ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->shipping_address ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->order_note ?? 'N/A' }}</td>
-                        <td align="center">{{  $item->status ?? 'N/A' }}</td>
+                        <td align="left">{{  $loop->iteration }}</td>
+                        <td align="left">{{  $item->invoice_no ?? 'N/A' }}</td>
+                        <td align="left">{{  $item->customer_name ?? 'N/A' }}</td>
+                        <td align="left">{{  $item->sales_date ?? 'N/A' }}</td>
+                        <td align="right">{{ $item->sold_total_qty ?? '0.0' }}</td>
+                        <td align="right">{{ $item->order_grand_total ?? '0.0' }}</td>
                     </tr>
                 @endforeach
             @endisset
             <!-- END ITEMS HERE -->
             <tr>
-                <td class="totals" colspan="5">Total:</td>
-                <td class="totals cost">{{ $all_total_qty ?? '0.0'}}</td>
-                <td class="totals cost">{{ $all_total_price ?? '0.0' }}</td>
-                <td class="totals cost">{{ $total_discount_price ?? '0.0' }}</td>
-                <td class="totals cost">{{ $total_payments ?? '0.0' }}</td>
-                <td class="totals" colspan="6"></td>
+                <td class="totals" colspan="4">Total:</td>
+                <td class="totals cost">{{ $total_qty ?? '0.0'}}</td>
+                <td class="totals cost">{{ $total_amount ?? '0.0' }}</td>
             </tr>
         </tbody>
     </table>

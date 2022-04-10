@@ -12,6 +12,7 @@ use App\Models\PurchaseProduct;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class StockReportController extends Controller
 {
@@ -159,6 +160,7 @@ class StockReportController extends Controller
         $to_date    = $request->to_date;
         $supplier_id= $request->supplier_id;
         $product_id = $request->product_id;
+        // dd($from_date, $to_date);
 
         $sql = Purchase::selectRaw('
                 purchases.supplier_name, 
@@ -278,4 +280,108 @@ class StockReportController extends Controller
     {
         //
     }
+
+
+    public function getstockreportpdf(){
+        $getstocks = Product::select('product_name','category_name','product_unit','sales_price','purchase_price','total_product_qty','total_stock_out_qty','total_stock_qty')->get();
+        // dd($getstocks);
+        $pdf = PDF::loadView('backend.pages.stock.stockreport_pdf', compact('getstocks'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('stock.pdf');
+    }
+
+
+    public function supplier_stock_pdf(Request $request){
+        $supplier_id= $request->supplier_id;
+        $date       = $request->date;
+
+        $sql = Purchase::selectRaw(' 
+        purchases.supplier_name, 
+        purchase_products.product_name,
+        products.category_name,
+        purchase_products.product_unit,
+        products.sales_price,
+        purchase_products.product_price,
+        purchase_products.product_qty,
+        purchase_products.stocked_qty,
+        purchase_products.returned_qty
+        ')
+        ->join('purchase_products', 'purchase_products.purchase_id','=', 'purchases.id')
+        ->join('products', 'purchase_products.product_id','=', 'products.id')
+        ->where('purchases.supplier_id', $supplier_id)
+        ->where('purchases.is_manage_stock', 1)
+        ->where('purchase_products.stocked_qty', ">", 0);
+
+        if($date){
+            $sql->Where('purchases.purchase_date', $date);
+        }
+
+        $stocks = $sql->get();
+
+        $pdf = PDF::loadView('backend.pages.stock.supplierstock_report_pdf', compact('stocks'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('supplier_stock.pdf');
+        
+        // dd($stocks);
+    }
+
+    public function product_stock_pdf(Request $request){
+        $from_date  = $request->from_date;
+        $to_date    = $request->to_date;
+        $supplier_id= $request->supplier_id;
+        $product_id = $request->product_id;
+
+        $sql = Purchase::selectRaw('
+                purchases.supplier_name, 
+                purchase_products.product_name,
+                purchase_products.product_unit,
+                purchase_products.product_price,
+                purchase_products.product_qty,
+                purchase_products.stocked_qty,
+                purchase_products.returned_qty,
+                round(purchase_products.product_qty * purchase_products.product_price,0) in_amount,
+                round(purchase_products.stocked_qty * purchase_products.product_price,0) in_stock_amount,
+                round(purchase_products.returned_qty * purchase_products.product_price,0) in_return_amount
+            ')
+            ->join('purchase_products', 'purchase_products.purchase_id', '=', 'purchases.id')
+            ->join('products', 'purchase_products.product_id', '=', 'products.id')
+            ->where('purchases.supplier_id', $supplier_id)
+            ->where('purchase_products.product_id', $product_id);
+
+            if ($from_date) {
+                $sql->whereDate('purchases.purchase_date', '>=', $from_date);
+            }
+
+            if ($to_date) {
+                $sql->whereDate('purchases.purchase_date', '<=', $from_date);
+            }
+
+            $product_stocks = $sql->get();
+            $pdf = PDF::loadView('backend.pages.stock.product_stock_pdf', compact('product_stocks'), [], [
+                'margin_left'   => 20,
+                'margin_right'  => 15,
+                'margin_top'    => 45,
+                'margin_bottom' => 20,
+                'margin_header' => 5,
+                'margin_footer' => 5,
+                'watermark'     => env('APP_NAME','Micro Media')
+            ]);
+            return $pdf->stream('product_stock.pdf');
+    }
+
+
 }

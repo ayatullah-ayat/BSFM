@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OfficeAccountRequest;
 use Exception;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PDF;
 class OfficeAccountController extends Controller
 {
     /**
@@ -174,6 +174,38 @@ class OfficeAccountController extends Controller
                 'msg'       => $th->getMessage()
             ]);
         }
+    }
+
+
+    public function account_datewise_pdf(Request $request)
+    {
+
+        $from   = $request->from_date;
+        $to     = $request->to_date;
+
+        if(!$from){
+            return back();
+        }
+
+        $q = OfficeAccount::where('date', '>=', $from);
+
+        if ($to) {
+            $q->where('date', '<=', $to);
+        }
+
+        $accounts = $q->get();
+
+        $pdf = PDF::loadView('backend.pages.account.account_pdf', compact('accounts'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME', 'Micro Media')
+        ]);
+
+        return $pdf->stream('account.pdf');
     }
 
 

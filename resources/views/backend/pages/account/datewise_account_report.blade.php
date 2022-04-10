@@ -10,6 +10,7 @@
     
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Date Wise Account Report</a></h6>
+                    <a class="btn btn-sm btn-danger downloadPDF"><i class="fa fa-file-pdf"></i> PDF</a>
                 </div>
     
                 <div class="card-body">
@@ -18,7 +19,7 @@
                         <div class="col-md-2" data-col="col">
                             <div class="form-group">
                                 <label for="from_date">From Date</label>
-                                <input type="text" data-required autocomplete="off" class="form-control" id="from_date"
+                                <input type="text" data-required autocomplete="off" value="{{ date('Y-m-d')}}" class="form-control" id="from_date"
                                     name="from_date">
                             </div>
                             <span class="v-msg"></span>
@@ -97,13 +98,11 @@
     let timeId = null;
     $(document).ready(function(){
         init();
-
         $(document).on('click','#search_result', getInvoices)
+        $(document).on('click','.downloadPDF', openPDF)
     })
 
-
-
-      function getInvoices(){
+    function getInvoices(){
             let 
             from_date   = $('#from_date').val(),
             to_date     = $('#to_date').val();
@@ -133,12 +132,9 @@
                     },
                 })
             }, 500);
-        }
+    }
 
-
-
-
-        function loadAjaxData(resData){
+    function loadAjaxData(resData){
 
             let 
             count           = 0,
@@ -179,9 +175,7 @@
                 $('#totalBalance').text(totalBalance);
             },1000)
 
-        }
-
-
+    }
 
     function init(){
 
@@ -203,6 +197,17 @@
             format          : 'yyyy-mm-dd',
         })
     }
+
+    function openPDF(e){
+        e.preventDefault();
+
+        let
+        from_date = $('#from_date').val(),
+        to_date = $('#to_date').val();
+
+        open(`{{ route('admin.officeacount.datewise_account_pdf') }}?from_date=${from_date}&to_date=${to_date}`,'_self')
+    }
+
 </script>
 
 @endpush

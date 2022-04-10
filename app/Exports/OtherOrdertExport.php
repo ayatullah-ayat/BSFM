@@ -21,7 +21,6 @@ class OtherOrdertExport implements FromCollection, WithHeadings, WithStyles
             'Quantity',
             'Price',
             'Total Price',
-            'Service Charge',
             'Advaced Amount',
             'Due Amount',
             'Mobile',

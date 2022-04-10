@@ -225,8 +225,6 @@ class OtherOrderController extends Controller
         if(!$from){
             return back();
         }
-            
-
         $q = OtherOrder::where('order_date', '>=', $from);
 
         if ($to) {

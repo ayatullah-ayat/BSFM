@@ -19,7 +19,7 @@
                         <div class="col-md-2" data-col="col">
                             <div class="form-group">
                                 <label for="from_date">From Date</label>
-                                <input type="text" data-required autocomplete="off" class="form-control" id="from_date"
+                                <input type="text" data-required autocomplete="off" value="{{ date('Y-m-d')}}" class="form-control" id="from_date"
                                     name="from_date">
                             </div>
                             <span class="v-msg"></span>
@@ -113,7 +113,7 @@
 
 
 
-      function getInvoices(){
+    function getInvoices(){
             let 
             from_date   = $('#from_date').val(),
             to_date     = $('#to_date').val();
@@ -143,12 +143,9 @@
                     },
                 })
             }, 500);
-        }
+    }
 
-
-
-
-        function loadAjaxData(resData){
+    function loadAjaxData(resData){
 
             let 
             count               = 0,
@@ -201,9 +198,7 @@
                 $('#totalDue').text(totalDue);
             },1000)
 
-        }
-
-
+    }
 
     function init(){
 
@@ -226,9 +221,7 @@
         })
     }
 
-
     function openPDF(e){
-
         // console.log(e);
         e.preventDefault();
 
@@ -238,6 +231,7 @@
 
         open(`{{ route('admin.otherOrder.datewise_pdf') }}?from_date=${from_date}&to_date=${to_date}`,'_self')
     }
+    
 </script>
 
 @endpush

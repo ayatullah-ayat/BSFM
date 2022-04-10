@@ -14,7 +14,7 @@ class OtherOrder extends Model
 
     public static function getOtherOrderData(){
         $otherdata = DB::table('other_orders')
-        ->select('order_date','order_no','category_name','order_qty','price','total_order_price', 'service_charge','advance_balance','due_price','moible_no','institute_description','note')
+        ->select('order_date','order_no','category_name','order_qty','price','total_order_price','advance_balance','due_price','moible_no','institute_description','note')
         ->get()->toArray();
         return $otherdata;
     }

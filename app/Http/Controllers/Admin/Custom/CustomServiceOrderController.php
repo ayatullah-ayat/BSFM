@@ -28,9 +28,9 @@ class CustomServiceOrderController extends Controller
      */
     public function index()
     {
-        $customserviceorders = CustomServiceOrder::orderByDesc('id')->get();
-        $customservicecategories = CustomServiceCategory::get();
-        $customserviceproducts = CustomServiceProduct::get();
+        $customserviceorders        = CustomServiceOrder::orderByDesc('id')->get();
+        $customservicecategories    = CustomServiceCategory::get();
+        $customserviceproducts      = CustomServiceProduct::get();
         return view('backend.pages.custom_order.managecustomorder', compact('customserviceorders','customservicecategories','customserviceproducts'));
     }
 
@@ -346,6 +346,21 @@ class CustomServiceOrderController extends Controller
                 'msg'       => $th->getMessage()
             ]);
         }
+    }
+
+    public function getcustomorderpdf(){
+
+        $getcustomserviceorder = CustomServiceOrder::get();
+        $pdf = PDF::loadView('backend.pages.custom_order.customorder_pdf', compact('getcustomserviceorder'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('customorder.pdf');
     }
 
 
