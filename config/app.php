@@ -168,6 +168,9 @@ return [
          * Package Service Providers...
          */
 
+        Alauddin\Authorize\AuthorizeServiceProvider::class,
+
+
         App\Providers\ViewServiceProvider::class,
         Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class,
         /*

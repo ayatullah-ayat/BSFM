@@ -9,7 +9,7 @@ use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PDF;
 class CustomerController extends Controller
 {
     /**
@@ -151,6 +151,24 @@ class CustomerController extends Controller
                 'msg'       => $th->getMessage()
             ]);
         }
+    }
+
+
+    public function getcustomerpdf(){
+        $getcustomers = Customer::get();
+        // dd($getcustomers);
+        $pdf = PDF::loadView('backend.pages.customer.customer_pdf', compact('getcustomers'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('customer_list.pdf');
+
+        // return view('backend.pages.customer.customer_pdf');
     }
 
 

@@ -9,7 +9,7 @@ use App\Http\Requests\SupplierRequest;
 use App\Models\Supplier;
 use Exception;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PDF;
 class SupplierController extends Controller
 {
     /**
@@ -154,6 +154,24 @@ class SupplierController extends Controller
                 'msg'       => $th->getMessage()
             ]);
         }
+    }
+
+
+    public function getsupplierpdf(){
+        $getsuppliers = Supplier::get();
+        $pdf = PDF::loadView('backend.pages.supplier.supplier_pdf', compact('getsuppliers'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('customer_list.pdf');
+
+        // return view('backend.pages.supplier.supplier_pdf');
+
     }
 
 

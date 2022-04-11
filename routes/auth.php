@@ -74,7 +74,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('register', [AdminRegisteredUserController::class, 'create'])
             ->name('register');
 
-        // Route::post('register', [AdminRegisteredUserController::class, 'store']);
+        Route::post('register', [AdminRegisteredUserController::class, 'store']);
 
         Route::get('login', [AdminAuthenticatedSessionController::class, 'create'])->name('login');
 

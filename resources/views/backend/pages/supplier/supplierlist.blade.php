@@ -10,6 +10,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Manage Supplier</a> </h6>
                 <div class="inner">
+                    <button class="btn btn-sm btn-danger"><a class="text-white" href="{{ route('admin.supplier.supplier_list_pdf')}}"><i class="fa fa-file-pdf"> Export Pdf</i></a></button>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('supplier_export')}}"><i class="fa fa-download"> Export excel</i></a></button>
                     <button class="btn btn-sm btn-success mx-2" id="account"><i class="fa fa-user"> Supplier Ledger</i></button>
                     <button class="btn btn-sm btn-info" id="add"><i class="fa fa-plus"> Supplier</i></button>
