@@ -152,8 +152,8 @@ body {
 
 
 .main-header .navbar-brand .logo {
-    width: 190px;
-    height: 32px;
+    width: 300px;
+    height: 54px;
 }
 
 .navbar-brand {
@@ -260,9 +260,9 @@ textarea.form-control {
 
 
 .cart-icon {
-    font-size: 1.5em;
+    font-size: 1.2em;
     position: relative;
-    padding-top: 5px;
+    padding-top: 0px;
 }
 
 .cart-icon a {
@@ -461,8 +461,8 @@ footer {
 
 @media only screen and (max-width:520px) {
     .main-header .navbar-brand .logo {
-        width: 132px;
-        height: 30px;
+        width: 300px;
+        height: 54px;
     }
 }
 

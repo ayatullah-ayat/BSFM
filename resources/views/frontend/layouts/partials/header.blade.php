@@ -1,7 +1,7 @@
 <!-- Main Header-->
 <header class="container-fluid main-header box-shadow" style="background-color:#FCE5CD">
 
-    <nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light" style="width: 100% !important; padding-top: 0px; padding-bottom: 0px;">
 
         <div class="container">
                @if (isset($companylogo))
@@ -23,27 +23,27 @@
             <div class="collapse navbar-collapse menu" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" aria-current="page" href="{{ route('home_index') }}"> Customize </a>
+                        <a class="nav-link" aria-current="page" href="{{ route('home_index') }}">Customize</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('shop_index') }}"> Shop </a>
+                        <a class="nav-link" href="{{ route('shop_index') }}">Shop</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('gallery_index') }}"> Gallery </a>
+                        <a class="nav-link" href="{{ route('gallery_index') }}">Gallery</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('about_index') }}"> About Us </a>
+                        <a class="nav-link" href="{{ route('about_index') }}">About</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contact_index') }}"> Contact </a>
+                        <a class="nav-link" href="{{ route('contact_index') }}">Contact</a>
                     </li>
 
                     <li class="nav-item ordertraking">
-                        <a class="nav-link" href="#"> Order Track </a>
+                        <a class="nav-link" href="#">Order Track</a>
                     </li>
                     
                 </ul>
@@ -57,7 +57,7 @@
                     <div id="my-list"></div>
                 </form>
 
-                <div class="cart-icon">
+                <div class="cart-icon ps-2">
                     <a href="{{ route('cart_index') }}"> <i class="fas fa-cart-shopping"></i><span class="cartvalue"> {{ isset($productIds) && is_array($productIds) ? count($productIds) : 0 }} </span></a>
                 </div>
 
