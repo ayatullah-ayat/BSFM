@@ -2,6 +2,15 @@
 @section('title','Home')
 
 @section('content')
+
+    <!-- Banner Area -->
+    <section class="banner-area">
+        <div class="banner-content">
+            <h1>Welcome to our online store</h1>
+            <p>Discover our latest collections</p>
+            <a href="#" class="btn-shop-now">Shop now</a>
+        </div>
+    </section>
     <!-- Hero Area-->
     <section class="container-fluid hero-area">
     
@@ -15,7 +24,7 @@
     
                     <div class="hero-content">
                         <div class="hero-heading">
-                            <h2>Customize <br>Your Corporate Gift Item</h2>
+                            <h2>Customize Your Corporate Gift Item</h2>
                         </div>
                         <div class="hero-text">
                             <p>Create any type of customized product at lowest cost, fastest time, highest quality assurance only at Micromedia. Order any type of customized print Work as per your requirement from the list below</p>
