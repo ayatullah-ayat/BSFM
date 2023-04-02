@@ -65,7 +65,7 @@
                                 <div class="product-details text-center">
                                     <h3 class="product-title"> {{ $customservicecategory->category_name  }} </h3>
                                     <p class="product-text">  {{ $customservicecategory->category_description  }} </p>
-                                    <a href="javascript:void(0)" id="category_id" data-categoryid="{{$customservicecategory->id}}" type="button" class="product-button customize-btn"> কাস্টমাইজ করুন </a>
+                                    <a href="javascript:void(0)" id="category_id" data-categoryid="{{$customservicecategory->id}}" type="button" class="product-button customize-btn"> Customize </a>
                                 </div>
             
                             </div>
@@ -74,7 +74,7 @@
                 @endisset
 
                 <div data-totalcount="{{ $countCustomservicecategories ?? 0 }}" class="product-ses-more text-center loadMoreContainer {{ $countCustomservicecategories <= $limit ? 'd-none' : '' }}">
-                    <a href="javascript:void(0)" data-uri="{{ route('home_index') }}" class="loadMoreBtn" data-maxid="{{ $maxCatId }}" data-limit="{{ $limit }}"> আরও কাস্টমাইজ প্রোডাক্ট দেখুন </a>
+                    <a href="javascript:void(0)" data-uri="{{ route('home_index') }}" class="loadMoreBtn" data-maxid="{{ $maxCatId }}" data-limit="{{ $limit }}"> See More Customize Products </a>
                 </div>
     
             </div>
@@ -92,7 +92,7 @@
         <div class="container">
     
             <div class="heading-title text-center">
-                <h2>রেডিমেট প্রডাক্ট কিনুন</h2>
+                <h2>Buy Readymade Product</h2>
             </div>
     
             <div class="row">
@@ -121,7 +121,7 @@
         <div class="container">
     
             <div class="heading-title text-center">
-                <h2> আমাদের সার্ভিস সমূহ </h2>
+                <h2> Our Services </h2>
             </div>
     
             <div class="row">
@@ -152,7 +152,7 @@
         <div class="container">
     
             <div class="heading-title text-center">
-                <h2> আমাদের ক্লাইন্টসমূহ </h2>
+                <h2> Our Clients </h2>
             </div>
     
             <div class="client-details">
@@ -186,7 +186,7 @@
             <div data-totalcount="{{ $countClientLogos ?? 0 }}"
                 class="product-ses-more text-center loadMoreContainerlogos {{ $countClientLogos <= $clientLogosLimit ? 'd-none' : '' }}">
                 <a href="javascript:void(0)" data-uri="{{ route('home_client_loadmore') }}" class="loadMoreBtnClientLogo" data-maxid="{{ $maxClientLogoId }}"
-                    data-limit="{{ $clientLogosLimit }}"> আরও ক্লাইন্ট দেখুন </a>
+                    data-limit="{{ $clientLogosLimit }}"> See More Client </a>
             </div>
     
         </div>
@@ -199,7 +199,7 @@
         <div class="container">
     
             <div class="heading-title text-center">
-                <h2> আমাদের আবাসন </h2>
+                <h2> Our Address </h2>
             </div>
     
             <div class="contact-details">
@@ -217,36 +217,36 @@
                     <div class="col-md-5 mt-3">
     
                         <div class="contact-form">
-                            <h3 class="text-center">যোগাযোগ করুন </h3>
+                            <h3 class="text-center">Contact Us </h3>
 
                                 <div class="form-group form-group2">
                                     <input type="text" class="form-control form-control2 border mt-3"
-                                        id="name" placeholder=" আপনার নাম ">
+                                        id="name" placeholder="Your Name">
                                 </div>
     
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control2 border mt-3"
-                                        id="email" placeholder=" ইমেইল অ্যাড্রেস ">
+                                        id="email" placeholder="Email Address">
                                 </div>
     
                                 <div class="form-group">
                                     <input type="number" class="form-control form-control2 border mt-3"
-                                        id="phone" placeholder=" ফোন নাম্বার ">
+                                        id="phone" placeholder="Phone Number">
                                 </div>
                                 
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control2 border mt-3"
-                                        id="subject" placeholder="সাবজেক্ট">
+                                        id="subject" placeholder="Subject">
                                 </div>
     
                                 <div class="form-group">
                                     <textarea style="resize: none;" class="form-control border mt-3"
                                         id="message" rows="20" cols="10"
-                                        placeholder=" আপনি কি চাচ্ছেন তা উল্লেখ করুন.... "></textarea>
+                                        placeholder="Describe Here.... "></textarea>
                                 </div>
     
                                 <div class="form-group text-center text-lg-end  mt-3">
-                                    <button class="contact-button btn-outline-none border-0" id="contact_sent_btn"> পাঠিয়ে দিন </button>
+                                    <button class="contact-button btn-outline-none border-0" id="contact_sent_btn"> Send </button>
                                 </div>
     
                         </div>
@@ -269,7 +269,7 @@
                 <div class="col-md-12 d-flex align-items-center justify-content-center">
     
                     <div class="call-center text-center">
-                        <h2> আপনি যা খুঁজছিলেন তা খুঁজে পাননি? কল করুন:<span> <a href="tel:01971819813" class="text-decoration-none" type="button">০১৯৭-১৮১৯-৮১৩</a></span></h2>
+                        <h2 class="text-capitalize"> You didn't find what you were looking for? Please Call:<span> <a href="tel:01971819813" class="text-decoration-none" type="button">0197-1819-813</a></span></h2>
                     </div>
     
                 </div>
