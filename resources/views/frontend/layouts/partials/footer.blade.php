@@ -96,8 +96,8 @@
                 <div class="our-organigation">
                     <ul class="list-unstyled d-flex">
                         @if(isset($organizationlogo))
-                               @foreach ($organizationlogo as $organizationItem)
-                                    <li><a href="javascript:void(0)"><img class="img-fluid" src="{{asset( $organizationItem->logo )}}" alt=""></a></li>
+                               @foreach ($organizationlogo as $ind => $organizationItem)
+                                    <li><a href="{{ $ind == 0 ? 'https://www.facebook.com/keyringhouse':'https://www.facebook.com/merchandisefashion' }}"><img class="img-fluid" src="{{asset( $organizationItem->logo )}}" alt=""></a></li>
                                @endforeach
                         @endif
                     </ul>

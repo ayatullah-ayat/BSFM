@@ -99,8 +99,12 @@ class AdminProfileController extends Controller
 
             $updatable = [
                 'mobile_no' => $reqData->phone,
-                'gender'    => $reqData->gender ?? '',
+                'gender'    => $reqData->gender ?? '1',
             ];
+            
+            if ($admin->profile) {
+                $hasProfile = true;
+            }
 
             $encoded_string = isset($reqData->photo) ? $reqData->photo : null;
             if ($encoded_string) {
@@ -121,11 +125,13 @@ class AdminProfileController extends Controller
 
                     $updatable['photo'] = $fileResponse['fileLocation'] ?? null;
                 }
+                
+                
             }
 
-            // dd($updatable);
+        
             if (!$hasProfile) {
-                // dd( $admin, $updatable, 'gender');
+                            // dd( $admin->profile()->create($updatable));
                 $createProfile = $admin->profile()->create($updatable);
                 if (!$createProfile)
                     throw new Exception("Unable to Create Profile!", 403);

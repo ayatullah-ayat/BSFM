@@ -317,10 +317,14 @@ function pdfFooter($organizationlogo=null){
     $html = "";
 
     if(isset($organizationlogo) && count($organizationlogo)):
-        foreach ($organizationlogo as $organizationItem):
-            $logoPath = asset($organizationItem->logo) ?? '';
-            $html .= "<span><img class=\"img-fluid\" width=\"60px\" src=\"{$logoPath}\" alt=\"\"></span>";
-        endforeach;
+        // foreach ($organizationlogo as $organizationItem):
+        //     $logoPath = asset($organizationItem->logo) ?? '';
+        //     $html .= "<span><img class=\"img-fluid\" width=\"60px\" src=\"{$logoPath}\" alt=\"\"></span>";
+        // endforeach;
+        $logoPath = asset('assets/backend/img/key-ring1.png');
+        $logoPath2 = asset('assets/backend/img/Merchandise2.png');
+        $html .= "<span><img class=\"img-fluid mx-1\" width=\"60px\" src=\"{$logoPath}\" alt=\"\"></span>";
+        $html .= "<span><img class=\"img-fluid\" width=\"60px\" src=\"{$logoPath2}\" alt=\"\"></span>";
     endif;
 
     return "<table width=\"100%\">

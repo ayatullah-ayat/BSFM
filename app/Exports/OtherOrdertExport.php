@@ -21,11 +21,12 @@ class OtherOrdertExport implements FromCollection, WithHeadings, WithStyles
             'Quantity',
             'Price',
             'Total Price',
-            'Service Charge',
+            'Total Bill',
             'Advaced Amount',
             'Due Amount',
             'Mobile',
-            'Institute Description',
+            'Company',
+            'Address',
             'Note'
         ];
     }

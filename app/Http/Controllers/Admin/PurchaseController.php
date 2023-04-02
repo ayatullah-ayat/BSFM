@@ -510,4 +510,23 @@ class PurchaseController extends Controller
         }
             
     }
+
+
+    public function getpurchasepdf(){
+        $getpurchases = Purchase::get();
+        $pdf = PDF::loadView('backend.pages.purchase.purchase_pdf', compact('getpurchases'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('purchase.pdf');
+
+        // return view('backend.pages.purchase.purchase_pdf');
+    }
+
+
 }

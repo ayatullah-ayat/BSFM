@@ -19,7 +19,7 @@
                         <div class="col-md-2" data-col="col">
                             <div class="form-group">
                                 <label for="from_date">From Date</label>
-                                <input type="text" data-required autocomplete="off" class="form-control" id="from_date"
+                                <input type="text" data-required autocomplete="off" value="{{ date('Y-m-d')}}" class="form-control" id="from_date"
                                     name="from_date">
                             </div>
                             <span class="v-msg"></span>
@@ -50,18 +50,21 @@
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total Price</th>
+                                    <th>Discount</th>
                                     <th>Service Charge</th>
                                     <th>Advance Amount</th>
                                     <th>Due Amount</th>
                                     <th>Mobile</th>
-                                    <th>Institute Description</th>
+                                    <th>Company</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
                                     <th>Note</th>
                                 </tr>
                             </thead>
                             <tbody>
     
                                 <tr class="odd text-center dataTables_empty_row">
-                                    <td colspan="13" class="dataTables_empty" valign="top">No data available in table</td>
+                                    <td colspan="15" class="dataTables_empty" valign="top">No data available in table</td>
                                 </tr>
     
                             </tbody>
@@ -70,10 +73,11 @@
                                     <th colspan="5"></th>
                                     <th id="totalQty">0</th>
                                     <th id="totalPrice">0</th>
+                                    <th id="totalDiscount">0</th>
                                     <th id="totalServiceCharge">0</th>
                                     <th id="totalAdvanced">0</th>
                                     <th id="totalDue">0</th>
-                                    <th colspan="3"></th>
+                                    <th colspan="4"></th>
                                 </tr>
                             </tfoot>
     
@@ -113,7 +117,7 @@
 
 
 
-      function getInvoices(){
+    function getInvoices(){
             let 
             from_date   = $('#from_date').val(),
             to_date     = $('#to_date').val();
@@ -137,23 +141,24 @@
                     },
                     success(data){
                         loadAjaxData(data);
+
+                        console.log('d====', data);
                     },
                     error(err){
                         console.log(err);
                     },
                 })
             }, 500);
-        }
+    }
 
+    function loadAjaxData(resData){
 
-
-
-        function loadAjaxData(resData){
 
             let 
             count               = 0,
             totalQty            = 0,
             totalPrice          = 0,
+            totalDiscount       = 0,
             totalServiceCharge  = 0,
             totalAdvanced       = 0,
             totalDue            = 0,
@@ -163,8 +168,40 @@
 
                 resData.forEach(order => {
     
-                    totalQty            += order.order_qty ?? 0,
-                    totalPrice          += order.total_order_price ?? 0,
+                    let category_names = '',
+                        prices = '',
+                        order_qty = '',
+                        total_order_price = 0,
+                        itemLength = order.categories.length,
+                        index = 0;
+
+
+
+                    let sub_total_order_qty = 0,
+                        sub_total_order_price = 0;
+
+                    if(order.categories.length) {
+
+                        order.categories.forEach(item => {
+                            total_order_price += item.total_order_price;
+
+                            sub_total_order_price += item.total_order_price;
+                            sub_total_order_qty += item.order_qty;
+                            if(++index == itemLength){
+                                category_names += item.category_name;
+                                prices += item.price;
+                                order_qty += item.order_qty;
+                            }else {
+                                category_names += `${item.category_name}, `;
+                                prices += `${item.price}, `;
+                                order_qty += `${item.order_qty}, `;
+                            }
+                        })
+                    }
+
+                    totalQty            += sub_total_order_qty ?? 0,
+                    totalPrice          += sub_total_order_price ?? 0,
+                    totalDiscount       += order.order_discount_price ?? 0,
                     totalServiceCharge  += order.service_charge ?? 0,
                     totalAdvanced       += order.advance_balance ?? 0,
                     totalDue            += order.due_price ?? 0,
@@ -173,21 +210,24 @@
                         <td>${++count}</td>
                         <td>${order.order_date ?? 'N/A' }</td>
                         <td>${order.order_no }</td>
-                        <td>${order.category_name ?? 'N/A' }</td>
-                        <td>${order.price ?? '0.0' }</td>
-                        <td>${order.order_qty ?? '0' }</td>
-                        <td>${order.total_order_price ?? '0.0' }</td>
+                        <td>${category_names ?? 'N/A' }</td>
+                        <td>${prices ?? '0.0' }</td>
+                        <td>${order_qty ?? '0' }</td>
+                        <td>${total_order_price ?? '0.0' }</td>
+                        <td>${order.order_discount_price ?? '0.0' }</td>
                         <td>${order.service_charge ?? '0.0' }</td>
                         <td>${order.advance_balance ?? '0.0' }</td>
                         <td>${order.due_price ?? '0.0' }</td>
                         <td>${order.moible_no ?? 'N/A' }</td>
                         <td>${order.institute_description ?? 'N/A' }</td>
+                        <td>${order.address ?? 'N/A' }</td>
+                        <td>${order.status ?? 'N/A' }</td>
                         <td>${order.note ?? 'N/A' }</td>
                     </tr>`;
                 })
             }else{
                 html += `<tr class="odd text-center dataTables_empty_row">
-                    <td colspan="13" class="dataTables_empty" valign="top">No data available in table</td>
+                    <td colspan="15" class="dataTables_empty" valign="top">No data available in table</td>
                 </tr>`;
             }
 
@@ -196,14 +236,13 @@
                 $('#mydataTable').find('tbody').html(html);
                 $('#totalQty').text(totalQty);
                 $('#totalPrice').text(totalPrice);
+                $('#totalDiscount').text(totalDiscount);
                 $('#totalServiceCharge').text(totalServiceCharge);
                 $('#totalAdvanced').text(totalAdvanced);
                 $('#totalDue').text(totalDue);
             },1000)
 
-        }
-
-
+    }
 
     function init(){
 
@@ -226,9 +265,7 @@
         })
     }
 
-
     function openPDF(e){
-
         // console.log(e);
         e.preventDefault();
 
@@ -238,6 +275,7 @@
 
         open(`{{ route('admin.otherOrder.datewise_pdf') }}?from_date=${from_date}&to_date=${to_date}`,'_self')
     }
+    
 </script>
 
 @endpush

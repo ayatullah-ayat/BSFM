@@ -2,8 +2,8 @@
 
 return [
     'mode'                     => 'utf-8',
-    'format'                   => 'A4-L',
-    // 'default_font'             => 'sans-serif',
+    'format'                   => 'A4-P',
+    'default_font'             => 'sans-serif',
     'default_font_size'        => 12,
     'default_font'             => 'nikosh',
     'margin_left'              => 10,
@@ -16,7 +16,7 @@ return [
     'title'                    => env('APP_NAME', 'Ecommerce'),
     'subject'                  => '',
     'author'                   => 'themeshaper',
-    'watermark'                => 'Themeshaper',
+    'watermark'                => '',
     'show_watermark'           => true,
     'show_watermark_image'     => false,
     'watermark_font'           => 'sans-serif',

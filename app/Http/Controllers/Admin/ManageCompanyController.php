@@ -132,6 +132,8 @@ class ManageCompanyController extends Controller
                     $fileLocation = $fileResponse['fileLocation'];
                     $data['dark_logo']  = $fileLocation;
 
+                }else{
+                    unset($data['dark_logo'] );
                 }
     
                 if($white_logo){
@@ -141,6 +143,8 @@ class ManageCompanyController extends Controller
     
                     $whitefileLocation = $fileResponse['fileLocation'];
                     $data['white_logo'] = $whitefileLocation;
+                }else{
+                    unset($data['white_logo'] );
                 }
     
 

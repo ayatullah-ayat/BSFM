@@ -489,4 +489,21 @@ class SaleController extends Controller
     {
         //
     }
+
+
+    public function managesales_pdf(){
+        $getsales = Sale::get();
+        $pdf = PDF::loadView('backend.pages.sale.sale_pdf', compact('getsales'), [], [
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 45,
+            'margin_bottom' => 20,
+            'margin_header' => 5,
+            'margin_footer' => 5,
+            'watermark'     => env('APP_NAME','Micro Media')
+        ]);
+        return $pdf->stream('sales.pdf');
+
+        // return view('backend.pages.sale.sale_pdf');
+    }
 }

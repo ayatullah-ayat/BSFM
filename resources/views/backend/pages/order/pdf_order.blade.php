@@ -6,31 +6,25 @@
             font-family: nikosh, sans-serif;
             font-size: 10pt;
         }
-
         p {
             margin: 0pt;
         }
-
         table.items {
             border: 0.1mm solid #000000;
         }
-
         td {
             vertical-align: top;
         }
-
         .items td {
             border-left: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
-
         table thead td {
             background-color: #EEEEEE;
             text-align: center;
             border: 0.1mm solid #000000;
             font-variant: small-caps;
         }
-
         .items td.blanktotal {
             background-color: #EEEEEE !important;
             border: 0.1mm solid #000000;
@@ -39,16 +33,13 @@
             border-top: 0.1mm solid #000000;
             border-right: 0.1mm solid #000000;
         }
-
         .items td.totals {
             text-align: right;
             border: 0.1mm solid #000000;
         }
-
         .items td.cost {
             text-align: "."center;
         }
-
         .spacer{
             height: 110px !important;
         }

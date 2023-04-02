@@ -340,6 +340,11 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/libs/slick-carousel/slick.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/libs/exzoom/jquery.exzoom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/product_detail.css') }}">
+    <style>
+        .tabs-product-comments table{
+            width: 100% !important;
+        }
+    </style>
 @endpush
 
 @push('js')

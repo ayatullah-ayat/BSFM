@@ -278,12 +278,47 @@
     
     </section>
     
+    
+    
+    <div class="modal fade" id="adsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        role="dialog" data-backdrop="static" data-keyboard="false" aria-modal="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-body px-0 py-0 m-0" id="adsBody">
+                    <button type="button" class="btn-close c-btn" data-bs-dismiss="modal" aria-label="Close"></button>
+                    @if($ad)
+                    <img src="{{asset($ad->image)}}" alt="" class="adsImage">
+                    @else 
+                    <img src="{{asset('assets/frontend/img/micromedia-image 1.png')}}" alt="" class="img-fluidx adsImage">
+                    @endif 
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
  
 @endsection
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/frontend/pages/css/home.css') }}">
     <style>
+    
+            .adsImage{
+                width: 100%;
+                /*height: 100%;*/
+            }
+            
+            .c-btn{
+                position: absolute;
+                top: 0;
+                right: 0px;
+                color: #fff !important;
+                font-size: 24px;
+            }
+
+            
         /*   img {
              height: 100%;
              width: auto;
@@ -354,6 +389,13 @@
 @push('js')
 <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
+            
+        let acessToAds = @json($ad && $ad->is_publish);
+
+        if(acessToAds){
+           setTimeout(()=>  $('#adsModal').modal('show'), 2000)
+        }
+        
         const options = {
         root: null,
         rootMargin: "0px",

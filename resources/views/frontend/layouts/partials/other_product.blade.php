@@ -26,7 +26,7 @@
                                         <div class="card-body p-0">
                                             <div class="card-product-title card-title text-center fw-bold">
                                                 <a href="{{ route('product_detail',$product->id ) }}" class="text-decoration-none text-dark">
-                                                    <h5>{{ $product->product_name }}</h5>
+                                                    <h5 style="line-height: 1.2rem !important;">{{ $product->product_name }}</h5>
                                                 </a>
                                             </div>
 

@@ -455,12 +455,15 @@ var mybutton = document.getElementById("myBtn");
 window.onscroll = function () { scrollFunction() };
 
 function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        mybutton.style.display = "block";
-        $("nav").addClass("sticky");
-    } else {
-        mybutton.style.display = "none";
-        $("nav").removeClass("sticky");
+    
+    if(mybutton){
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+            $("nav").addClass("sticky");
+        } else {
+            mybutton.style.display = "none";
+            $("nav").removeClass("sticky");
+        }
     }
 }
 

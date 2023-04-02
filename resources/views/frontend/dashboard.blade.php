@@ -236,7 +236,7 @@
                                         <h2 class="mb-3"> অর্ডার লিস্ট </h2>
                                         <div class="data-table">
                                             <table id="user-product-oderlist" class="table table-striped w-100">
-                                                <thead class="bg-danger">
+                                                <thead class="bg-danger fixed-header-top">
                                                     <tr class="text-white">
                                                         <th> অর্ডার তারিখ</th>
                                                         <th> অর্ডার </th>
@@ -268,7 +268,7 @@
                                                     @endif 
     
                                                 </tbody>
-                                                <tfoot>
+                                                <tfoot class="fixed-footer-top bg-danger text-white">
                                                     <tr>
                                                         <th> অর্ডার তারিখ</th>
                                                         <th> অর্ডার </th>

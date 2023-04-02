@@ -11,6 +11,7 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Return Sale</a> </h6>
                 <div class="inner">
+                    <button class="btn btn-sm btn-danger"><a class="text-white" href="{{ route('admin.return_sale.sale_return_pdf')}}"><i class="fa fa-file-pdf"> Export Pdf</i></a></button>
                     <button class="btn btn-sm btn-success"><a class="text-white" href="{{ route('sale_return_export') }}"><i class="fa fa-download"> Export excel</i></a></button>
                     <a class="btn btn-sm btn-outline-info" href="{{ route('admin.ecom_sales.manage_sale') }}">Sales List</i></a>
                 </div>

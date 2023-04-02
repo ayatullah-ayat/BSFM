@@ -233,7 +233,7 @@ class OrderController extends Controller
             'margin_header' => 5,
             'margin_footer' => 5,
             'watermark'     => env('APP_NAME','Micro Media')
-        ]);
+        ])->setPaper('a4', 'landscape')->setWarnings(false);
         return $pdf->stream('getorderdata.pdf');
 
         // return view('backend.pages.order.pdf_order', compact('ordersdata'));

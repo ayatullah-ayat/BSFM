@@ -19,8 +19,12 @@ class OtherOrderController extends Controller
      */
     public function index()
     {
-        $otherOrders = OtherOrder::orderByDesc('id')->get();
-        // dd($otherOrders);
+        // $otherOrders = OtherOrder::orderByDesc('id')->get();
+        
+         $otherOrders = OtherOrder::orderByDesc('order_date')
+                        ->groupBy('order_no')
+                        ->orderByDesc('id')
+                        ->get();
         return view('backend.pages.otherorder.otherorder', compact('otherOrders'));
     }
 
@@ -54,11 +58,36 @@ class OtherOrderController extends Controller
             if(!$request->order_no){
                 $data['order_no'] =  uniqid();
             }
+            
+            
+
 
             $data['created_by'] = auth()->guard('admin')->user()->id ?? null;
-            $orderorder   = OtherOrder::create($data);
-            if(!$orderorder)
-                throw new Exception("Unable to create Other Order!", 403);
+
+            foreach ($data['products'] as $product) {
+                $orderorder = OtherOrder::create([
+                    'order_date' => $data['order_date'],
+                    'order_no' => $data['order_no'],
+                    'customer_name' => $data['customer_name'],
+                    'advance_balance' => $data['advance_balance'],
+                    'due_price' => $data['due_price'],
+                    'service_charge' => $data['service_charge'],
+                    'order_discount_price' => $data['order_discount_price'],
+                    'moible_no' => $data['moible_no'],
+                    'institute_description' => $data['institute_description'],
+                    'address' => $data['address'],
+                    'note' => $data['note'],
+                    'status' => $data['status'],
+                    'category_name' => $product['category_name'],
+                    'order_qty' => $product['order_qty'],
+                    'price' => $product['price'],
+                    'total_order_price' => $product['total_order_price'],
+                    'created_by' => $data['created_by']
+                ]);
+                if(!$orderorder)
+                    throw new Exception("Unable to create Other Order!", 403);
+            }
+            // $orderorder   = OtherOrder::create($data);
 
             return response()->json([
                 'success'   => true,
@@ -86,19 +115,37 @@ class OtherOrderController extends Controller
     {
         try {
 
-            // dd($order);
+            // dd($otherOrder);
 
-            $pdf = PDF::loadView('backend.pages.otherorder.show_order', compact('otherOrder'), [], [
+            // $pdf = PDF::loadView('backend.pages.otherorder.show_order', compact('otherOrder'), [], [
+            //     'margin_left'   => 20,
+            //     'margin_right'  => 15,
+            //     'margin_top'    => 48,
+            //     'margin_bottom' => 25,
+            //     'margin_header' => 10,
+            //     'margin_footer' => 10,
+            //     'watermark'     => $this->setWaterMark($otherOrder),
+            // ]);
+
+
+            $otherOrders = [];
+            if($otherOrder && $otherOrder->order_no){
+                $otherOrders = $otherOrder->where('order_no', $otherOrder->order_no)->get();
+            }
+
+            $pdf = PDF::loadView('backend.pages.otherorder.show_order', compact('otherOrder', 'otherOrders'), [], [
                 'margin_left'   => 20,
-                'margin_right'  => 15,
-                'margin_top'    => 48,
-                'margin_bottom' => 25,
+                'margin_right'  => 20,
+                'margin_top'    => 45,
+                'margin_bottom' => 15,
                 'margin_header' => 10,
                 'margin_footer' => 10,
-                'watermark'     => $this->setWaterMark($otherOrder),
+                // 'watermark'     => $this->setWaterMark($otherOrder, $otherOrders),
             ]);
 
-
+            $pagecount = $pdf->getMpdf()->setSourceFile(public_path('/assets/backend/pdf/final_pad.pdf'));
+            $tplIdx = $pdf->getMpdf()->importPage($pagecount);
+            $pdf->getMpdf()->useTemplate($tplIdx);
             // dd($pdf);
 
             return $pdf->stream('other_order_invoice_' . preg_replace("/\s/", '_', ($otherOrder->order_no ?? '')) . '_' . ($otherOrder->order_date ?? '') . '_.pdf');
@@ -110,12 +157,37 @@ class OtherOrderController extends Controller
         // return view('backend.pages.order.show_order', compact('order'));
 
     }
-
-
-    private function setWaterMark($otherOrder)
+    
+    
+    private function setWaterMark($otherOrder, $otherOrders)
     {
+        if(isset($otherOrders) && count($otherOrders) > 1){
+
+            $subtotal               = 0;
+            $serviceCharge          = 0;
+            $discountTotal          = 0;
+            $advanceBalanceTotal    = 0;
+
+            foreach($otherOrders as $other):
+                $subtotal           += $other->total_order_price;
+                $discountTotal      += $other->order_discount_price;
+                $serviceCharge      += $other->service_charge;
+                $advanceBalanceTotal+= $other->advance_balance;
+            endforeach;
+
+            $gTotal = ($subtotal + $serviceCharge) - $discountTotal;
+
+            return $otherOrder && $gTotal - $advanceBalanceTotal <= 0 ? 'Paid' : 'Due';
+        }
+
         return $otherOrder && ($otherOrder->total_order_price + $otherOrder->service_charge) - $otherOrder->advance_balance  <= 0 ? 'Paid': 'Due';
     }
+
+
+    // private function setWaterMark($otherOrder)
+    // {
+    //     return $otherOrder && ($otherOrder->total_order_price + $otherOrder->service_charge) - $otherOrder->advance_balance  <= 0 ? 'Paid': 'Due';
+    // }
 
 
 
@@ -146,7 +218,34 @@ class OtherOrderController extends Controller
             $data = $request->all();
 
             $data['updated_by'] = auth()->guard('admin')->user()->id ?? null;
-            $orderstatus        = $otherOrder->update($data);
+
+            foreach ($data['products'] as $product) {
+                $otherorder = [
+                    'order_date'            => $data['order_date'],
+                    'order_no'              => $data['order_no'],
+                    'customer_name'         => $data['customer_name'],
+                    'advance_balance'       => $data['advance_balance'],
+                    'due_price'             => $data['due_price'],
+                    'service_charge'        => $data['service_charge'],
+                    'order_discount_price'  => $data['order_discount_price'],
+                    'moible_no'             => $data['moible_no'],
+                    'institute_description' => $data['institute_description'],
+                    'address'               => $data['address'],
+                    'note'                  => $data['note'],
+                    'status'                => $data['status'],
+                    'category_name'         => $product['category_name'],
+                    'order_qty'             => $product['order_qty'],
+                    'price'                 => $product['price'],
+                    'total_order_price'     => $product['total_order_price'],
+                ];
+                
+                if($product['order_id'] && !empty($product['order_id'])){
+                    $orderstatus        = OtherOrder::find($product['order_id'])->update($otherorder);
+                }else {
+                    OtherOrder::create($otherorder);
+                }
+            }
+
             if(!$orderstatus)
                 throw new Exception("Unable to Update Order!", 403);
 
@@ -192,6 +291,11 @@ class OtherOrderController extends Controller
     }
 
 
+    public function getAllOrdersByOrderNo($order_no) {
+        $orders = OtherOrder::where('order_no', $order_no)->get();
+
+        return response()->json(['data' => $orders], 200);
+    }
 
     public function datewise_report(Request $request)
     {
@@ -207,7 +311,7 @@ class OtherOrderController extends Controller
                 $q->where('order_date', '<=', $to);
             }
 
-            $orders = $q->get();
+            $orders = $q->groupBy('order_no')->orderBy('order_date')->with(['categories'])->get();
 
             return response()->json($orders);
         }
@@ -225,15 +329,13 @@ class OtherOrderController extends Controller
         if(!$from){
             return back();
         }
-            
-
         $q = OtherOrder::where('order_date', '>=', $from);
 
         if ($to) {
             $q->where('order_date', '<=', $to);
         }
 
-        $orders = $q->get();
+        $orders = $q->groupBy('order_no')->orderBy('order_date')->with(['categories'])->get();
 
         $pdf = PDF::loadView('backend.pages.otherorder.pdf_view', compact('orders'), [], [
             'margin_left'   => 20,

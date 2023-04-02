@@ -10,7 +10,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="/" class="text-decoration-none">Purchase Product Stock Report</a> </h6>
-                <button class="btn btn-sm btn-success"><a class="text-white" id="excelExport" href="javascript:void(0) {{ route('purchase_product_stock_report_export')}}?supplier_id=&product_id=&from_date=&to_date="><i class="fa fa-download"> Export excel</i></a></button>
+                <div class="inner">
+                    <a class="btn btn-sm btn-danger downloadPDF"><i class="fa fa-file-pdf"></i> Export PDF</a>
+                    <button class="btn btn-sm btn-success"><a class="text-white" id="excelExport" href="javascript:void(0) {{ route('purchase_product_stock_report_export')}}?supplier_id=&product_id=&from_date=&to_date="><i class="fa fa-download"> Export excel</i></a></button>
+                </div>
             </div>
 
             <div class="card-body">
@@ -172,6 +175,8 @@
             init()
             $(document).on('click','#search_result', searchSupplierProduct)
             $(document).on('change','#supplier', getProductBySupplier)
+
+            $(document).on('click','.downloadPDF', openPDF)
         })
 
 
@@ -322,9 +327,21 @@
             orientation     : 'bottom',
             format          : 'yyyy-mm-dd',
         })
-
-    
     }
+
+    function openPDF(e){
+        e.preventDefault();
+
+        let
+        supplier_id = $('#supplier').val(),
+        product_id  = $('#product').val(),
+        from_date   = $('#purchase_from_date').val(),
+        to_date     = $('#purchase_to_date').val();
+
+        open(`{{ route('admin.product_stock_pdf') }}?supplier_id=${supplier_id}&product_id=${product_id}&from_date=${from_date}&to_date=${to_date}`,'_self')
+    }
+
+
 </script>
 
 

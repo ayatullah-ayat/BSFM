@@ -205,7 +205,7 @@
                 <div class="form-group">
                     <label for="short_description">Short Description</label>
                     <textarea name="short_description" id="short_description" cols="" rows="5" class="form-control"
-                        placeholder="Product Short Description"></textarea>
+                        placeholder="Product Short Description"> {!! $product->short_description !!}</textarea>
                 </div>
             </div>
 

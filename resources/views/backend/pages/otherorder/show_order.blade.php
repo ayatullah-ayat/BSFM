@@ -2,6 +2,11 @@
 
 <head>
     <style>
+    
+        @page {
+          line-height: 2.9;
+        }
+        
         body {
             font-family: nikosh, sans-serif;
             font-size: 10pt;
@@ -57,61 +62,58 @@
         $company = getCompanyProfile();
     @endphp
 
-    <htmlpageheader name="myheader">
-        <table width="100%">
-            <tr>
-                {{-- <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;"> --}}
-                    {{-- <img width="180" height="80" style="padding:0px !important;" src="{{ asset('assets/img/nadeem-hair01.png') }}" alt=""> --}}
-                {{-- </span><br /><br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 07595 183489</td> --}}
-                <td width="50%" style="color:#0000BB; "><span style="font-weight: bold; font-size: 14pt;">
-                    @if(isset($company->dark_logo))
-                    <img width="180" height="auto" style="padding:0px !important; margin-bottom: 5px;" src="{{ asset($company->dark_logo) }}" alt="">
-                    @else 
-                    <img width="180" height="80" style="padding:0px !important;" src="https://themeshaper.net/img/logo.png" alt="">
-                    @endif 
-                </span><br />
-                {{ $company->company_address ?? 'House-07,Kobi faruk soroni<br />Nikunja 2 ,Dhaka 1229' }}
-                <br /><span style="font-family:dejavusanscondensed;">&#9742;</span>
-                    {{ $company->company_phone ?? '' }}</td>
-                <td style="text-align: right; width: 25%; min-width: 100px;vertical-align: bottom">
-                    <p>Order No :</p>
-                    <p>Order Date :</p>
-                </td>
-                <td style="width: calc(50%% - 25%);text-align: right;vertical-align: bottom">
-                    <p>{{ $otherOrder->order_no ?? '' }}</p>
-                    <p>{{ $otherOrder->order_date ?? '' }}</p>
-                </td>
-            </tr>
-        </table>
-    </htmlpageheader>
-
-    {{-- @dd($order->order_no) --}}
-
-    {{-- <htmlpagefooter name="myfooter">
-        <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
-            Page {PAGENO} of {nb}
-        </div>
-    </htmlpagefooter> --}}
-
-    <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
-    {{--
-    <sethtmlpagefooter name="myfooter" value="on" /> --}}
-
-    <table width="100%" style="font-family: serif;" cellpadding="10">
+    <htmlpageheader style="width: 50%; color: red;" name="myheader">
+        <br /><br /><br /><br /><br />
+            <table width="100%" style="font-family: serif;" cellpadding="10">
         <tr>
-            <td width="45%" style="padding-left: 0px !important;"><span
-                    style="font-size: 7pt; color: #555555; font-family: sans;font-weight:bold;">ORDER
-                    TO:</span><br /><br />Institute Name&nbsp;: {{ $otherOrder->institute_description ?? 'N/A' }}<br />Phone &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $otherOrder->moible_no ?? 'N/A' }}</td>
+            <td width="70%" style="padding-left: 0px !important;">
+                <div style="font-size: 7pt; color: #555555; font-family: sans;font-weight:bold;">ORDER
+                    TO:</div><br />
+                <div>Order No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $otherOrder->order_no ?? '' }}</div>
+                <p style="font-size: 5pt;">&nbsp;&nbsp;&nbsp; </p>
+                @if($otherOrder->customer_name)
+                <p>Customer Name&nbsp;&nbsp;&nbsp;: {{ $otherOrder->customer_name ?? '' }}</p>
+                <p style="font-size: 5pt;">&nbsp;&nbsp;&nbsp; </p>
+                @endif
+                <div style="margin-top: 15px !important;">Company Name&nbsp;&nbsp;&nbsp;&nbsp;: {{ $otherOrder->institute_description ?? 'N/A' }}</div>
+                <p style="font-size: 5pt;">&nbsp;&nbsp;&nbsp; </p>
+                @if($otherOrder->address)
+                <div style="padding-bottom: 15px !important;">Company Address&nbsp;: {{ $otherOrder->address ?? '' }}</div>
+                <p style="font-size: 5pt;">&nbsp;&nbsp;&nbsp; </p>
+                @endif 
+                <div style="line-height: 1.6 !important">Phone &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $otherOrder->moible_no ?? 'N/A' }} </div><br />
+            </td>
             <td width="10%">&nbsp;</td>
-            <td width="45%" style="text-align: right; padding-right: 0px !important;">
+            <td width="20%" style="text-align: right; padding-right: 0px !important;">
                 <div style="text-align: right;visibility:hidden;">x</div>
                 <div style="text-align: right;visibility:hidden;">y</div>
-                <div style="text-align: right;visibility:hidden;">z</div>
-                <div style="text-align: right;visibility:hidden;">z</div>
-                <div style="text-align: right">Date: {{ date('Y-m-d') }}</div>
+                <div style="text-align: right">Date: {{ date('Y-m-d', strtotime($otherOrder->order_date)) }}</div>
             </td>
         </tr>
     </table>
+    </htmlpageheader>
+
+
+    <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
+    
+    <!--<sethtmlpagefooter name="myfooter" value="on" />-->
+    
+    <!--<htmlpagefooter name="myfooter">-->
+    <!--    <table width="100%" style="margin-bottom: 65px;">-->
+    <!--        <tr style="padding-bottom: 15px !important;">-->
+    <!--            <td width="20%" style="padding-left: 0px !important;">-->
+    <!--                <div style="border-top: 1.5px solid black;">Authorized Signature</div>-->
+    <!--            </td>-->
+    <!--            <td width="55%">&nbsp;</td>-->
+    <!--            <td width="18%" style="text-align: right; padding-right: 0px !important;">-->
+    <!--                <div style="border-top: 1.5px solid black;">Receiver Signature</div>-->
+    <!--            </td>-->
+    <!--        </tr>-->
+    <!--    </table>-->
+    <!--</htmlpagefooter>-->
+    
+
+<br /><br /><br /><br /><br /><br /><br /><br />
     <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
         <thead>
             <tr>
@@ -127,7 +129,66 @@
             @php
                 $subSubtotal    = $otherOrder->total_order_price ?? 0;
                 $totalDiscount  = 0;
+                $notes          = [];
             @endphp
+            @if($otherOrders && count($otherOrders))
+
+                @php
+                $subtotal               =  0;
+                $serviceCharge          = 0;
+                $discountTotal          = 0;
+                $advanceBalanceTotal    = 0;
+                @endphp
+
+            @foreach($otherOrders as $other)
+                @php
+                $subtotal           += $other->total_order_price;
+                $discountTotal      = $other->order_discount_price;
+                $serviceCharge      = $other->service_charge;
+                $advanceBalanceTotal= $other->advance_balance;
+                $notes[]            = $other->note;
+                @endphp
+
+            <tr>
+                <td align="center">{{ $loop->iteration }}</td>
+                <td align="left">
+                    {{ $other->category_name ?? '' }}
+                </td>
+                <td align="center">{{ $other->price ?? '0.0' }}</td>
+                <td align="center">{{ $other->order_qty ?? '0' }}</td>
+                <td align="right">{{ $other->total_order_price }}</td>
+            </tr>
+            @endforeach 
+            
+            <!-- END ITEMS HERE -->
+            <tr>
+                <td class="blanktotal" colspan="2" rowspan="6"></td>
+                <td class="totals" colspan="2">Subtotal:</td>
+                <td class="totals cost">{{ $subtotal ?? 0 }}</td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2">Discount:</td>
+                <td class="totals cost">{{ $discountTotal ?? 0 }}</td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2">Service Charge:</td>
+                <td class="totals cost">{{ $serviceCharge ?? 0 }}</td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2"><b>Total:</b></td>
+                <td class="totals cost"><b>{{ $gTotal = ($subtotal + $serviceCharge) - $discountTotal  }}</b></td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2">Paid:</td>
+                <td class="totals cost">{{ $advanceBalanceTotal }}</td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2"><b>Due:</b></td>
+                <td class="totals cost"><b>{{ $gTotal - $advanceBalanceTotal }}</b>
+                </td>
+            </tr>
+            @else 
+
             <tr>
                 <td align="center">1</td>
                 <td align="left">
@@ -140,9 +201,13 @@
 
             <!-- END ITEMS HERE -->
             <tr>
-                <td class="blanktotal" colspan="2" rowspan="5"></td>
+                <td class="blanktotal" colspan="2" rowspan="6"></td>
                 <td class="totals" colspan="2">Subtotal:</td>
                 <td class="totals cost">{{ $subSubtotal ?? 0 }}</td>
+            </tr>
+            <tr>
+                <td class="totals" colspan="2">Discount:</td>
+                <td class="totals cost">{{ $otherOrder->order_discount_price ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="totals" colspan="2">Service Charge:</td>
@@ -150,7 +215,7 @@
             </tr>
             <tr>
                 <td class="totals" colspan="2"><b>Total:</b></td>
-                <td class="totals cost"><b>{{ $subSubtotal + $otherOrder->service_charge  }}</b></td>
+                <td class="totals cost"><b>{{ ($subSubtotal + $otherOrder->service_charge) - $otherOrder->order_discount_price }}</b></td>
             </tr>
             <tr>
                 <td class="totals" colspan="2">Paid:</td>
@@ -158,16 +223,16 @@
             </tr>
             <tr>
                 <td class="totals" colspan="2"><b>Due:</b></td>
-                <td class="totals cost"><b>{{ ($subSubtotal + $otherOrder->service_charge) - $otherOrder->advance_balance }}</b></td>
+                <td class="totals cost"><b>{{ (($subSubtotal + $otherOrder->service_charge) - $otherOrder->order_discount_price ?? 0 ) - $otherOrder->advance_balance }}</b></td>
             </tr>
+
+            @endif 
         </tbody>
     </table>
     @if(isset($otherOrder->note))
-    <p style="margin-top: 10px"><b>Note:</b> {{ $otherOrder->note ?? '' }}</p>
-    @endif 
-    <br />
-
-    {!! pdfFooter($organizationlogo) !!}
+    <p style="margin-top: 15px;"><b>Note:</b> {{ $otherOrder->note ?? '' }}</p>
+    @endif
+    
 
 </body>
 

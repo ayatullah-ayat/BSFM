@@ -135,6 +135,21 @@
     margin-right: 13px !important;
 }
 
+.data-table{
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+.fixed-header-top{
+    top: 0;
+    position: sticky;
+}
+
+.fixed-footer-top{
+    bottom: 0;
+    position: sticky;
+}
+
 /* .data-table{
     overflow-x: auto;
 } */

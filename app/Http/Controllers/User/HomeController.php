@@ -11,6 +11,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Custom\OurCustomService;
 use App\Models\Custom\CustomServiceProduct;
 use App\Models\Custom\CustomServiceCategory;
+use Illuminate\Support\Facades\Artisan;
+use App\Models\AdsManager;
 
 class HomeController extends Controller
 {
@@ -26,6 +28,17 @@ class HomeController extends Controller
 
     public function index()
     {
+            //   Artisan::call('storage:link');
+        // Artisan::call('route:clear');
+        // Artisan::call('view:clear');
+        // Artisan::call('config:cache');
+        // Artisan::call('config:clear');
+        // dd(Artisan::call('key:generate'));
+        // dd(env('MAIL_PASSWORD'));
+        // Artisan::call('migrate --force');
+        
+        // dd('done');
+        
         $maxId    = request()->max_id ?? $this->maxId;
         $limit    = request()->limit ?? $this->limit;
         $operator = request()->operator ?? '>';
@@ -74,9 +87,11 @@ class HomeController extends Controller
         $countClientLogos = ClientLogos::count();
         // $sociallink = SocialIcon::where('is_active', 1)->first();
         // $footerabout = WebFooter::where('is_active', 1)->first();
+        
+          $ad = AdsManager::orderByDesc('id')->first();
 
         // dd($customservicecategories);
-        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit'));
+        return view('frontend.pages.home', compact('customservices' , 'customservicecategories' , 'serviceproducts', 'shopbanner', 'clientlogos', 'countCustomservicecategories', 'limit', 'countClientLogos', 'clientLogosLimit','ad'));
     }
 
 

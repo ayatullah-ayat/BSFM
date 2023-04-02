@@ -10,7 +10,10 @@
 
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary"><a href="javascript:void(0)" class="text-decoration-none">Supplier Stock Report</a> </h6>
-                <button class="btn btn-sm btn-success"><a class="text-white" id="excelExport" href="javascript:void(0) {{route('supplier_stock_report_export')}}?supplier_id=&date="><i class="fa fa-download"> Export excel</i></a></button>
+                <div class="inner">
+                    <a class="btn btn-sm btn-danger downloadPDF"><i class="fa fa-file-pdf"></i> Export PDF</a>
+                    <button class="btn btn-sm btn-success"><a class="text-white" id="excelExport" href="javascript:void(0) {{route('supplier_stock_report_export')}}?supplier_id=&date="><i class="fa fa-download"> Export excel</i></a></button>
+                </div>
             </div>
 
             <div class="card-body">
@@ -150,6 +153,8 @@
             init()
             $(document).on('keyup change', '.dataTables_filter input[type="search"]', calcSummary)
             $(document).on('click','#search_result', searchSupplierProduct)
+
+            $(document).on('click','.downloadPDF', openPDF)
         })
 
         function searchSupplierProduct(){
@@ -273,17 +278,18 @@
         ];
     
         globeInit(arr);
-
-    
     }
+
+
+    function openPDF(e){
+        e.preventDefault();
+
+        let
+        supplier_id = $('#supplier').val(),
+        date        = $('#purchase_date').val();
+
+        open(`{{ route('admin.supplier_stock_pdf') }}?supplier_id=${supplier_id}&purchase_date=${date}`,'_self')
+    }
+
     </script>
-
-
-
-
-
-
-
-
-
 @endpush
