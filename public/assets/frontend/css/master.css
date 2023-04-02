@@ -258,31 +258,6 @@ textarea.form-control {
     box-shadow: 0 0 0 0.25rem rgb(247 247 247);
 }
 
-.ordertraking {
-    width: 116px;
-    height: 30px;
-    margin: 0px 10px;
-    text-align: center;
-    background: #E20C18;
-    box-shadow: inset 2px 1px 4px rgba(28, 28, 28, 0.15);
-    border-radius: 5px;
-}
-
-.ordertraking a {
-    font-family: Mulish;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 30px;
-    color: #FFFFFF;
-    text-decoration: none;
-    padding: 0px 5px;
-}
-
-.ordertraking a svg {
-    color: rgb(255 255 255) !important;
-    font-size: 1em;
-}
 
 .cart-icon {
     font-size: 1.5em;
