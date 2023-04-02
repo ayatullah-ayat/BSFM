@@ -15,14 +15,10 @@
     
                     <div class="hero-content">
                         <div class="hero-heading">
-                            <h2>কাস্টমাইজড করুন <br>আপনার কর্পোরেট গিফট আইটেম</h2>
+                            <h2>Customize <br>Your Corporate Gift Item</h2>
                         </div>
                         <div class="hero-text">
-                            <p>
-                                যে কোনো ধরনের কাস্টমাইজড প্রোডাক্ট সামগ্রী তৈরি করতে সর্বনিম্ন খরচে, দ্রুততম সময়ে, সর্বোচ্চ
-                                গুণগত মানের নিশ্চয়তা পাবেন কেবল মাইক্রোমিডিয়ায়। আপনার চাহিদা অনুযায়ী যে কোনো ধরনে কাস্টমাইজড
-                                প্রিন্টের কাজের অর্ডার করুন নিচের লিস্ট থেকে
-                            </p>
+                            <p>Create any type of customized product at lowest cost, fastest time, highest quality assurance only at Micromedia. Order any type of customized print Work as per your requirement from the list below</p>
                         </div>
                     </div>
     
