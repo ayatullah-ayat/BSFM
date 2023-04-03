@@ -4,19 +4,17 @@
     <nav class="navbar navbar-expand-lg navbar-light" style="width: 100% !important; padding-top: 0px; padding-bottom: 0px;">
 
         <div class="container">
-               @if (isset($companylogo))
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="logo" src="{{asset( $companylogo->dark_logo )}}" alt="">
-                    </a>
-               @else
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <img class="logo" src="{{asset('assets/frontend/img/logo-mic.png')}}" alt="">
-                    </a> 
-               @endif
+            @if (isset($companylogo))
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img class="logo" src="{{asset( $companylogo->dark_logo )}}" alt="">
+            </a>
+            @else
+            <a class="navbar-brand" href="{{ url('/') }}">
+                <img class="logo" src="{{asset('assets/frontend/img/logo-mic.png')}}" alt="">
+            </a>
+            @endif
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -45,14 +43,13 @@
                     <li class="nav-item ordertraking">
                         <a class="nav-link" href="#">Order Track</a>
                     </li>
-                    
+
                 </ul>
 
                 <form action="{{ route('searchResult') }}" autocomplete="off" class="d-flex justify-content-lg-end justify-content-start" style="position: relative !important;">
                     <div class="input-group border rounded">
                         <input class="form-control search-product" name="key" type="search" placeholder="Search Product" aria-label="Search">
-                        <button class="btn d-flex justify-content-center" type="submit"><i
-                                class="fas fa-search"></i></button>
+                        <button class="btn d-flex justify-content-center" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                     <div id="my-list"></div>
                 </form>
@@ -61,8 +58,18 @@
                     <a href="{{ route('cart_index') }}"> <i class="fas fa-cart-shopping"></i><span class="cartvalue"> {{ isset($productIds) && is_array($productIds) ? count($productIds) : 0 }} </span></a>
                 </div>
 
-                <div class="cart-icon ps-3">
-                    <a href="{{ route('cart_index') }}"> <i class="fas fa-user"></i></a>
+                <div class="cart-icon ps-3 dropdown">
+                    <a href="{{ route('cart_index') }}" class="dropdown-toggle-no-arrow" id="user-dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-dropdown">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
                 </div>
 
 

@@ -20,18 +20,20 @@
     
         <div class="container">
             <div class="row">
-                <div class="col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 col-sm-12 d-flex align-items-center justify-content-center">
     
-                    <div class="hero-content">
+                    <div class="text-center">
                         <div class="hero-heading">
-                            <h2>Customize Your Corporate Gift Item</h2>
+                            <h2 class="text-justify">Customize Your Corporate Gift Item</h2>
                         </div>
                         <div class="hero-text">
-                            <p>Create any type of customized product at lowest cost, fastest time, highest quality assurance only at Micromedia. Order any type of customized print Work as per your requirement from the list below</p>
+                            <p class="text-justify">Create any type of customized product at lowest cost, fastest time, highest quality assurance only at Micromedia. Order any type of customized print Work as per your requirement from the list below</p>
                         </div>
                     </div>
     
                 </div>
+                <div class="col-md-2"></div>
             </div>
         </div>
     

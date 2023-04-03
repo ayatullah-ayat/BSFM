@@ -286,7 +286,9 @@ textarea.form-control {
     display: flex;
     justify-content: center;
 }
-
+.dropdown-toggle::after {
+    
+}
 /* ----------------------------------------------------------------------------- */
 
 /* Call Center Area */
